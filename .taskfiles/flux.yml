@@ -13,6 +13,18 @@ tasks:
     cmds:
       - flux check --pre
 
+  install:
+    desc: Install flux on a new cluster
+    cmds:
+      - flux install
+      - task: installkey
+      - kubectl apply --kustomize {{.CLUSTER_DIR}}/flux/flux-system/
+
+  sync:
+    desc: Sync flux-system with the Git Repository
+    cmds:
+      - flux reconcile source git flux-system
+
   installkey:
     desc: Install Age key into cluster
     cmds:
@@ -27,4 +39,4 @@ tasks:
   bootstrap:
     desc: Bootstrap flux-system with the Git Repository (Only needed after initial cluster install)
     cmds:
-      - flux bootstrap github --owner=wipash --repository=homelab --private=false --personal=true --path=/clusters/homelab-0/flux/ --reconcile
+      - flux bootstrap github --owner=wipash --repository=homelab --private=false --personal=true --path=/clusters/homelab-0/flux/ --reconcile --token-auth
