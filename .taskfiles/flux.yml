@@ -28,4 +28,3 @@ tasks:
     desc: Bootstrap flux-system with the Git Repository (Only needed after initial cluster install)
     cmds:
       - flux bootstrap github --owner=wipash --repository=homelab --private=false --personal=true --path=/clusters/homelab-0/flux/ --token-auth --reconcile
-

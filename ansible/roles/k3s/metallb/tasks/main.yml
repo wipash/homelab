@@ -1,3 +1,4 @@
+---
 - name: Install Python prereqs
   ansible.builtin.pip:
     name: "{{ item }}"
@@ -19,8 +20,8 @@
     definition: "{{ lookup('template', 'configmap.yaml.j2') | from_yaml }}"
     state: present
     validate:
-      fail_on_error: no
-      strict: yes
+      fail_on_error: false
+      strict: true
 
 - name: Add MetalLB chart repo
   kubernetes.core.helm_repository:
