@@ -16,3 +16,4 @@ includes:
   flux: .taskfiles/flux.yml
   udm: .taskfiles/udm.yml
   precommit: .taskfiles/precommit.yml
+  sops: .taskfiles/sops.yml

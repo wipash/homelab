@@ -1,0 +1,10 @@
+---
+version: "3"
+
+tasks:
+  encrypt-secrets:
+    desc: Generate a new cluster-secrets.yaml file using SOPS
+    vars:
+      CONFIG_DIR: "{{.CLUSTER_DIR}}/config"
+    cmds:
+      - sops --encrypt "{{.CONFIG_DIR}}/cluster-secrets.dec.yaml" | tee "{{.CONFIG_DIR}}/cluster-secrets.yaml"
