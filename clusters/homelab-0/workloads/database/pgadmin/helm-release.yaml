@@ -24,6 +24,10 @@ spec:
       tag: ""
       pullPolicy: IfNotPresent
 
+    env:
+      email: ${SECRET_PGADMIN_EMAIL}
+      password: ${SECRET_PGADMIN_PASSWORD}
+
     serverDefinitions:
       ## If true, server definitions will be created
       ##
