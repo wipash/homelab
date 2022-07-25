@@ -9,3 +9,8 @@ tasks:
       CONFIG_DIR: "{{.CLUSTER_DIR}}/homelab-0/flux/configs/"
     cmds:
       - sops --encrypt "{{.CONFIG_DIR}}/global-secrets.dec.yaml" --output "{{.CONFIG_DIR}}/global-secrets.yaml" > /dev/null
+
+  update-kubeconfig:
+    desc: Update local copy of kubeconfig with file retrieved from cluster
+    cmds:
+      - cp "{{.ANSIBLE_DIR}}/kubeconfig.yaml" ~/.kube/config
