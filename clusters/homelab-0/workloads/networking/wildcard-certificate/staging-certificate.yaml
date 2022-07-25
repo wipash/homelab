@@ -2,11 +2,11 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: wildcard-tls
+  name: wildcard-tls-staging
   namespace: networking
 spec:
   # secretName doesn't have to match the certificate name, but it may as well, for simplicity!
-  secretName: wildcard-tls
+  secretName: wildcard-tls-staging
   issuerRef:
     name: letsencrypt-staging
     kind: ClusterIssuer
