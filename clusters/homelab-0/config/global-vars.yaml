@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: flux-system
-  name: global-vars
+  name: cluster-settings
 data:
   CLUSTER_NAME: "homelab-0"
   CLUSTER_ID: "1"

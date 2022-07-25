@@ -4,11 +4,11 @@ version: "3"
 tasks:
 
   encrypt-secrets:
-    desc: Generate a new global-secrets.yaml file using SOPS
+    desc: Generate a new cluster-secrets.yaml file using SOPS
     vars:
       CONFIG_DIR: "{{.CLUSTER_DIR}}/flux/configs/"
     cmds:
-      - sops --encrypt "{{.CONFIG_DIR}}/global-secrets.dec.yaml" --output "{{.CONFIG_DIR}}/global-secrets.yaml" > /dev/null
+      - sops --encrypt "{{.CONFIG_DIR}}/cluster-secrets.dec.yaml" --output "{{.CONFIG_DIR}}/cluster-secrets.yaml" > /dev/null
 
   update-kubeconfig:
     desc: Update local copy of kubeconfig with file retrieved from cluster

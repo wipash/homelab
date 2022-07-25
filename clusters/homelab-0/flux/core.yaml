@@ -7,6 +7,7 @@ metadata:
 spec:
   interval: 10m0s
   dependsOn:
+    - name: config
     - name: crds
   path: ./clusters/homelab-0/core
   prune: true
@@ -21,6 +22,6 @@ spec:
     substitute: {}
     substituteFrom:
       - kind: ConfigMap
-        name: global-vars
+        name: cluster-settings
       - kind: Secret
-        name: global-secrets
+        name: cluster-secrets
