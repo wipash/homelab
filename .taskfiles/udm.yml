@@ -1,0 +1,10 @@
+---
+version: "3"
+
+tasks:
+
+  configure:
+    desc: Configure UDM
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook udm-config.yaml"

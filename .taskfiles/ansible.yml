@@ -1,0 +1,20 @@
+---
+version: "3"
+
+tasks:
+  deps:
+    desc: Upgrade Ansible galaxy deps
+    cmds:
+      - "ansible-galaxy install -r {{.ANSIBLE_DIR}}/collections/requirements.yml --force"
+
+  playbook:install:
+    desc: Install k3s on a new cluster
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook homelab-k3s.yaml"
+
+  playbook:nuke:
+    desc: Remove k3s from the cluster
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - "ansible-playbook homelab-k3s-nuke.yaml"

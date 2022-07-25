@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - helmrepository-bitnami.yaml
+  - helmrepository-emberstack.yaml
+  - helmrepository-groundhog2k.yaml
+  - helmrepository-jetstack.yaml
+  - helmrepository-k8sathome-library.yaml
+  - helmrepository-k8sathome.yaml
+  - helmrepository-metallb.yaml
+  - helmrepository-nfs-subdir-external-provisioner.yaml
+  - helmrepository-runix.yaml
+  - helmrepository-traefik.yaml

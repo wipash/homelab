@@ -1,0 +1,21 @@
+---
+- name: Configure BGP on UDM
+  hosts: udm
+  gather_facts: false
+  roles:
+    - role: udm
+      install_kernel_tools: true
+      frr_enabled: true
+      udm_onboot_version_tag: 1.0.5-fix
+      frr_bgp_router_as: 65510
+      frr_bgp_router_id: 10.0.16.1
+      frr_bgp_hostname: SKUDM
+      frr_bgp_password: zebra
+      frr_bgp_peer_groups:
+        K3S:
+          remote_as: 65511
+          neighbors:
+            - 10.0.16.131
+            - 10.0.16.132
+            - 10.0.16.133
+            - 10.0.16.134

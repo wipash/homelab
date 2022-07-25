@@ -1,0 +1,6 @@
+---
+- name: restart udm boot service
+  raw: "{{ unifi_os_cmd }} systemctl restart udm-boot"
+
+- name: restart frr container
+  raw: "podman restart frr"

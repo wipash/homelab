@@ -1,0 +1,10 @@
+# Sops
+.decrypted~*.yaml
+*.dec.yaml
+kubeconfig
+talosconfig
+.terraform
+*.crt
+*.key
+*.agekey
+secret.yaml

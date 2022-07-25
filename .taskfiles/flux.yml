@@ -1,0 +1,31 @@
+---
+version: "3"
+
+tasks:
+
+  update-cli:
+    desc: Go get the latest cli
+    cmds:
+      - brew upgrade fluxcd/tap/flux
+
+  verify:
+    desc: Verify flux meets the prerequisites
+    cmds:
+      - flux check --pre
+
+  installkey:
+    desc: Install Age key into cluster
+    cmds:
+      - cat {{.SOPS_AGE_KEY_FILE}} | kubectl -n flux-system create secret generic sops-age --from-file=age.agekey=/dev/stdin
+    preconditions:
+      - sh: test -f {{.SOPS_AGE_KEY_FILE}}
+        msg: |
+          Age key file is not found. Did you forget to create it?
+    vars:
+      SOPS_AGE_KEY_FILE: ~/.config/sops/age/keys.txt
+
+  bootstrap:
+    desc: Bootstrap flux-system with the Git Repository (Only needed after initial cluster install)
+    cmds:
+      - flux bootstrap github --owner=wipash --repository=homelab --private=false --personal=true --path=/clusters/homelab-0/flux/ --token-auth --reconcile
+

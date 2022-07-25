@@ -1,0 +1,37 @@
+- name: Install Python prereqs
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    extra_args: --user
+    state: latest
+  with_items:
+    - openshift
+    - kubernetes-validate
+
+- name: Ensure MetalLB namespace exist
+  kubernetes.core.k8s:
+    api_version: v1
+    kind: Namespace
+    name: "{{ metallb_namespace }}"
+    state: present
+
+- name: Create MetalLB config based on network info
+  kubernetes.core.k8s:
+    definition: "{{ lookup('template', 'configmap.yaml.j2') | from_yaml }}"
+    state: present
+    validate:
+      fail_on_error: no
+      strict: yes
+
+- name: Add MetalLB chart repo
+  kubernetes.core.helm_repository:
+    name: metallb
+    repo_url: https://metallb.github.io/metallb
+
+- name: Deploy MetalLB
+  kubernetes.core.helm:
+    name: metallb
+    chart_ref: metallb/metallb
+    release_namespace: "{{ metallb_namespace }}"
+    values:
+      metallb:
+        existingConfigMap: metallb-config

@@ -1,0 +1,46 @@
+! -*- bgp -*-
+!
+hostname {{ frr_bgp_hostname }}
+frr defaults traditional
+log stdout
+!
+{% if frr_bgp_peer_groups is defined %}
+
+router bgp {{ frr_bgp_router_as }}
+ bgp ebgp-requires-policy
+ bgp router-id {{ frr_bgp_router_id }}
+ maximum-paths 1
+{% for group, value in frr_bgp_peer_groups.items() %}
+ !
+ ! Peer group for {{ group }}
+ neighbor {{ group }} peer-group
+ neighbor {{ group }} remote-as {{ value.remote_as }}
+ neighbor {{ group }} activate
+ neighbor {{ group }} soft-reconfiguration inbound
+ neighbor {{ group }} timers 15 45
+ neighbor {{ group }} timers connect 15
+{% endfor %}
+
+{% for group, value in frr_bgp_peer_groups.items() %}
+ !
+ ! Neighbors for {{ group }}
+{% for neighbor in value.neighbors %}
+ neighbor {{ neighbor }} peer-group {{ group }}
+{% endfor %}
+{% endfor %}
+
+ address-family ipv4 unicast
+  redistribute connected
+{% for group, values in frr_bgp_peer_groups.items() %}
+  neighbor {{ group }} activate
+  neighbor {{ group }} route-map ALLOW-ALL in
+  neighbor {{ group }} route-map ALLOW-ALL out
+  neighbor {{ group }} next-hop-self
+{% endfor %}
+ exit-address-family
+ !
+{% endif %}
+route-map ALLOW-ALL permit 10
+!
+line vty
+!

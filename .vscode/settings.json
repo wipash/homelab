@@ -1,0 +1,14 @@
+{
+    "yaml.schemas": {
+        "https://json.schemastore.org/taskfile.json": [
+            "file:///home/sean/homelab/.taskfiles/cluster.yml",
+            "file:///home/sean/homelab/.taskfiles/flux.yml",
+            "file:///home/sean/homelab/.taskfiles/ansible.yml"
+        ],
+        "https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible.json#/$defs/playbook": [
+            "file:///home/sean/homelab/ansible/homelab-k3s-nuke.yaml",
+            "file:///home/sean/homelab/ansible/homelab-k3s.yaml",
+            "file:///home/sean/homelab/ansible/udm-config.yaml"
+        ]
+    }
+}

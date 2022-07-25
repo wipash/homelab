@@ -1,0 +1,11 @@
+---
+version: "3"
+
+tasks:
+
+  encrypt-secrets:
+    desc: Generate a new global-secrets.yaml file using SOPS
+    vars:
+      CONFIG_DIR: "{{.CLUSTER_DIR}}/homelab-0/flux/configs/"
+    cmds:
+      - sops --encrypt "{{.CONFIG_DIR}}/global-secrets.dec.yaml" --output "{{.CONFIG_DIR}}/global-secrets.yaml" > /dev/null
