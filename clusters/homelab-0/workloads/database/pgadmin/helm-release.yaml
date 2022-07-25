@@ -1,0 +1,40 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: pgadmin
+  namespace: database
+spec:
+  chart:
+    spec:
+      chart: pgadmin4
+      version: 1.11.x
+      sourceRef:
+        kind: HelmRepository
+        name: runix
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: pgadmin4
+  values:
+    image:
+      registry: docker.io
+      repository: dpage/pgadmin4
+      # Overrides the image tag whose default is the chart appVersion.
+      tag: ""
+      pullPolicy: IfNotPresent
+
+    serverDefinitions:
+      ## If true, server definitions will be created
+      ##
+      enabled: true
+
+      servers:
+        brian:
+          Name: ${SECRET_NFS_SERVER}
+          Group: "Servers"
+          Port: 5431
+          Username: ${SECRET_NFS_SERVER_SUPERUSER}
+          Host: ${SECRET_NFS_SERVER}
+          SSLMode: "prefer"
+          MaintenanceDB: "postgres"
