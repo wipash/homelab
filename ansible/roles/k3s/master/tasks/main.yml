@@ -85,6 +85,7 @@
   register: kubeconfig_base64
 
 - name: Write Kubernetes config file with the correct cluster address
+  become: false
   ansible.builtin.copy:
     content: "{{ kubeconfig_base64.content | b64decode | replace('127.0.0.1', master_ip) }}"
     dest: "{{ playbook_dir }}/kubeconfig.yaml"

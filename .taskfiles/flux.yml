@@ -18,7 +18,7 @@ tasks:
     cmds:
       - flux install
       - task: installkey
-      - kubectl apply --kustomize {{.CLUSTER_DIR}}/flux/flux-system/
+      - task: bootstrap
 
   sync:
     desc: Sync flux-system with the Git Repository

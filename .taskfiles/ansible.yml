@@ -13,6 +13,7 @@ tasks:
     cmds:
       - "ansible-playbook homelab-k3s.yaml"
       - "cp kubeconfig.yaml ../kubeconfig"
+      - "cp kubeconfig.yaml ~/.kube/config"
 
   playbook:nuke:
     desc: Remove k3s from the cluster
