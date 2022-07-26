@@ -30,7 +30,7 @@ spec:
       env:
         TZ: ${TIMEZONE}
         TOKEN_TIME: 43830
-        DB_ENGINE: postgres
+        DB_ENGINE: sqlite
         POSTGRES_USER: ${SECRET_MEALIE_PG_USER}
         POSTGRES_PASSWORD: ${SECRET_MEALIE_PG_PASS}
         POSTGRES_SERVER: ${SECRET_MEALIE_PG_SERVER}

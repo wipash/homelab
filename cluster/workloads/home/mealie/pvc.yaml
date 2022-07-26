@@ -4,6 +4,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: mealie-v1
   namespace: home
+  annotations:
+    nfs.io/storage-path: "mealie"
 spec:
   accessModes:
     - ReadWriteOnce
