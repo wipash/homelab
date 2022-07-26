@@ -3,7 +3,7 @@ apiVersion: metallb.io/v1beta1
 kind: BGPAdvertisement
 metadata:
   name: bgp-lb
-  namespace: metallb-system
+  namespace: networking
 spec:
   ipAddressPools:
     - bgp-pool
@@ -14,7 +14,7 @@ apiVersion: metallb.io/v1beta2
 kind: BGPPeer
 metadata:
   name: gateway
-  namespace: metallb-system
+  namespace: networking
 spec:
   peerAddress: ${GATEWAY_ADDRESS}
   peerASN: 65510
@@ -25,7 +25,7 @@ apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
   name: bgp-pool
-  namespace: metallb-system
+  namespace: networking
 spec:
   addresses:
     - ${METALLB_CIDR}
