@@ -8,7 +8,7 @@ spec:
   dependsOn:
     - name: core
   interval: 2m0s
-  path: ./clusters/homelab-0/workloads
+  path: ./cluster/workloads
   prune: true
   sourceRef:
     kind: GitRepository
