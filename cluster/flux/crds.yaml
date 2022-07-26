@@ -9,7 +9,7 @@ spec:
   path: ./cluster/crds
   prune: true
   dependsOn:
-    - name: global
+    - name: charts
   sourceRef:
     kind: GitRepository
     name: flux-system
