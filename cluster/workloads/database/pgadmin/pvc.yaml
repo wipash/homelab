@@ -4,10 +4,12 @@ kind: PersistentVolumeClaim
 metadata:
   name: pgadmin-v1
   namespace: database
+  annotations:
+    nfs.io/storage-path: "pgadmin"
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: 10Gi
-  storageClassName: nfs-client
+  storageClassName: nfs-provisioner
