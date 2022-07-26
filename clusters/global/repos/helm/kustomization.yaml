@@ -12,3 +12,4 @@ resources:
   - helmrepository-nfs-subdir-external-provisioner.yaml
   - helmrepository-runix.yaml
   - helmrepository-traefik.yaml
+  - helmrepository-ingress-nginx.yaml
