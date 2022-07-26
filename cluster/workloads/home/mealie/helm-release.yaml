@@ -1,0 +1,58 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: mealie
+  namespace: home
+spec:
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: mealie
+      version: 5.0.2
+      sourceRef:
+        kind: HelmRepository
+        name: k8sathome
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: mealie
+  values:
+    image:
+      repository: hkotel/mealie
+      tag: frontend-v1.0.0beta-3
+      pullPolicy: IfNotPresent
+    api:
+      image:
+        repository: hkotel/mealie
+        tag: api-v1.0.0beta-3
+        pullPolicy: IfNotPresent
+      env:
+        TZ: ${TIMEZONE}
+        TOKEN_TIME: 43830
+        DB_ENGINE: postgres
+        POSTGRES_USER: ${SECRET_MEALIE_PG_USER}
+        POSTGRES_PASSWORD: ${SECRET_MEALIE_PG_PASS}
+        POSTGRES_SERVER: ${SECRET_MEALIE_PG_SERVER}
+        POSTGRES_PORT: 5431
+        POSTGRES_DB: ${SECRET_MEALIE_PG_DB}
+        BASE_URL: https://mealie.${SECRET_DOMAIN}
+    env:
+      TZ: Pacific/Auckland
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: nginx
+        hosts:
+          - host: mealie.${SECRET_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - secretName: wildcard-tls
+            hosts:
+              - mealie.${SECRET_DOMAIN}
+    persistence:
+      api-data:
+        enabled: true
+        existingClaim: mealie-v1

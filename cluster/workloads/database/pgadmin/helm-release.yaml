@@ -36,11 +36,11 @@ spec:
 
       servers:
         brian:
-          Name: ${SECRET_NFS_SERVER}
+          Name: ${SECRET_POSTGRES_SERVER}
           Group: "Servers"
           Port: 5431
-          Username: ${SECRET_NFS_SERVER_SUPERUSER}
-          Host: ${SECRET_NFS_SERVER}
+          Username: ${SECRET_POSTGRES_SERVER_SUPERUSER}
+          Host: ${SECRET_POSTGRES_SERVER}
           SSLMode: "prefer"
           MaintenanceDB: "postgres"
 
