@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mealie-v1
+  name: mealie-v2
   namespace: home
   annotations:
     nfs.io/storage-path: "mealie"

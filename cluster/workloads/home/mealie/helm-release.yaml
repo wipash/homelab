@@ -55,4 +55,4 @@ spec:
     persistence:
       api-data:
         enabled: true
-        existingClaim: mealie-v1
+        existingClaim: mealie-v2
