@@ -17,14 +17,42 @@ spec:
   timeout: 5m
   releaseName: metallb
   values:
-    configInLine:
-      peers:
-        - peer-address: ${GATEWAY_ADDRESS}
-          peer-asn: 65510
-          my-asn: 65511
-      address-pools:
-        - name: default
-          protocol: bgp
-          avoid-buggy-ips: true
-          addresses:
-            - ${METALLB_CIDR}
+    crds:
+      enabled: true
+    prometheusRule:
+      enabled: true
+    controller:
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+    speaker:
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+      tolerations:
+        - effect: "NoExecute"
+          operator: "Exists"
+        - effect: "NoSchedule"
+          operator: "Exists"
+      frr:
+        enabled: false
+
+    prometheus:
+      serviceAccount: kube-prometheus-stack-prometheus
+      namespace: monitoring
+
+      podMonitor:
+        enabled: true
+      prometheusRule:
+        enabled: true
+
+  postRenderers:
+    - kustomize:
+        patchesStrategicMerge:
+          - $patch: delete
+            apiVersion: admissionregistration.k8s.io/v1
+            kind: ValidatingWebhookConfiguration
+            metadata:
+              name: validating-webhook-configuration
