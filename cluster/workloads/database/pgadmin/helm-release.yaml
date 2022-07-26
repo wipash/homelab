@@ -59,4 +59,4 @@ spec:
 
     persistentVolume:
       enabled: true
-      existingClaim: pgadmin-v1
+      existingClaim: pgadmin-v2
