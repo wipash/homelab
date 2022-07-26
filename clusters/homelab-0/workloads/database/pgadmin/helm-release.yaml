@@ -42,3 +42,16 @@ spec:
           Host: ${SECRET_NFS_SERVER}
           SSLMode: "prefer"
           MaintenanceDB: "postgres"
+
+    ingress:
+      enabled: true
+      ingressClassName: "nginx"
+      hosts:
+        - host: "pgadmin.${SECRET_DOMAIN}"
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - hosts:
+            - "pgadmin.${SECRET_DOMAIN}"
+          secretName: "wildcard-tls"
