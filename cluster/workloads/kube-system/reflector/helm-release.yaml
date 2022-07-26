@@ -7,8 +7,9 @@ metadata:
 spec:
   chart:
     spec:
+      # renovate: registryUrl=https://emberstack.github.io/helm-charts
       chart: reflector
-      version: 6.x
+      version: 6.1.47
       sourceRef:
         kind: HelmRepository
         name: emberstack
