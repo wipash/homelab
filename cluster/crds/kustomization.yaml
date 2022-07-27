@@ -5,3 +5,4 @@ resources:
   - cert-manager
   - kube-prometheus-stack
   - external-dns
+  - node-feature-discovery
