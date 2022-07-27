@@ -13,3 +13,4 @@ resources:
   - helmrepository-runix.yaml
   - helmrepository-traefik.yaml
   - helmrepository-ingress-nginx.yaml
+  - helmrepository-kubito.yaml
