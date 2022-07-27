@@ -37,6 +37,7 @@ spec:
     txtPrefix: "k8s-${CLUSTER_NAME}."
     domainFilters:
       - "${SECRET_DOMAIN}"
+    annotationFilter: "external-dns/is-public in (true)"
     crd:
       create: false
       apiversion: externaldns.k8s.io/v1alpha1
