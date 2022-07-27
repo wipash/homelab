@@ -44,14 +44,14 @@ spec:
         enabled: true
         ingressClassName: nginx
         hosts:
-          - host: mealie.${SECRET_DOMAIN}
+          - host: &host mealie.${SECRET_DOMAIN}
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - secretName: wildcard-tls
             hosts:
-              - mealie.${SECRET_DOMAIN}
+              - *host
     persistence:
       api-data:
         enabled: true

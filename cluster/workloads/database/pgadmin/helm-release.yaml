@@ -48,13 +48,13 @@ spec:
       enabled: true
       ingressClassName: "nginx"
       hosts:
-        - host: "pgadmin.${SECRET_DOMAIN}"
+        - host: &host "pgadmin.${SECRET_DOMAIN}"
           paths:
             - path: /
               pathType: Prefix
       tls:
         - hosts:
-            - "pgadmin.${SECRET_DOMAIN}"
+            - *host
           secretName: "wildcard-tls"
 
     persistentVolume:
