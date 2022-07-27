@@ -17,6 +17,9 @@ spec:
         namespace: flux-system
       interval: 5m
   values:
+    image:
+      repository: ghcr.io/milgradesec/cloudflared
+      tag: 2022.7.1
     replicaCount: 3
     tunnelID: ${SECRET_CLOUDFLARE_TUNNEL_ID}
     existingSecret: cloudflare-tunnel-credentials
