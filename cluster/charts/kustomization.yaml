@@ -14,6 +14,6 @@ resources:
   - helmrepository-traefik.yaml
   - helmrepository-ingress-nginx.yaml
   - helmrepository-kubito.yaml
-  - helmrepository-stakater.yaml
+  - helmrepository-stakater-charts.yaml
   - helmrepository-node-feature-discovery.yaml
   - helmrepository-kubernetes-sigs-descheduler-charts.yaml
