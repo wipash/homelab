@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m
-  url: git@github.com:wipash/charts
+  url: https://github.com/wipash/charts
   ref:
     branch: add-chart-paradoxalarminterface
   ignore: |
