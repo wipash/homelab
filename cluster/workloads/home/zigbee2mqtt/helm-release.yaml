@@ -1,0 +1,92 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: zigbee2mqtt
+  namespace: home
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: zigbee2mqtt
+      version: 9.3.2
+      sourceRef:
+        kind: HelmRepository
+        name: k8sathome
+        namespace: flux-system
+      interval: 5m
+  install:
+    disableWait: true
+    remediation:
+      retries: 100
+    createNamespace: true
+  upgrade:
+    remediation:
+      retries: 100
+  # dependsOn:
+  #   - name: mosquitto
+  #     namespace: home
+  values:
+    image:
+      repository: ghcr.io/koenkk/zigbee2mqtt
+      tag: 1.26.0
+    env:
+      TZ: "${TIMEZONE}"
+      ZIGBEE2MQTT_DATA: /data
+      ZIGBEE2MQTT_CONFIG_MQTT_USER: "${SECRET_MQTT_USER}"
+      ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD: "${SECRET_MQTT_PASSWORD}"
+    ingress:
+      main:
+        enabled: true
+        primary: true
+        ingressClassName: "ingress-nginx"
+        hosts:
+          - host: &host "zigbee2mqtt.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+    persistence:
+      config:
+        enabled: true
+        existingClaim: zigbee2mqtt-config-v1
+        mountPath: "/data"
+      usb:
+        enabled: true
+        type: hostPath
+        hostPath: /dev/serial/by-id/usb-Texas_Instruments_TI_CC2531_USB_CDC___0X00124B0014DA43F4-if00
+    # nodeSelector:
+    #   kubernetes.io/hostname: nuc1
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: feature.node.kubernetes.io/usb-02_0451_16a8.present
+                  operator: In
+                  values:
+                    - "true"
+    securityContext:
+      privileged: true
+    podSecurityContext:
+      supplementalGroups:
+        - 20 # dialout for /dev/ttyUSB0
+    resources:
+      requests:
+        memory: 100Mi
+        cpu: 100m
+      limits:
+        memory: 500Mi
+    config:
+      # Minimal configuration.yml example
+      permit_join: true
+      homeassistant: true
+      mqtt:
+        server: mqtt://${SECRET_MQTT_SERVER}:1883
+      serial:
+        port: /dev/serial/by-id/usb-Texas_Instruments_TI_CC2531_USB_CDC___0X00124B0014DA43F4-if00
+      frontend:
+        port: 8080
