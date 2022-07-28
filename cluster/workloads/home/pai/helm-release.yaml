@@ -8,7 +8,6 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: ./charts/stable/paradoxalarminterface
       sourceRef:
         kind: GitRepository
@@ -29,33 +28,20 @@ spec:
   values:
     env:
       TZ: "${TIMEZONE}"
-    # ingress:
-    #   main:
-    #     enabled: true
-    #     primary: true
-    #     ingressClassName: "ingress-nginx"
-    #     hosts:
-    #       - host: &host "zigbee2mqtt.${SECRET_DOMAIN}"
-    #         paths:
-    #           - path: /
-    #             pathType: Prefix
-    #     tls:
-    #       - hosts:
-    #           - *host
     persistence:
       usb:
         enabled: true
         type: hostPath
-        hostPath: /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
-    # affinity:
-    #   nodeAffinity:
-    #     requiredDuringSchedulingIgnoredDuringExecution:
-    #       nodeSelectorTerms:
-    #         - matchExpressions:
-    #             - key: feature.node.kubernetes.io/usb-02_0451_16a8.present
-    #               operator: In
-    #               values:
-    #                 - "true"
+        hostPath: /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: feature.node.kubernetes.io/usb-ff_10c4_ea60.present
+                  operator: In
+                  values:
+                    - "true"
     securityContext:
       privileged: true
     podSecurityContext:
@@ -68,5 +54,13 @@ spec:
       limits:
         memory: 500Mi
     config:
-      # Minimal configuration.yml example
-      SERIAL_PORT: /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
+      SERIAL_PORT: /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0
+      MQTT_ENABLE: True
+      MQTT_HOST: ${SECRET_MQTT_SERVER}
+      MQTT_USERNAME: ${SECRET_MQTT_USER}
+      MQTT_PASSWORD: ${SECRET_MQTT_PASS}
+      MQTT_HOMEASSISTANT_AUTODISCOVERY_ENABLE: True
+      LIMITS:
+        zone: [1, 2, 3, 5]
+        pgm: [1]
+        partition: [1]
