@@ -8,7 +8,6 @@ resources:
   - helmrepository-jetstack.yaml
   - helmrepository-k8sathome-library.yaml
   - helmrepository-k8sathome.yaml
-  - helmrepository-k8sathome-sean.yaml
   - helmrepository-metallb.yaml
   - helmrepository-nfs-subdir-external-provisioner.yaml
   - helmrepository-runix.yaml
