@@ -1,0 +1,16 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: sean-charts-paradoxalarminterface
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: git@github.com:wipash/charts
+  ref:
+    branch: add-chart-paradoxalarminterface
+  ignore: |
+    # exclude all
+    /*
+    # include charts directory
+    !/charts/

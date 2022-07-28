@@ -9,9 +9,12 @@ spec:
   chart:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
-      git: git@github.com:wipash/charts
-      ref: add-chart-paradoxalarminterface
-      path: charts/stable/paradoxalarminterface
+      chart: ./charts/stable/paradoxalarminterface
+      sourceRef:
+        kind: GitRepository
+        name: sean-charts-paradoxalarminterface
+        namespace: flux-system
+      interval: 5m
   install:
     disableWait: true
     remediation:
