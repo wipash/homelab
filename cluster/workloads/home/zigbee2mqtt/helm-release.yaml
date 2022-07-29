@@ -36,6 +36,7 @@ spec:
       ZIGBEE2MQTT_DATA: /data
       ZIGBEE2MQTT_CONFIG_MQTT_USER: "${SECRET_MQTT_USER}"
       ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD: "${SECRET_MQTT_PASS}"
+      ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://${SECRET_MQTT_SERVER}:1883
     ingress:
       main:
         enabled: true
