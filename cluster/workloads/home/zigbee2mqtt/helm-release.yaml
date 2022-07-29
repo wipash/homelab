@@ -31,11 +31,6 @@ spec:
     image:
       repository: ghcr.io/koenkk/zigbee2mqtt
       tag: 1.26.0
-    env:
-      TZ: "${TIMEZONE}"
-      ZIGBEE2MQTT_DATA: /data
-      ZIGBEE2MQTT_CONFIG_MQTT_USER: "${SECRET_MQTT_USER}"
-      ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD: "${SECRET_MQTT_PASSWORD}"
     ingress:
       main:
         enabled: true
@@ -86,6 +81,8 @@ spec:
       homeassistant: true
       mqtt:
         server: mqtt://${SECRET_MQTT_SERVER}:1883
+        user: ${SECRET_MQTT_USER}
+        password: ${SECRET_MQTT_PASSWORD}
       serial:
         port: /dev/serial/by-id/usb-Texas_Instruments_TI_CC2531_USB_CDC___0X00124B0014DA43F4-if00
       frontend:
