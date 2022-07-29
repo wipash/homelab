@@ -58,7 +58,7 @@ spec:
       mqttEnable: True
       mqttHost: ${SECRET_MQTT_SERVER}
       mqttUsername: ${SECRET_MQTT_USER}
-      mattPassword: ${SECRET_MQTT_PASS}
+      mqttPassword: ${SECRET_MQTT_PASS}
       mqttHomeassistantAutodiscoveryEnable: True
       limits:
         zone: [1, 2, 3, 5]
