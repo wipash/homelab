@@ -82,7 +82,7 @@ spec:
       mqtt:
         server: mqtt://${SECRET_MQTT_SERVER}:1883
         user: ${SECRET_MQTT_USER}
-        password: ${SECRET_MQTT_PASSWORD}
+        password: ${SECRET_MQTT_PASS}
       serial:
         port: /dev/serial/by-id/usb-Texas_Instruments_TI_CC2531_USB_CDC___0X00124B0014DA43F4-if00
       frontend:
