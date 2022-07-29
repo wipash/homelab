@@ -54,13 +54,13 @@ spec:
       limits:
         memory: 500Mi
     config:
-      SERIAL_PORT: /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0
-      MQTT_ENABLE: True
-      MQTT_HOST: ${SECRET_MQTT_SERVER}
-      MQTT_USERNAME: ${SECRET_MQTT_USER}
-      MQTT_PASSWORD: ${SECRET_MQTT_PASS}
-      MQTT_HOMEASSISTANT_AUTODISCOVERY_ENABLE: True
-      LIMITS:
+      serialPort: /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0
+      mqttEnable: True
+      mqttHost: ${SECRET_MQTT_SERVER}
+      mqttUsername: ${SECRET_MQTT_USER}
+      mattPassword: ${SECRET_MQTT_PASS}
+      mqttHomeassistantAutodiscoveryEnable: True
+      limits:
         zone: [1, 2, 3, 5]
         pgm: [1]
         partition: [1]
