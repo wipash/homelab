@@ -91,3 +91,21 @@ spec:
         port: /dev/serial/by-id/usb-Texas_Instruments_TI_CC2531_USB_CDC___0X00124B0014DA43F4-if00
       frontend:
         port: 8080
+      advanced:
+        network_key:
+          - 1
+          - 3
+          - 5
+          - 7
+          - 9
+          - 11
+          - 13
+          - 15
+          - 0
+          - 2
+          - 4
+          - 6
+          - 8
+          - 10
+          - 12
+          - 13
