@@ -41,7 +41,7 @@ spec:
       main:
         enabled: true
         primary: true
-        ingressClassName: "ingress-nginx"
+        ingressClassName: nginx
         hosts:
           - host: &host "zigbee2mqtt.${SECRET_DOMAIN}"
             paths:
