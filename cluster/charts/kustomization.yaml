@@ -18,3 +18,4 @@ resources:
   - helmrepository-node-feature-discovery.yaml
   - helmrepository-kubernetes-sigs-descheduler-charts.yaml
   # - helmrepository-truecharts.yaml
+  - helmrepository-prometheus-community-charts.yaml
