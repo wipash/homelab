@@ -17,4 +17,4 @@ resources:
   - helmrepository-stakater-charts.yaml
   - helmrepository-node-feature-discovery.yaml
   - helmrepository-kubernetes-sigs-descheduler-charts.yaml
-  - helmrepository-truecharts.yaml
+  # - helmrepository-truecharts.yaml
