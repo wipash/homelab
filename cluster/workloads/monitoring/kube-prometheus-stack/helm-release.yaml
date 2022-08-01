@@ -78,7 +78,8 @@ spec:
         hosts:
           - &alertmanagerhost "alert-manager.${SECRET_DOMAIN}"
         tls:
-          - hosts:
+          - secretName: wildcard-tls
+            hosts:
               - *alertmanagerhost
       alertmanagerSpec:
         storage:
@@ -179,7 +180,8 @@ spec:
         hosts:
           - &prometheushost "prometheus.${SECRET_DOMAIN}"
         tls:
-          - hosts:
+          - secretName: wildcard-tls
+            hosts:
               - *prometheushost
 #      thanosService:
 #        enabled: true
