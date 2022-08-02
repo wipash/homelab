@@ -24,7 +24,7 @@ spec:
         namespace: flux-system
   values:
     nodeFeatureRule:
-      createCRD: true
+      createCRD: false
     worker:
       annotations:
         configmap.reloader.stakater.com/reload: node-feature-discovery-worker-conf
