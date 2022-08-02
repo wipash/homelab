@@ -1,0 +1,20 @@
+---
+
+- name: Prepare machines to join cluster
+  hosts: k3s_cluster
+  gather_facts: true
+  become: true
+  vars:
+    ansible_ssh_user: ubuntu
+  roles:
+    - role: k3s/prereq
+
+- name: Remove ubuntu user
+  hosts: k3s_cluster
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Remove ubuntu user
+      ansible.builtin.user:
+        state: absent
+        name: "ubuntu"

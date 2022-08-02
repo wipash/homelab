@@ -20,3 +20,9 @@ tasks:
     dir: "{{.ANSIBLE_DIR}}"
     cmds:
       - "ansible-playbook homelab-k3s-nuke.yaml"
+
+  playbook:prep:
+    desc: Prepare new hosts for the cluster
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - ansible-playbook homelab-k3s-prep.yaml --ask-pass

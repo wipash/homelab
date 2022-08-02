@@ -1,4 +1,25 @@
 ---
+- name: Create user
+  ansible.builtin.user:
+    state: present
+    name: "{{ cluster_user }}"
+
+- name: Add user to sudoers
+  ansible.builtin.copy:
+    content: "{{ cluster_user }} ALL=(ALL:ALL) NOPASSWD:ALL"
+    dest: "/etc/sudoers.d/{{ cluster_user }}_nopasswd"
+    mode: "0440"
+
+- name: Add additional user SSH public keys
+  ansible.posix.authorized_key:
+    user: "{{ cluster_user }}"
+    key: "{{ item }}"
+  loop: "{{ ssh_authorized_keys }}"
+  when:
+    - ssh_authorized_keys is defined
+    - ssh_authorized_keys is iterable
+    - ssh_authorized_keys | length > 0
+
 - name: Set SELinux to disabled state
   selinux:
     state: disabled
@@ -63,19 +84,3 @@
   package:
     name: nfs-common
     state: present
-
-- name: Add user to sudoers
-  ansible.builtin.copy:
-    content: "{{ ansible_user }} ALL=(ALL:ALL) NOPASSWD:ALL"
-    dest: "/etc/sudoers.d/{{ ansible_user }}_nopasswd"
-    mode: "0440"
-
-- name: Add additional user SSH public keys
-  ansible.posix.authorized_key:
-    user: "{{ ansible_user }}"
-    key: "{{ item }}"
-  loop: "{{ ssh_authorized_keys }}"
-  when:
-    - ssh_authorized_keys is defined
-    - ssh_authorized_keys is iterable
-    - ssh_authorized_keys | length > 0
