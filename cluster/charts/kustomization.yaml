@@ -19,3 +19,4 @@ resources:
   - helmrepository-kubernetes-sigs-descheduler-charts.yaml
   # - helmrepository-truecharts.yaml
   - helmrepository-prometheus-community-charts.yaml
+  - helmrepository-metricsserver.yaml
