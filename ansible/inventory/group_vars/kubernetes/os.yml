@@ -1,0 +1,35 @@
+---
+# (string) Timezone for the servers
+# timezone: "America/New_York"
+
+# (list) Additional ssh public keys to add to the nodes
+# ssh_authorized_keys:
+
+ssh_authorized_keys:
+  - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC6T/Vv+IP0SV3Q6hKfpZq8E6+abluKtA7E5Vy1EL3s/
+  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCu2Fd3rwzhAn9MonX1911cDhWtEvTyXQpwBsyTPzLg5BH0xS7Q7k8Xn6Fbbp6q8DAj9RRJJL9Rqvx6TN0VbxVQ8zPGYj73iEI0DU0j+V16jJEMIg4mTrOpRr6wB3u1RTYR01RERj6MgxCjqWupsSSFfaP3VuXqVYrCiQn8BkoBdx2Wibx96PSPZ03r/sh0+lJMnQcuMFt0VDc3mz+CccJK0a5FsTJiy9KKNoFR3xoTMOy8itXl3SZy3pcRwMk8x6o8Yo7If81uVHpM49jw068fwvxE3c5ZZcFalYvAHkyom0GvrlPc4K8U5bDvMmeUlF5B70/a5Btd2eMX8eeXewKOU6EcJaVMS33252KQRsW08zsEfHTPRx1t9vgI3wTCl9b4xD0xUdJaGPSazJbJTH2NQIHfxKj7mDO9pEnq+BV/dxgzNe5qaNc9X2TOCUPeO1r4+QgCypBWyBfXK3Pq7EYCKFn0Y9xnh9IIYnBugmVlORf/ulSTHNQwCAwP3gLCxZtuG8ptlzsgfXJEpzNna+XWvjVDT1KRV+/GGHBNENYEyp5dODKQKbob6/S3Pd36muW5J7sKuKdTZamjsfEPg/jPTSNEbcdmnryk7aGltCv1vMY2xtmOUBiuLcDLhF925+lDrcp5+ba7HwChMSq1aCOUFekVEqaj2xXHIpKc7DDvDw==
+
+
+packages:
+  - "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ ansible_distribution_major_version }}.noarch.rpm"
+  - "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ ansible_distribution_major_version }}.noarch.rpm"
+  - dnf-automatic
+  - dnf-utils
+  - hdparm
+  - htop
+  - intel-gpu-tools
+  - ipvsadm
+  - lm_sensors
+  - nano
+  - nvme-cli
+  - socat
+  - python3-libselinux
+  # TODO(ansible): Might be required for newer Intel CPU generations
+  # https://ask.fedoraproject.org/t/intel-graphics-best-practices-and-settings-for-hardware-acceleration/21119
+  # - intel-media-driver
+  # - mesa-dri-drivers
+  # - libva-intel-driver
+  # - libva-intel-hybrid-driver
+  # - libva-utils
+  # - libva-vdpau-driver
+  # - libvdpau-va-gl

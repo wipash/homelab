@@ -6,5 +6,5 @@ tasks:
   update-kubeconfig:
     desc: Update local copy of kubeconfig with file retrieved from cluster
     cmds:
-      - cp "{{.ANSIBLE_DIR}}/kubeconfig.yaml" ~/.kube/config
-      - cp "{{.ANSIBLE_DIR}}/kubeconfig.yaml" "{{.PROJECT_DIR}}/kubeconfig"
+      - cp "{{.ANSIBLE_DIR}}/kubeconfig" ~/.kube/config
+      - cp "{{.ANSIBLE_DIR}}/kubeconfig" "{{.PROJECT_DIR}}/kubeconfig"
