@@ -19,7 +19,7 @@ spec:
   releaseName: metallb
   values:
     crds:
-      enabled: true
+      enabled: false
     prometheusRule:
       enabled: true
     controller:
