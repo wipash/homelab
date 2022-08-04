@@ -30,7 +30,7 @@ spec:
         etcd: false
 
     alertmanager:
-      enabled: true
+      enabled: false
       config:
         global:
           resolve_timeout: 5m
@@ -101,10 +101,12 @@ spec:
             hosts:
               - *alertmanagerhost
       alertmanagerSpec:
+        nodeSelector:
+          kubernetes.io/hostname: rpi2
         storage:
           volumeClaimTemplate:
             spec:
-              storageClassName: "nfs-provisioner"
+              storageClassName: "local-path"
               resources:
                 requests:
                   storage: 1Gi
@@ -184,6 +186,8 @@ spec:
               enabled: true
 
     prometheusOperator:
+      nodeSelector:
+        kubernetes.io/hostname: rpi2
       prometheusConfigReloader:
         resources:
           requests:
@@ -216,10 +220,12 @@ spec:
         retention: 6h
         enableAdminAPI: true
         walCompression: true
+        nodeSelector:
+          kubernetes.io/hostname: rpi2
         storageSpec:
           volumeClaimTemplate:
             spec:
-              storageClassName: "nfs-provisioner"
+              storageClassName: "local-path"
               resources:
                 requests:
                   storage: 20Gi
