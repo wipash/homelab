@@ -74,6 +74,8 @@ spec:
     podSecurityContext:
       supplementalGroups:
         - 20 # dialout for /dev/ttyUSB0
+    podAnnotations:
+      configmap.reloader.stakater.com/reload: "zigbee2matt-settings"
     resources:
       requests:
         memory: 100Mi

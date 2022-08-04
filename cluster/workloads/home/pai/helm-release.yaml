@@ -47,6 +47,8 @@ spec:
     podSecurityContext:
       supplementalGroups:
         - 20 # dialout for /dev/ttyUSB0
+    podAnnotations:
+      configmap.reloader.stakater.com/reload: "paradoxalarminterface-config"
     resources:
       requests:
         memory: 100Mi
