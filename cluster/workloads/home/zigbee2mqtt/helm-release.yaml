@@ -24,9 +24,9 @@ spec:
   upgrade:
     remediation:
       retries: 100
-  # dependsOn:
-  #   - name: mosquitto
-  #     namespace: home
+  dependsOn:
+    - name: mosquitto
+      namespace: home
   values:
     image:
       repository: ghcr.io/koenkk/zigbee2mqtt
@@ -85,7 +85,7 @@ spec:
       permit_join: true
       homeassistant: true
       mqtt:
-        server: mqtt://${SECRET_MQTT_SERVER}:1883
+        server: mqtt://mosquitto.home:1883
         user: ${SECRET_MQTT_USER}
         password: ${SECRET_MQTT_PASS}
       serial:

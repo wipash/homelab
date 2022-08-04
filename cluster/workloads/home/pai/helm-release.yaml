@@ -22,9 +22,9 @@ spec:
   upgrade:
     remediation:
       retries: 100
-  # dependsOn:
-  #   - name: mosquitto
-  #     namespace: home
+  dependsOn:
+    - name: mosquitto
+      namespace: home
   values:
     env:
       TZ: "${TIMEZONE}"
@@ -56,7 +56,7 @@ spec:
     config:
       serialPort: /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0
       mqttEnable: True
-      mqttHost: ${SECRET_MQTT_SERVER}
+      mqttHost: mosquitto.home
       mqttUsername: ${SECRET_MQTT_USER}
       mqttPassword: ${SECRET_MQTT_PASS}
       mqttHomeassistantAutodiscoveryEnable: True
