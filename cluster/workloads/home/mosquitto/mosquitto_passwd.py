@@ -9,10 +9,10 @@ print()
 
 chars   = b'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-salt    = bytes([random.choice(chars) for i in range(16)])
+salt    = bytes([random.choice(chars) for i in range(12)])
 saltB64 = base64.b64decode(salt)
 
-passwd  = b'Put your password in here'
+passwd  = b'2TTtknFPsjBPuAFZ7hkQ'
 
 m = hashlib.sha512()
 m.update(passwd)
