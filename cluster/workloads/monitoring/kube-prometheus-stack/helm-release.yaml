@@ -137,6 +137,8 @@ spec:
     kubeStateMetrics:
       enabled: true
     kube-state-metrics:
+      nodeSelector:
+        kubernetes.io/hostname: rpi2
       metricLabelsAllowlist:
         - "persistentvolumeclaims=[*]"
       prometheus:
