@@ -58,6 +58,7 @@ spec:
         - address=/phpmyadmin.${SECRET_DOMAIN}/${METALLB_INGRESS_ADDR}
         - address=/hajimari.${SECRET_DOMAIN}/${METALLB_INGRESS_ADDR}
         - address=/dash.${SECRET_DOMAIN}/${METALLB_INGRESS_ADDR}
+        - address=/monica.${SECRET_DOMAIN}/${METALLB_INGRESS_ADDR}
         ##
         - address=/3dp.${SECRET_DOMAIN}/${EXTERNAL_TRAEFIK_ADDR}
         - address=/hass.${SECRET_DOMAIN}/${EXTERNAL_TRAEFIK_ADDR}
