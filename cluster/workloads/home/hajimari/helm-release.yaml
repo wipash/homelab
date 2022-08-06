@@ -38,15 +38,6 @@ spec:
           url: https://3dp.${SECRET_DOMAIN}
           icon: printer-3d
           group: Home
-      groups:
-        - name: Home
-        - name: Home Automation
-        - name: Networking
-        - name: Monitoring
-        - name: Tech
-          links:
-            - name: Hacker News
-              url: https://news.ycombinator.com/
     ingress:
       main:
         enabled: true
