@@ -10,3 +10,4 @@ resources:
   - mosquitto
   - smtp-relay
   - hajimari
+  - monica
