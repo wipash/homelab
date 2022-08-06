@@ -57,20 +57,20 @@ spec:
 
     persistentVolumeClaim:
       enabled: true
-      existingClaim: pihole
-
-    virtualHost: "pihole.${SECRET_DOMAIN}"
+      existingClaim: pihole-v1
 
     ingress:
       enabled: true
       ingressClassName: nginx
       path: /
       hosts:
-        - "pihole.${SECRET_DOMAIN}"
+        - &host "pihole.${SECRET_DOMAIN}"
       tls:
         - secretName: wildcard-tls
           hosts:
-            - "pihole.${SECRET_DOMAIN}"
+            - *host
+
+    virtualHost: *host
 
     serviceWeb:
       loadBalancerIP: ${METALLB_PIHOLE_ADDR}
