@@ -45,18 +45,23 @@ spec:
         enabled: true
         annotations:
         hosts:
-          - host: &host hajimari.${DOMAIN}
+          - host: &hosthajimari hajimari.${DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+          - host: &hostdash dash.${DOMAIN}
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-              - *host
-            secretName: hajimari-tls
+              - *hosthajimari
+              - *hostdash
+            secretName: wildcard-tls
     persistence:
       data:
         enabled: true
-        existingClaim: hajimari-data
+        existingClaim: hajimari-data-v1
     podAnnotations:
       configmap.reloader.stakater.com/reload: hajimari-settings
     resources:
