@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: "pihole/pihole"
-      tag: "2022.07"
+      tag: "2022.07.1"
     monitoring:
       podMonitor:
         enabled: true
@@ -44,6 +44,9 @@ spec:
 
     dnsmasq:
       customDnsEntries:
+        ##
+        - address=/pihole.${SECRET_DOMAIN}/${METALLB_PIHOLE_ADDR}
+        ##
         - address=/k3s.${SECRET_DOMAIN}/${METALLB_INGRESS_ADDR}
         - address=/alert-manager.${SECRET_DOMAIN}/${METALLB_INGRESS_ADDR}
         - address=/mealie.${SECRET_DOMAIN}/${METALLB_INGRESS_ADDR}
