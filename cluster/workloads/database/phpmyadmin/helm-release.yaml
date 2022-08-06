@@ -16,18 +16,29 @@ spec:
         name: bitnami
         namespace: flux-system
   values:
+    image:
+      registry: docker.io
+      repository: bitnami/phpmyadmin
+      tag: 5.2.0-debian-11-r24
+      pullPolicy: IfNotPresent
     db:
       allowArbitraryServer: false
       host: ${SECRET_MARIADB_SERVER}
     ingress:
       enabled: true
-      hostname: phpmyadmin.${DOMAIN}
+      ingressClassName: nginx
+      hostname: &host phpmyadmin.${SECRET_DOMAIN}
       pathType: Prefix
+      path: /
       annotations:
         hajimari.io/enable: "true"
         hajimari.io/icon: database-cog
         hajimari.io/appName: phpMyAdmin
-      tls: true
+        hajimari.io/group: Database
+      extraTls:
+        - hosts:
+            - *host
+          secretName: wildcard-tls
     metrics:
       enabled: true
       serviceMonitor:
