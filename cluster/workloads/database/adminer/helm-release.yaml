@@ -24,9 +24,7 @@ spec:
     config:
       design: dracula
       externalserver: ${SECRET_MARIADB_SERVER}
-      plugins:
-        - designs
-        - tinymce
+      plugins: "tables-filter tinymce designs"
     ingress:
       enabled: true
       ingressClassName: "nginx"
