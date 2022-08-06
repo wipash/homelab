@@ -45,11 +45,11 @@ spec:
         enabled: true
         annotations:
         hosts:
-          - host: &hosthajimari hajimari.${DOMAIN}
+          - host: &hosthajimari hajimari.${SECRET_DOMAIN}
             paths:
               - path: /
                 pathType: Prefix
-          - host: &hostdash dash.${DOMAIN}
+          - host: &hostdash dash.${SECRET_DOMAIN}
             paths:
               - path: /
                 pathType: Prefix
