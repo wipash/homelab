@@ -8,4 +8,3 @@ resources:
   - pai
   - node-red
   - mosquitto
-  - pihole
