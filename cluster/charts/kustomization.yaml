@@ -20,3 +20,4 @@ resources:
   # - helmrepository-truecharts.yaml
   - helmrepository-prometheus-community-charts.yaml
   - helmrepository-metricsserver.yaml
+  - helmrepository-pihole.yaml

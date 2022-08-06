@@ -1,0 +1,91 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: pihole
+  namespace: home
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://mojo2600.github.io/pihole-kubernetes/
+      chart: pihole
+      version: 2.9.0
+      sourceRef:
+        kind: HelmRepository
+        name: pihole
+        namespace: flux-system
+      interval: 5m
+  values:
+    image:
+      repository: "pihole/pihole"
+      tag: "2022.07"
+    monitoring:
+      podMonitor:
+        enabled: true
+      sidecar:
+        enabled: true
+        image:
+          pullPolicy: "IfNotPresent"
+          repository: "ekofr/pihole-exporter"
+          tag: "v0.3.0"
+          port: 9617
+        resources:
+          limits:
+            memory: "128Mi"
+
+    doh:
+      enabled: true
+      name: "cloudflared"
+      repository: "crazymax/cloudflared"
+      tag: "2021.5.7"
+
+    adminPassword: ${SECRET_PIHOLE_ADMIN_PASSWORD}
+
+    dnsmasq:
+      customDnsEntries:
+        - address=/nas/192.168.178.10
+
+      customCnameEntries:
+        - cname=foo.nas,nas
+
+    persistentVolumeClaim:
+      enabled: true
+      existingClaim: pihole
+
+    virtualHost: "pihole.${SECRET_DOMAIN}"
+
+    ingress:
+      enabled: true
+      ingressClassName: nginx
+      path: /
+      hosts:
+        - "pihole.${SECRET_DOMAIN}"
+      tls:
+        - secretName: wildcard-tls
+          hosts:
+            - "pihole.${SECRET_DOMAIN}"
+
+    serviceWeb:
+      loadBalancerIP: ${METALLB_PIHOLE_ADDR}
+      annotations:
+        metallb.universe.tf/allow-shared-ip: pihole-svc
+      type: LoadBalancer
+
+    serviceDns:
+      loadBalancerIP: ${METALLB_PIHOLE_ADDR}
+      annotations:
+        metallb.universe.tf/allow-shared-ip: pihole-svc
+      type: LoadBalancer
+
+    serviceDhcp:
+      enabled: false
+
+    podDnsConfig:
+      enabled: true
+      policy: "None"
+      nameservers:
+        - 127.0.0.1
+        - 9.9.9.11
+        - 149.112.112.11
+        - 1.1.1.1
