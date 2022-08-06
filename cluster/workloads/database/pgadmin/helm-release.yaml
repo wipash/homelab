@@ -56,7 +56,11 @@ spec:
         - hosts:
             - *host
           secretName: "wildcard-tls"
-
+      annotations:
+        hajimari.io/enable: "true"
+        hajimari.io/icon: database-cog
+        hajimari.io/appName: PGAdmin
+        hajimari.io/group: Database
     persistentVolume:
       enabled: true
       existingClaim: pgadmin-v2

@@ -59,6 +59,11 @@ spec:
           - secretName: wildcard-tls
             hosts:
               - *host
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: sitemap
+          hajimari.io/appName: Node-RED
+          hajimari.io/group: Home Automation
     persistence:
       config:
         enabled: true

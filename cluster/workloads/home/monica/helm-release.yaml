@@ -48,6 +48,11 @@ spec:
         tls:
           - hosts:
               - *host
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: calendar-text
+          hajimari.io/appName: Monica
+          hajimari.io/group: Home
     persistence:
       config:
         enabled: true

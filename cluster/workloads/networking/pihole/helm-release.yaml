@@ -77,6 +77,11 @@ spec:
         - secretName: wildcard-tls
           hosts:
             - *host
+      annotations:
+        hajimari.io/enable: "true"
+        hajimari.io/icon: server-security
+        hajimari.io/appName: Pi-hole
+        hajimari.io/group: Networking
 
     virtualHost: *host
 

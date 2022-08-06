@@ -100,6 +100,11 @@ spec:
           - secretName: wildcard-tls
             hosts:
               - *alertmanagerhost
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: bell-alert
+          hajimari.io/appName: Alert Manager
+          hajimari.io/group: Monitoring
       alertmanagerSpec:
         nodeSelector:
           kubernetes.io/hostname: rpi2
@@ -208,6 +213,11 @@ spec:
           - secretName: wildcard-tls
             hosts:
               - *prometheushost
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: database-eye
+          hajimari.io/appName: Prometheus
+          hajimari.io/group: Monitoring
       #      thanosService:
       #        enabled: true
       #      thanosServiceMonitor:
