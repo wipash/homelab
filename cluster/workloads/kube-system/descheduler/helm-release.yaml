@@ -24,11 +24,6 @@ spec:
     remediation:
       retries: 5
   values:
-    image:
-      repository: k8s.gcr.io/descheduler/descheduler
-      # Overrides the image tag whose default is the chart version
-      tag: 0.24.1
-      pullPolicy: IfNotPresent
     kind: Deployment
     replicas: 3
     leaderElection:
