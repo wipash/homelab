@@ -9,3 +9,4 @@ resources:
   - node-red
   - mosquitto
   - smtp-relay
+  - hajimari

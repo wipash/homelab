@@ -59,6 +59,7 @@ spec:
         ##
         - address=/3dp.${SECRET_DOMAIN}/${EXTERNAL_TRAEFIK_ADDR}
         - address=/hass.${SECRET_DOMAIN}/${EXTERNAL_TRAEFIK_ADDR}
+        - address=/${SECRET_NAS_HOSTNAME}/${SECRET_NAS_IP}
 
     persistentVolumeClaim:
       enabled: true
