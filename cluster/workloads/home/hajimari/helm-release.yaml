@@ -30,7 +30,7 @@ spec:
       name: Diaoul
       customApps:
         - name: NAS
-          url: https://${SECRET_NAS_HOSTNAME}
+          url: https://${SECRET_NAS_HOSTNAME}:5001/
           icon: nas
         - name: 3D Printer
           url: https://3dp.${SECRET_DOMAIN}
