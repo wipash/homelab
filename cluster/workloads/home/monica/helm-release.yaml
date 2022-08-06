@@ -26,6 +26,7 @@ spec:
       APP_URL: https://monica.${SECRET_DOMAIN}
       APP_ENV: production
       APP_KEY: ${SECRET_MONICA_APP_KEY}
+      APP_DEBUG: true
       DB_HOST: ${SECRET_MARIADB_SERVER}
       DB_DATABASE: ${SECRET_MONICA_MARIADB_DB}
       DB_USERNAME: ${SECRET_MONICA_MARIADB_USER}
