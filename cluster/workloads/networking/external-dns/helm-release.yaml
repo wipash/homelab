@@ -20,7 +20,7 @@ spec:
     image:
       registry: k8s.gcr.io
       repository: external-dns/external-dns
-      tag: v0.12.0
+      tag: v0.12.2
     nameOverride: external-dns
     interval: "5m"
     # logLevel: debug
