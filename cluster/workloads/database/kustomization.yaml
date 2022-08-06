@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - pgadmin
-  - phpmyadmin
+  - adminer
