@@ -17,9 +17,10 @@ spec:
         namespace: flux-system
   values:
     image:
+      # Changed from bitnami image to support ARM64
       registry: docker.io
-      repository: bitnami/phpmyadmin
-      tag: 5.2.0-debian-11-r24
+      repository: phpmyadmin
+      tag: 5.2.0-fpm-alpine
       pullPolicy: IfNotPresent
     db:
       allowArbitraryServer: false

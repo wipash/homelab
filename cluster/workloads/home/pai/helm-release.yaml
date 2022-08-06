@@ -26,6 +26,10 @@ spec:
     - name: mosquitto
       namespace: home
   values:
+    image:
+      repository: paradoxalarminterface/pai
+      tag: "3.0.1"
+      pullPolicy: IfNotPresent
     env:
       TZ: "${TIMEZONE}"
     persistence:

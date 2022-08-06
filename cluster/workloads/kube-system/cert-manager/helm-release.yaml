@@ -18,6 +18,10 @@ spec:
   timeout: 5m
   releaseName: cert-manager
   values:
+    image:
+      repository: quay.io/jetstack/cert-manager-controller
+      tag: 1.9.1
+      pullPolicy: IfNotPresent
     installCRDs: false
     extraArgs:
       - --dns01-recursive-nameservers=1.1.1.1:53,8.8.8.8:53
