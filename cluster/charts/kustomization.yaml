@@ -21,3 +21,4 @@ resources:
   - helmrepository-prometheus-community-charts.yaml
   - helmrepository-metricsserver.yaml
   - helmrepository-pihole.yaml
+  - helmrepository-hajimari.yaml
