@@ -8,3 +8,4 @@ resources:
   - pai
   - node-red
   - mosquitto
+  - smtp-relay
