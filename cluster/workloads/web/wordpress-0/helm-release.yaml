@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: wordpress_0
+  name: wordpress-0
   namespace: web
 spec:
   interval: 5m
@@ -44,10 +44,10 @@ spec:
         tls:
           - hosts:
               - "${SECRET_WP_0_DOMAIN}"
-            secretName: "wordpress_0-tls"
+            secretName: "wordpress-0-tls"
     persistence:
       content:
         enabled: true
-        existingClaim: wordpress_0-v1
+        existingClaim: wordpress-0-v1
     mariadb:
       enabled: false
