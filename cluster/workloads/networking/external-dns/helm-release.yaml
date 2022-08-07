@@ -37,6 +37,8 @@ spec:
     txtPrefix: "k8s-${CLUSTER_NAME}."
     domainFilters:
       - "${SECRET_DOMAIN}"
+      - "${SECRET_GHOST_DOMAIN}"
+      - "${SECRET_WP_0_DOMAIN}"
     annotationFilter: "external-dns/is-public in (true)"
     crd:
       create: false
