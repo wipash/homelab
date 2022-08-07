@@ -20,8 +20,6 @@ spec:
     image:
       repository: wordpress
       tag: 6.0.1-apache
-    env:
-      - TZ: ${TZ}
     externalDatabase:
       host: ${SECRET_MARIADB_SERVER}
       name: ${SECRET_WP_0_MARIADB_DB}
