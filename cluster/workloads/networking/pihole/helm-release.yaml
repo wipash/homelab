@@ -20,19 +20,19 @@ spec:
     image:
       repository: "pihole/pihole"
       tag: "2022.07.1"
-    monitoring:
-      podMonitor:
-        enabled: true
-      sidecar:
-        enabled: true
-        image:
-          pullPolicy: "IfNotPresent"
-          repository: "ekofr/pihole-exporter"
-          tag: "v0.3.0"
-          port: 9617
-        resources:
-          limits:
-            memory: "128Mi"
+    # monitoring:
+    #   podMonitor:
+    #     enabled: true
+    #   sidecar:
+    #     enabled: true
+    #     image:
+    #       pullPolicy: "IfNotPresent"
+    #       repository: "ekofr/pihole-exporter"
+    #       tag: "v0.3.0"
+    #       port: 9617
+    #     resources:
+    #       limits:
+    #         memory: "128Mi"
 
     doh:
       enabled: true
