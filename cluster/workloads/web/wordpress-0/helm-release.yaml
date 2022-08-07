@@ -42,9 +42,7 @@ spec:
         - hosts:
             - "${SECRET_WP_0_DOMAIN}"
           secretName: "wordpress-0-tls"
-    persistence:
-      content:
-        enabled: true
-        existingClaim: wordpress-0-v1
+    storage:
+      persistentVolumeClaimName: wordpress-0-v1
     mariadb:
       enabled: false
