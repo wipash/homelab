@@ -93,10 +93,18 @@ spec:
           monica.${SECRET_DOMAIN}: ${METALLB_INGRESS_ADDR}
         ##
           3dp.${SECRET_DOMAIN}: ${EXTERNAL_TRAEFIK_ADDR}
+          3dp.${SECRET_DOMAIN_INTERNAL}: 10.0.10.148
           hass.${SECRET_DOMAIN}: ${EXTERNAL_TRAEFIK_ADDR}
+          hass.${SECRET_DOMAIN_INTERNAL}: 10.0.16.3
+          seave.${SECRET_DOMAIN_INTERNAL}: 10.0.16.10
           ${SECRET_NAS_HOSTNAME}: ${SECRET_NAS_IP}
           unifi.${SECRET_DOMAIN}: ${GATEWAY_ADDRESS}
           unifi.${SECRET_DOMAIN_INTERNAL}: ${GATEWAY_ADDRESS}
+          traefik.${SECRET_DOMAIN}: ${EXTERNAL_TRAEFIK_ADDR}
+          traefik.${SECRET_DOMAIN_INTERNAL}: ${EXTERNAL_TRAEFIK_ADDR}
+          traefik.dmz.${SECRET_DOMAIN_INTERNAL}: ${EXTERNAL_TRAEFIK_ADDR}
+          docker1.${SECRET_DOMAIN_INTERNAL}: 10.0.16.245
+          sk1.${SECRET_DOMAIN_INTERNAL}: 10.0.16.11
 
       blocking:
         blockType: zeroIp
