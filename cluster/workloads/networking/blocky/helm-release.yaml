@@ -149,6 +149,8 @@ spec:
     tolerations:
       - key: "arm"
         operator: "Exists"
+    podAnnotations:
+      configmap.reloader.stakater.com/reload: "blocky-config"
     resources:
       requests:
         memory: 280Mi
