@@ -16,6 +16,14 @@ spec:
         name: k8sathome
         namespace: flux-system
       interval: 5m
+  install:
+    disableWait: true
+    remediation:
+      retries: 100
+    createNamespace: true
+  upgrade:
+    remediation:
+      retries: 100
   values:
     image:
       repository: ghcr.io/0xerr0r/blocky

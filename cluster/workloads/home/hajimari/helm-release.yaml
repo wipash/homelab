@@ -15,6 +15,14 @@ spec:
         kind: HelmRepository
         name: hajimari
         namespace: flux-system
+  install:
+    disableWait: true
+    remediation:
+      retries: 100
+    createNamespace: true
+  upgrade:
+    remediation:
+      retries: 100
   values:
     image:
       repository: ghcr.io/toboshii/hajimari
