@@ -25,6 +25,14 @@
             path: /etc/hosts
             block: |
               127.0.1.1   {{ inventory_hostname }}
+        - name: Set DNS to not rely on cluster-hosted DNS
+          ansible.builtin.include_role:
+            name: oefenweb.dns
+            public: true
+          vars:
+            dns_remove_resolvconf: true
+            dns_nameservers:
+              - 1.1.1.1
     - name: Packages
       block:
         - name: Packages | Improve dnf performance

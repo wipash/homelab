@@ -31,6 +31,15 @@
   when:
     - ansible_hostname != inventory_hostname
 
+- name: Set DNS
+  ansible.builtin.include_role:
+    name: oefenweb.dns
+    public: true
+  vars:
+    dns_remove_resolvconf: true
+    dns_nameservers:
+      - 1.1.1.1
+
 - name: Enable IPv4 forwarding
   sysctl:
     name: net.ipv4.ip_forward

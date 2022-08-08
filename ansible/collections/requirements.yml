@@ -6,3 +6,5 @@ collections:
 roles:
   - src: xanmanning.k3s
     version: v3.2.0
+  - src: oefenweb.dns
+    version: v1.1.34
