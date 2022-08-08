@@ -47,6 +47,7 @@ spec:
         ##
         - address=/pihole.${SECRET_DOMAIN}/${METALLB_INGRESS_ADDR}
         - address=/pihole.${SECRET_DOMAIN_INTERNAL}/${METALLB_PIHOLE_ADDR}
+        - address=/pi.hole/${METALLB_PIHOLE_ADDR}
         ##
         - address=/k3s.${SECRET_DOMAIN}/${METALLB_INGRESS_ADDR}
         - address=/alert-manager.${SECRET_DOMAIN}/${METALLB_INGRESS_ADDR}
@@ -63,6 +64,8 @@ spec:
         - address=/3dp.${SECRET_DOMAIN}/${EXTERNAL_TRAEFIK_ADDR}
         - address=/hass.${SECRET_DOMAIN}/${EXTERNAL_TRAEFIK_ADDR}
         - address=/${SECRET_NAS_HOSTNAME}/${SECRET_NAS_IP}
+        - address=/unifi.${SECRET_DOMAIN}/${GATEWAY_ADDRESS}
+        - address=/unifi.${SECRET_DOMAIN_INTERNAL}/${GATEWAY_ADDRESS}
 
     persistentVolumeClaim:
       enabled: true
