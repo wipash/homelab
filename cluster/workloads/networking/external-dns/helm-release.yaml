@@ -35,10 +35,15 @@ spec:
       proxied: true
     policy: upsert-only
     txtPrefix: "k8s-${CLUSTER_NAME}."
-    domainFilters:
-      - "${SECRET_DOMAIN}"
-      - "${SECRET_GHOST_DOMAIN}"
-      - "${SECRET_WP_0_DOMAIN}"
+    # domainFilters:
+    #   - "${SECRET_DOMAIN}"
+    #   - ".${SECRET_DOMAIN}"
+    #   - "${SECRET_GHOST_DOMAIN}"
+    #   - ".${SECRET_GHOST_DOMAIN}"
+    #   - "${SECRET_WP_0_DOMAIN}"
+    #   - ".${SECRET_WP_0_DOMAIN}"
+    #   - "${SECRET_WP_1_DOMAIN}"
+    #   - ".${SECRET_WP_1_DOMAIN}"
     annotationFilter: "external-dns/is-public in (true)"
     crd:
       create: false
