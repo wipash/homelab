@@ -36,4 +36,16 @@ spec:
         service: https://ingress-nginx-controller.networking
         originRequest:
           noTLSVerify: true
+      - hostname: "www.${SECRET_WP_0_DOMAIN}"
+        service: https://ingress-nginx-controller.networking
+        originRequest:
+          noTLSVerify: true
+      - hostname: "${SECRET_WP_1_DOMAIN}"
+        service: https://ingress-nginx-controller.networking
+        originRequest:
+          noTLSVerify: true
+      - hostname: "www.${SECRET_WP_1_DOMAIN}"
+        service: https://ingress-nginx-controller.networking
+        originRequest:
+          noTLSVerify: true
       - service: http_status:404
