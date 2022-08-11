@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: wordpress-0
+  name: wordpress-1
   namespace: web
 spec:
   interval: 5m
@@ -22,9 +22,9 @@ spec:
       tag: 6.0.1-apache
     externalDatabase:
       host: ${SECRET_MARIADB_SERVER}
-      name: ${SECRET_WP_0_MARIADB_DB}
-      user: ${SECRET_WP_0_MARIADB_USER}
-      password: ${SECRET_WP_0_MARIADB_PASS}
+      name: ${SECRET_WP_1_MARIADB_DB}
+      user: ${SECRET_WP_1_MARIADB_USER}
+      password: ${SECRET_WP_1_MARIADB_PASS}
     ingress:
       enabled: true
       annotations:
@@ -34,20 +34,20 @@ spec:
         external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
         external-dns.alpha.kubernetes.io/target: "${SECRET_CLOUDFLARE_TUNNEL_ID}.cfargotunnel.com"
       hosts:
-        - host: "${SECRET_WP_0_DOMAIN}"
+        - host: "${SECRET_WP_1_DOMAIN}"
           paths:
             - path: /
               pathType: Prefix
-        - host: "www.${SECRET_WP_0_DOMAIN}"
+        - host: "www.${SECRET_WP_1_DOMAIN}"
           paths:
             - path: /
               pathType: Prefix
       tls:
         - hosts:
-            - "${SECRET_WP_0_DOMAIN}"
-            - "www.${SECRET_WP_0_DOMAIN}"
-          secretName: "wordpress-0-tls"
+            - "${SECRET_WP_1_DOMAIN}"
+            - "www.${SECRET_WP_1_DOMAIN}"
+          secretName: "wordpress-1-tls"
     storage:
-      persistentVolumeClaimName: wordpress-0-v1
+      persistentVolumeClaimName: wordpress-1-v1
     mariadb:
       enabled: false
