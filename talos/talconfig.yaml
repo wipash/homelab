@@ -1,72 +1,102 @@
+---
 clusterName: home-cluster
+
 talosVersion: v1.1.1
 kubernetesVersion: v1.24.3
-endpoint: https://10.0.16.131:6443
-domain: home-cluster.local
+endpoint: https://home-cluster.${domainName}:6443
+
+cniConfig:
+  name: none
+
 allowSchedulingOnMasters: true
 clusterPodNets:
   - 10.244.0.0/16
 clusterSvcNets:
   - 10.96.0.0/12
-cniConfig:
-  name: custom
-  urls:
-    - https://raw.githubusercontent.com/bjw-s/home-ops/main/infrastructure/talos/cluster-0/cni/install.yaml
+
 nodes:
-  - hostname: rpi1
-    ipAddress: 10.0.16.131
+  - hostname: nuc1.${domainName}
+    ipAddress: 10.0.16.135
     controlPlane: true
     installDisk: /dev/sda
     nameservers:
       - 1.1.1.1
       - 8.8.8.8
-  - hostname: rpi2
-    ipAddress: 10.0.16.132
-    controlPlane: false
-    installDisk: /dev/sda
-    nameservers:
-      - 1.1.1.1
-      - 8.8.8.8
 controlPlane:
-  configPatches:
-    - op: add
-      path: /machine/kubelet/extraArgs
-      value:
-        feature-gates: GracefulNodeShutdown=true,MixedProtocolLBService=true
-        rotate-server-certificates: "true"
-    - op: add
-      path: /machine/install/extraKernelArgs
-      value:
-        - talos.logging.kernel=udp://10.45.0.2:6050/
   inlinePatch:
     cluster:
       aescbcEncryptionSecret: ${aescbcEncryptionKey}
       aggregatorCA:
         crt: ${k8sAggregatorCert}
         key: ${k8sAggregatorCertKey}
+      apiServer:
+        admissionControl: []
+        certSANs:
+          - ${clusterEndpointIP}
+          - home-cluster.${domainName}
+        extraArgs:
+          feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
       ca:
         crt: ${clusterCert}
         key: ${clusterCertKey}
+      controllerManager:
+        extraArgs:
+          feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+      discovery:
+        registries:
+          service:
+            disabled: true
       etcd:
         ca:
           crt: ${etcdCert}
           key: ${etcdCertKey}
+      extraManifests:
+        - https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/v0.5.1/deploy/ha-install.yaml
+      proxy:
+        disabled: true
+        extraArgs:
+          feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+      scheduler:
+        extraArgs:
+          feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
       secret: ${clusterSecret}
       serviceAccount:
         key: ${k8sServiceAccountKey}
       token: ${clusterToken}
+
     machine:
       ca:
         crt: ${machineCert}
         key: ${machineCertKey}
+      certSANs:
+        - ${clusterEndpointIP}
+        - home-cluster.${domainName}
+      files:
+        - content: |
+            [plugins."io.containerd.grpc.v1.cri"]
+              enable_unprivileged_ports = true
+              enable_unprivileged_icmp = true
+          path: /var/cri/conf.d/allow-unpriv-ports.toml
+          op: create
+      kubelet:
+        extraArgs:
+          feature-gates: GracefulNodeShutdown=true,MixedProtocolLBService=true
+          rotate-server-certificates: "true"
+      install:
+        extraKernelArgs:
+          - "talos.logging.kernel=udp://10.45.0.2:6050/"
+      logging:
+        destinations:
+          - endpoint: "udp://10.45.0.2:6051/"
+            format: json_lines
+      network:
+        extraHostEntries:
+          - ip: ${clusterEndpointIP}
+            aliases:
+              - home-cluster.${domainName}
       token: ${machineToken}
+
 worker:
-  configPatches:
-    - op: add
-      path: /machine/kubelet/extraArgs
-      value:
-        feature-gates: GracefulNodeShutdown=true,MixedProtocolLBService=true
-        rotate-server-certificates: "true"
   inlinePatch:
     cluster:
       aescbcEncryptionSecret: ${aescbcEncryptionKey}
@@ -75,8 +105,42 @@ worker:
         key: ${clusterCertKey}
       secret: ${clusterSecret}
       token: ${clusterToken}
+      discovery:
+        registries:
+          service:
+            disabled: true
+
     machine:
       ca:
         crt: ${machineCert}
         key: ${machineCertKey}
+      certSANs:
+        - ${clusterEndpointIP}
+        - home-cluster.${domainName}
+      files:
+        - content: |
+            [plugins."io.containerd.grpc.v1.cri"]
+              enable_unprivileged_ports = true
+              enable_unprivileged_icmp = true
+          path: /var/cri/conf.d/allow-unpriv-ports.toml
+          op: create
+      install:
+        extraKernelArgs:
+          - "talos.logging.kernel=udp://10.45.0.2:6050/"
+      logging:
+        destinations:
+          - endpoint: "udp://10.45.0.2:6051/"
+            format: json_lines
+      network:
+        extraHostEntries:
+          - ip: ${clusterEndpointIP}
+            aliases:
+              - home-cluster.${domainName}
+      sysctls:
+        fs.inotify.max_user_watches: "1048576"
+        fs.inotify.max_user_instances: "8192"
       token: ${machineToken}
+      kubelet:
+        extraArgs:
+          rotate-server-certificates: "true"
+          feature-gates: MixedProtocolLBService=true,EphemeralContainers=True

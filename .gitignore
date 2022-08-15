@@ -1,7 +1,7 @@
 # Sops
 .decrypted~*.yaml
 *.dec.yaml
-kubeconfig
+*kubeconfig
 talosconfig
 .terraform
 *.crt
