@@ -105,6 +105,10 @@ spec:
           traefik.dmz.${SECRET_DOMAIN_INTERNAL}: ${EXTERNAL_TRAEFIK_ADDR}
           docker1.${SECRET_DOMAIN_INTERNAL}: 10.0.16.245
           sk1.${SECRET_DOMAIN_INTERNAL}: 10.0.16.11
+          #
+          sonarr.${SECRET_DOMAIN}: ${EXTERNAL_TRAEFIK_ADDR}
+          radarr.${SECRET_DOMAIN}: ${EXTERNAL_TRAEFIK_ADDR}
+          nzbget.${SECRET_DOMAIN}: ${EXTERNAL_TRAEFIK_ADDR}
 
       blocking:
         blockType: zeroIp
