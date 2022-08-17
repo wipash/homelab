@@ -26,3 +26,9 @@ tasks:
     dir: "{{.ANSIBLE_DIR}}"
     cmds:
       - ansible-playbook homelab-k3s-prep.yaml --ask-pass
+
+  playbook:udm:
+    desc: Apply UDM config
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - ansible-playbook udm-config.yaml
