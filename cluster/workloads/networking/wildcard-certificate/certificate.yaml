@@ -18,5 +18,5 @@ spec:
     annotations:
       reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
       reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true" # Auto create reflection for matching namespaces
-      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "media,home,monitoring,database" # Control destination namespaces
-      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "media,home,monitoring,database" # Control auto-reflection namespaces
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "media,home,monitoring,database,kube-system" # Control destination namespaces
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "media,home,monitoring,database,kube-system" # Control auto-reflection namespaces
