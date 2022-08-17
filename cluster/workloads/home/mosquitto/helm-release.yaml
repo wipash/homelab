@@ -34,6 +34,8 @@ spec:
       main:
         type: LoadBalancer
         loadBalancerIp: ${METALLB_MOSQUITTO_ADDR}
+        externalIPs:
+          - "${METALLB_MOSQUITTO_ADDR}"
         externalTrafficPolicy: Local
     auth:
       enabled: true
