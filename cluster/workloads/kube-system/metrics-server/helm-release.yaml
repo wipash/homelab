@@ -5,7 +5,6 @@ metadata:
   name: metrics-server
   namespace: kube-system
 spec:
-  interval: 15m
   chart:
     spec:
       chart: metrics-server
@@ -15,13 +14,15 @@ spec:
         name: metrics-server
         namespace: flux-system
       interval: 15m
+  interval: 15m
+  maxHistory: 2
+  timeout: 20m
   install:
-    createNamespace: true
     remediation:
-      retries: 5
+      retries: 300
   upgrade:
     remediation:
-      retries: 5
+      retries: 300
   values:
     args:
       - --kubelet-insecure-tls

@@ -6,7 +6,15 @@ metadata:
   namespace: home
 spec:
   releaseName: monica
-  interval: 5m
+  interval: 15m
+  maxHistory: 2
+  timeout: 20m
+  install:
+    remediation:
+      retries: 300
+  upgrade:
+    remediation:
+      retries: 300
   chart:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/

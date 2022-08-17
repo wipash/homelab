@@ -5,7 +5,6 @@ metadata:
   name: hajimari
   namespace: home
 spec:
-  interval: 10m
   chart:
     spec:
       # renovate: registryUrl=https://hajimari.io
@@ -15,14 +14,15 @@ spec:
         kind: HelmRepository
         name: hajimari
         namespace: flux-system
+  interval: 15m
+  maxHistory: 2
+  timeout: 20m
   install:
-    disableWait: true
     remediation:
-      retries: 100
-    createNamespace: true
+      retries: 300
   upgrade:
     remediation:
-      retries: 100
+      retries: 300
   values:
     image:
       repository: ghcr.io/toboshii/hajimari

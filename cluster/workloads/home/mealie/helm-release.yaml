@@ -15,7 +15,14 @@ spec:
         name: k8sathome
         namespace: flux-system
   interval: 15m
-  timeout: 5m
+  maxHistory: 2
+  timeout: 20m
+  install:
+    remediation:
+      retries: 300
+  upgrade:
+    remediation:
+      retries: 300
   releaseName: mealie
   values:
     image:

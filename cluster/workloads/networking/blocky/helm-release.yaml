@@ -5,7 +5,6 @@ metadata:
   name: blocky
   namespace: networking
 spec:
-  interval: 5m
   chart:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
@@ -16,14 +15,15 @@ spec:
         name: k8sathome
         namespace: flux-system
       interval: 5m
+  interval: 15m
+  maxHistory: 2
+  timeout: 20m
   install:
-    disableWait: true
     remediation:
-      retries: 100
-    createNamespace: true
+      retries: 300
   upgrade:
     remediation:
-      retries: 100
+      retries: 300
   values:
     image:
       repository: spx01/blocky

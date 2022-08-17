@@ -5,7 +5,6 @@ metadata:
   name: external-dns
   namespace: networking
 spec:
-  interval: 5m
   chart:
     spec:
       # renovate: registryUrl=https://charts.bitnami.com/bitnami
@@ -16,6 +15,15 @@ spec:
         name: bitnami
         namespace: flux-system
       interval: 5m
+  interval: 15m
+  maxHistory: 2
+  timeout: 20m
+  install:
+    remediation:
+      retries: 300
+  upgrade:
+    remediation:
+      retries: 300
   values:
     image:
       registry: k8s.gcr.io
