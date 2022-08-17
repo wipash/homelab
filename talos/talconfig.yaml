@@ -16,7 +16,7 @@ clusterSvcNets:
 
 nodes:
   - hostname: nuc1.${domainName}
-    ipAddress: 10.0.16.135
+    ipAddress: 10.0.16.131
     controlPlane: true
     installDisk: /dev/sda
     nameservers:

@@ -1,3 +1,2 @@
-cluster-0-nuc1.yaml
 talosconfig
-cluster-0-nuc1.mcgrath.nz.yaml
+cluster-0-*.yaml
