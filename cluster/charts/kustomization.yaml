@@ -23,3 +23,4 @@ resources:
   - helmrepository-pihole.yaml
   - helmrepository-hajimari.yaml
   - helmrepository-cetic.yaml
+  - helmrepository-cilium.yaml

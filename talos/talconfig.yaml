@@ -1,9 +1,9 @@
 ---
-clusterName: home-cluster
+clusterName: cluster-0
 
 talosVersion: v1.1.1
 kubernetesVersion: v1.24.3
-endpoint: https://home-cluster.${domainName}:6443
+endpoint: https://cluster-0.${domainName}:6443
 
 cniConfig:
   name: none
@@ -33,7 +33,7 @@ controlPlane:
         admissionControl: []
         certSANs:
           - ${clusterEndpointIP}
-          - home-cluster.${domainName}
+          - cluster-0.${domainName}
         extraArgs:
           feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
       ca:
@@ -70,7 +70,7 @@ controlPlane:
         key: ${machineCertKey}
       certSANs:
         - ${clusterEndpointIP}
-        - home-cluster.${domainName}
+        - cluster-0.${domainName}
       files:
         - content: |
             [plugins."io.containerd.grpc.v1.cri"]
@@ -93,7 +93,7 @@ controlPlane:
         extraHostEntries:
           - ip: ${clusterEndpointIP}
             aliases:
-              - home-cluster.${domainName}
+              - cluster-0.${domainName}
       token: ${machineToken}
 
 worker:
@@ -116,7 +116,7 @@ worker:
         key: ${machineCertKey}
       certSANs:
         - ${clusterEndpointIP}
-        - home-cluster.${domainName}
+        - cluster-0.${domainName}
       files:
         - content: |
             [plugins."io.containerd.grpc.v1.cri"]
@@ -135,7 +135,7 @@ worker:
         extraHostEntries:
           - ip: ${clusterEndpointIP}
             aliases:
-              - home-cluster.${domainName}
+              - cluster-0.${domainName}
       sysctls:
         fs.inotify.max_user_watches: "1048576"
         fs.inotify.max_user_instances: "8192"
