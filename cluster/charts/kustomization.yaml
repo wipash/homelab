@@ -24,3 +24,4 @@ resources:
   - helmrepository-hajimari.yaml
   - helmrepository-cetic.yaml
   - helmrepository-cilium.yaml
+  - helmrepository-fairwinds.yaml
