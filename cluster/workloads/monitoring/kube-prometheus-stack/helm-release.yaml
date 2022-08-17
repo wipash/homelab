@@ -24,42 +24,13 @@ spec:
         name: prometheus-community-charts
         namespace: flux-system
       interval: 15m
+
   values:
-    fullnameOverride: prometheus
-    defaultRules:
-      create: true
-      rules:
-        alertmanager: true
-        etcd: true
-        configReloaders: true
-        general: true
-        k8s: true
-        kubeApiserver: true
-        kubeApiserverAvailability: true
-        kubeApiserverSlos: true
-        kubelet: true
-        kubeProxy: false
-        kubePrometheusGeneral: true
-        kubePrometheusNodeRecording: true
-        kubernetesApps: true
-        kubernetesResources: true
-        kubernetesStorage: true
-        kubernetesSystem: true
-        kubeScheduler: false
-        kubeStateMetrics: true
-        network: true
-        node: true
-        nodeExporterAlerting: true
-        nodeExporterRecording: true
-        prometheus: true
-        prometheusOperator: true
-
-
-    alertmanager:
-      enabled: false
-
+    ###
+    ### Component values
+    ###
     kubeApiServer:
-      enabled: false
+      enabled: true
 
     kubeControllerManager:
       enabled: false
@@ -68,7 +39,13 @@ spec:
       enabled: false
 
     kubelet:
-      enabled: false
+      enabled: true
+      serviceMonitor:
+        metricRelabelings:
+          - action: replace
+            sourceLabels:
+              - node
+            targetLabel: instance
 
     kubeProxy:
       enabled: false
@@ -77,54 +54,241 @@ spec:
       enabled: false
 
     kubeStateMetrics:
-      enabled: false
-
-    nodeExporter:
-      enabled: false
+      enabled: true
+    kube-state-metrics:
+      metricLabelsAllowlist:
+        - "persistentvolumeclaims=[*]"
+      prometheus:
+        monitor:
+          enabled: true
+          relabelings:
+            - action: replace
+              regex: (.*)
+              replacement: $1
+              sourceLabels:
+                - __meta_kubernetes_pod_node_name
+              targetLabel: kubernetes_node
+      resources:
+        requests:
+          cpu: 15m
+          memory: 127M
+        limits:
+          memory: 153M
 
     grafana:
       enabled: false
+      forceDeployDashboards: true
+      sidecar:
+        dashboards:
+          multicluster:
+            etcd:
+              enabled: true
 
+    nodeExporter:
+      enabled: true
+    prometheus-node-exporter:
+      resources:
+        requests:
+          cpu: 23m
+          memory: 64M
+        limits:
+          memory: 64M
+
+      prometheus:
+        monitor:
+          enabled: true
+          relabelings:
+            - action: replace
+              regex: (.*)
+              replacement: $1
+              sourceLabels:
+                - __meta_kubernetes_pod_node_name
+              targetLabel: kubernetes_node
+
+    ###
+    ### Prometheus operator values
+    ###
     prometheusOperator:
+      resources:
+        requests:
+          cpu: 35m
+          memory: 273M
+        limits:
+          memory: 326M
+
       prometheusConfigReloader:
+        # resource config for prometheusConfigReloader
         resources:
           requests:
-            cpu: 100m
-            memory: 50Mi
+            cpu: 11m
+            memory: 32M
           limits:
-            memory: 100Mi
+            memory: 32M
 
+    ###
+    ### Prometheus instance values
+    ###
     prometheus:
       ingress:
         enabled: true
+        ingressClassName: nginx
         pathType: Prefix
-        ingressClassName: "nginx"
         hosts:
-          - &prometheushost "prometheus.${SECRET_DOMAIN}"
+          - &host_prometheus prometheus.${SECRET_DOMAIN}
         tls:
-          - secretName: wildcard-tls
-            hosts:
-              - *prometheushost
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/icon: database-eye
-          hajimari.io/appName: Prometheus
-          hajimari.io/group: Monitoring
+          - hosts:
+              - *host_prometheus
+            secretName: wildcard-tls
 
       prometheusSpec:
-        replicas: 1
-        replicaExternalLabelName: "replica"
-        ruleSelectorNilUsesHelmValues: false
-        serviceMonitorSelectorNilUsesHelmValues: false
+        # additionalScrapeConfigs:
+        #   - job_name: node-exporter
+        #     scrape_interval: 1m
+        #     scrape_timeout: 10s
+        #     honor_timestamps: true
+        #     static_configs:
+        #       - targets:
+        #           - "athena.${HARDWARE_DOMAIN}:9100"
+        #           - "bruno.${HARDWARE_DOMAIN}:9100"
+        #           - "carmen.${HARDWARE_DOMAIN}:9100"
+        #           - "diego.${HARDWARE_DOMAIN}:9100"
+        enableAdminAPI: true
+        externalLabels:
+          cluster: ${CLUSTER_NAME}
         podMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false
-        retention: 6h
-        enableAdminAPI: true
-        walCompression: true
+        replicas: 1
+        replicaExternalLabelName: "replica"
+        resources:
+          requests:
+            cpu: 587m
+            memory: 4993M
+          limits:
+            memory: 5977M
+        retention: 2d
+        retentionSize: "6GB"
+        ruleSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
         storageSpec:
           volumeClaimTemplate:
             spec:
-              storageClassName: "local-path"
+              storageClassName: local-path
               resources:
                 requests:
-                  storage: 20Gi
+                  storage: 10Gi
+        thanos:
+          image: quay.io/thanos/thanos:v0.27.0@sha256:0c010131dc9982a859ddbfec3c1691281e873dcbf2f18db3026972d8ae432229
+          objectStorageConfig:
+            name: thanos-objstore-secret
+            key: objstore.yml
+          # renovate: datasource=docker depName=quay.io/thanos/thanos
+          version: "v0.27.0"
+        walCompression: true
+
+      thanosService:
+        enabled: true
+
+      thanosServiceMonitor:
+        enabled: true
+
+    ###
+    ### Alertmanager values
+    ###
+    alertmanager:
+      config:
+        receivers:
+          - name: "null"
+          - name: "pushover"
+            pushover_configs:
+              - user_key: ${SECRET_PUSHOVER_USER_KEY}
+                token: ${SECRET_PUSHOVER_PROMETHEUS_APP_KEY}
+                title: |-
+                  [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}
+                message: |-
+                  {{- range .Alerts }}
+                    {{- if ne .Labels.severity "" }}
+                      <b>Severity:</b> <i>{{ .Labels.severity }}</i>
+                    {{- else }}
+                      <b>Severity:</b> <i>N/A</i>
+                    {{- end }}
+                    {{- if ne .Annotations.description "" }}
+                      <b>Description:</b> <i>{{ .Annotations.description }}</i>
+                    {{- else if ne .Annotations.summary "" }}
+                      <b>Summary:</b> <i>{{ .Annotations.summary }}</i>
+                    {{- else if ne .Annotations.message "" }}
+                      <b>Message:</b> <i>{{ .Annotations.message }}</i>
+                    {{- else }}
+                      <b>Description:</b> <i>N/A</i>
+                    {{- end }}
+                    {{- if gt (len .Labels.SortedPairs) 0 }}
+                      <b>Details:</b>
+                      {{- range .Labels.SortedPairs }}
+                        • <b>{{ .Name }}:</b> <i>{{ .Value }}</i>
+                      {{- end }}
+                    {{- end }}
+                  {{- end }}
+        route:
+          group_by: ["alertname", "job"]
+          group_wait: 30s
+          group_interval: 5m
+          repeat_interval: 6h
+          receiver: "pushover"
+          routes:
+            - receiver: "null"
+              matchers:
+                - alertname =~ "InfoInhibitor|Watchdog"
+            - receiver: "pushover"
+              match_re:
+                # severity: critical|warning
+                severity: critical
+              continue: true
+
+        inhibit_rules:
+          - source_match:
+              alertname: "InfoInhibitor"
+            target_match:
+              severity: "info"
+            equal: ["namespace"]
+          - source_match:
+              severity: "critical"
+            target_match:
+              severity: "warning"
+            equal: ["alertname", "namespace"]
+
+      alertmanagerSpec:
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: local-path
+              resources:
+                requests:
+                  storage: 1Gi
+
+        resources:
+          requests:
+            cpu: 11m
+            memory: 50M
+          limits:
+            memory: 99M
+
+      ingress:
+        enabled: true
+        ingressClassName: nginx
+        pathType: Prefix
+        hosts:
+          - &host_alertmanager alertmanager.${SECRET_DOMAIN}
+        tls:
+          - hosts:
+              - *host_alertmanager
+            secretName: wildcard-tls
+
+      prometheus:
+        monitor:
+          enabled: true
+          relabelings:
+            - action: replace
+              regex: (.*)
+              replacement: $1
+              sourceLabels:
+                - __meta_kubernetes_pod_node_name
+              targetLabel: kubernetes_node

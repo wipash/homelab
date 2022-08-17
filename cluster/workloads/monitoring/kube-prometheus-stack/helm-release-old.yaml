@@ -79,6 +79,7 @@ spec:
               matchers:
                 - severity =~ "critical|warning|error"
               continue: true
+
         inhinhibit_rules:
           - source_match:
               alertname: "InfoInhibitor"
