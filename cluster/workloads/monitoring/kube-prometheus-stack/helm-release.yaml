@@ -162,9 +162,9 @@ spec:
         resources:
           requests:
             cpu: 587m
-            memory: 4993M
+            memory: 3000M
           limits:
-            memory: 5977M
+            memory: 5000M
         retention: 2d
         retentionSize: "6GB"
         ruleSelectorNilUsesHelmValues: false
