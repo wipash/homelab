@@ -34,9 +34,8 @@ spec:
         - name: TZ
           value: "${TIMEZONE}"
       service:
-        loadBalancerIp: ${METALLB_INGRESS_ADDR}
-        externalIPs:
-          - "${METALLB_INGRESS_ADDR}"
+        type: LoadBalancer
+        loadBalancerIP: ${METALLB_INGRESS_ADDR}
         externalTrafficPolicy: Local
       publishService:
         enabled: true
