@@ -82,6 +82,14 @@ controlPlane:
         extraArgs:
           feature-gates: GracefulNodeShutdown=true,MixedProtocolLBService=true
           rotate-server-certificates: "true"
+        extraMounts:
+          - destination: /opt/local-path-provisioner
+            type: bind
+            source: /opt/local-path-provisioner
+            options:
+              - bind
+              - rshared
+              - rw
       install:
         extraKernelArgs:
           - "talos.logging.kernel=udp://10.45.0.2:6050/"
@@ -144,3 +152,11 @@ worker:
         extraArgs:
           rotate-server-certificates: "true"
           feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+        extraMounts:
+          - destination: /opt/local-path-provisioner
+            type: bind
+            source: /opt/local-path-provisioner
+            options:
+              - bind
+              - rshared
+              - rw
