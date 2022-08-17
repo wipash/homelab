@@ -33,9 +33,7 @@ spec:
     service:
       main:
         type: LoadBalancer
-        annotations:
-          metallb.universe.tf/loadBalancerIPs: |-
-            ${METALLB_MOSQUITTO_ADDR}
+        loadBalancerIp: ${METALLB_MOSQUITTO_ADDR}
         externalTrafficPolicy: Local
     auth:
       enabled: true
