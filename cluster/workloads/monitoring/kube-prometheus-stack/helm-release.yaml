@@ -9,7 +9,6 @@ spec:
   maxHistory: 2
   timeout: 20m
   install:
-    disableWait: true
     remediation:
       retries: 300
   upgrade:
