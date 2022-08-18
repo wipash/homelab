@@ -26,7 +26,6 @@ spec:
       interval: 15m
 
   values:
-    fullnameOverride: prometheus
     ###
     ### Component values
     ###
@@ -57,7 +56,6 @@ spec:
     kubeStateMetrics:
       enabled: true
     kube-state-metrics:
-      fullnameOverride: kube-state-metrics
       metricLabelsAllowlist:
         - "persistentvolumeclaims=[*]"
       prometheus:
@@ -95,7 +93,7 @@ spec:
           memory: 64M
         limits:
           memory: 64M
-      fullnameOverride: node-exporter
+
       prometheus:
         monitor:
           enabled: true
