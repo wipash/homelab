@@ -83,9 +83,10 @@ spec:
       configmap.reloader.stakater.com/reload: "zigbee2matt-settings"
     resources:
       requests:
-        memory: 100Mi
-        cpu: 100m
+        cpu: 10m
+        memory: 64Mi
       limits:
+        cpu: 500m
         memory: 500Mi
     config:
       # Minimal configuration.yml example

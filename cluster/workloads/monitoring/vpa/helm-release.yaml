@@ -21,10 +21,11 @@ spec:
       enabled: true
 
       requests:
-        cpu: 15m
-        memory: 110M
+        cpu: 10m
+        memory: 64Mi
       limits:
-        memory: 316M
+        cpu: 500m
+        memory: 500Mi
 
       extraArgs:
         pod-recommendation-min-cpu-millicores: 15

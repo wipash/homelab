@@ -55,9 +55,10 @@ spec:
       configmap.reloader.stakater.com/reload: "paradoxalarminterface-config"
     resources:
       requests:
-        memory: 100Mi
-        cpu: 100m
+        cpu: 10m
+        memory: 64Mi
       limits:
+        cpu: 500m
         memory: 500Mi
     config:
       serialPort: /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0

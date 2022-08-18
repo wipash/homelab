@@ -19,11 +19,12 @@ spec:
   values:
     controller:
       resources:
-        requests:
-          cpu: 15m
-          memory: 145M
-        limits:
-          memory: 174M
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        cpu: 500m
+        memory: 500Mi
 
     dashboard:
       replicaCount: 1
@@ -40,8 +41,9 @@ spec:
               - *host
             secretName: wildcard-tls
       resources:
-        requests:
-          cpu: 15m
-          memory: 64M
-        limits:
-          memory: 64M
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        cpu: 500m
+        memory: 64Mi

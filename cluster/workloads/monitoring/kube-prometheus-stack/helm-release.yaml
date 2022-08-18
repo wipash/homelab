@@ -70,10 +70,11 @@ spec:
               targetLabel: kubernetes_node
       resources:
         requests:
-          cpu: 15m
-          memory: 127M
+          cpu: 10m
+          memory: 64Mi
         limits:
-          memory: 153M
+          cpu: 500m
+          memory: 200Mi
 
     grafana:
       enabled: false
@@ -111,10 +112,11 @@ spec:
     prometheusOperator:
       resources:
         requests:
-          cpu: 35m
-          memory: 273M
+          cpu: 10m
+          memory: 64Mi
         limits:
-          memory: 326M
+          cpu: 500m
+          memory: 500Mi
 
       prometheusConfigReloader:
         # resource config for prometheusConfigReloader
@@ -161,8 +163,8 @@ spec:
         replicaExternalLabelName: "replica"
         resources:
           requests:
-            cpu: 587m
-            memory: 3000M
+            cpu: 200m
+            memory: 500M
           limits:
             memory: 5000M
         retention: 2d

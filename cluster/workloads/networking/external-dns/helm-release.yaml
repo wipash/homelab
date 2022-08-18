@@ -59,7 +59,8 @@ spec:
       kind: DNSEndpoint
     resources:
       requests:
-        memory: 100Mi
-        cpu: 25m
+        cpu: 10m
+        memory: 64Mi
       limits:
-        memory: 250Mi
+        cpu: 500m
+        memory: 500Mi

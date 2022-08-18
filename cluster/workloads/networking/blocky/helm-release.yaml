@@ -157,7 +157,8 @@ spec:
       configmap.reloader.stakater.com/reload: "blocky-config"
     resources:
       requests:
-        memory: 280Mi
-        cpu: 50m
+        cpu: 10m
+        memory: 64Mi
       limits:
-        memory: 1000Mi
+        cpu: 500m
+        memory: 500Mi
