@@ -113,10 +113,10 @@ spec:
       resources:
         requests:
           cpu: 10m
-          memory: 64Mi
+          memory: 64M
         limits:
           cpu: 500m
-          memory: 500Mi
+          memory: 500M
 
       prometheusConfigReloader:
         # resource config for prometheusConfigReloader
