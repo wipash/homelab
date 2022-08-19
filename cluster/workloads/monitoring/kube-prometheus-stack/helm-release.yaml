@@ -70,11 +70,11 @@ spec:
               targetLabel: kubernetes_node
       resources:
         requests:
-          cpu: 10m
-          memory: 64Mi
+          cpu: 15m
+          memory: 64M
         limits:
-          cpu: 500m
-          memory: 200Mi
+          cpu: 26m
+          memory: 89M
 
     grafana:
       enabled: false
@@ -112,11 +112,11 @@ spec:
     prometheusOperator:
       resources:
         requests:
-          cpu: 10m
-          memory: 64M
+          cpu: 15m
+          memory: 94M
         limits:
-          cpu: 500m
-          memory: 500M
+          cpu: 26m
+          memory: 229M
 
       prometheusConfigReloader:
         # resource config for prometheusConfigReloader
@@ -268,9 +268,10 @@ spec:
 
         resources:
           requests:
-            cpu: 11m
-            memory: 50M
+            cpu: 10m
+            memory: 37M
           limits:
+            cpu: 30m
             memory: 99M
 
       ingress:
