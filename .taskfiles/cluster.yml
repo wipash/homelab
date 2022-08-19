@@ -7,3 +7,56 @@ tasks:
     desc: Update local copy of kubeconfig with file retrieved from cluster
     cmds:
       - cp "{{.PROJECT_DIR}}/kubeconfig" ~/.kube/config
+
+  reconcile:
+    desc: Force update Flux to pull in changes from your Git repository
+    cmds:
+      - flux reconcile -n flux-system source git flux-cluster
+      - flux reconcile -n flux-system kustomization flux-cluster
+
+  list-dockerhub:
+    desc: What dockerhub images are running in my cluster
+    cmds:
+      - kubectl get pods --all-namespaces -o=jsonpath="{range .items[*]}{'\n'}{range .spec.containers[*]}{.image}{'\n'}{end}{end}" | sort | uniq | grep -Ev 'quay|gcr|ghcr|ecr|us-docker' | grep -Ev 'bitnami|rook|intel|grafana' |  sed -e 's/docker\.io\///g' | sort | uniq
+
+  delete-failed-pods:
+    desc: Deletes failed pods
+    cmds:
+      - kubectl delete pods --field-selector status.phase=Failed -A --ignore-not-found=true
+
+  hr-restart:
+    desc: Restart all failed Helm Releases
+    cmds:
+      - kubectl get hr --all-namespaces | grep False | awk '{print $2, $1}' | xargs -l bash -c 'flux suspend hr $0 -n $1'
+      - kubectl get hr --all-namespaces | grep False | awk '{print $2, $1}' | xargs -l bash -c 'flux resume hr $0 -n $1'
+
+  pause:
+    desc: Pause all Helm Releases that rely on NFS storage
+    cmds:
+      - flux suspend helmrelease --all -n media
+      - flux suspend helmrelease --all -n web
+      - flux suspend helmrelease --all -n home
+      - kubectl scale -n web deploy/ghost --replicas 0
+      - kubectl scale -n web deploy/wordpress-0 --replicas 0
+      - kubectl scale -n web deploy/wordpress-1 --replicas 0
+      - kubectl scale -n home deploy/hajimari --replicas 0
+      - kubectl scale -n home deploy/mealie --replicas 0
+      - kubectl scale -n home deploy/mosquitto --replicas 0
+      - kubectl scale -n home deploy/node-red --replicas 0
+      - kubectl scale -n home deploy/zigbee2mqtt --replicas 0
+      - kubectl scale -n home deploy/monica --replicas 0
+  resume:
+    desc: Resume all Helm Releases that rely on NFS storage
+    cmds:
+      - flux resume helmreleases --all -n media
+      - flux resume helmreleases --all -n web
+      - flux resume helmreleases --all -n home
+      - kubectl scale -n web deploy/ghost --replicas 1
+      - kubectl scale -n web deploy/wordpress-0 --replicas 1
+      - kubectl scale -n web deploy/wordpress-1 --replicas 1
+      - kubectl scale -n home deploy/hajimari --replicas 1
+      - kubectl scale -n home deploy/mealie --replicas 1
+      - kubectl scale -n home deploy/mosquitto --replicas 1
+      - kubectl scale -n home deploy/node-red --replicas 1
+      - kubectl scale -n home deploy/zigbee2mqtt --replicas 1
+      - kubectl scale -n home deploy/monica --replicas 1
