@@ -45,12 +45,13 @@ tasks:
       - kubectl scale -n home deploy/node-red --replicas 0
       - kubectl scale -n home deploy/zigbee2mqtt --replicas 0
       - kubectl scale -n home deploy/monica --replicas 0
+      - kubectl scale -n home deploy/home-assistant --replicas 0
   resume:
     desc: Resume all Helm Releases that rely on NFS storage
     cmds:
-      - flux resume helmreleases --all -n media
-      - flux resume helmreleases --all -n web
-      - flux resume helmreleases --all -n home
+      - flux resume helmrelease --all -n media
+      - flux resume helmrelease --all -n web
+      - flux resume helmrelease --all -n home
       - kubectl scale -n web deploy/ghost --replicas 1
       - kubectl scale -n web deploy/wordpress-0 --replicas 1
       - kubectl scale -n web deploy/wordpress-1 --replicas 1
@@ -60,3 +61,4 @@ tasks:
       - kubectl scale -n home deploy/node-red --replicas 1
       - kubectl scale -n home deploy/zigbee2mqtt --replicas 1
       - kubectl scale -n home deploy/monica --replicas 1
+      - kubectl scale -n home deploy/home-assistant --replicas 1
