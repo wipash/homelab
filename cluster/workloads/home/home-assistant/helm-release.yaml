@@ -33,7 +33,7 @@ spec:
     env:
       TZ: "${TZ}"
       PYTHONUSERBASE: /config/deps
-      HOME_ASSISTANT__HACS_INSTALL: "true"
+      # HOME_ASSISTANT__HACS_INSTALL: "true"
 
     hostNetwork: true
     dnsPolicy: ClusterFirstWithHostNet
