@@ -11,3 +11,4 @@ resources:
   - smtp-relay
   - hajimari
   - monica
+  - home-assistant

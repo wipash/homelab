@@ -29,6 +29,7 @@ spec:
     image:
       repository: ghcr.io/onedr0p/home-assistant
       tag: 2022.8.6
+
     env:
       TZ: "${TZ}"
       PYTHONUSERBASE: /config/deps
@@ -44,7 +45,6 @@ spec:
         enabled: false
       startup:
         enabled: false
-
 
     ingress:
       main:
