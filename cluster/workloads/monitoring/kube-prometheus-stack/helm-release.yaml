@@ -271,8 +271,8 @@ spec:
             cpu: 10m
             memory: 37M
           limits:
-            cpu: 30m
-            memory: 99M
+            cpu: 40m
+            memory: 110M
 
       ingress:
         enabled: true
