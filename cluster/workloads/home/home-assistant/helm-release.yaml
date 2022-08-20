@@ -65,9 +65,15 @@ spec:
             paths:
               - path: /
                 pathType: Prefix
+          - host: &internalhost "hass.${SECRET_DOMAIN_INTERNAL}"
+            paths:
+              - path: /
+                pathType: Prefix
         tls:
           - hosts:
               - *host
+              - *internalhost
+            secretName: wildcard-tls
 
     persistence:
       config:
