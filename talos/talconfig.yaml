@@ -6,7 +6,9 @@ kubernetesVersion: v1.24.3
 endpoint: https://cluster-0.${domainName}:6443
 
 cniConfig:
-  name: none
+  name: custom
+  urls:
+    - https://raw.githubusercontent.com/wipash/homelab/main/talos/cilium/quick-install.yaml
 
 allowSchedulingOnMasters: true
 clusterPodNets:
