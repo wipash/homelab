@@ -26,3 +26,6 @@ echo "Waiting 3 mins"
 sleep 180
 
 talosctl kubeconfig
+
+# Not needed anymore, talos config should do this automatically
+# kubectl apply -f ./cilium/quick-install.yaml

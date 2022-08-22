@@ -16,14 +16,9 @@ tasks:
   install:
     desc: Install flux on a new cluster
     cmds:
-      - flux install
+      - kubectl apply --kustomize {{.CLUSTER_DIR}}/bootstrap/
       - task: installkey
-      - task: bootstrap
-
-  sync:
-    desc: Sync flux-system with the Git Repository
-    cmds:
-      - flux reconcile source git flux-system
+      - kubectl apply --kustomize {{.CLUSTER_DIR}}/flux/flux-system/
 
   installkey:
     desc: Install Age key into cluster
@@ -35,8 +30,3 @@ tasks:
           Age key file is not found. Did you forget to create it?
     vars:
       SOPS_AGE_KEY_FILE: ~/.config/sops/age/keys.txt
-
-  bootstrap:
-    desc: Bootstrap flux-system with the Git Repository (Only needed after initial cluster install)
-    cmds:
-      - flux bootstrap github --owner=wipash --repository=homelab --private=false --personal=true --path=/cluster/flux/ --reconcile --token-auth
