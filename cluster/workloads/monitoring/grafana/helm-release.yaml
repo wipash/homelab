@@ -65,7 +65,7 @@ spec:
         datasources:
           - name: Prometheus
             type: prometheus
-            url: http://prometheus-prometheus.monitoring:9090/
+            url: http://thanos-query.monitoring:9090/
             access: proxy
             isDefault: true
           # - name: Loki
@@ -91,12 +91,12 @@ spec:
       dashboardproviders.yaml:
         apiVersion: 1
         providers:
-          - name: "default"
+          - name: default
             orgId: 1
-            folder: "default"
+            folder: ""
             type: file
             disableDeletion: false
-            editable: true
+            allowUiUpdates: true
             options:
               path: /var/lib/grafana/dashboards/default
 
