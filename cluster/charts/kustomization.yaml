@@ -6,12 +6,12 @@ resources:
   - helmrepository-emberstack.yaml
   - helmrepository-groundhog2k.yaml
   - helmrepository-jetstack.yaml
-  - helmrepository-k8sathome-library.yaml
+  # - helmrepository-k8sathome-library.yaml
   - helmrepository-k8sathome.yaml
-  - helmrepository-metallb.yaml
+  # - helmrepository-metallb.yaml
   - helmrepository-nfs-subdir-external-provisioner.yaml
   - helmrepository-runix.yaml
-  - helmrepository-traefik.yaml
+  # - helmrepository-traefik.yaml
   - helmrepository-ingress-nginx.yaml
   - helmrepository-kubito.yaml
   - helmrepository-stakater-charts.yaml
@@ -20,8 +20,9 @@ resources:
   # - helmrepository-truecharts.yaml
   - helmrepository-prometheus-community-charts.yaml
   - helmrepository-metricsserver.yaml
-  - helmrepository-pihole.yaml
+  # - helmrepository-pihole.yaml
   - helmrepository-hajimari.yaml
   - helmrepository-cetic.yaml
   - helmrepository-cilium.yaml
-  - helmrepository-fairwinds.yaml
+  # - helmrepository-fairwinds.yaml
+  - helmrepository-grafana.yaml
