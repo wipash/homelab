@@ -121,7 +121,7 @@ spec:
           url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
           datasource: Prometheus
 
-      cilium:
+      #cilium:
         cilium-agent:
           gnetId: 15513
           revision: 1
@@ -167,7 +167,7 @@ spec:
       #     datasource: Prometheus
       # Ref: https://grafana.com/grafana/dashboards/13646
 
-      flux:
+      #flux:
         flux-cluster:
           url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/monitoring-config/dashboards/cluster.json
           datasource: Prometheus
@@ -175,7 +175,7 @@ spec:
           url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/monitoring-config/dashboards/control-plane.json
           datasource: Prometheus
 
-      organizarrs:
+      #organizarrs:
         lidarr:
           url: https://raw.githubusercontent.com/k8s-at-home/grafana-dashboards/main/lidarr.json
           datasource: Prometheus
