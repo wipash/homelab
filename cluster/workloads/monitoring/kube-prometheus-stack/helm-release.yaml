@@ -57,6 +57,7 @@ spec:
     kubeStateMetrics:
       enabled: true
     kube-state-metrics:
+      fullnameOverride: kube-state-metrics
       metricLabelsAllowlist:
         - "persistentvolumeclaims=[*]"
       prometheus:
@@ -89,6 +90,7 @@ spec:
     nodeExporter:
       enabled: true
     prometheus-node-exporter:
+      fullnameOverride: node-exporter
       resources:
         requests:
           cpu: 23m
