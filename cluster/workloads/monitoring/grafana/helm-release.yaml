@@ -305,12 +305,5 @@ spec:
       enabled: true
       existingClaim: grafana-config-v1
 
-    resources:
-      requests:
-        cpu: 34m
-        memory: 94M
-      limits:
-        memory: 213M
-
     podAnnotations:
       configmap.reloader.stakater.com/reload: "grafana"

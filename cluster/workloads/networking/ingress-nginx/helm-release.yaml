@@ -59,13 +59,7 @@ spec:
         enabled: false
       podAnnotations:
         configmap.reloader.stakater.com/reload: "cloudflare-proxied-networks"
-      resources:
-        requests:
-          cpu: 10m
-          memory: 64M
-        limits:
-          cpu: 500m
-          memory: 500M
+
     defaultBackend:
       enabled: true
       image:

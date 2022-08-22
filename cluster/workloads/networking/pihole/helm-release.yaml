@@ -38,9 +38,7 @@ spec:
     #       repository: "ekofr/pihole-exporter"
     #       tag: "v0.3.0"
     #       port: 9617
-    #     resources:
-    #       limits:
-    #         memory: "128Mi"
+
 
     doh:
       enabled: true

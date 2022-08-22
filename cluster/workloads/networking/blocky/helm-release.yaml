@@ -155,10 +155,3 @@ spec:
         operator: "Exists"
     podAnnotations:
       configmap.reloader.stakater.com/reload: "blocky-config"
-    resources:
-      requests:
-        cpu: 10m
-        memory: 64M
-      limits:
-        cpu: 500m
-        memory: 500M

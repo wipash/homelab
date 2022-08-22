@@ -53,13 +53,6 @@ spec:
         - 20 # dialout for /dev/ttyUSB0
     podAnnotations:
       configmap.reloader.stakater.com/reload: "paradoxalarminterface-config"
-    resources:
-      requests:
-        cpu: 10m
-        memory: 64M
-      limits:
-        cpu: 500m
-        memory: 500M
     config:
       serialPort: /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0
       mqttEnable: True

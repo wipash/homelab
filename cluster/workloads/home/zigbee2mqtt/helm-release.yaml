@@ -81,13 +81,6 @@ spec:
         - 20 # dialout for /dev/ttyUSB0
     podAnnotations:
       configmap.reloader.stakater.com/reload: "zigbee2matt-settings"
-    resources:
-      requests:
-        cpu: 10m
-        memory: 64M
-      limits:
-        cpu: 500m
-        memory: 500M
     config:
       # Minimal configuration.yml example
       permit_join: true

@@ -70,10 +70,3 @@ spec:
         existingClaim: hajimari-data-v1
     podAnnotations:
       configmap.reloader.stakater.com/reload: hajimari-settings
-    resources:
-      requests:
-        cpu: 10m
-        memory: 64M
-      limits:
-        cpu: 500m
-        memory: 500M

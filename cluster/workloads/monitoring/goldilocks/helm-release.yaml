@@ -18,13 +18,6 @@ spec:
   timeout: 20m
   values:
     controller:
-      resources:
-        requests:
-          cpu: 15m
-          memory: 64M
-        limits:
-          cpu: 60m
-          memory: 89M
 
     dashboard:
       replicaCount: 1
@@ -40,10 +33,3 @@ spec:
           - hosts:
               - *host
             secretName: wildcard-tls
-      resources:
-        requests:
-          cpu: 15m
-          memory: 64M
-        limits:
-          cpu: 26m
-          memory: 64M

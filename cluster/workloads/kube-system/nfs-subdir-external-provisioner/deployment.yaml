@@ -31,10 +31,6 @@ spec:
               value: "${SECRET_NFS_SERVER_PATH}"
             - name: ENABLE_LEADER_ELECTION
               value: "false"
-          resources:
-            limits:
-              cpu: 100m
-              memory: 128Mi
       serviceAccountName: nfs-provisioner
       volumes:
         - name: nfs-provisioner-root

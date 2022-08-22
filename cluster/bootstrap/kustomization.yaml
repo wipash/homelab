@@ -20,8 +20,6 @@ patches:
                 resources:
                   requests:
                     memory: 512Mi
-                  limits:
-                    memory: "2Gi"
   - target:
       group: networking.k8s.io
       version: v1

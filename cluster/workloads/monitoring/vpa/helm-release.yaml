@@ -20,13 +20,6 @@ spec:
     recommender:
       enabled: true
 
-      requests:
-        cpu: 10m
-        memory: 64M
-      limits:
-        cpu: 500m
-        memory: 500M
-
       extraArgs:
         pod-recommendation-min-cpu-millicores: 15
         pod-recommendation-min-memory-mb: 61
