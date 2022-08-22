@@ -99,9 +99,8 @@ spec:
     ### Prometheus operator values
     ###
     prometheusOperator:
-
-
-      prometheusConfigReloader:
+      enabled: true
+      #prometheusConfigReloader:
         # resource config for prometheusConfigReloader
 
 
