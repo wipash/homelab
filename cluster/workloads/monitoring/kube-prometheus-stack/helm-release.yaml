@@ -26,6 +26,7 @@ spec:
       interval: 15m
 
   values:
+    fullnameOverride: prometheus
     ###
     ### Component values
     ###
