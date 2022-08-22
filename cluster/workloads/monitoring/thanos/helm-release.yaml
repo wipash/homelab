@@ -16,14 +16,16 @@ spec:
         namespace: flux-system
       interval: 15m
   values:
-    objstoreConfig:
-      type: s3
-      config:
-        insecure: true
-        bucket: thanos
-        endpoint: ${SECRET_MINIO_ENDPOINT}
-        access_key: ${SECRET_MINIO_ACCESSKEY_THANOS}
-        secret_key: ${SECRET_MINIO_SECRETKEY_THANOS}
+    existingObjstoreSecret: &secret thanos-objstore-secret
+
+    # objstoreConfig:
+    #   type: s3
+    #   config:
+    #     insecure: true
+    #     bucket: thanos
+    #     endpoint: ${SECRET_MINIO_ENDPOINT}
+    #     access_key: ${SECRET_MINIO_ACCESSKEY_THANOS}
+    #     secret_key: ${SECRET_MINIO_SECRETKEY_THANOS}
 
     query:
       enabled: true
@@ -47,6 +49,8 @@ spec:
 
     bucketweb:
       enabled: true
+      podAnnotations:
+        secret.reloader.stakater.com/reload: *secret
       ingress:
         enabled: true
         hostname: &host "thanos-bucketweb.${SECRET_DOMAIN}"
@@ -61,6 +65,8 @@ spec:
 
     compactor:
       enabled: true
+      podAnnotations:
+        secret.reloader.stakater.com/reload: *secret
       extraFlags:
         - "--compact.concurrency"
         - "4"
@@ -85,6 +91,8 @@ spec:
 
     storegateway:
       enabled: true
+      podAnnotations:
+        secret.reloader.stakater.com/reload: *secret
       persistence:
         enabled: true
         storageClass: "nfs-provisioner"
@@ -103,6 +111,8 @@ spec:
 
     ruler:
       enabled: true
+      podAnnotations:
+        secret.reloader.stakater.com/reload: *secret
       alertmanagers:
         - http://prometheus-alertmanager.monitoring:9093
       clusterName: ${CLUSTER_NAME}
