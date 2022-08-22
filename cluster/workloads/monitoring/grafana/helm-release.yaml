@@ -44,7 +44,7 @@ spec:
     adminPassword: "${SECRET_GRAFANA_PASSWORD}"
     grafana.ini:
       server:
-        root_url: "https://grafana.${EXTERNAL_DOMAIN}"
+        root_url: "https://grafana.${SECRET_DOMAIN}"
       paths:
         data: /var/lib/grafana/data
         logs: /var/log/grafana
@@ -215,16 +215,14 @@ spec:
       enabled: true
       ingressClassName: "nginx"
       annotations:
-        cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
-        external-dns/is-public: "false"
         hajimari.io/enable: "true"
         hajimari.io/icon: "graph-line"
       hosts:
         - &host "grafana.${SECRET_DOMAIN}"
       tls:
-        - hosts:
+        - secretName: wildcard-tls
+          hosts:
             - *host
-          secretName: wildcard-tls
 
     serviceAccount:
       create: true
