@@ -6,5 +6,6 @@ resources:
   - kube-prometheus-stack
   - grafana
   - thanos
+  - loki
   # - goldilocks
   # - vpa
