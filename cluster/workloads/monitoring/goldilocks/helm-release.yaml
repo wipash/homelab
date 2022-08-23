@@ -32,4 +32,3 @@ spec:
         tls:
           - hosts:
               - *host
-            secretName: wildcard-tls

@@ -218,8 +218,7 @@ spec:
       hosts:
         - &host "grafana.${SECRET_DOMAIN}"
       tls:
-        - secretName: wildcard-tls
-          hosts:
+        - hosts:
             - *host
 
     deploymentStrategy:

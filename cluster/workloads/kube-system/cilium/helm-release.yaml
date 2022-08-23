@@ -61,8 +61,7 @@ spec:
           hosts:
             - &host hubble.${SECRET_DOMAIN}
           tls:
-            - secretName: wildcard-tls
-              hosts:
+            - hosts:
                 - *host
         rollOutPods: true
     ipam:

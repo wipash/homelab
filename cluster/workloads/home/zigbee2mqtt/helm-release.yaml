@@ -50,8 +50,7 @@ spec:
               - path: /
                 pathType: Prefix
         tls:
-          - secretName: wildcard-tls
-            hosts:
+          - hosts:
               - *host
         annotations:
           hajimari.io/enable: "true"

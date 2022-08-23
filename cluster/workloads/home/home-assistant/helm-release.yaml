@@ -73,7 +73,6 @@ spec:
           - hosts:
               - *host
               - *internalhost
-            secretName: wildcard-tls
 
     persistence:
       config:
@@ -119,7 +118,6 @@ spec:
           tls:
             - hosts:
                 - *host
-              secretName: wildcard-tls
         volumeMounts:
           - name: config
             mountPath: /config

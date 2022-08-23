@@ -62,7 +62,6 @@ spec:
       tls:
         - hosts:
             - *host
-          secretName: "wildcard-tls"
       annotations:
         hajimari.io/enable: "true"
         hajimari.io/icon: database-cog

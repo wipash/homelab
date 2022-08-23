@@ -63,7 +63,6 @@ spec:
           - hosts:
               - *hosthajimari
               - *hostdash
-            secretName: wildcard-tls
     persistence:
       data:
         enabled: true

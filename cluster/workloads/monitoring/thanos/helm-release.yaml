@@ -40,7 +40,6 @@ spec:
         extraTls:
           - hosts:
               - *host
-            secretName: wildcard-tls
       replicaLabels:
         - replica
 
@@ -61,7 +60,6 @@ spec:
         extraTls:
           - hosts:
               - *host
-            secretName: wildcard-tls
 
     compactor:
       enabled: true
@@ -87,7 +85,6 @@ spec:
         extraTls:
           - hosts:
               - *host
-            secretName: wildcard-tls
 
     storegateway:
       enabled: true
@@ -107,7 +104,6 @@ spec:
         extraTls:
           - hosts:
               - *host
-            secretName: wildcard-tls
 
     ruler:
       enabled: true
@@ -138,7 +134,6 @@ spec:
         extraTls:
           - hosts:
               - *host
-            secretName: wildcard-tls
 
     metrics:
       enabled: true
