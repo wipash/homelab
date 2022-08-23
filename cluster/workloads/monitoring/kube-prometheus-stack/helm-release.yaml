@@ -142,6 +142,8 @@ spec:
         retentionSize: "6GB"
         ruleSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
+        nodeSelector:
+          kubernetes.io/hostname: "hp1"
         storageSpec:
           volumeClaimTemplate:
             spec:
@@ -236,6 +238,8 @@ spec:
             equal: ["alertname", "namespace"]
 
       alertmanagerSpec:
+        nodeSelector:
+          kubernetes.io/hostname: "hp1"
         storage:
           volumeClaimTemplate:
             spec:
