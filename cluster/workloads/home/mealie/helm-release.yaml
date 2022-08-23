@@ -64,8 +64,7 @@ spec:
               - path: /
                 pathType: Prefix
         tls:
-          - secretName: wildcard-tls
-            hosts:
+          - hosts:
               - *host
     persistence:
       api-data:
