@@ -26,3 +26,4 @@ resources:
   - helmrepository-cilium.yaml
   # - helmrepository-fairwinds.yaml
   - helmrepository-grafana.yaml
+  - bjw-s.yaml
