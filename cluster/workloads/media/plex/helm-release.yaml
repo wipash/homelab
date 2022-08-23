@@ -83,8 +83,8 @@ spec:
     podSecurityContext:
       supplementalGroups:
         - 44
-        - 109
-        - 65539
+        - 100
+        - 65537
 
     resources:
       requests:
