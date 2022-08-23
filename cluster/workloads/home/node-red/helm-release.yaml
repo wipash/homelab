@@ -24,9 +24,11 @@ spec:
   upgrade:
     remediation:
       retries: 300
-  # dependsOn:
-  #   - name: home-assistant
-  #     namespace: home
+  dependsOn:
+    - name: mosquitto
+      namespace: home
+    - name: home-assistant
+      namespace: home
   values:
     initContainers:
       npm-update:

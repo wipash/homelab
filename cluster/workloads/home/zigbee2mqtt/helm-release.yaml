@@ -27,6 +27,8 @@ spec:
   dependsOn:
     - name: mosquitto
       namespace: home
+    - name: home-assistant
+      namespace: home
   values:
     image:
       repository: ghcr.io/koenkk/zigbee2mqtt
