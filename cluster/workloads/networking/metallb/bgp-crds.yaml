@@ -28,4 +28,4 @@ metadata:
   namespace: networking
 spec:
   addresses:
-    - ${METALLB_CIDR}
+    - ${NETWORK_BGP_SVC_CIDR}

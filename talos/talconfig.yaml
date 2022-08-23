@@ -17,9 +17,16 @@ clusterSvcNets:
   - 10.96.0.0/12
 
 nodes:
+  - hostname: hp1.${domainName}
+    ipAddress: 10.0.16.132
+    controlPlane: true
+    installDisk: /dev/sda
+    nameservers:
+      - 1.1.1.1
+      - 8.8.8.8
   - hostname: nuc1.${domainName}
     ipAddress: 10.0.16.131
-    controlPlane: true
+    controlPlane: false
     installDisk: /dev/sda
     nameservers:
       - 1.1.1.1
@@ -94,10 +101,10 @@ controlPlane:
               - rw
       install:
         extraKernelArgs:
-          - "talos.logging.kernel=udp://10.45.0.2:6050/"
+          - "talos.logging.kernel=udp://172.16.10.5:6050/"
       logging:
         destinations:
-          - endpoint: "udp://10.45.0.2:6051/"
+          - endpoint: "udp://172.16.10.5:6051/"
             format: json_lines
       network:
         extraHostEntries:
@@ -136,10 +143,10 @@ worker:
           op: create
       install:
         extraKernelArgs:
-          - "talos.logging.kernel=udp://10.45.0.2:6050/"
+          - "talos.logging.kernel=udp://172.16.10.5:6050/"
       logging:
         destinations:
-          - endpoint: "udp://10.45.0.2:6051/"
+          - endpoint: "udp://172.16.10.5:6051/"
             format: json_lines
       network:
         extraHostEntries:

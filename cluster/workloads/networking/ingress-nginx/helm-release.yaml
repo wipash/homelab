@@ -36,7 +36,7 @@ spec:
 
       service:
         type: LoadBalancer
-        loadBalancerIP: ${METALLB_INGRESS_ADDR}
+        loadBalancerIP: ${SVC_INGRESS_ADDR}
         externalTrafficPolicy: Local
 
       publishService:

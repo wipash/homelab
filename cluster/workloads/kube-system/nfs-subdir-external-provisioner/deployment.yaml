@@ -6,7 +6,7 @@ metadata:
   labels: &labels
     app.kubernetes.io/name: *name
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     type: Recreate
   selector:

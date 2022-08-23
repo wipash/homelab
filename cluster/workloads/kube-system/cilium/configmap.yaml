@@ -14,5 +14,5 @@ data:
       - name: default
         protocol: bgp
         addresses:
-          - ${METALLB_CIDR}
+          - ${NETWORK_BGP_SVC_CIDR}
         avoid-buggy-ips: true
