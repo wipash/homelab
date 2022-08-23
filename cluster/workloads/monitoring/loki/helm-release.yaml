@@ -33,10 +33,10 @@ spec:
         aws:
           s3forcepathstyle: true
           insecure: true
-          bucket: loki
+          bucketnames: loki
           endpoint: ${SECRET_NAS_IP}:9000
-          access_key: ${SECRET_MINIO_ACCESSKEY_LOKI}
-          secret_key: ${SECRET_MINIO_SECRETKEY_LOKI}
+          access_key_id: ${SECRET_MINIO_ACCESSKEY_LOKI}
+          secret_access_key: ${SECRET_MINIO_SECRETKEY_LOKI}
 
         boltdb_shipper:
           active_index_directory: /data/loki/index
