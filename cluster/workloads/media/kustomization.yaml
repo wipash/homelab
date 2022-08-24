@@ -11,3 +11,4 @@ resources:
     - sonarr
     - recyclarr
     - radarr
+    - overseerr
