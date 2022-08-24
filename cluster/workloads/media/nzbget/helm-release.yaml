@@ -32,7 +32,7 @@ spec:
     podSecurityContext:
       runAsUser: 568
       runAsGroup: 568
-      fsGroup: 65537
+      fsGroup: 568
       supplementalGroups:
         - 65537 # NAS Permission group
 
