@@ -32,7 +32,7 @@ spec:
   values:
     image:
       repository: alturismo/xteve
-      tag: latest
+      tag: latest@sha256:7885f2759c0da3c5f2c72b2e45ba4b602bdd7d6f04cc6abba201091f11c93a95
     updateStrategy: Recreate
     env:
       TZ: "${TZ}"
