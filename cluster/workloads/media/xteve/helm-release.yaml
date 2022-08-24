@@ -31,8 +31,8 @@ spec:
     cleanupOnFail: true
   values:
     image:
-      repository: ghcr.io/k8s-at-home/xteve
-      tag: v2.2.0.200
+      repository: alturismo/xteve
+      tag: latest
     updateStrategy: Recreate
     env:
       TZ: "${TZ}"
