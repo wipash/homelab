@@ -7,3 +7,4 @@ resources:
   - _pvc
   - plex
   - xteve
+  - nzbget
