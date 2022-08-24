@@ -46,6 +46,10 @@ tasks:
       - kubectl scale -n home deploy/zigbee2mqtt --replicas 0
       - kubectl scale -n home deploy/monica --replicas 0
       - kubectl scale -n home deploy/home-assistant --replicas 0
+      - kubectl scale -n media deploy/sonarr --replicas 0
+      - kubectl scale -n media deploy/radarr --replicas 0
+      - kubectl scale -n media deploy/plex --replicas 0
+      - kubectl scale -n media deploy/nzbget --replicas 0
   resume:
     desc: Resume all Helm Releases that rely on NFS storage
     cmds:
@@ -62,3 +66,7 @@ tasks:
       - kubectl scale -n home deploy/zigbee2mqtt --replicas 1
       - kubectl scale -n home deploy/monica --replicas 1
       - kubectl scale -n home deploy/home-assistant --replicas 1
+      - kubectl scale -n media deploy/sonarr --replicas 1
+      - kubectl scale -n media deploy/radarr --replicas 1
+      - kubectl scale -n media deploy/plex --replicas 1
+      - kubectl scale -n media deploy/nzbget --replicas 1
