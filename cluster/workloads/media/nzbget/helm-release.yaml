@@ -1,0 +1,75 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: nzbget
+  namespace: media
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: nzbget
+      version: 12.4.2
+      sourceRef:
+        kind: HelmRepository
+        name: k8sathome
+        namespace: flux-system
+      interval: 5m
+  install:
+    createNamespace: true
+    remediation: # perform remediation when helm install fails
+      retries: 3
+  upgrade:
+    remediation: # perform remediation when helm upgrade fails
+      retries: 3
+      remediateLastFailure: true # remediate the last failure, when no retries remain
+    cleanupOnFail: true
+  values:
+    image:
+      repository: ghcr.io/k8s-at-home/nzbget
+      tag: "v21.1"
+
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 65537
+      supplementalGroups:
+        - 65537 # NAS Permission group
+
+    env:
+      TZ: "${TZ}"
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: nzbget-config
+      scripts:
+        enabled: true
+        type: configMap
+        name: nzbget-scripts
+        mountPath: /scripts
+        readOnly: true
+        defaultMode: 0555
+      media:
+        enabled: true
+        existingClaim: media-nfs
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: "nginx"
+        annotations:
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_set_header Accept-Encoding "";
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${SECRET_DOMAIN}/css/base/nzbget/plex.css"></head>';
+            sub_filter_once on;
+          hajimari.io/enable: "true"
+          hajimari.io/icon: "download-box"
+
+        hosts:
+          - host: &host "nzbget.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+        tls:
+          - hosts:
+              - *host
