@@ -82,9 +82,9 @@ spec:
 
     podSecurityContext:
       supplementalGroups:
-        - 44
-        - 100
-        - 65537
+        - 44    # Video
+        - 100   # Users
+        - 65537 # NAS Permission group
 
     resources:
       requests:
