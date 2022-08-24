@@ -42,7 +42,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: nzbget-config
+        existingClaim: nzbget-config-v1
       scripts:
         enabled: true
         type: configMap
