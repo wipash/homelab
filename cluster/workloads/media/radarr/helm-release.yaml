@@ -1,0 +1,73 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: radarr
+  namespace: media
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 0.1.1
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+
+  values:
+    image:
+      repository: ghcr.io/onedr0p/radarr-develop
+      tag: 4.2.2.6503@sha256:b1d020c55eafe7a8df4dab105bec61b4dbca7071f274b3975f2bcbd888538b74
+
+    podAnnotations:
+      secret.reloader.stakater.com/reload: radarr
+
+    podSecurityContext:
+      supplementalGroups:
+        - 65537 # NAS Permission group
+
+    env:
+      PUSHOVER_APP_URL: &host "radarr.${SECRET_DOMAIN}"
+      PUSHOVER_PRIORITY: "-1"
+      RADARR__INSTANCE_NAME: Radarr
+      RADARR__PORT: &port 8989
+      RADARR__APPLICATION_URL: "https://radarr.${SECRET_DOMAIN}"
+      RADARR__LOG_LEVEL: info
+
+    envFrom:
+      - secretRef:
+          name: radarr
+
+    service:
+      main:
+        ports:
+          http:
+            port: *port
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: "nginx"
+        annotations:
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_set_header Accept-Encoding "";
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${SECRET_DOMAIN}/css/base/radarr/nord.css"></head>';
+            sub_filter_once on;
+        hosts:
+          - host: *host
+            paths:
+              - path: /
+        tls:
+          - hosts:
+              - *host
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: radarr-config-v1
+      media:
+        enabled: true
+        existingClaim: media-nfs
+        mountPath: /data/nas-media

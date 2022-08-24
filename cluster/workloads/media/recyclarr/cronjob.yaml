@@ -1,0 +1,85 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: recyclarr
+  namespace: media
+  labels:
+    app: recyclarr
+spec:
+  schedule: "0 3 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          automountServiceAccountToken: false
+
+          initContainers:
+            - name: render-config
+              image: ghcr.io/k8s-at-home/recyclarr:v2.3.1@sha256:5f616f5fbe4d89bdd6fa172431018a3bd0e34ce34762b8763977a66bd75409be
+              command:
+                - "/bin/bash"
+                - -c
+              args:
+                - "envsubst < /config/recyclarr.yaml > /shared/recyclarr.yaml"
+              env:
+                - name: RADARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: recyclarr-secrets
+                      key: radarrApiKey
+                - name: SONARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: recyclarr-secrets
+                      key: sonarrApiKey
+              volumeMounts:
+                - name: config
+                  mountPath: /config
+                - name: shared
+                  mountPath: /shared
+
+          containers:
+            - name: recyclarr-sonarr
+              image: ghcr.io/k8s-at-home/recyclarr:v2.3.1@sha256:5f616f5fbe4d89bdd6fa172431018a3bd0e34ce34762b8763977a66bd75409be
+              imagePullPolicy: IfNotPresent
+              command:
+                - /app/recyclarr
+              args:
+                - sonarr
+                - --app-data
+                - /tmp/recyclarr
+                - --config
+                - /config/recyclarr.yaml
+              volumeMounts:
+                - name: shared
+                  mountPath: /config/recyclarr.yaml
+                  subPath: recyclarr.yaml
+                  readOnly: true
+
+            - name: recyclarr-radarr
+              image: ghcr.io/k8s-at-home/recyclarr:v2.3.1@sha256:5f616f5fbe4d89bdd6fa172431018a3bd0e34ce34762b8763977a66bd75409be
+              imagePullPolicy: IfNotPresent
+              command:
+                - /app/recyclarr
+              args:
+                - radarr
+                - --app-data
+                - /tmp/recyclarr
+                - --config
+                - /config/recyclarr.yaml
+              volumeMounts:
+                - name: shared
+                  mountPath: /config/recyclarr.yaml
+                  subPath: recyclarr.yaml
+                  readOnly: true
+
+          restartPolicy: OnFailure
+
+          volumes:
+            - name: config
+              configMap:
+                name: recyclarr-config
+            - name: shared
+              emptyDir: {}
