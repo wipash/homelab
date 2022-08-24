@@ -28,7 +28,8 @@ spec:
       runAsUser: 568
       runAsGroup: 568
       fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
+      supplementalGroups:
+        - 65537 # NAS Permission group
 
     env:
       PROWLARR__INSTANCE_NAME: Prowlarr
