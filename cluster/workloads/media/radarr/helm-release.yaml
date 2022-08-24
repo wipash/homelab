@@ -32,7 +32,7 @@ spec:
       PUSHOVER_APP_URL: &host "radarr.${SECRET_DOMAIN}"
       PUSHOVER_PRIORITY: "-1"
       RADARR__INSTANCE_NAME: Radarr
-      RADARR__PORT: &port 8989
+      RADARR__PORT: &port 7878
       RADARR__APPLICATION_URL: "https://radarr.${SECRET_DOMAIN}"
       RADARR__LOG_LEVEL: info
 
