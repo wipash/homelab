@@ -7,3 +7,4 @@ resources:
   - wildcard-certificate
   - external-dns
   - cloudflared
+  - downloads-gateway

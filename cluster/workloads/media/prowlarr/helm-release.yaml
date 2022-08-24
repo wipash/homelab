@@ -21,6 +21,9 @@ spec:
       repository: ghcr.io/onedr0p/prowlarr-nightly
       tag: 0.4.5.1955@sha256:89ac2eb71462a21b294780ef6f7eaac02636a9b25eaa12bd978bf2a6d4bbff50
 
+    podAnnotations:
+      setGateway: "true"
+
     podSecurityContext:
       runAsUser: 568
       runAsGroup: 568

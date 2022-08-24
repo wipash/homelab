@@ -10,5 +10,6 @@
             "file:///home/sean/homelab/ansible/homelab-k3s.yaml",
             "file:///home/sean/homelab/ansible/udm-config.yaml"
         ]
-    }
+    },
+    "sops.creationEnabled": true
 }
