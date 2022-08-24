@@ -8,3 +8,4 @@ resources:
     - xteve
     - nzbget
     - prowlarr
+    - sonarr
