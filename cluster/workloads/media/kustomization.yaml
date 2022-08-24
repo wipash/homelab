@@ -9,3 +9,5 @@ resources:
     - nzbget
     - prowlarr
     - sonarr
+    - recyclarr
+    - radarr
