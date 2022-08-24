@@ -61,4 +61,4 @@ spec:
         enabled: true
         existingClaim: xteve-config-v1
     nodeSelector:
-      worker: yes
+      kubernetes.io/hostname: "hp1"
