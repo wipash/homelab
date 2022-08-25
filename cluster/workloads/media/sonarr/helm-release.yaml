@@ -71,3 +71,16 @@ spec:
         enabled: true
         existingClaim: media-nfs
         mountPath: /data/nas-media
+
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - nzbget
+              topologyKey: kubernetes.io/hostname
