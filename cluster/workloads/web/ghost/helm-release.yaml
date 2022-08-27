@@ -27,7 +27,7 @@ spec:
   values:
     image:
       repository: ghost
-      tag: 3.42.9
+      tag: 5.12.0
     env:
       TZ: "${TZ}"
       url: "https://${SECRET_GHOST_DOMAIN}"
