@@ -36,6 +36,14 @@ spec:
         service: https://ingress-nginx-controller.networking
         originRequest:
           noTLSVerify: true
+      - hostname: "*.${SECRET_DOMAIN_2}"
+        service: https://ingress-nginx-controller.networking
+        originRequest:
+          noTLSVerify: true
+      - hostname: "*.${SECRET_DOMAIN_3}"
+        service: https://ingress-nginx-controller.networking
+        originRequest:
+          noTLSVerify: true
       - hostname: "${SECRET_GHOST_DOMAIN}"
         service: https://ingress-nginx-controller.networking
         originRequest:
