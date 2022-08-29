@@ -62,9 +62,13 @@ spec:
           - host: &host "overseerr.${SECRET_DOMAIN}"
             paths:
               - path: /
+          - host: &host2 "overseerr.${SECRET_DOMAIN_2}"
+            paths:
+              - path: /
         tls:
           - hosts:
               - *host
+              - *host2
 
     persistence:
       config:
