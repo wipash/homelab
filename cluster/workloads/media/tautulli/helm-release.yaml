@@ -57,6 +57,12 @@ spec:
       config:
         enabled: true
         existingClaim: tautulli-config-v2
+      plexLogs:
+        enabled: true
+        existingClaim: plex-library-config-v2
+        subPath: "/Library/Application Support/Plex Media Server/Logs"
+        readOnly: true
+        mountPath: /plexlogs
 
     podSecurityContext:
       runAsUser: 568
