@@ -48,8 +48,11 @@ tasks:
       - kubectl scale -n home deploy/home-assistant --replicas 0
       - kubectl scale -n media deploy/sonarr --replicas 0
       - kubectl scale -n media deploy/radarr --replicas 0
+      - kubectl scale -n media deploy/prowlarr --replicas 0
+      - kubectl scale -n media deploy/overseerr --replicas 0
       - kubectl scale -n media deploy/plex --replicas 0
       - kubectl scale -n media deploy/nzbget --replicas 0
+      - kubectl scale -n media deploy/tautulli --replicas 0
   resume:
     desc: Resume all Helm Releases that rely on NFS storage
     cmds:
@@ -68,5 +71,8 @@ tasks:
       - kubectl scale -n home deploy/home-assistant --replicas 1
       - kubectl scale -n media deploy/sonarr --replicas 1
       - kubectl scale -n media deploy/radarr --replicas 1
+      - kubectl scale -n media deploy/prowlarr --replicas 1
+      - kubectl scale -n media deploy/overseerr --replicas 1
       - kubectl scale -n media deploy/plex --replicas 1
       - kubectl scale -n media deploy/nzbget --replicas 1
+      - kubectl scale -n media deploy/tautulli --replicas 1
