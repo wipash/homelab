@@ -57,7 +57,7 @@ spec:
       config:
         enabled: true
         existingClaim: tautulli-config-v2
-      plexLogs:
+      plexlogs:
         enabled: true
         existingClaim: plex-library-config-v2
         subPath: "/Library/Application Support/Plex Media Server/Logs"
