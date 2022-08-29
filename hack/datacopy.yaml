@@ -1,0 +1,134 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: datacopy-radarr
+  namespace: media
+spec:
+  restartPolicy: Never
+  nodeSelector:
+    kubernetes.io/hostname: hp1
+  containers:
+    - name: alpine
+      image: alpine:latest
+      command: ["cp", "-a", "/og-data/.", "/data"]
+      volumeMounts:
+        - name: &source radarr-config-v1
+          mountPath: /og-data
+        - name: &dest radarr-config-v2
+          mountPath: /data
+  volumes:
+    - name: *source
+      persistentVolumeClaim:
+        claimName: *source
+    - name: *dest
+      persistentVolumeClaim:
+        claimName: *dest
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: datacopy-prowlarr
+  namespace: media
+spec:
+  restartPolicy: Never
+  nodeSelector:
+    kubernetes.io/hostname: hp1
+  containers:
+    - name: alpine
+      image: alpine:latest
+      command: ["cp", "-a", "/og-data/.", "/data"]
+      volumeMounts:
+        - name: &source prowlarr-config-v1
+          mountPath: /og-data
+        - name: &dest prowlarr-config-v2
+          mountPath: /data
+  volumes:
+    - name: *source
+      persistentVolumeClaim:
+        claimName: *source
+    - name: *dest
+      persistentVolumeClaim:
+        claimName: *dest
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: datacopy-overseer
+  namespace: media
+spec:
+  restartPolicy: Never
+  nodeSelector:
+    kubernetes.io/hostname: hp1
+  containers:
+    - name: alpine
+      image: alpine:latest
+      command: ["cp", "-a", "/og-data/.", "/data"]
+      volumeMounts:
+        - name: &source overseerr-config-v1
+          mountPath: /og-data
+        - name: &dest overseerr-config-v2
+          mountPath: /data
+  volumes:
+    - name: *source
+      persistentVolumeClaim:
+        claimName: *source
+    - name: *dest
+      persistentVolumeClaim:
+        claimName: *dest
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: datacopy-tautulli
+  namespace: media
+spec:
+  restartPolicy: Never
+  nodeSelector:
+    kubernetes.io/hostname: hp1
+  containers:
+    - name: alpine
+      image: alpine:latest
+      command: ["cp", "-a", "/og-data/.", "/data"]
+      volumeMounts:
+        - name: &source tautulli-config-v1
+          mountPath: /og-data
+        - name: &dest tautulli-config-v2
+          mountPath: /data
+  volumes:
+    - name: *source
+      persistentVolumeClaim:
+        claimName: *source
+    - name: *dest
+      persistentVolumeClaim:
+        claimName: *dest
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: datacopy-plex
+  namespace: media
+spec:
+  restartPolicy: Never
+  nodeSelector:
+    kubernetes.io/hostname: hp1
+  containers:
+    - name: alpine
+      image: alpine:latest
+      command: ["cp", "-a", "/og-data/.", "/data"]
+      volumeMounts:
+        - name: &source plex-library-config-v1
+          mountPath: /og-data
+        - name: &dest plex-library-config-v2
+          mountPath: /data
+  volumes:
+    - name: *source
+      persistentVolumeClaim:
+        claimName: *source
+    - name: *dest
+      persistentVolumeClaim:
+        claimName: *dest
