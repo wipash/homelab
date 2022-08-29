@@ -111,6 +111,10 @@ spec:
       ingress:
         enabled: true
         ingressClassName: nginx
+        annotations:
+          hajimari.io/appName: "prometheus"
+          hajimari.io/enable: "true"
+          hajimari.io/icon: "chart-line"
         pathType: Prefix
         hosts:
           - &host_prometheus prometheus.${SECRET_DOMAIN}
@@ -249,6 +253,10 @@ spec:
 
       ingress:
         enabled: true
+        annotations:
+          hajimari.io/appName: "alertmanager"
+          hajimari.io/enable: "true"
+          hajimari.io/icon: "alarm-light-outline"
         ingressClassName: nginx
         pathType: Prefix
         hosts:
