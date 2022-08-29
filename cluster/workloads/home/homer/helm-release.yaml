@@ -27,7 +27,7 @@ spec:
       config:
         enabled: true
         mountPath: /www/assets
-        existingClaim: homer-config
+        existingClaim: homer-config-v1
 
     service:
       main:
