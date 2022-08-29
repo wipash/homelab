@@ -24,6 +24,16 @@ spec:
     podAnnotations:
       setGateway: "true"
 
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - "hp1"
+
     podSecurityContext:
       runAsUser: 568
       runAsGroup: 568

@@ -19,6 +19,16 @@ spec:
       repository: ghcr.io/onedr0p/tautulli
       tag: 2.10.3@sha256:6cc5f014597d9764de3de75e43267c8e08415813b9e45c5943c533511c92e8ad
 
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - "hp1"
+
     service:
       main:
         ports:

@@ -21,6 +21,16 @@ spec:
       repository: ghcr.io/onedr0p/radarr-develop
       tag: 4.2.2.6503@sha256:4252feffee3058d739f63e8b4201ff55ca047db686a8ce587c1120c1964d987c
 
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - "hp1"
+
     podAnnotations:
       secret.reloader.stakater.com/reload: radarr
 

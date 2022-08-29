@@ -29,17 +29,10 @@ spec:
                   operator: In
                   values:
                     - "true"
-      podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                  - key: app.kubernetes.io/name
-                    operator: In
-                    values:
-                      - nzbget
-              topologyKey: kubernetes.io/hostname
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - "hp1"
 
     dnsConfig:
       options:
