@@ -75,7 +75,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: plex-library-config-v1
+        existingClaim: plex-library-config-v2
       nfs-nas-media:
         enabled: true
         mountPath: /storage/media

@@ -79,4 +79,4 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: prowlarr-config-v1
+        existingClaim: prowlarr-config-v2
