@@ -62,6 +62,9 @@ spec:
                 return 301 $scheme://$host/web/index.html;
               }
             }
+          hajimari.io/enable: "true"
+          hajimari.io/icon: "plex"
+          hajimari.io/appName: Plex
         ingressClassName: nginx
         hosts:
           - host: &host plex.${SECRET_DOMAIN}

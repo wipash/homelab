@@ -48,6 +48,10 @@ spec:
       main:
         enabled: true
         ingressClassName: "nginx"
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: "plex"
+          hajimari.io/appName: Xteve
         hosts:
           - host: "xteve.${SECRET_DOMAIN}"
             paths:
