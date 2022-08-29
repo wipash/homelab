@@ -1,0 +1,78 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: homer
+  namespace: home
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 0.1.1
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 15m
+  values:
+    image:
+      repository: b4bz/homer
+      tag: v22.08.1
+
+    env:
+      TZ: "${TIMEZONE}"
+
+    persistence:
+      config:
+        enabled: true
+        mountPath: /www/assets
+        existingClaim: homer-config
+
+    service:
+      main:
+        annotations:
+          prometheus.io/probe: "true"
+          prometheus.io/protocol: http
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: "nginx"
+        hosts:
+          - host: &host "homer.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+
+    addons:
+      codeserver:
+        enabled: true
+        image:
+          repository: docker.io/codercom/code-server
+          tag: 4.6.0
+        workingDir: "/www/assets"
+        args:
+          - --auth
+          - "none"
+          - --user-data-dir
+          - "/www/assets/.vscode"
+          - --extensions-dir
+          - "/www/assets/.vscode"
+        ingress:
+          enabled: true
+          ingressClassName: "nginx"
+          hosts:
+            - host: &confighost "homer-config.${SECRET_DOMAIN}"
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - hosts:
+                - *confighost
+        volumeMounts:
+          - name: config
+            mountPath: /www/assets
