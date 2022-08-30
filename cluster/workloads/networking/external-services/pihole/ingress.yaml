@@ -6,6 +6,9 @@ metadata:
   namespace: networking
 spec:
   ingressClassName: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://homer.${SECRET_DOMAIN}"
   rules:
     - host: &host "pihole.${SECRET_DOMAIN}"
       http:
