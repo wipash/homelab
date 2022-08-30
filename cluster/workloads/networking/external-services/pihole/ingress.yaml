@@ -4,8 +4,6 @@ kind: Ingress
 metadata:
   name: pihole
   namespace: networking
-spec:
-  ingressClassName: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-origin: "https://homer.${SECRET_DOMAIN}"
@@ -13,6 +11,8 @@ spec:
             location = / {
               return 301 $scheme://$host/admin/;
             }
+spec:
+  ingressClassName: "nginx"
   rules:
     - host: &host "pihole.${SECRET_DOMAIN}"
       http:
