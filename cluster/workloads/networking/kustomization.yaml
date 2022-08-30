@@ -8,3 +8,4 @@ resources:
   - external-dns
   - cloudflared
   - downloads-gateway
+  - external-services

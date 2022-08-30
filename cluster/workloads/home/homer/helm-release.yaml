@@ -22,6 +22,7 @@ spec:
 
     env:
       TZ: "${TIMEZONE}"
+      PORT: 8080
 
     persistence:
       config:
