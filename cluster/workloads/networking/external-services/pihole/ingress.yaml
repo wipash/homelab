@@ -9,6 +9,10 @@ spec:
   annotations:
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-origin: "https://homer.${SECRET_DOMAIN}"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+            location = / {
+              return 301 $scheme://$host/admin/;
+            }
   rules:
     - host: &host "pihole.${SECRET_DOMAIN}"
       http:
