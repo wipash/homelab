@@ -27,12 +27,12 @@ spec:
   values:
     image:
       repository: hkotel/mealie
-      tag: frontend-v1.0.0beta-3
+      tag: frontend-v1.0.0beta-4
       pullPolicy: IfNotPresent
     api:
       image:
         repository: hkotel/mealie
-        tag: api-v1.0.0beta-3
+        tag: api-v1.0.0beta-4
         pullPolicy: IfNotPresent
       env:
         TZ: ${TIMEZONE}
