@@ -9,3 +9,4 @@ resources:
   - cloudflared
   - downloads-gateway
   - external-services
+  - unifi
