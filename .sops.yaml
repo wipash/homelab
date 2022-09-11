@@ -2,6 +2,6 @@ creation_rules:
     - path_regex: \w+\.sops\.yaml$
       age: age1gvxhazdcrf83u2mhvat4le39eaw0gr5vg3eqj4nz444umzem6gcq6493xw
       encrypted_regex: ^(data|stringData)$
-    - path_regex: cluster/.*\.sops\.toml
-      key_groups:
-      - age: age1gvxhazdcrf83u2mhvat4le39eaw0gr5vg3eqj4nz444umzem6gcq6493xw
+    # - path_regex: cluster/.*\.sops\.toml
+    #   key_groups:
+    #   - age: age1gvxhazdcrf83u2mhvat4le39eaw0gr5vg3eqj4nz444umzem6gcq6493xw
