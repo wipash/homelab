@@ -8,3 +8,4 @@ talosconfig
 *.key
 *.agekey
 secret.yaml
+mosquitto_pwd
