@@ -42,6 +42,36 @@ ffmpeg:
     - -hwaccel_output_format
     - yuv420p
 
+# Enable rtmp stream
+rtmp:
+  enabled: True
+
+# Global detection configuration
+detect:
+  width: 704
+  height: 576
+  fps: 5
+
+# Global recording configuration
+record:
+  enabled: True
+  retain:
+    days: 3
+    mode: all
+  events:
+    objects:
+      - person
+    retain:
+      default: 14
+
+# Global snapshots configuration
+snapshots:
+  enabled: True
+  timestamp: True
+  retain:
+    # Required: Default retention days (default: shown below)
+    default: 14
+
 # Specify camera's
 cameras:
   FDC:
@@ -55,38 +85,25 @@ cameras:
         - path: "rtsp://{FRIGATE_CAMERA_FDC_USER}:{FRIGATE_CAMERA_FDC_PASSWORD}@{FRIGATE_CAMERA_FDC_HOST}:554/cam/realmonitor?channel=1&subtype=1"
           roles:
             - detect
-
-    # Enable rtmp stream for camera
-    rtmp:
-      enabled: True
-
-    # Camera-specific detection configuration
-    detect:
-      width: 704
-      height: 576
-      fps: 5
-
-    # Camera-specific recording configuration
-    record:
-      enabled: True
-      retain:
-        days: 3
-        mode: all
-      events:
-        objects:
-          - person
-        retain:
-          default: 14
-
-    # Camera-specific snapshots configuration
-    snapshots:
-      enabled: True
-      timestamp: True
-      retain:
-        # Required: Default retention days (default: shown below)
-        default: 14
-
-    # Camera-specific objects configuration
-    objects:
-      track:
-        - person
+  BDC:
+    # Camera-specific ffmpeg configuration
+    ffmpeg:
+      inputs:
+        - path: "rtsp://{FRIGATE_CAMERA_BDC_USER}:{FRIGATE_CAMERA_BDC_PASSWORD}@{FRIGATE_CAMERA_BDC_HOST}:554/cam/realmonitor?channel=1&subtype=0"
+          roles:
+            - rtmp
+            - record
+        - path: "rtsp://{FRIGATE_CAMERA_BDC_USER}:{FRIGATE_CAMERA_BDC_PASSWORD}@{FRIGATE_CAMERA_BDC_HOST}:554/cam/realmonitor?channel=1&subtype=1"
+          roles:
+            - detect
+  SDC:
+    # Camera-specific ffmpeg configuration
+    ffmpeg:
+      inputs:
+        - path: "rtsp://{FRIGATE_CAMERA_SDC_USER}:{FRIGATE_CAMERA_SDC_PASSWORD}@{FRIGATE_CAMERA_SDC_HOST}:554/cam/realmonitor?channel=1&subtype=0"
+          roles:
+            - rtmp
+            - record
+        - path: "rtsp://{FRIGATE_CAMERA_SDC_USER}:{FRIGATE_CAMERA_SDC_PASSWORD}@{FRIGATE_CAMERA_SDC_HOST}:554/cam/realmonitor?channel=1&subtype=1"
+          roles:
+            - detect
