@@ -21,6 +21,9 @@ spec:
       repository: docker.io/blakeblackshear/frigate
       tag: 0.10.1-amd64
 
+    env:
+      TZ: "${TZ}"
+
     envFrom:
       - secretRef:
           name: frigate-secrets
@@ -30,6 +33,11 @@ spec:
         ports:
           http:
             port: &port 5000
+          rtmp:
+            enabled: true
+            port: 1935
+            protocol: TCP
+            targetPort: 1935
 
     probes:
       liveness: &probe
