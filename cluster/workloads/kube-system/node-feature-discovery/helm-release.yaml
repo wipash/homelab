@@ -59,5 +59,4 @@ spec:
             - name: coral-tpu
               matchOn:
                 - usbId:
-                    vendor: ["1a6e"]
-                    class: ["089a"]
+                    vendor: ["1a6e", "18d1"]
