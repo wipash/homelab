@@ -9,18 +9,9 @@ database:
   path: /data/frigate.db
 
 detectors:
-  cpu1:
-    type: cpu
-    num_threads: 2
-  cpu2:
-    type: cpu
-    num_threads: 2
-  cpu3:
-    type: cpu
-    num_threads: 2
-  # coral:
-  #   type: edgetpu
-  #   device: usb
+  coral:
+    type: edgetpu
+    device: usb
 
 # Global objects configuration
 objects:
