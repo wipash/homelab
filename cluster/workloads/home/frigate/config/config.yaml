@@ -21,7 +21,7 @@ objects:
     person:
       min_area: 5000
       max_area: 100000
-      threshold: 0.5
+      threshold: 0.7
 
 # Global ffmpeg configuration
 ffmpeg:
@@ -39,8 +39,8 @@ rtmp:
 
 # Global detection configuration
 detect:
-  width: 704
-  height: 576
+  width: 1280
+  height: 720
   fps: 5
 
 # Global recording configuration
@@ -78,29 +78,31 @@ cameras:
         - path: "rtsp://{FRIGATE_CAMERA_FDC_USER}:{FRIGATE_CAMERA_FDC_PASSWORD}@{FRIGATE_CAMERA_FDC_HOST}:554/cam/realmonitor?channel=1&subtype=2"
           roles:
             - detect
-    detect:
-      width: 1280
-      height: 720
-      fps: 5
+
   BDC:
     # Camera-specific ffmpeg configuration
     ffmpeg:
       inputs:
         - path: "rtsp://{FRIGATE_CAMERA_BDC_USER}:{FRIGATE_CAMERA_BDC_PASSWORD}@{FRIGATE_CAMERA_BDC_HOST}:554/cam/realmonitor?channel=1&subtype=0"
           roles:
-            - rtmp
             - record
         - path: "rtsp://{FRIGATE_CAMERA_BDC_USER}:{FRIGATE_CAMERA_BDC_PASSWORD}@{FRIGATE_CAMERA_BDC_HOST}:554/cam/realmonitor?channel=1&subtype=1"
           roles:
+            - rtmp
+        - path: "rtsp://{FRIGATE_CAMERA_BDC_USER}:{FRIGATE_CAMERA_BDC_PASSWORD}@{FRIGATE_CAMERA_BDC_HOST}:554/cam/realmonitor?channel=1&subtype=2"
+          roles:
             - detect
+
   SDC:
     # Camera-specific ffmpeg configuration
     ffmpeg:
       inputs:
         - path: "rtsp://{FRIGATE_CAMERA_SDC_USER}:{FRIGATE_CAMERA_SDC_PASSWORD}@{FRIGATE_CAMERA_SDC_HOST}:554/cam/realmonitor?channel=1&subtype=0"
           roles:
-            - rtmp
             - record
         - path: "rtsp://{FRIGATE_CAMERA_SDC_USER}:{FRIGATE_CAMERA_SDC_PASSWORD}@{FRIGATE_CAMERA_SDC_HOST}:554/cam/realmonitor?channel=1&subtype=1"
+          roles:
+            - rtmp
+        - path: "rtsp://{FRIGATE_CAMERA_SDC_USER}:{FRIGATE_CAMERA_SDC_PASSWORD}@{FRIGATE_CAMERA_SDC_HOST}:554/cam/realmonitor?channel=1&subtype=2"
           roles:
             - detect
