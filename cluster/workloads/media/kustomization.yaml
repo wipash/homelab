@@ -13,3 +13,4 @@ resources:
     - radarr
     - overseerr
     - tautulli
+    - qbittorrent
