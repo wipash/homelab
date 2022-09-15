@@ -26,7 +26,7 @@ spec:
     env:
       TZ: ${TZ}
       serverIP: 0.0.0.0
-      ffmpegPath: /usr/bin/ffmpeg
+      ffmpegPath: /usr/local/bin/ffmpeg
       PGID: 65537
     podSecurityContext:
       # Required for passthrough of /dev/dri devices from NFD
