@@ -19,10 +19,11 @@ spec:
   values:
     image:
       repository: docker.io/blakeblackshear/frigate
-      tag: 0.10.1-amd64
+      tag: 0.11.0
 
     env:
       TZ: "${TZ}"
+      LIBVA_DRIVER_NAME: i965
 
     envFrom:
       - secretRef:
