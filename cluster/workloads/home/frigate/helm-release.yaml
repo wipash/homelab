@@ -16,6 +16,12 @@ spec:
         name: bjw-s
         namespace: flux-system
 
+  dependsOn:
+    - name: intel-gpu-plugin
+      namespace: kube-system
+    - name: node-feature-discovery
+      namespace: kube-system
+
   values:
     image:
       repository: docker.io/blakeblackshear/frigate
@@ -119,6 +125,12 @@ spec:
 
     securityContext:
       privileged: true
+
+    resources:
+      requests:
+        gpu.intel.com/i915: "1"
+      limits:
+        gpu.intel.com/i915: "1"
 
     affinity:
       nodeAffinity:

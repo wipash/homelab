@@ -71,6 +71,11 @@ snapshots:
 cameras:
   FDC:
     # Camera-specific ffmpeg configuration
+    objects:
+      filters:
+        person:
+          mask:
+            - 0,310,137,154,246,121,463,53,782,54,909,63,1053,129,1070,80,1084,0,0,0
     ffmpeg:
       inputs:
         - path: "rtsp://{FRIGATE_CAMERA_FDC_USER}:{FRIGATE_CAMERA_FDC_PASSWORD}@{FRIGATE_CAMERA_FDC_HOST}:554/cam/realmonitor?channel=1&subtype=0"
@@ -85,6 +90,16 @@ cameras:
 
   BDC:
     # Camera-specific ffmpeg configuration
+    objects:
+      filters:
+        person:
+          threshold: 0.81
+          mask:
+            - 1280,611,625,105,471,73,442,110,374,118,265,92,253,0,577,0,642,0,770,0,1002,0,1242,0,1280,0
+            - 0,720,300,720,293,611,242,417,229,178,253,0,0,0
+    motion:
+      mask:
+        - 626,197,1081,484,1280,385,1280,0,454,0,475,69,633,108
     ffmpeg:
       inputs:
         - path: "rtsp://{FRIGATE_CAMERA_BDC_USER}:{FRIGATE_CAMERA_BDC_PASSWORD}@{FRIGATE_CAMERA_BDC_HOST}:554/cam/realmonitor?channel=1&subtype=0"
@@ -99,6 +114,15 @@ cameras:
 
   SDC:
     # Camera-specific ffmpeg configuration
+    objects:
+      filters:
+        person:
+          mask:
+            - 1280,419,1280,0,847,0
+    motion:
+      mask:
+        - 0,720,419,720,419,368,391,0,0,0REMOVE
+        - 1280,446,1280,0,844,0
     ffmpeg:
       inputs:
         - path: "rtsp://{FRIGATE_CAMERA_SDC_USER}:{FRIGATE_CAMERA_SDC_PASSWORD}@{FRIGATE_CAMERA_SDC_HOST}:554/cam/realmonitor?channel=1&subtype=0"
