@@ -65,13 +65,14 @@ spec:
       usb:
         enabled: true
         type: hostPath
-        hostPath: /dev/serial/by-id/usb-Texas_Instruments_TI_CC2531_USB_CDC___0X00124B0014DA43F4-if00
+        hostPath: /dev/serial/by-id/usb-ITEAD_SONOFF_Zigbee_3.0_USB_Dongle_Plus_V2_20220719081347-if00
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
             - matchExpressions:
-                - key: feature.node.kubernetes.io/usb-02_0451_16a8.present
+                # - key: feature.node.kubernetes.io/usb-02_0451_16a8.present
+                - key: feature.node.kubernetes.io/usb-02_1a86_55d4.present
                   operator: In
                   values:
                     - "true"
@@ -91,24 +92,25 @@ spec:
         user: ${SECRET_MQTT_USER}
         password: ${SECRET_MQTT_PASS}
       serial:
-        port: /dev/serial/by-id/usb-Texas_Instruments_TI_CC2531_USB_CDC___0X00124B0014DA43F4-if00
+        #port: /dev/serial/by-id/usb-Texas_Instruments_TI_CC2531_USB_CDC___0X00124B0014DA43F4-if00
+        port: /dev/serial/by-id/usb-ITEAD_SONOFF_Zigbee_3.0_USB_Dongle_Plus_V2_20220719081347-if00
       frontend:
         port: 8080
       advanced:
         network_key:
-          - 1
-          - 3
           - 5
-          - 7
-          - 9
-          - 11
-          - 13
-          - 15
-          - 0
+          - 3
           - 2
-          - 4
-          - 6
           - 8
+          - 9
+          - 1
           - 10
+          - 5
+          - 6
+          - 0
           - 12
-          - 13
+          - 15
+          - 4
+          - 2
+          - 8
+          - 11
