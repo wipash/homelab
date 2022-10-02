@@ -17,7 +17,7 @@ spec:
 
           initContainers:
             - name: render-config
-              image: ghcr.io/k8s-at-home/recyclarr:v2.5.0@sha256:44491d7b6db862269e0e671cfabe2ee5ebae2761282cca1dd7e97282335c7bda
+              image: ghcr.io/onedr0p/recyclarr:2.5.0@sha256:bd4dc562a12c31857c2e198de154d4ffa734d5e7f6fe817283c6fdf5807c5fb1
               command:
                 - "/bin/bash"
                 - -c
@@ -42,7 +42,7 @@ spec:
 
           containers:
             - name: recyclarr-sonarr
-              image: ghcr.io/k8s-at-home/recyclarr:v2.5.0@sha256:44491d7b6db862269e0e671cfabe2ee5ebae2761282cca1dd7e97282335c7bda
+              image: ghcr.io/onedr0p/recyclarr:2.5.0@sha256:bd4dc562a12c31857c2e198de154d4ffa734d5e7f6fe817283c6fdf5807c5fb1
               imagePullPolicy: IfNotPresent
               command:
                 - /app/recyclarr
@@ -59,7 +59,7 @@ spec:
                   readOnly: true
 
             - name: recyclarr-radarr
-              image: ghcr.io/k8s-at-home/recyclarr:v2.5.0@sha256:44491d7b6db862269e0e671cfabe2ee5ebae2761282cca1dd7e97282335c7bda
+              image: ghcr.io/onedr0p/recyclarr:2.5.0@sha256:bd4dc562a12c31857c2e198de154d4ffa734d5e7f6fe817283c6fdf5807c5fb1
               imagePullPolicy: IfNotPresent
               command:
                 - /app/recyclarr
