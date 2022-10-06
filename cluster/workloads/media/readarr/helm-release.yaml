@@ -1,0 +1,87 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: readarr
+  namespace: media
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 0.2.1
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+
+  values:
+    image:
+      repository: ghcr.io/onedr0p/readarr-nightly
+      tag: 0.1.1.1426@sha256:f7513a7aea80362daecb3ba543092a87d436e0bb7ed6d3a2df3f8d31d093c9a2
+
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - "hp1"
+
+    podAnnotations:
+      secret.reloader.stakater.com/reload: readarr
+
+    podSecurityContext:
+      supplementalGroups:
+        - 65537 # NAS Permission group
+
+    env:
+      PUSHOVER_APP_URL: &host "readarr.${SECRET_DOMAIN}"
+      PUSHOVER_PRIORITY: "-1"
+      readarr__INSTANCE_NAME: readarr
+      readarr__PORT: &port 7878
+      readarr__APPLICATION_URL: "https://readarr.${SECRET_DOMAIN}"
+      readarr__LOG_LEVEL: info
+
+    envFrom:
+      - secretRef:
+          name: readarr
+
+    service:
+      main:
+        ports:
+          http:
+            port: *port
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: "nginx"
+        annotations:
+          nginx.ingress.kubernetes.io/enable-cors: "true"
+          nginx.ingress.kubernetes.io/cors-allow-origin: "https://homer.${SECRET_DOMAIN}"
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_set_header Accept-Encoding "";
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${SECRET_DOMAIN}/css/base/readarr/nord.css"></head>';
+            sub_filter_once on;
+          hajimari.io/enable: "true"
+          hajimari.io/appName: readarr
+        hosts:
+          - host: *host
+            paths:
+              - path: /
+        tls:
+          - hosts:
+              - *host
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: readarr-config-v1
+      media:
+        enabled: true
+        existingClaim: media-nfs
+        mountPath: /data/nas-media
