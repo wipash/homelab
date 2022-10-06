@@ -42,7 +42,7 @@ spec:
       PUSHOVER_APP_URL: &host "readarr.${SECRET_DOMAIN}"
       PUSHOVER_PRIORITY: "-1"
       readarr__INSTANCE_NAME: readarr
-      readarr__PORT: &port 7878
+      readarr__PORT: &port 8787
       readarr__APPLICATION_URL: "https://readarr.${SECRET_DOMAIN}"
       readarr__LOG_LEVEL: info
 
