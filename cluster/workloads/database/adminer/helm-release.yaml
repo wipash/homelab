@@ -9,7 +9,7 @@ spec:
     spec:
       # renovate: registryUrl=https://cetic.github.io/helm-charts
       chart: adminer
-      version: 0.1.7
+      version: 0.1.8
       sourceRef:
         kind: HelmRepository
         name: cetic
