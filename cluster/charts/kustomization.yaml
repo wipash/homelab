@@ -27,3 +27,4 @@ resources:
   # - helmrepository-fairwinds.yaml
   - helmrepository-grafana.yaml
   - bjw-s.yaml
+  - helmrepository-mvisonneau.yaml
