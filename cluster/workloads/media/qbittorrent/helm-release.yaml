@@ -22,7 +22,7 @@ spec:
       tag: 4.4.3.1@sha256:cea2a1647727f49582ca3d517bc45d53d00abe211fc667c429020f042635ea34
 
     podAnnotations:
-      setGateway: "true"
+      setGateway: "false"
 
     podSecurityContext:
       runAsUser: 568
