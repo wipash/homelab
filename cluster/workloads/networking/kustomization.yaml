@@ -10,4 +10,3 @@ resources:
   - downloads-gateway
   - external-services
   - unifi
-  - tailscale-relay
