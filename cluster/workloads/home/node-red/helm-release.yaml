@@ -55,7 +55,10 @@ spec:
       NODE_RED_ENABLE_SAFE_MODE: "false"
     # Fix for https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/678
     securityContext:
-      runAsUser: 1
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
       privileged: true
     ###
     ingress:
