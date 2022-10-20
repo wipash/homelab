@@ -53,6 +53,11 @@ spec:
       TZ: "${TIMEZONE}"
       NODE_RED_ENABLE_PROJECTS: "true"
       NODE_RED_ENABLE_SAFE_MODE: "false"
+    # Fix for https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/678
+    securityContext:
+      runAsUser: 1
+      privileged: true
+    ###
     ingress:
       main:
         enabled: true
