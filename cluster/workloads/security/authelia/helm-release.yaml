@@ -32,7 +32,7 @@ spec:
 
     image:
       repository: ghcr.io/authelia/authelia
-      tag: 4.36.9
+      tag: 4.37.0
 
     envFrom:
       - secretRef:
