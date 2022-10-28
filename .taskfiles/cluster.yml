@@ -36,9 +36,13 @@ tasks:
       - flux suspend helmrelease --all -n media
       - flux suspend helmrelease --all -n web
       - flux suspend helmrelease --all -n home
+      - flux suspend helmrelease --all -n networking
+      - flux suspend helmrelease --all -n monitoring
       - kubectl scale -n web deploy/ghost --replicas 0
       - kubectl scale -n web deploy/wordpress-0 --replicas 0
       - kubectl scale -n web deploy/wordpress-1 --replicas 0
+      - kubectl scale -n web deploy/wordpress-2 --replicas 0
+      - kubectl scale -n web deploy/wordpress-3 --replicas 0
       - kubectl scale -n home deploy/hajimari --replicas 0
       - kubectl scale -n home deploy/mealie --replicas 0
       - kubectl scale -n home deploy/mosquitto --replicas 0
@@ -46,22 +50,37 @@ tasks:
       - kubectl scale -n home deploy/zigbee2mqtt --replicas 0
       - kubectl scale -n home deploy/monica --replicas 0
       - kubectl scale -n home deploy/home-assistant --replicas 0
+      - kubectl scale -n home deploy/esphome --replicas 0
+      - kubectl scale -n home deploy/frigate --replicas 0
       - kubectl scale -n media deploy/sonarr --replicas 0
       - kubectl scale -n media deploy/radarr --replicas 0
+      - kubectl scale -n media deploy/readarr --replicas 0
       - kubectl scale -n media deploy/prowlarr --replicas 0
       - kubectl scale -n media deploy/overseerr --replicas 0
       - kubectl scale -n media deploy/plex --replicas 0
       - kubectl scale -n media deploy/nzbget --replicas 0
       - kubectl scale -n media deploy/tautulli --replicas 0
+      - kubectl scale -n media deploy/qbittorrent --replicas 0
+      - kubectl scale -n media deploy/tdarr --replicas 0
+      - kubectl scale -n media deploy/xteve --replicas 0
+      - kubectl scale -n networking deploy/unifi --replicas 0
+      - kubectl scale -n monitoring deploy/grafana --replicas 0
+      - kubectl scale -n monitoring deploy/thanos-compactor --replicas 0
+      - kubectl scale -n monitoring statefulset thanos-ruler --replicas 0
+      - kubectl scale -n monitoring statefulset thanos-storegateway --replicas 0
   resume:
     desc: Resume all Helm Releases that rely on NFS storage
     cmds:
       - flux resume helmrelease --all -n media
       - flux resume helmrelease --all -n web
       - flux resume helmrelease --all -n home
+      - flux resume helmrelease --all -n networking
+      - flux resume helmrelease --all -n monitoring
       - kubectl scale -n web deploy/ghost --replicas 1
       - kubectl scale -n web deploy/wordpress-0 --replicas 1
       - kubectl scale -n web deploy/wordpress-1 --replicas 1
+      - kubectl scale -n web deploy/wordpress-2 --replicas 1
+      - kubectl scale -n web deploy/wordpress-3 --replicas 1
       - kubectl scale -n home deploy/hajimari --replicas 1
       - kubectl scale -n home deploy/mealie --replicas 1
       - kubectl scale -n home deploy/mosquitto --replicas 1
@@ -69,10 +88,21 @@ tasks:
       - kubectl scale -n home deploy/zigbee2mqtt --replicas 1
       - kubectl scale -n home deploy/monica --replicas 1
       - kubectl scale -n home deploy/home-assistant --replicas 1
+      - kubectl scale -n home deploy/esphome --replicas 1
+      - kubectl scale -n home deploy/frigate --replicas 1
       - kubectl scale -n media deploy/sonarr --replicas 1
       - kubectl scale -n media deploy/radarr --replicas 1
+      - kubectl scale -n media deploy/readarr --replicas 1
       - kubectl scale -n media deploy/prowlarr --replicas 1
       - kubectl scale -n media deploy/overseerr --replicas 1
       - kubectl scale -n media deploy/plex --replicas 1
       - kubectl scale -n media deploy/nzbget --replicas 1
       - kubectl scale -n media deploy/tautulli --replicas 1
+      - kubectl scale -n media deploy/qbittorrent --replicas 1
+      - kubectl scale -n media deploy/tdarr --replicas 1
+      - kubectl scale -n media deploy/xteve --replicas 1
+      - kubectl scale -n networking deploy/unifi --replicas 1
+      - kubectl scale -n monitoring deploy/grafana --replicas 1
+      - kubectl scale -n monitoring deploy/thanos-compactor --replicas 1
+      - kubectl scale -n monitoring statefulset thanos-ruler --replicas 1
+      - kubectl scale -n monitoring statefulset thanos-storegateway --replicas 1
