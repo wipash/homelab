@@ -77,6 +77,11 @@ cameras:
         person:
           mask:
             - 0,310,137,154,246,121,463,53,782,54,909,63,1053,129,1070,80,1084,0,0,0
+      zones:
+        zone_0:
+          coordinates: 89,116,68,0,987,0,977,116,974,169,961,216,347,180,329,103
+        zone_1:
+          coordinates: 980,221,232,176,0,382,0,720,1098,720
     ffmpeg:
       inputs:
         - path: "rtsp://{FRIGATE_CAMERA_FDC_USER}:{FRIGATE_CAMERA_FDC_PASSWORD}@{FRIGATE_CAMERA_FDC_HOST}:554/cam/realmonitor?channel=1&subtype=0"
