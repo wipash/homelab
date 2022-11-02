@@ -21,7 +21,8 @@ objects:
     person:
       min_area: 5000
       max_area: 100000
-      threshold: 0.7
+      min_score: 0.6
+      threshold: 0.8
 
 # Global ffmpeg configuration
 ffmpeg:
