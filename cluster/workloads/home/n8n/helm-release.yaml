@@ -43,6 +43,13 @@ spec:
       N8N_HIRING_BANNER_ENABLED: false
       EXECUTIONS_DATA_PRUNE: true
       EXECUTIONS_DATA_MAX_AGE: 336
+      N8N_EMAIL_MODE: smtp
+      N8N_SMTP_HOST: smtp-relay
+      N8N_SMTP_PORT: 25
+      N8N_SMTP_SSL: false
+      N8N_SMTP_SENDER: n8n@mcgrath.nz
+      N8N_SMTP_USER: ""
+      N8N_SMTP_PASS: ""
 
     # envFrom:
     #   - secretRef:
