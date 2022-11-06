@@ -16,3 +16,4 @@ resources:
   - homer
   - frigate
   - esphome
+  - n8n
