@@ -17,3 +17,4 @@ resources:
   - frigate
   - esphome
   - n8n
+  - paperless

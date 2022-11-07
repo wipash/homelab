@@ -53,9 +53,9 @@ spec:
       N8N_SMTP_PASS: "none"
       DB_SQLITE_VACUUM_ON_STARTUP: true
 
-    # envFrom:
-    #   - secretRef:
-    #       name: n8n-secrets
+    envFrom:
+      - secretRef:
+          name: n8n-secrets
 
     service:
       main:
