@@ -41,6 +41,7 @@ spec:
       N8N_VERSION_NOTIFICATIONS_ENABLED: false
       N8N_DIAGONISTICS_ENABLED: false
       N8N_HIRING_BANNER_ENABLED: false
+      N8N_PERSONALIZATION_ENABLED: false
       EXECUTIONS_DATA_PRUNE: true
       EXECUTIONS_DATA_MAX_AGE: 336
       N8N_EMAIL_MODE: smtp
@@ -50,6 +51,7 @@ spec:
       N8N_SMTP_SENDER: n8n@mcgrath.nz
       N8N_SMTP_USER: "none"
       N8N_SMTP_PASS: "none"
+      DB_SQLITE_VACUUM_ON_STARTUP: true
 
     # envFrom:
     #   - secretRef:
