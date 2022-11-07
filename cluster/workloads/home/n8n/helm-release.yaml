@@ -44,12 +44,12 @@ spec:
       EXECUTIONS_DATA_PRUNE: true
       EXECUTIONS_DATA_MAX_AGE: 336
       N8N_EMAIL_MODE: smtp
-      N8N_SMTP_HOST: smtp-relay
+      N8N_SMTP_HOST: smtp-relay.home.svc.cluster.local
       N8N_SMTP_PORT: 25
       N8N_SMTP_SSL: false
       N8N_SMTP_SENDER: n8n@mcgrath.nz
-      N8N_SMTP_USER: ""
-      N8N_SMTP_PASS: ""
+      N8N_SMTP_USER: "none"
+      N8N_SMTP_PASS: "none"
 
     # envFrom:
     #   - secretRef:
@@ -66,6 +66,9 @@ spec:
         enabled: true
         ingressClassName: "nginx"
         annotations:
+          external-dns/is-public: "true"
+          external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+          external-dns.alpha.kubernetes.io/target: "${SECRET_CLOUDFLARE_TUNNEL_ID}.cfargotunnel.com"
           hajimari.io/enable: "true"
           hajimari.io/icon: source-branch
           hajimari.io/appName: n8n
