@@ -63,7 +63,7 @@ spec:
           hajimari.io/icon: file-outline
           hajimari.io/appName: Paperless
         hosts:
-          - host: &host "paperless.${INGRESS_DOMAIN}"
+          - host: &host "paperless.${SECRET_DOMAIN}"
             paths:
               - path: /
         tls:
