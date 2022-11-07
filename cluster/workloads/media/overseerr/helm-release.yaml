@@ -56,10 +56,10 @@ spec:
           external-dns.alpha.kubernetes.io/target: "${SECRET_CLOUDFLARE_TUNNEL_ID}.cfargotunnel.com"
           nginx.ingress.kubernetes.io/enable-cors: "true"
           nginx.ingress.kubernetes.io/cors-allow-origin: "https://homer.${SECRET_DOMAIN}"
-          # nginx.ingress.kubernetes.io/configuration-snippet: |
-          #   proxy_set_header Accept-Encoding "";
-          #   sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${SECRET_DOMAIN}/css/base/overseerr/nord.css"></head>';
-          #   sub_filter_once on;
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_set_header Accept-Encoding "";
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${SECRET_DOMAIN}/css/base/overseerr/nord.css"></head>';
+            sub_filter_once on;
           hajimari.io/enable: "true"
           hajimari.io/icon: "eye-circle"
           hajimari.io/appName: Overseerr
