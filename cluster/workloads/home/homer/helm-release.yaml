@@ -56,8 +56,8 @@ spec:
       codeserver:
         enabled: true
         image:
-          repository: docker.io/codercom/code-server
-          tag: 4.8.2
+          repository: docker.io/coder/code-server
+          tag: 4.8.3
         workingDir: "/www/assets"
         git:
           deployKeySecret: homer-code-server-git-deploy
