@@ -72,7 +72,7 @@ spec:
           enabled: true
           ingressClassName: "nginx"
           hosts:
-            - host: &confighost "homer-config.${SECRET_DOMAIN}"
+            - host: &confighost "homer-code.${SECRET_DOMAIN}"
               paths:
                 - path: /
                   pathType: Prefix
