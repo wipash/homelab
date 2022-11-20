@@ -38,6 +38,7 @@ spec:
       SMTP_USERNAME: apikey
       SMTP_PASSWORD: "${SECRET_SENDGRID_APIKEY_SMTP_RELAY}"
       SMTP_DOMAIN: "${SECRET_DOMAIN}"
+      SMTP_PORT: "587"
 
     service:
       main:
