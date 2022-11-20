@@ -7,13 +7,12 @@ metadata:
 spec:
   chart:
     spec:
-      chart: kah-common-chart
-      version: 1.2.2
+      chart: app-template
+      version: 1.1.3
       sourceRef:
         kind: HelmRepository
-        name: k8sathome
+        name: bjw-s
         namespace: flux-system
-      interval: 5m
   interval: 15m
   maxHistory: 2
   timeout: 20m

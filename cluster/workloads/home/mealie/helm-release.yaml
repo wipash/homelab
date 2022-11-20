@@ -7,12 +7,11 @@ metadata:
 spec:
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: mealie
-      version: 5.1.2
+      chart: app-template
+      version: 1.1.3
       sourceRef:
         kind: HelmRepository
-        name: k8sathome
+        name: bjw-s
         namespace: flux-system
   interval: 15m
   maxHistory: 2
@@ -29,28 +28,37 @@ spec:
       repository: hkotel/mealie
       tag: frontend-v1.0.0beta-4
       pullPolicy: IfNotPresent
-    api:
-      image:
-        repository: hkotel/mealie
-        tag: api-v1.0.0beta-4
-        pullPolicy: IfNotPresent
-      env:
-        TZ: ${TIMEZONE}
-        TOKEN_TIME: 43830
-        DB_ENGINE: sqlite
-        POSTGRES_USER: ${SECRET_MEALIE_PG_USER}
-        POSTGRES_PASSWORD: ${SECRET_MEALIE_PG_PASS}
-        POSTGRES_SERVER: ${SECRET_MEALIE_PG_SERVER}
-        POSTGRES_PORT: 5431
-        POSTGRES_DB: ${SECRET_MEALIE_PG_DB}
-        BASE_URL: https://mealie.${SECRET_DOMAIN}
-        SMTP_HOST: smtp-relay.home
-        SMTP_PORT: 25
-        SMTP_FROM_NAME: Mealie
-        SMTP_FROM_EMAIL: mealie@${SECRET_DOMAIN_MAIL}
-        SMTP_AUTH_STRATEGY: NONE
+
+    additionalContainers:
+      api:
+        name: mealie-api
+        image: docker.io/hkotel/mealie:api-v1.0.0beta-4
+        imagePullPolicy: IfNotPresent
+        env:
+          TZ: ${TIMEZONE}
+          TOKEN_TIME: 43830
+          DB_ENGINE: sqlite
+          POSTGRES_USER: ${SECRET_MEALIE_PG_USER}
+          POSTGRES_PASSWORD: ${SECRET_MEALIE_PG_PASS}
+          POSTGRES_SERVER: ${SECRET_MEALIE_PG_SERVER}
+          POSTGRES_PORT: 5431
+          POSTGRES_DB: ${SECRET_MEALIE_PG_DB}
+          BASE_URL: https://mealie.${SECRET_DOMAIN}
+          SMTP_HOST: smtp-relay.home
+          SMTP_PORT: 25
+          SMTP_FROM_NAME: Mealie
+          SMTP_FROM_EMAIL: mealie@${SECRET_DOMAIN_MAIL}
+          SMTP_AUTH_STRATEGY: NONE
+        ports:
+          - name: api
+            containerPort: 9000
+        volumeMounts:
+          - name: api-data
+            mountPath: /app/data/
+
     env:
       TZ: Pacific/Auckland
+
     ingress:
       main:
         enabled: true
@@ -73,7 +81,19 @@ spec:
         tls:
           - hosts:
               - *host
+
     persistence:
       api-data:
         enabled: true
         existingClaim: mealie-v2
+        mountPath: /app/data/
+        accessMode: ReadWriteOnce
+
+    service:
+      main:
+        ports:
+          http:
+            port: 3000
+          api:
+            enabled: true
+            port: 9000

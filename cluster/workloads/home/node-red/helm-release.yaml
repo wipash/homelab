@@ -7,14 +7,12 @@ metadata:
 spec:
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: node-red
-      version: 10.3.2
+      chart: app-template
+      version: 1.1.3
       sourceRef:
         kind: HelmRepository
-        name: k8sathome
+        name: bjw-s
         namespace: flux-system
-      interval: 5m
   interval: 15m
   maxHistory: 2
   timeout: 20m
@@ -84,3 +82,9 @@ spec:
         enabled: true
         existingClaim: node-red-v1
         mountPath: "/data"
+
+    service:
+      main:
+        ports:
+          http:
+            port: 1880

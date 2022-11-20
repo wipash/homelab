@@ -17,14 +17,13 @@ spec:
       retries: 300
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: monica
-      version: 8.1.2
+      chart: app-template
+      version: 1.1.3
       sourceRef:
         kind: HelmRepository
-        name: k8sathome
+        name: bjw-s
         namespace: flux-system
-      interval: 5m
+
   values:
     image:
       repository: monica
@@ -57,6 +56,7 @@ spec:
       MAIL_PORT: 25
       MAIL_FROM_ADDRESS: monica@${SECRET_DOMAIN_MAIL}
       MAIL_FROM_NAME: Monica
+
     ingress:
       main:
         enabled: true
@@ -74,9 +74,15 @@ spec:
           hajimari.io/icon: calendar-text
           hajimari.io/appName: Monica
           hajimari.io/group: Home
+
     persistence:
       config:
         enabled: true
         existingClaim: monica-v1
-    mariadb:
-      enabled: false
+
+    service:
+      main:
+        enabled: true
+        ports:
+          http:
+            port: 80
