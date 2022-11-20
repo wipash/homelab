@@ -22,18 +22,22 @@ spec:
   upgrade:
     remediation:
       retries: 300
+
   dependsOn:
     - name: mosquitto
       namespace: home
     - name: home-assistant
       namespace: home
+
   values:
     image:
       repository: paradoxalarminterface/pai
       tag: "3.1.0"
       pullPolicy: IfNotPresent
+
     env:
       TZ: "${TIMEZONE}"
+
     persistence:
       config:
         enabled: true
@@ -46,6 +50,7 @@ spec:
         enabled: true
         type: hostPath
         hostPath: /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0
+
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -55,10 +60,25 @@ spec:
                   operator: In
                   values:
                     - "true"
+
     securityContext:
       privileged: true
+
     podSecurityContext:
       supplementalGroups:
         - 20 # dialout for /dev/ttyUSB0
+
     podAnnotations:
       configmap.reloader.stakater.com/reload: "paradoxalarminterface-config"
+
+    service:
+      main:
+        enabled: false
+
+    probes:
+      liveness:
+        enabled: false
+      readiness:
+        enabled: false
+      startup:
+        enabled: false
