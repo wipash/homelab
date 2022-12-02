@@ -54,9 +54,6 @@ spec:
         enabled: true
         existingClaim: media-nfs
 
-    nodeSelector:
-      kubernetes.io/hostname: "nuc1"
-
     ingress:
       main:
         enabled: true
