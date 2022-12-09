@@ -21,7 +21,8 @@ objects:
     person:
       min_area: 5000
       max_area: 100000
-      threshold: 0.7
+      min_score: 0.6
+      threshold: 0.8
 
 # Global ffmpeg configuration
 ffmpeg:
@@ -36,6 +37,8 @@ ffmpeg:
     - /dev/dri/renderD128
     - -hwaccel_output_format
     - yuv420p
+  output_args:
+    record: -f segment -segment_time 10 -segment_format mp4 -reset_timestamps 1 -strftime 1 -c:v copy -c:a aac
 
 # Enable rtmp stream
 rtmp:
@@ -72,6 +75,11 @@ cameras:
   FDC:
     # Camera-specific ffmpeg configuration
     objects:
+      zones:
+        zone_0:
+          coordinates: 89,116,68,0,987,0,977,116,974,169,961,216,347,180,329,103
+        zone_1:
+          coordinates: 980,221,232,176,0,382,0,720,1098,720
       filters:
         person:
           mask:
