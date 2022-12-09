@@ -75,9 +75,9 @@ cameras:
   FDC:
     # Camera-specific ffmpeg configuration
     zones:
-      zone_0:
+      footpath:
         coordinates: 89,116,68,0,987,0,977,116,974,169,961,216,347,180,329,103
-      zone_1:
+      driveway:
         coordinates: 980,221,232,176,0,382,0,720,1098,720
     objects:
       filters:
