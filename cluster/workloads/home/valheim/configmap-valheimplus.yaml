@@ -125,8 +125,9 @@ data:
   # VPCFG_PlayerProjectile_enableScaleWithSkillLevel: true
   ### server
   VPCFG_Server_enabled: "true"
-  VPCFG_Server_maxPlayers: "4"
+  VPCFG_Server_maxPlayers: "5"
   VPCFG_Server_enforceMod: "true"
+  #VPCFG_Server_serverSyncsConfig: "true"
   ### smelter
   VPCFG_Smelter_enabled: "true"
   VPCFG_Smelter_maximumOre: "50" # default "10"
@@ -153,3 +154,8 @@ data:
   VPCFG_Windmill_autoFuel: "true"
   VPCFG_Windmill_ignorePrivateAreaCheck: "false"
   VPCFG_Windmill_autoRange: "10" # default "10", max "50"
+  ### building
+  VPCFG_Building_enabled: "true"
+  VPCFG_Building_noWeatherDamage: "true"
+  VPCFG_Building_maximumPlacementDistance: "10"
+  VPCFG_Building_enableAreaRepair: "true"
