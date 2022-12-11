@@ -17,7 +17,7 @@ data:
   VPCFG_Beehive_autoDepositRange: "10" # default 10, max 50
   # VPCFG_Beehive_showDuration: "false"
   ### brightness
-  VPCFG_Brightness_nightBrightnessMultiplier: "3" # default 0; 7-ish will 2x brightness at night
+  VPCFG_Brightness_nightBrightnessMultiplier: "4" # default 0; 7-ish will 2x brightness at night
   ### camera
   VPCFG_Camera_enabled: "true"
   VPCFG_Camera_cameraMaximumZoomDistance: "8" # default 6
@@ -104,7 +104,7 @@ data:
   VPCFG_Player_enabled: "true"
   VPCFG_Player_baseMaximumWeight: "400" # default 300
   # VPCFG_Player_baseMegingjordBuff: "150" # default 150
-  # VPCFG_Player_baseAutoPickUpRange: "2" # default 2
+  VPCFG_Player_baseAutoPickUpRange: "3" # default 2
   VPCFG_Player_cropNotifier: "true" # do not plant in grow-range of other crops
   # VPCFG_Player_restSecondsPerComfortLevel: "60" # default 60
   # VPCFG_Player_deathPenaltyMultiplier: "0" # default 0
@@ -113,9 +113,10 @@ data:
   # VPCFG_Player_guardianBuffCooldown: "1200" # default 1200
   # VPCFG_Player_autoEquipShield: "false"
   # VPCFG_Player_autoUnequipShield: "false"
-  # VPCFG_Player_skipIntro: "false"
+  VPCFG_Player_skipIntro: "true"
   # VPCFG_Player_dontUnequipItemsWhenSwimming: "false"
   VPCFG_Player_reequipItemsAfterSwimming: "true"
+  VPCFG_Player_queueWeaponChanges: "true"
   ### PlayerProjectile
   VPCFG_PlayerProjectile_enabled: "true"
   VPCFG_PlayerProjectile_playerMinChargeVelocityMultiplier: "20" # default 0%
@@ -157,5 +158,40 @@ data:
   ### building
   VPCFG_Building_enabled: "true"
   VPCFG_Building_noWeatherDamage: "true"
-  VPCFG_Building_maximumPlacementDistance: "10"
+  VPCFG_Building_maximumPlacementDistance: "15"
   VPCFG_Building_enableAreaRepair: "true"
+  VPCFG_Building_noInvalidPlacementRestriction: "true"
+  VPCFG_Building_noMysticalForcesPreventPlacementRestriction: "true"
+  ##
+  VPCFG_Workbench_enabled: "true"
+  VPCFG_Workbench_workbenchRange: "30"
+  ##
+  VPCFG_GridAlignment_enabled: "true"
+  VPCFG_GridAlignment_align: "LeftAlt"
+  VPCFG_GridAlignment_alignToggle: "F7"
+  VPCFG_GridAlignment_changeDefaultAlignment: "F6"
+  ##
+  VPCFG_AdvancedBuildingMode_enabled: "true"
+  VPCFG_AdvancedBuildingMode_enterAdvancedBuildingMode: "F3"
+  VPCFG_AdvancedBuildingMode_exitAdvancedBuildingMode: "F4"
+  VPCFG_AdvancedBuildingMode_copyObjectRotation: "Keypad7"
+  VPCFG_AdvancedBuildingMode_pasteObjectRotation: "Keypad8"
+  VPCFG_AdvancedBuildingMode_increaseScrollSpeed: "KeypadPlus"
+  VPCFG_AdvancedBuildingMode_decreaseScrollSpeed: "KeypadMinus"
+  ##
+  VPCFG_AdvancedEditingMode_enabled: "true"
+  VPCFG_AdvancedEditingMode_enterAdvancedEditingMode: "Numpad0"
+  VPCFG_AdvancedEditingMode_resetAdvancedEditingMode: "F7"
+  VPCFG_AdvancedEditingMode_abortAndExitAdvancedEditingMode: "F8"
+  VPCFG_AdvancedEditingMode_confirmPlacementOfAdvancedEditingMode: "KeypadEnter"
+  VPCFG_AdvancedEditingMode_copyObjectRotation: "Keypad7"
+  VPCFG_AdvancedEditingMode_pasteObjectRotation: "Keypad8"
+  VPCFG_AdvancedEditingMode_increaseScrollSpeed: "KeypadPlus"
+  VPCFG_AdvancedEditingMode_decreaseScrollSpeed: "KeypadMinus"
+  ##
+  VPCFG_FreePlacementRotation_enabled: "true"
+  VPCFG_FreePlacementRotation_rotateY: "LeftAlt"
+  VPCFG_FreePlacementRotation_rotateX: "C"
+  VPCFG_FreePlacementRotation_rotateZ: "V"
+  VPCFG_FreePlacementRotation_copyRotationParallel: "F"
+  VPCFG_FreePlacementRotation_copyRotationPerpendicular: "G"
