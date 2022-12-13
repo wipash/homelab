@@ -1,0 +1,72 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: homebox
+  namespace: home
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 1.2.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 15m
+  maxHistory: 2
+  timeout: 20m
+  install:
+    remediation:
+      retries: 300
+  upgrade:
+    remediation:
+      retries: 300
+  releaseName: homebox
+  values:
+    image:
+      repository: ghcr.io/hay-kot/homebox:latest
+      tag: v0.6.0
+      pullPolicy: IfNotPresent
+
+    env:
+      TZ: Pacific/Auckland
+      HBOX_MAILER_HOST: smtp-relay.home
+      HBOX_MAILER_PORT: 25
+      HBOX_MAILER_FROM: homebox@${SECRET_DOMAIN_MAIL}
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: nginx
+        annotations:
+          # external-dns/is-public: "true"
+          # external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+          # external-dns.alpha.kubernetes.io/target: "${SECRET_CLOUDFLARE_TUNNEL_ID}.cfargotunnel.com"
+          nginx.ingress.kubernetes.io/enable-cors: "true"
+          nginx.ingress.kubernetes.io/cors-allow-origin: "https://homer.${SECRET_DOMAIN}"
+          hajimari.io/enable: "true"
+          hajimari.io/icon: box
+          hajimari.io/appName: Homebox
+          hajimari.io/group: Home
+        hosts:
+          - host: &host homebox.${SECRET_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+
+    persistence:
+      api-data:
+        enabled: true
+        existingClaim: homebox-v1
+        mountPath: /data/
+        accessMode: ReadWriteOnce
+
+    service:
+      main:
+        ports:
+          http:
+            port: 7745
