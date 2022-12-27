@@ -22,7 +22,7 @@ spec:
                 - "/bin/bash"
                 - -c
               args:
-                - "envsubst < /config/recyclarr.yaml > /shared/recyclarr.yaml"
+                - "envsubst < /config/recyclarr.yml > /shared/recyclarr.yml"
               env:
                 - name: RADARR_API_KEY
                   valueFrom:
@@ -50,8 +50,8 @@ spec:
                 - sonarr
               volumeMounts:
                 - name: shared
-                  mountPath: /config/recyclarr.yaml
-                  subPath: recyclarr.yaml
+                  mountPath: /config/recyclarr.yml
+                  subPath: recyclarr.yml
                   readOnly: true
 
             - name: recyclarr-radarr
@@ -63,8 +63,8 @@ spec:
                 - radarr
               volumeMounts:
                 - name: shared
-                  mountPath: /config/recyclarr.yaml
-                  subPath: recyclarr.yaml
+                  mountPath: /config/recyclarr.yml
+                  subPath: recyclarr.yml
                   readOnly: true
 
           restartPolicy: OnFailure
