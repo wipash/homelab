@@ -42,7 +42,7 @@ spec:
 
           containers:
             - name: recyclarr-sonarr
-              image: ghcr.io/recyclarr/recyclarr:4.0.2
+              image: ghcr.io/recyclarr/recyclarr:4.1.0
               imagePullPolicy: IfNotPresent
               command:
                 - /app/recyclarr/recyclarr
@@ -55,7 +55,7 @@ spec:
                   readOnly: true
 
             - name: recyclarr-radarr
-              image: ghcr.io/recyclarr/recyclarr:4.0.2
+              image: ghcr.io/recyclarr/recyclarr:4.1.0
               imagePullPolicy: IfNotPresent
               command:
                 - /app/recyclarr/recyclarr
