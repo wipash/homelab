@@ -25,6 +25,11 @@ spec:
       GROCY_CULTURE: "en_GB"
       GROCY_CURRENCY: "NZD"
 
+    service:
+      main:
+        ports:
+          http: 9283
+
     ingress:
       main:
         enabled: true
