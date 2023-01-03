@@ -24,12 +24,14 @@ spec:
       TZ: "${TIMEZONE}"
       GROCY_CULTURE: "en_GB"
       GROCY_CURRENCY: "NZD"
+      PUID: "1000"
+      PGID: "1000"
 
     service:
       main:
         ports:
           http:
-            port: 9283
+            port: 80
 
     ingress:
       main:
@@ -53,5 +55,9 @@ spec:
 
     persistence:
       config:
-        enabled: true
+        enabled: false
         existingClaim: grocy-data-v1
+      viewcache:
+        enabled: true
+        type: emptyDir
+        mountPath: /config/data/viewcache
