@@ -28,7 +28,8 @@ spec:
     service:
       main:
         ports:
-          http: 9283
+          http:
+            port: 9283
 
     ingress:
       main:
