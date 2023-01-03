@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: linuxserver/grocy
-      tag: version-v3.1.2
+      tag: version-v3.3.1
       pullPolicy: IfNotPresent
 
     env:
