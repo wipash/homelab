@@ -55,7 +55,7 @@ spec:
 
     persistence:
       config:
-        enabled: false
+        enabled: true
         existingClaim: grocy-data-v1
       viewcache:
         enabled: true
