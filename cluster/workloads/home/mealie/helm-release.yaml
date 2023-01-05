@@ -26,13 +26,13 @@ spec:
   values:
     image:
       repository: hkotel/mealie
-      tag: frontend-v1.0.0beta-4
+      tag: frontend-v1.0.0beta-5
       pullPolicy: IfNotPresent
 
     additionalContainers:
       api:
         name: mealie-api
-        image: docker.io/hkotel/mealie:api-v1.0.0beta-4
+        image: docker.io/hkotel/mealie:api-v1.0.0beta-5
         imagePullPolicy: IfNotPresent
         env:
           TZ: ${TIMEZONE}

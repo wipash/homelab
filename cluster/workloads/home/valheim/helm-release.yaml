@@ -29,7 +29,7 @@ spec:
 
     image:
       repository: lloesche/valheim-server
-      tag: latest
+      tag: latest@sha256:d977ccbeff02d2509646fb0157b5e353ebadb3105a3ed351b9c309a09a61701b
 
     # env:
     #   ...
