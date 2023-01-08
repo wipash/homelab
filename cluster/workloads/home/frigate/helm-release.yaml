@@ -48,6 +48,9 @@ spec:
           rtsp:
             enabled: true
             port: 8554
+          webrtc:
+            enabled: true
+            port: 8555
 
     probes:
       liveness: &probe
