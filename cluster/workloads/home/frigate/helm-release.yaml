@@ -45,6 +45,9 @@ spec:
             port: 1935
             protocol: TCP
             targetPort: 1935
+          rtsp:
+            enabled: true
+            port: 8554
 
     probes:
       liveness: &probe
