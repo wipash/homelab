@@ -54,6 +54,11 @@ spec:
           webrtc:
             enabled: true
             port: 8555
+            protocol: TCP
+          webrtc-udp:
+            enabled: true
+            port: 8555
+            protocol: UDP
 
     probes:
       liveness: &probe
