@@ -1,0 +1,5 @@
+webrtc:
+  listen: ":8555"
+  candidates:
+    - 172.16.10.10:8555 # <--- enter frigate host IP here
+    - stun:8555

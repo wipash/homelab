@@ -10,6 +10,9 @@ configMapGenerator:
   - name: frigate-config
     files:
       - config/config.yaml
+  - name: frigate-go2rtc-config
+    files:
+      - config/frigate-go2rtc.yaml
 generatorOptions:
   disableNameSuffixHash: true
   annotations:
