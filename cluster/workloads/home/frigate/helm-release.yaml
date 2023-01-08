@@ -37,6 +37,9 @@ spec:
 
     service:
       main:
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        loadBalancerIP: "${SVC_FRIGATE_ADDR}"
         ports:
           http:
             port: &port 5000
@@ -112,6 +115,13 @@ spec:
         medium: Memory
         sizeLimit: 512Mi
         mountPath: /dev/shm
+      go2rtc-config:
+        enabled: true
+        type: configMap
+        name: frigate-go2rtc-config
+        subpath: frigate-go2rtc.yaml
+        mountPath: /config/frigate-go2rtc.yaml
+        readOnly: true
 
     ingress:
       main:
