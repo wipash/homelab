@@ -54,7 +54,7 @@ spec:
 
     env:
       TRUSTED_PROXIES: "**"
-      FIREFLY_III_URL: "http://firefly-iii.home.svc.cluster.local:8080"
+      FIREFLY_III_URL: "https://cash.${SECRET_DOMAIN}"
       VANITY_URL: "https://cash.${SECRET_DOMAIN}"
       FIREFLY_III_ACCESS_TOKEN:
         valueFrom:
