@@ -54,6 +54,9 @@ spec:
           external-dns/is-public: "true"
           external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
           external-dns.alpha.kubernetes.io/target: "${SECRET_CLOUDFLARE_TUNNEL_ID}.cfargotunnel.com"
+          nginx.ingress.kubernetes.io/enable-cors: "true"
+          nginx.ingress.kubernetes.io/cors-allow-origin: "https://spotify.${SECRET_DOMAIN}"
+
         hosts:
           - host: &your-spotify-server-host "spotifyapi.${SECRET_DOMAIN}"
             paths:
