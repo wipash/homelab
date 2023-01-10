@@ -43,6 +43,12 @@ spec:
           secretKeyRef:
             name: firefly-iii-secrets
             key: appKey
+      STATIC_CRON_TOKEN:
+        valueFrom:
+          secretKeyRef:
+            name: firefly-iii-secrets
+            key: staticCronToken
+
       # MAIL_MAILER: ""
       # MAIL_HOST: ""
       # MAIL_PORT: ""
