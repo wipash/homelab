@@ -4,6 +4,8 @@ kind: HelmRelease
 metadata:
   name: &app firefly-iii-data-importer
   namespace: home
+  labels:
+    app.kubernetes.io/name: firefly-iii-importer
 spec:
   interval: 30m
   chart:
@@ -73,3 +75,14 @@ spec:
           secretKeyRef:
             name: firefly-iii-secrets
             key: saltEdgeAppSecret
+
+    affinity:
+      podAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - firefly-iii
+            topologyKey: kubernetes.io/hostname
