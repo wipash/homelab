@@ -4,6 +4,8 @@ kind: HelmRelease
 metadata:
   name: &app firefly-iii
   namespace: home
+  labels:
+    app.kubernetes.io/name: firefly-iii
 spec:
   interval: 15m
   chart:
@@ -83,3 +85,13 @@ spec:
         enabled: true
         existingClaim: firefly-iii-config-v1
         mountPath: /var/www/html/firefly-iii/storage/upload
+
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - "hp1"
