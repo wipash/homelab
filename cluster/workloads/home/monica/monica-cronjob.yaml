@@ -1,0 +1,46 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: &name monica-cron
+  namespace: home
+  labels: &labels
+    app.kubernetes.io/name: monica
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
+spec:
+  concurrencyPolicy: Forbid
+  schedule: "0 */6 * * *"
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    metadata:
+      labels: *labels
+    spec:
+      activeDeadlineSeconds: 120
+      backoffLimit: 5
+      template:
+        metadata:
+          labels: *labels
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: *name
+              image: monica:3.7.0-apache
+              imagePullPolicy: IfNotPresent
+              command:
+                - cron.sh
+              envFrom:
+                - configMapRef:
+                    name: monica-config
+
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: app.kubernetes.io/name
+                        operator: In
+                        values:
+                          - monica
+                  topologyKey: kubernetes.io/hostname
