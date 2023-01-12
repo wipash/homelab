@@ -39,6 +39,7 @@ spec:
       SMTP_PASSWORD: "${SECRET_SENDGRID_APIKEY_SMTP_RELAY}"
       SMTP_DOMAIN: "mail.${SECRET_DOMAIN}"
       SMTP_PORT: "465"
+      SENDER_DOMAINS: "mail.${SECRET_DOMAIN} ${SECRET_DOMAIN_2} sg.${SECRET_DOMAIN_3}"
 
     service:
       main:
