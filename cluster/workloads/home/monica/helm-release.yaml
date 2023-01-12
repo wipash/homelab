@@ -35,6 +35,17 @@ spec:
       - configMapRef:
           name: monica-config
 
+    additionalContainers:
+      cron:
+        name: monica-cron
+        image: monica:3.7.0-apache
+        imagePullPolicy: IfNotPresent
+        command:
+          - cron.sh
+        envFrom:
+          - configMapRef:
+              name: monica-config
+
     ingress:
       main:
         enabled: true
