@@ -4,6 +4,8 @@ kind: HelmRelease
 metadata:
   name: monica
   namespace: home
+  labels:
+    app.kubernetes.io/name: monica
 spec:
   releaseName: monica
   interval: 15m
@@ -29,33 +31,9 @@ spec:
       repository: monica
       tag: 3.7.0-apache
 
-    env:
-      APP_URL: https://monica.${SECRET_DOMAIN}
-      APP_ENV: production
-      APP_KEY: ${SECRET_MONICA_APP_KEY}
-      APP_DEBUG: true
-      APP_DISABLE_SIGNUP: true
-      DB_HOST: ${SECRET_MARIADB_SERVER}
-      DB_DATABASE: ${SECRET_MONICA_MARIADB_DB}
-      DB_USERNAME: ${SECRET_MONICA_MARIADB_USER}
-      DB_PASSWORD: ${SECRET_MONICA_MARIADB_PASS}
-      DB_USE_UTF8MB4: true
-      DEFAULT_MAX_STORAGE_SIZE: 4096
-      DEFAULT_FILESYSTEM: s3
-      AWS_KEY: ${SECRET_MONICA_AWS_KEY}
-      AWS_SECRET: ${SECRET_MONICA_AWS_SECRET}
-      AWS_REGION: ${SECRET_MONICA_AWS_REGION}
-      AWS_BUCKET: ${SECRET_MONICA_AWS_BUCKET}
-      S3_PATH_STYLE: true
-      LOCATION_IQ_API_KEY: ${SECRET_MONICA_LOCATION_IQ_API_KEY}
-      ENABLE_GEOLOCATION: true
-      ENABLE_WEATHER: true
-      WEATHERAPI_KEY: ${SECRET_MONICA_WEATHERAPI_KEY}
-      MAIL_MAILER: smtp
-      MAIL_HOST: smtp-relay.home
-      MAIL_PORT: 25
-      MAIL_FROM_ADDRESS: monica@${SECRET_DOMAIN_MAIL}
-      MAIL_FROM_NAME: Monica
+    envFrom:
+      - configMapRef:
+          name: monica-config
 
     ingress:
       main:
