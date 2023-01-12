@@ -44,8 +44,8 @@ spec:
           POSTGRES_PORT: 5431
           POSTGRES_DB: ${SECRET_MEALIE_PG_DB}
           BASE_URL: https://mealie.${SECRET_DOMAIN}
-          SMTP_HOST: smtp-relay.home
-          SMTP_PORT: 25
+          SMTP_HOST: smtp-relay.home.svc.cluster.local
+          SMTP_PORT: 2525
           SMTP_FROM_NAME: Mealie
           SMTP_FROM_EMAIL: mealie@${SECRET_DOMAIN_MAIL}
           SMTP_AUTH_STRATEGY: NONE
