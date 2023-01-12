@@ -31,8 +31,8 @@ spec:
 
     env:
       TZ: Pacific/Auckland
-      HBOX_MAILER_HOST: smtp-relay.home
-      HBOX_MAILER_PORT: 25
+      HBOX_MAILER_HOST: smtp-relay.home.svc.cluster.local
+      HBOX_MAILER_PORT: 2525
       HBOX_MAILER_FROM: homebox@${SECRET_DOMAIN_MAIL}
 
     ingress:
