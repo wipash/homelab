@@ -6,6 +6,7 @@ resources:
   - ingress-nginx
   - wildcard-certificate
   - external-dns
+  - external-dns-pihole
   - cloudflared
   - downloads-gateway
   - external-services
