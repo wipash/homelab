@@ -78,8 +78,6 @@ spec:
         medium: Memory
         sizeLimit: 1Gi
         mountPath: /dev/shm
-      sender_domains:
-        enabled: true
 
 
     podAnnotations:
