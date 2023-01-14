@@ -18,7 +18,7 @@ spec:
       serviceAccountName: external-dns-pihole
       containers:
         - name: external-dns-pihole
-          image: registry.k8s.io/external-dns/external-dns:latest
+          image: registry.k8s.io/external-dns/external-dns:v0.13.1
           # If authentication is disabled and/or you didn't create
           # a secret, you can remove this block.
           envFrom:
