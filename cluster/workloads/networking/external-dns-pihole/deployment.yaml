@@ -5,7 +5,7 @@ metadata:
   name: external-dns-pihole
   namespace: networking
 spec:
-  replicas: 0
+  replicas: 1
   strategy:
     type: Recreate
   selector:
@@ -29,6 +29,7 @@ spec:
           args:
             - --source=service
             - --source=ingress
+            - --source=crd
             # Pihole only supports A/CNAME records so there is no mechanism to track ownership.
             # You don't need to set this flag, but if you leave it unset, you will receive warning
             # logs when ExternalDNS attempts to create TXT records.
