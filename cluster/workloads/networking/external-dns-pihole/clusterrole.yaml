@@ -6,7 +6,7 @@ metadata:
   namespace: networking
 rules:
   - apiGroups: [""]
-    resources: ["services", "endpoints", "pods"]
+    resources: ["services", "endpoints", "pods", "nodes"]
     verbs: ["get", "watch", "list"]
   - apiGroups: ["extensions", "networking.k8s.io"]
     resources: ["ingresses"]
@@ -14,3 +14,12 @@ rules:
   - apiGroups: [""]
     resources: ["nodes"]
     verbs: ["list", "watch"]
+  - apiGroups: ["externaldns.k8s.io"]
+    resources: ["dnsendpoints"]
+    verbs: ["get", "watch", "list"]
+  - verbs:
+      - update
+    apiGroups:
+      - externaldns.k8s.io
+    resources:
+      - dnsendpoints/status
