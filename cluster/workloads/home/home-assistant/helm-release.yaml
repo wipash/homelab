@@ -65,7 +65,6 @@ spec:
         tls:
           - hosts:
               - *host
-              - *internalhost
 
     service:
       main:
