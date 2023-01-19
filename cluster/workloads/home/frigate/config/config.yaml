@@ -62,9 +62,21 @@ snapshots:
 
 go2rtc:
   streams:
-    FDC: "rtsp://{FRIGATE_CAMERA_FDC_USER}:{FRIGATE_CAMERA_FDC_PASSWORD}@{FRIGATE_CAMERA_FDC_HOST}:554/cam/realmonitor?channel=1&subtype=0"
-    SDC: "rtsp://{FRIGATE_CAMERA_SDC_USER}:{FRIGATE_CAMERA_SDC_PASSWORD}@{FRIGATE_CAMERA_SDC_HOST}:554/cam/realmonitor?channel=1&subtype=0"
-    BDC: "rtsp://{FRIGATE_CAMERA_BDC_USER}:{FRIGATE_CAMERA_BDC_PASSWORD}@{FRIGATE_CAMERA_BDC_HOST}:554/cam/realmonitor?channel=1&subtype=0"
+    fdc:
+      - "rtsp://{FRIGATE_CAMERA_FDC_USER}:{FRIGATE_CAMERA_FDC_PASSWORD}@{FRIGATE_CAMERA_FDC_HOST}:554/cam/realmonitor?channel=1&subtype=0"
+      - ffmpeg:fdc#audio=opus
+    fdc_sub:
+      - "rtsp://{FRIGATE_CAMERA_FDC_USER}:{FRIGATE_CAMERA_FDC_PASSWORD}@{FRIGATE_CAMERA_FDC_HOST}:554/cam/realmonitor?channel=1&subtype=2"
+    sdc:
+      - "rtsp://{FRIGATE_CAMERA_SDC_USER}:{FRIGATE_CAMERA_SDC_PASSWORD}@{FRIGATE_CAMERA_SDC_HOST}:554/cam/realmonitor?channel=1&subtype=0"
+      - ffmpeg:sdc#audio=opus
+    sdc_sub:
+      - "rtsp://{FRIGATE_CAMERA_SDC_USER}:{FRIGATE_CAMERA_SDC_PASSWORD}@{FRIGATE_CAMERA_SDC_HOST}:554/cam/realmonitor?channel=1&subtype=2"
+    bdc:
+      - "rtsp://{FRIGATE_CAMERA_BDC_USER}:{FRIGATE_CAMERA_BDC_PASSWORD}@{FRIGATE_CAMERA_BDC_HOST}:554/cam/realmonitor?channel=1&subtype=0"
+      - ffmpeg:bdc#audio=opus
+    bdc_sub:
+      - "rtsp://{FRIGATE_CAMERA_BDC_USER}:{FRIGATE_CAMERA_BDC_PASSWORD}@{FRIGATE_CAMERA_BDC_HOST}:554/cam/realmonitor?channel=1&subtype=2"
   webrtc:
     listen: ":8555"
     candidates:
@@ -86,10 +98,10 @@ cameras:
             - 0,310,137,154,246,121,463,53,782,54,909,63,1053,129,1070,80,1084,0,0,0
     ffmpeg:
       inputs:
-        - path: "rtsp://127.0.0.1:8554/FDC?video=copy&audio=aac"
+        - path: "rtsp://127.0.0.1:8554/fdc?video=copy&audio=aac"
           roles:
             - record
-        - path: "rtsp://{FRIGATE_CAMERA_FDC_USER}:{FRIGATE_CAMERA_FDC_PASSWORD}@{FRIGATE_CAMERA_FDC_HOST}:554/cam/realmonitor?channel=1&subtype=2"
+        - path: "rtsp://127.0.0.1:8554/fdc_sub?video=copy"
           roles:
             - detect
 
@@ -107,10 +119,10 @@ cameras:
         - 626,197,1081,484,1280,385,1280,0,454,0,475,69,633,108
     ffmpeg:
       inputs:
-        - path: "rtsp://127.0.0.1:8554/BDC?video=copy&audio=aac"
+        - path: "rtsp://127.0.0.1:8554/bdc?video=copy&audio=aac"
           roles:
             - record
-        - path: "rtsp://{FRIGATE_CAMERA_BDC_USER}:{FRIGATE_CAMERA_BDC_PASSWORD}@{FRIGATE_CAMERA_BDC_HOST}:554/cam/realmonitor?channel=1&subtype=2"
+        - path: "rtsp://127.0.0.1:8554/bdc_sub?video=copy"
           roles:
             - detect
 
@@ -127,9 +139,9 @@ cameras:
         - 1280,446,1280,0,844,0
     ffmpeg:
       inputs:
-        - path: "rtsp://127.0.0.1:8554/SDC?video=copy&audio=aac"
+        - path: "rtsp://127.0.0.1:8554/sdc?video=copy&audio=aac"
           roles:
             - record
-        - path: "rtsp://{FRIGATE_CAMERA_SDC_USER}:{FRIGATE_CAMERA_SDC_PASSWORD}@{FRIGATE_CAMERA_SDC_HOST}:554/cam/realmonitor?channel=1&subtype=2"
+        - path: "rtsp://127.0.0.1:8554/sdc_sub?video=copy"
           roles:
             - detect
