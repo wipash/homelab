@@ -99,11 +99,15 @@ cameras:
     ffmpeg:
       inputs:
         - path: "rtsp://127.0.0.1:8554/fdc?video=copy&audio=aac"
+          input_args: preset-rtsp-restream
           roles:
             - record
         - path: "rtsp://127.0.0.1:8554/fdc_sub?video=copy"
+          input_args: preset-rtsp-restream
           roles:
             - detect
+    live:
+      stream_name: fdc
 
 
   BDC:
@@ -120,11 +124,15 @@ cameras:
     ffmpeg:
       inputs:
         - path: "rtsp://127.0.0.1:8554/bdc?video=copy&audio=aac"
+          input_args: preset-rtsp-restream
           roles:
             - record
         - path: "rtsp://127.0.0.1:8554/bdc_sub?video=copy"
+          input_args: preset-rtsp-restream
           roles:
             - detect
+    live:
+      stream_name: bdc
 
 
   SDC:
@@ -140,8 +148,12 @@ cameras:
     ffmpeg:
       inputs:
         - path: "rtsp://127.0.0.1:8554/sdc?video=copy&audio=aac"
+          input_args: preset-rtsp-restream
           roles:
             - record
         - path: "rtsp://127.0.0.1:8554/sdc_sub?video=copy"
+          input_args: preset-rtsp-restream
           roles:
             - detect
+    live:
+      stream_name: sdc
