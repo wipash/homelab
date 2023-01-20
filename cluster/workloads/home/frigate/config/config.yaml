@@ -69,12 +69,12 @@ go2rtc:
       - "rtsp://{FRIGATE_CAMERA_FDC_USER}:{FRIGATE_CAMERA_FDC_PASSWORD}@{FRIGATE_CAMERA_FDC_HOST}:554/cam/realmonitor?channel=1&subtype=2"
     sdc:
       - "rtsp://{FRIGATE_CAMERA_SDC_USER}:{FRIGATE_CAMERA_SDC_PASSWORD}@{FRIGATE_CAMERA_SDC_HOST}:554/cam/realmonitor?channel=1&subtype=0"
-      - ffmpeg:sdc#audio=opus
+      - ffmpeg:sdc#audio=aac
     sdc_sub:
       - "rtsp://{FRIGATE_CAMERA_SDC_USER}:{FRIGATE_CAMERA_SDC_PASSWORD}@{FRIGATE_CAMERA_SDC_HOST}:554/cam/realmonitor?channel=1&subtype=2"
     bdc:
       - "rtsp://{FRIGATE_CAMERA_BDC_USER}:{FRIGATE_CAMERA_BDC_PASSWORD}@{FRIGATE_CAMERA_BDC_HOST}:554/cam/realmonitor?channel=1&subtype=0"
-      - ffmpeg:bdc#audio=opus
+      - ffmpeg:bdc#audio=aac
     bdc_sub:
       - "rtsp://{FRIGATE_CAMERA_BDC_USER}:{FRIGATE_CAMERA_BDC_PASSWORD}@{FRIGATE_CAMERA_BDC_HOST}:554/cam/realmonitor?channel=1&subtype=2"
   webrtc:
