@@ -157,3 +157,7 @@ cameras:
             - detect
     live:
       stream_name: sdc
+
+ui:
+  live_mode: mse
+  experimental_ui: True
