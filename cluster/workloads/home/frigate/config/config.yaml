@@ -160,4 +160,4 @@ cameras:
 
 ui:
   live_mode: mse
-  experimental_ui: True
+  #experimental_ui: True
