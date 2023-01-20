@@ -9,6 +9,10 @@
             "file:///home/sean/homelab/ansible/homelab-k3s-nuke.yaml",
             "file:///home/sean/homelab/ansible/homelab-k3s.yaml",
             "file:///home/sean/homelab/ansible/udm-config.yaml"
+        ],
+        "kubernetes": [
+            "kubernetes/**/*.yaml",
+            "cluster/**/*.yaml"
         ]
     },
     "sops.creationEnabled": true,
