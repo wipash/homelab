@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/readarr-nightly
-      tag: 0.1.2.1532@sha256:6d710cc41be6f44fafd0330502a277d7516557bc9875b7700e74cc55500a571a
+      tag: 0.1.2.1533@sha256:68813cd0113910c3390a6c761cce170a670ec064f45377e0332477e5c58441e6
 
     affinity:
       nodeAffinity:
