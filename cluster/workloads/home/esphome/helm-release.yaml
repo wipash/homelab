@@ -21,7 +21,7 @@ spec:
     image:
       # renovate: datasource=github-releases packageName=esphome/esphome
       repository: esphome/esphome
-      tag: 2022.12.6
+      tag: 2022.12.7
 
     env:
       ESPHOME_DASHBOARD_USE_PING: "true"
