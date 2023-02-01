@@ -28,7 +28,7 @@ spec:
       nameOverride: *app
     image:
       repository: fireflyiii/core
-      tag: develop@sha256:7d8fd688ff82e0573a9feb82cbaa0736075e668c7e0e10df17430a45f76e795e
+      tag: develop@sha256:9079c240f3f125c1c02985b9450d74c627096f5c12286c7ad70c1ca3e1637d8c
     env:
       LOG_CHANNEL: stdout
       TZ: "${TIMEZONE}"
