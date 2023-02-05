@@ -28,3 +28,4 @@ resources:
   - helmrepository-grafana.yaml
   - bjw-s.yaml
   - helmrepository-mvisonneau.yaml
+  - weave-gitops.yaml
