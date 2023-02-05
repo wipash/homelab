@@ -7,3 +7,4 @@ resources:
   - clusterrole.yaml
   - clusterrolebinding.yaml
   - deployment.yaml
+  - deployment-node.yaml
