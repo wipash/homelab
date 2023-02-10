@@ -2,6 +2,16 @@
 
 ## Flux
 
+### Install Cilium
+```sh
+kubectl apply --server-side --kustomize ./kubernetes/bootstrap/cilium
+```
+
+### Install kubelet-csr-approver
+```sh
+kubectl apply --server-side --kustomize ./kubernetes/bootstrap/kubelet-csr-approver
+```
+
 ### Install Flux
 
 ```sh
