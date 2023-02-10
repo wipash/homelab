@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: volsync
 resources:
   - ./helmrelease.yaml
-  - ./prometheusrule.yaml
+  #- ./prometheusrule.yaml
 labels:
   - pairs:
       app.kubernetes.io/name: volsync
