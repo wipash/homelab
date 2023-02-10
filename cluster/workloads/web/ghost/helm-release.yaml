@@ -27,7 +27,7 @@ spec:
   values:
     image:
       repository: ghost
-      tag: 5.33@sha256:aac5d48bdb2214869bfaa3d451b42efd59e0d723d20f561bc98f7c0aea723d24
+      tag: 5.33@sha256:99c705cd230d4e52e22c171e9b3f8eeaa0632e8ebc78ba758e94ef59a19ab823
     env:
       TZ: "${TZ}"
       url: "https://${SECRET_GHOST_DOMAIN}"
