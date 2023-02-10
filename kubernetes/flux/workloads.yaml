@@ -6,8 +6,6 @@ metadata:
   name: workloads
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: core
   interval: 2m0s
   path: ./cluster/workloads
   prune: true
