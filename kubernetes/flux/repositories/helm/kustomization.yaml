@@ -26,3 +26,4 @@ resources:
   - ./bjw-s.yaml
   - ./mvisonneau.yaml
   - ./weave-gitops.yaml
+  - ./piraeus.yaml
