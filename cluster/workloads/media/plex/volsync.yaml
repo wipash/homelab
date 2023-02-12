@@ -4,7 +4,7 @@ apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: plex-restic
-  namespace: default
+  namespace: media
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
@@ -28,18 +28,18 @@ apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
   name: plex
-  namespace: default
+  namespace: media
 spec:
-  sourcePVC: config-plex-0
+  sourcePVC: plex-library-config-v2
   trigger:
     schedule: "0 0 * * *"
   restic:
-    copyMethod: Snapshot
+    copyMethod: Direct
     pruneIntervalDays: 10
     repository: plex-restic-secret
     cacheCapacity: 5Gi
-    volumeSnapshotClassName: csi-ceph-blockpool
-    storageClassName: ceph-block
+    #volumeSnapshotClassName: csi-ceph-blockpool
+    #storageClassName: ceph-block
     retain:
       daily: 10
       within: 3d
