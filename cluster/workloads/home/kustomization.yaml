@@ -5,7 +5,7 @@ resources:
   - namespace.yaml
   - mealie
   - zigbee2mqtt
-  - pai
+  # - pai
   - node-red
   - mosquitto
   - smtp-relay

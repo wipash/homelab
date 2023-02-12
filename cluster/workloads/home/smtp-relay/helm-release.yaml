@@ -24,7 +24,7 @@ spec:
       retries: 300
   values:
     controller:
-      replicas: 2
+      replicas: 1
       strategy: RollingUpdate
 
     image:
