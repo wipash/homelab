@@ -40,6 +40,7 @@ spec:
     cacheCapacity: 5Gi
     #volumeSnapshotClassName: csi-ceph-blockpool
     storageClassName: local-path
+    cacheStorageClassName: local-path
     retain:
       daily: 10
       within: 3d
