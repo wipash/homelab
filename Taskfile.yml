@@ -17,3 +17,10 @@ includes:
   udm: .taskfiles/udm.yml
   precommit: .taskfiles/precommit.yml
   sops: .taskfiles/sops.yml
+  vs: .taskfiles/VolSync/Tasks.yml
+
+tasks:
+
+  default:
+    silent: true
+    cmds: ["task -l"]
