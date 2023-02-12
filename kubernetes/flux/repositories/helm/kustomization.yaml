@@ -27,3 +27,4 @@ resources:
   - ./mvisonneau.yaml
   - ./weave-gitops.yaml
   - ./piraeus.yaml
+  - ./external-secrets.yaml
