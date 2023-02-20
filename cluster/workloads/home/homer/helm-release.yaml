@@ -16,6 +16,8 @@ spec:
         namespace: flux-system
   interval: 15m
   values:
+    controller:
+      replicas: 0
     image:
       repository: b4bz/homer
       tag: v23.02.1

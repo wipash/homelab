@@ -6,6 +6,5 @@ resources:
   - external-dns
   - external-dns-pihole
   - cloudflared
-  - downloads-gateway
   - external-services
   - unifi

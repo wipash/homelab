@@ -24,6 +24,8 @@ spec:
       retries: 300
   releaseName: mealie
   values:
+    controller:
+      replicas: 0
     image:
       repository: hkotel/mealie
       tag: frontend-v1.0.0beta-5
