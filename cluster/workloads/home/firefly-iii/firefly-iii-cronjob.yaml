@@ -26,7 +26,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: *name
-              image: curlimages/curl:latest@sha256:4311823d3576c0b7330beccbe09896ff0378c9c1c6f6974ff9064af803fed766
+              image: curlimages/curl:latest@sha256:17468885fb8a20cd6bc25316f8267492c4d758ba63a6838ce74b9a0ffe4d2e90
               imagePullPolicy: IfNotPresent
               command:
                 - /usr/bin/curl
