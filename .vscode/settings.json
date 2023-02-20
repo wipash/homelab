@@ -18,5 +18,7 @@
     "sops.creationEnabled": true,
     "files.associations": {
         "**/cluster/**/*.sops.toml": "plaintext"
-    }
+    },
+    "sops.beta": false,
+    "sops.defaults.ageKeyFile": "/home/sean/.config/sops/age/keys.txt"
 }
