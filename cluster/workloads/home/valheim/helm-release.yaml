@@ -22,6 +22,8 @@ spec:
     remediation:
       retries: 3
   values:
+    controller:
+      replicas: 0
     global:
       # nameOverride: valheim
       annotations:
