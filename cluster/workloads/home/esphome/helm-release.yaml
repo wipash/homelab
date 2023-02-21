@@ -26,16 +26,6 @@ spec:
     env:
       ESPHOME_DASHBOARD_USE_PING: "true"
 
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: kubernetes.io/hostname
-                  operator: In
-                  values:
-                    - "hp1"
-
     service:
       main:
         ports:

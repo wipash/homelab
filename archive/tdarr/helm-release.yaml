@@ -96,11 +96,6 @@ spec:
                   operator: In
                   values:
                     - "true"
-                # Disable this one when you eventually get more hardware
-                - key: kubernetes.io/hostname
-                  operator: In
-                  values:
-                    - "hp1"
       # podAntiAffinity:
       #   preferredDuringSchedulingIgnoredDuringExecution:
       #     - weight: 100

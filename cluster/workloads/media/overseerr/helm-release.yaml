@@ -30,16 +30,6 @@ spec:
       LOG_LEVEL: "info"
       PORT: 80
 
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: kubernetes.io/hostname
-                  operator: In
-                  values:
-                    - "hp1"
-
     service:
       main:
         ports:
