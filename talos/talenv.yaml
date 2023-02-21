@@ -1,2 +1,2 @@
 clusterEndpointIP: 10.0.16.132
-domainName: k3s.mcgrath.nz
+domainName: k8s.mcgrath.nz

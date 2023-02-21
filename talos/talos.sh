@@ -10,11 +10,14 @@ talhelper genconfig
 # talosctl --talosconfig=./talos/talosconfig config endpoint 10.0.16.132
 talosctl config merge ./clusterconfig/talosconfig
 
-echo "Applying to master"
+echo "Applying to hp1"
 talosctl apply-config --insecure --nodes 10.0.16.132 --file "$(find ./clusterconfig -name "*hp1*")"
 
-echo "Applying to worker"
-talosctl apply-config --insecure --nodes 10.0.16.131 --file "$(find ./clusterconfig -name "*nuc1*")"
+echo "Applying to lappy1"
+talosctl apply-config --insecure --nodes 10.0.16.133 --file "$(find ./clusterconfig -name "*lappy1*")"
+
+echo "Applying to lappy2"
+talosctl apply-config --insecure --nodes 10.0.16.134 --file "$(find ./clusterconfig -name "*lappy2*")"
 
 echo "Waiting 2 mins"
 sleep 120
