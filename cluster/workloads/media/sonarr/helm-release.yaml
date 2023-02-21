@@ -76,13 +76,3 @@ spec:
         enabled: true
         existingClaim: media-nfs
         mountPath: /data/nas-media
-
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: kubernetes.io/hostname
-                  operator: In
-                  values:
-                    - "hp1"

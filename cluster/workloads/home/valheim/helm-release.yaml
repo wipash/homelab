@@ -95,13 +95,3 @@ spec:
       supplementalGroups:
         - 100   # Users
         - 65537 # NAS Permission group
-
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: kubernetes.io/hostname
-                  operator: In
-                  values:
-                    - "hp1"

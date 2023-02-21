@@ -85,13 +85,3 @@ spec:
         enabled: true
         existingClaim: firefly-iii-config-v1
         mountPath: /var/www/html/firefly-iii/storage/upload
-
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: kubernetes.io/hostname
-                  operator: In
-                  values:
-                    - "hp1"
