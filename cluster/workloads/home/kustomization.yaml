@@ -18,7 +18,7 @@ resources:
   - esphome
   - n8n
   - paperless
-  - valheim
+#  - valheim
   - homebox
   - your-spotify
   - grocy

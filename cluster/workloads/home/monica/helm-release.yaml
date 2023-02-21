@@ -27,8 +27,6 @@ spec:
         namespace: flux-system
 
   values:
-    controller:
-      replicas: 0
     image:
       repository: monica
       tag: 4.0.0-apache

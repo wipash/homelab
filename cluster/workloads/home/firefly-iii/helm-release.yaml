@@ -24,8 +24,6 @@ spec:
     remediation:
       retries: 5
   values:
-    controller:
-      replicas: 0
     global:
       nameOverride: *app
     image:
