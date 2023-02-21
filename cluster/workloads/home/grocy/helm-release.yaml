@@ -15,8 +15,6 @@ spec:
         name: bjw-s
         namespace: flux-system
   values:
-    controller:
-      replicas: 0
     image:
       repository: linuxserver/grocy
       tag: 3.3.2

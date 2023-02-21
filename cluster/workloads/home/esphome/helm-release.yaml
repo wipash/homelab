@@ -18,8 +18,6 @@ spec:
         namespace: flux-system
 
   values:
-    controller:
-      replicas: 0
     image:
       # renovate: datasource=github-releases packageName=esphome/esphome
       repository: esphome/esphome

@@ -24,8 +24,6 @@ spec:
       retries: 300
   releaseName: homebox
   values:
-    controller:
-      replicas: 0
     image:
       repository: ghcr.io/hay-kot/homebox
       tag: v0.8.2
