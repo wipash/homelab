@@ -47,7 +47,7 @@ spec:
                 user_key: ${SECRET_PUSHOVER_USER_KEY}
                 send_resolved: true
                 html: true
-                # sound: gamelan
+                sound: gamelan
                 priority: |-
                   {{ if eq .Status "firing" }}1{{ else }}0{{ end }}
                 title: |-
