@@ -39,6 +39,7 @@ nodes:
 controlPlane:
   patches:
     - "@./customInstaller-patch.yaml"
+    - "@./clusterMetricsExtraArgs-patch.yaml"
     - |-
       cluster:
         allowSchedulingOnMasters: true

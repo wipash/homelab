@@ -1,0 +1,20 @@
+# Patch kube system config to listen on any interface, not just localhost, so that prometheus can get metrics from it
+- op: add
+  path: /cluster/etcd/extraArgs
+  value:
+    listen-metrics-urls: http://0.0.0.0:2381
+
+- op: add
+  path: /cluster/controllerManager/extraArgs
+  value:
+    bind-address: 0.0.0.0
+
+- op: add
+  path: /cluster/scheduler/extraArgs
+  value:
+    bind-address: 0.0.0.0
+
+- op: add
+  path: /cluster/proxy/extraArgs
+  value:
+    metrics-bind-address: 0.0.0.0:10249
