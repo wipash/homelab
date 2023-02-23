@@ -52,6 +52,14 @@ tasks:
       - kubectl scale -n home deploy/home-assistant --replicas 0
       - kubectl scale -n home deploy/esphome --replicas 0
       - kubectl scale -n home deploy/frigate --replicas 0
+      - kubectl scale -n home deploy/firefly-iii --replicas 0
+      - kubectl scale -n home deploy/grocy --replicas 0
+      - kubectl scale -n home deploy/homebox --replicas 0
+      - kubectl scale -n home deploy/homer --replicas 0
+      - kubectl scale -n home deploy/n8n --replicas 0
+      - kubectl scale -n home deploy/your-spotify-client --replicas 0
+      - kubectl scale -n home deploy/your-spotify-server --replicas 0
+      - kubectl scale -n home statefulset/your-spotify-mongo --replicas 0
       - kubectl scale -n media deploy/sonarr --replicas 0
       - kubectl scale -n media deploy/radarr --replicas 0
       - kubectl scale -n media deploy/readarr --replicas 0
@@ -61,8 +69,6 @@ tasks:
       - kubectl scale -n media deploy/nzbget --replicas 0
       - kubectl scale -n media deploy/tautulli --replicas 0
       - kubectl scale -n media deploy/qbittorrent --replicas 0
-      - kubectl scale -n media deploy/tdarr --replicas 0
-      - kubectl scale -n media deploy/xteve --replicas 0
       - kubectl scale -n networking deploy/unifi --replicas 0
       - kubectl scale -n monitoring deploy/grafana --replicas 0
       - kubectl scale -n monitoring deploy/thanos-compactor --replicas 0
@@ -90,6 +96,14 @@ tasks:
       - kubectl scale -n home deploy/home-assistant --replicas 1
       - kubectl scale -n home deploy/esphome --replicas 1
       - kubectl scale -n home deploy/frigate --replicas 1
+      - kubectl scale -n home deploy/firefly-iii --replicas 1
+      - kubectl scale -n home deploy/grocy --replicas 1
+      - kubectl scale -n home deploy/homebox --replicas 1
+      - kubectl scale -n home deploy/homer --replicas 1
+      - kubectl scale -n home deploy/n8n --replicas 1
+      - kubectl scale -n home deploy/your-spotify-client --replicas 1
+      - kubectl scale -n home deploy/your-spotify-server --replicas 1
+      - kubectl scale -n home statefulset/your-spotify-mongo --replicas 1
       - kubectl scale -n media deploy/sonarr --replicas 1
       - kubectl scale -n media deploy/radarr --replicas 1
       - kubectl scale -n media deploy/readarr --replicas 1
@@ -99,8 +113,6 @@ tasks:
       - kubectl scale -n media deploy/nzbget --replicas 1
       - kubectl scale -n media deploy/tautulli --replicas 1
       - kubectl scale -n media deploy/qbittorrent --replicas 1
-      - kubectl scale -n media deploy/tdarr --replicas 1
-      - kubectl scale -n media deploy/xteve --replicas 1
       - kubectl scale -n networking deploy/unifi --replicas 1
       - kubectl scale -n monitoring deploy/grafana --replicas 1
       - kubectl scale -n monitoring deploy/thanos-compactor --replicas 1
