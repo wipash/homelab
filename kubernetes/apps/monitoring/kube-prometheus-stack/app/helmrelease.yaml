@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: kube-prometheus-stack
-      version: 45.0.0
+      version: 45.2.0
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
@@ -138,6 +138,7 @@ spec:
             targetLabel: instance
 
     kube-state-metrics:
+      enabled: true
       metricLabelsAllowlist: ["persistentvolumeclaims=[*]"]
       prometheus:
         monitor:
@@ -154,19 +155,19 @@ spec:
 
     kubeControllerManager:
       enabled: true
-      endpoints: ["10.0.16.131", "10.0.16.132"]
+      endpoints: ["10.0.16.132", "10.0.16.133", "10.0.16.134"]
 
     kubeScheduler:
-      enabled: true
-      endpoints: ["10.0.16.131", "10.0.16.132"]
+      enabled: false
+      endpoints: ["10.0.16.132", "10.0.16.133", "10.0.16.134"]
 
     kubeProxy:
       enabled: false # Enable if not using eBPF
-      endpoints: ["10.0.16.131", "10.0.16.132"]
+      endpoints: ["10.0.16.132", "10.0.16.133", "10.0.16.134"]
 
     kubeEtcd:
       enabled: true
-      endpoints: ["10.0.16.131", "10.0.16.132"]
+      endpoints: ["10.0.16.132", "10.0.16.133", "10.0.16.134"]
       service:
         enabled: true
         port: 2381
