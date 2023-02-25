@@ -21,7 +21,7 @@ resources:
   - ./hajimari.yaml
   - ./cetic.yaml
   - ./cilium.yaml
-   - ./fairwinds.yaml
+  - ./fairwinds.yaml
   - ./grafana.yaml
   - ./bjw-s.yaml
   - ./mvisonneau.yaml
