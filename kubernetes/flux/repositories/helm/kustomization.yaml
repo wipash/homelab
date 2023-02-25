@@ -21,10 +21,11 @@ resources:
   - ./hajimari.yaml
   - ./cetic.yaml
   - ./cilium.yaml
-  # - ./fairwinds.yaml
+   - ./fairwinds.yaml
   - ./grafana.yaml
   - ./bjw-s.yaml
   - ./mvisonneau.yaml
   - ./weave-gitops.yaml
   - ./piraeus.yaml
   - ./external-secrets.yaml
+  - ./rook-ceph.yaml
