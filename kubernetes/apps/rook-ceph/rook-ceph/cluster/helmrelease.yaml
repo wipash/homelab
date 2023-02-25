@@ -61,8 +61,8 @@ spec:
         disable: false
       dashboard:
         enabled: true
-        urlPrefix: /
         ssl: false
+        urlPrefix: "/"
       storage:
         useAllNodes: false
         useAllDevices: false
