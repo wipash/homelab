@@ -8,7 +8,7 @@ resources:
   - local-path-provisioner
   - nfs-subdir-external-provisioner
   - reflector
-  - node-feature-discovery
+  #- node-feature-discovery
   - reloader
   - descheduler
   #- intel-gpu-plugin

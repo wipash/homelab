@@ -11,6 +11,6 @@ resources:
   # - ./kube-image-keeper/ks.yaml
   #- ./local-path-provisioner/ks.yaml
   #- ./metrics-server/ks.yaml
-  #- ./node-feature-discovery/ks.yaml
+  - ./node-feature-discovery/ks.yaml
   #- ./reloader/ks.yaml
   - ./snapshot-controller/ks.yaml
