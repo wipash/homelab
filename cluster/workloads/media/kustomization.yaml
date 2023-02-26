@@ -4,12 +4,12 @@ namespace: media
 resources:
     - namespace.yaml
     - _pvc
-    - nzbget
-    - prowlarr
-    - sonarr
-    - recyclarr
-    - radarr
-    - overseerr
-    - tautulli
-    - qbittorrent
-    - readarr
+    #- nzbget
+    #- prowlarr
+    #- sonarr
+    #- recyclarr
+    #- radarr
+    #- overseerr
+    #- tautulli
+    #- qbittorrent
+    #- readarr
