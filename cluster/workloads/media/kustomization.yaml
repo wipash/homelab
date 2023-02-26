@@ -4,7 +4,6 @@ namespace: media
 resources:
     - namespace.yaml
     - _pvc
-    - plex
     - nzbget
     - prowlarr
     - sonarr
