@@ -38,7 +38,7 @@ spec:
       TZ: Pacific/Auckland
       PUSHOVER_DEBUG: "false"
       SONARR__INSTANCE_NAME: Sonarr
-      SONARR__PORT: &port 80
+      SONARR__PORT: &port 8989
       SONARR__LOG_LEVEL: info
     envFrom:
       - secretRef:
@@ -90,7 +90,7 @@ spec:
       runAsGroup: 568
       fsGroup: 568
       fsGroupChangePolicy: OnRootMismatch
-      supplementalGroups: [10000]
+      supplementalGroups: [65537]
     volumeClaimTemplates:
       - name: config
         mountPath: /config
