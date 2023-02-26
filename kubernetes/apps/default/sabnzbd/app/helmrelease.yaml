@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: &app sonarr
+  name: sabnzbd
   namespace: default
 spec:
   interval: 15m
@@ -32,17 +32,21 @@ spec:
       annotations:
         reloader.stakater.com/auto: "true"
     image:
-      repository: ghcr.io/onedr0p/sonarr-develop
-      tag: 4.0.0.391@sha256:dbf5513327d9c9c0bb9af284e7cdc7e8db8325b1239505669a3141416c4c52e1
+      repository: ghcr.io/onedr0p/sabnzbd
+      tag: 3.7.2@sha256:c8754b0ef01f50a5b4a78f88e6f2f2b7a3ca1651226ca3145fa62e3790251ef1
     env:
       TZ: Pacific/Auckland
-      PUSHOVER_DEBUG: "false"
-      SONARR__INSTANCE_NAME: Sonarr
-      SONARR__PORT: &port 8989
-      SONARR__LOG_LEVEL: info
-    envFrom:
-      - secretRef:
-          name: sonarr-secret
+      SABNZBD__PORT: &port 80
+      SABNZBD__HOST_WHITELIST_ENTRIES: >-
+        sabnzbd,
+        sabnzbd.default,
+        sabnzbd.default.svc,
+        sabnzbd.default.svc.cluster,
+        sabnzbd.default.svc.cluster.local,
+        sabnzbd.mcgrath.nz
+    # envFrom:
+    #   - secretRef:
+    #       name: sabnzbd-secret
     service:
       main:
         ports:
@@ -54,7 +58,7 @@ spec:
         custom: true
         spec:
           httpGet:
-            path: /ping
+            path: /api?mode=version
             port: *port
           initialDelaySeconds: 0
           periodSeconds: 10
@@ -68,15 +72,13 @@ spec:
         enabled: true
         ingressClassName: nginx
         annotations:
-          nginx.ingress.kubernetes.io/enable-cors: "true"
-          nginx.ingress.kubernetes.io/cors-allow-origin: "https://homer.${SECRET_DOMAIN}"
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_set_header Accept-Encoding "";
-            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.mcgrath.nz/css/base/sonarr/nord.css"></head>';
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.mcgrath.nz/css/base/sabnzbd/nord.css"></head>';
             sub_filter_once on;
           nginx.ingress.kubernetes.io/whitelist-source-range: |
             10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
-          hajimari.io/icon: mdi:television-classic
+          hajimari.io/icon: mdi:download
         hosts:
           - host: &host "{{ .Release.Name }}.mcgrath.nz"
             paths:
@@ -95,8 +97,9 @@ spec:
       - name: config
         mountPath: /config
         accessMode: ReadWriteOnce
-        size: 10Gi
+        size: 1Gi
         storageClass: ceph-block
+    # Note: If downloading very large nzbs it might be worth using NFS for your download directory.
     persistence:
       media:
         enabled: true
@@ -104,17 +107,12 @@ spec:
         server: 10.0.16.16
         path: /volume1/Media
         mountPath: /media
-      scripts:
+      incomplete:
         enabled: true
-        type: configMap
-        name: sonarr-configmap
-        subPath: pushover-notify.sh
-        mountPath: /scripts/pushover-notify.sh
-        defaultMode: 0775
-        readOnly: true
+        type: emptyDir
     resources:
       requests:
         cpu: 10m
         memory: 250Mi
       limits:
-        memory: 2000Mi
+        memory: 8000Mi
