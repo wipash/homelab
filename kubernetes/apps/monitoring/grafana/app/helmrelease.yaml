@@ -27,13 +27,13 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    extraInitContainers:
-      - name: init-db
-        image: ghcr.io/onedr0p/postgres-initdb:14.7
-        imagePullPolicy: IfNotPresent
-        envFrom:
-          - secretRef:
-              name: grafana-secret
+    # extraInitContainers:
+    #   - name: init-db
+    #     image: ghcr.io/onedr0p/postgres-initdb:14.7
+    #     imagePullPolicy: IfNotPresent
+    #     envFrom:
+    #       - secretRef:
+    #           name: grafana-secret
     replicas: 2
     rbac:
       pspEnabled: false
@@ -43,10 +43,10 @@ spec:
     #   existingSecret: grafana-secret
     env:
       GF_ANALYTICS_CHECK_FOR_UPDATES: false
-      GF_AUTH_GENERIC_OAUTH_API_URL: https://auth.devbu.io/api/oidc/userinfo
-      GF_AUTH_GENERIC_OAUTH_AUTH_URL: https://auth.devbu.io/api/oidc/authorization
-      GF_AUTH_GENERIC_OAUTH_CLIENT_ID: grafana
-      GF_AUTH_GENERIC_OAUTH_TOKEN_URL: https://auth.devbu.io/api/oidc/token
+      # GF_AUTH_GENERIC_OAUTH_API_URL: https://auth.mcgrath.nz/api/oidc/userinfo
+      # GF_AUTH_GENERIC_OAUTH_AUTH_URL: https://auth.mcgrath.nz/api/oidc/authorization
+      # GF_AUTH_GENERIC_OAUTH_CLIENT_ID: grafana
+      # GF_AUTH_GENERIC_OAUTH_TOKEN_URL: https://auth.mcgrath.nz/api/oidc/token
       GF_DATE_FORMATS_USE_BROWSER_LOCALE: true
       GF_EXPLORE_ENABLED: true
       GF_GRAFANA_NET_URL: https://grafana.net
@@ -60,34 +60,34 @@ spec:
       GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
       GF_SECURITY_ALLOW_EMBEDDING: true
       GF_SECURITY_COOKIE_SAMESITE: grafana
-      GF_SERVER_ROOT_URL: https://grafana.devbu.io
+      GF_SERVER_ROOT_URL: https://grafana.mcgrath.nz
     envFromSecrets:
       - name: grafana-secret
     grafana.ini:
-      auth:
-        signout_redirect_url: https://auth.devbu.io/logout
-        oauth_auto_login: false
-      auth.generic_oauth:
-        enabled: true
-        name: Authelia
-        client_id: # Set by env vars
-        client_secret: # Set by env vars secret
-        auth_url: # Set by env vars
-        token_url: # Set by env vars
-        api_url: # Set by env vars
-        scopes: "openid profile email groups"
-        empty_scopes: false
-        login_attribute_path: preferred_username
-        groups_attribute_path: groups
-        name_attribute_path: name
-        use_pkce: true
-      auth.generic_oauth.group_mapping:
-        role_attribute_path: |
-          contains(groups[*], 'admins') && 'Admin' || contains(groups[*], 'people') && 'Viewer'
-        org_id: 1
+      # auth:
+      #   signout_redirect_url: https://auth.mcgrath.nz/logout
+      #   oauth_auto_login: false
+      # auth.generic_oauth:
+      #   enabled: true
+      #   name: Authelia
+      #   client_id: # Set by env vars
+      #   client_secret: # Set by env vars secret
+      #   auth_url: # Set by env vars
+      #   token_url: # Set by env vars
+      #   api_url: # Set by env vars
+      #   scopes: "openid profile email groups"
+      #   empty_scopes: false
+      #   login_attribute_path: preferred_username
+      #   groups_attribute_path: groups
+      #   name_attribute_path: name
+      #   use_pkce: true
+      # auth.generic_oauth.group_mapping:
+      #   role_attribute_path: |
+      #     contains(groups[*], 'admins') && 'Admin' || contains(groups[*], 'people') && 'Viewer'
+      #   org_id: 1
       auth.basic:
-        enabled: false
-        # disable_login_form: false
+        enabled: true
+        disable_login_form: false
       auth.anonymous:
         enabled: true
         org_name: HomeOps
@@ -135,11 +135,6 @@ spec:
         unifi-usw:
           gnetId: 11312
           revision: 9
-          datasource: Prometheus
-        # Ref: https://grafana.com/grafana/dashboards/7845-zfs/
-        zfs:
-          gnetId: 7845
-          revision: 4
           datasource: Prometheus
         # Ref: https://grafana.com/grafana/dashboards/13502-minio-dashboard/
         minio:
@@ -224,10 +219,9 @@ spec:
       enabled: true
       ingressClassName: nginx
       annotations:
-        external-dns.alpha.kubernetes.io/target: ipv4.devbu.io
         hajimari.io/icon: simple-icons:grafana
       hosts:
-        - &host grafana.devbu.io
+        - &host grafana.mcgrath.nz
       tls:
         - hosts:
             - *host
