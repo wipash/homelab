@@ -36,7 +36,7 @@ spec:
       tag: 3.7.2@sha256:c8754b0ef01f50a5b4a78f88e6f2f2b7a3ca1651226ca3145fa62e3790251ef1
     env:
       TZ: Pacific/Auckland
-      SABNZBD__PORT: &port 80
+      SABNZBD__PORT: &port 8080
       SABNZBD__HOST_WHITELIST_ENTRIES: >-
         sabnzbd,
         sabnzbd.default,
