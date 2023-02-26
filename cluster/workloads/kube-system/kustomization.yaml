@@ -11,4 +11,4 @@ resources:
   - node-feature-discovery
   - reloader
   - descheduler
-  - intel-gpu-plugin
+  #- intel-gpu-plugin
