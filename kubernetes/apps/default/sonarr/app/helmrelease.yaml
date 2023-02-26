@@ -35,7 +35,7 @@ spec:
       repository: ghcr.io/onedr0p/sonarr-develop
       tag: 4.0.0.391@sha256:dbf5513327d9c9c0bb9af284e7cdc7e8db8325b1239505669a3141416c4c52e1
     env:
-      TZ: America/New_York
+      TZ: Pacific/Auckland
       PUSHOVER_DEBUG: "false"
       SONARR__INSTANCE_NAME: Sonarr
       SONARR__PORT: &port 80
@@ -68,15 +68,17 @@ spec:
         enabled: true
         ingressClassName: nginx
         annotations:
+          nginx.ingress.kubernetes.io/enable-cors: "true"
+          nginx.ingress.kubernetes.io/cors-allow-origin: "https://homer.${SECRET_DOMAIN}"
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_set_header Accept-Encoding "";
-            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.devbu.io/css/base/sonarr/nord.css"></head>';
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.mcgrath.nz/css/base/sonarr/nord.css"></head>';
             sub_filter_once on;
           nginx.ingress.kubernetes.io/whitelist-source-range: |
             10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
           hajimari.io/icon: mdi:television-classic
         hosts:
-          - host: &host "{{ .Release.Name }}.devbu.io"
+          - host: &host "{{ .Release.Name }}.mcgrath.nz"
             paths:
               - path: /
                 pathType: Prefix
@@ -99,9 +101,10 @@ spec:
       media:
         enabled: true
         type: nfs
-        server: expanse.turbo.ac
-        path: /eros/Media
+        server: 10.0.16.16
+        path: /volume1/Media
         mountPath: /media
+        readOnly: true
       scripts:
         enabled: true
         type: configMap
