@@ -7,7 +7,7 @@ resources:
   #- ./namespace.yaml
   # Flux-Kustomizations
   - ./external-secrets/ks.yaml
-  #- ./intel-device-plugin/ks.yaml
+  - ./intel-device-plugin/ks.yaml
   # - ./kube-image-keeper/ks.yaml
   #- ./local-path-provisioner/ks.yaml
   #- ./metrics-server/ks.yaml
