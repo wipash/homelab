@@ -16,11 +16,11 @@ spec:
         name: bjw-s
         namespace: flux-system
 
-  dependsOn:
-    - name: intel-gpu-plugin
-      namespace: kube-system
-    - name: node-feature-discovery
-      namespace: kube-system
+  # dependsOn:
+  #   - name: intel-gpu-plugin
+  #     namespace: kube-system
+  #   - name: node-feature-discovery
+  #     namespace: kube-system
 
   values:
     image:
