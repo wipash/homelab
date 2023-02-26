@@ -63,6 +63,7 @@ spec:
         enabled: true
         ssl: false
         urlPrefix: "/"
+        port: 8080
       storage:
         useAllNodes: false
         useAllDevices: false
