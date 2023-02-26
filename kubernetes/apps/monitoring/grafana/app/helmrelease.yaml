@@ -27,13 +27,13 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    # extraInitContainers:
-    #   - name: init-db
-    #     image: ghcr.io/onedr0p/postgres-initdb:14.7
-    #     imagePullPolicy: IfNotPresent
-    #     envFrom:
-    #       - secretRef:
-    #           name: grafana-secret
+    extraInitContainers:
+      - name: init-db
+        image: ghcr.io/onedr0p/postgres-initdb:14.7
+        imagePullPolicy: IfNotPresent
+        envFrom:
+          - secretRef:
+              name: grafana-secret
     replicas: 2
     rbac:
       pspEnabled: false
@@ -61,8 +61,8 @@ spec:
       GF_SECURITY_ALLOW_EMBEDDING: true
       GF_SECURITY_COOKIE_SAMESITE: grafana
       GF_SERVER_ROOT_URL: https://grafana.mcgrath.nz
-    # envFromSecrets:
-    #   - name: grafana-secret
+    envFromSecrets:
+      - name: grafana-secret
     grafana.ini:
       # auth:
       #   signout_redirect_url: https://auth.mcgrath.nz/logout
