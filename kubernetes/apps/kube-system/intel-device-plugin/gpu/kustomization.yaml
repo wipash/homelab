@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: kube-system
 resources:
   - ./helmrelease.yaml
+  - ./nodefeaturerule.yaml
 labels:
   - pairs:
       app.kubernetes.io/name: intel-device-plugin-gpu
