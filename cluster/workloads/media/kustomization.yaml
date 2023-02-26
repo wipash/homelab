@@ -4,7 +4,7 @@ namespace: media
 resources:
     - namespace.yaml
     - _pvc
-    #- nzbget
+    - nzbget
     #- prowlarr
     #- sonarr
     #- recyclarr
