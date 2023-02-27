@@ -14,7 +14,7 @@ resources:
   - home-assistant
   - theme-park
   - homer
-  - frigate
+  #- frigate
   - esphome
   - n8n
   - paperless

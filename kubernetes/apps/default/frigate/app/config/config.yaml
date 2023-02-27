@@ -1,0 +1,156 @@
+mqtt:
+  host: mosquitto.home
+  port: 1883
+  topic_prefix: frigate
+  user: "frigate"
+  password: "{FRIGATE_MQTT_PASSWORD}"
+
+ui:
+  live_mode: mse
+  #experimental_ui: True
+
+database:
+  path: /data/frigate.db
+
+detectors:
+  coral:
+    type: edgetpu
+    device: usb
+
+# Global objects configuration
+objects:
+  track: ["person"]
+  filters:
+    person:
+      min_area: 5000
+      max_area: 100000
+      min_score: 0.6
+      threshold: 0.8
+
+# Global ffmpeg configuration
+ffmpeg:
+  global_args:
+    - -hide_banner
+    - -loglevel
+    - warning
+  hwaccel_args: preset-vaapi
+  output_args:
+    record: preset-record-generic-audio-aac
+
+# Global detection configuration
+detect:
+  width: 1280
+  height: 720
+  fps: 10
+
+# Global recording configuration
+record:
+  enabled: True
+  retain:
+    days: 3
+    mode: all
+  events:
+    objects:
+      - person
+    retain:
+      default: 14
+
+# Global snapshots configuration
+snapshots:
+  enabled: True
+  timestamp: True
+  bounding_box: True
+  retain:
+    default: 14
+
+go2rtc:
+  streams:
+    fdc_hq:
+      - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.11:554/cam/realmonitor?channel=1&subtype=0"
+      - ffmpeg:fdc#audio=aac
+    fdc_lq:
+      - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.11:554/cam/realmonitor?channel=1&subtype=2"
+    sdc_hq:
+      - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.12:554/cam/realmonitor?channel=1&subtype=0"
+      - ffmpeg:sdc#audio=aac
+    sdc_lq:
+      - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.12:554/cam/realmonitor?channel=1&subtype=2"
+    bdc_hq:
+      - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.13:554/cam/realmonitor?channel=1&subtype=0"
+      - ffmpeg:bdc#audio=aac
+    bdc_lq:
+      - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.13:554/cam/realmonitor?channel=1&subtype=2"
+  webrtc:
+    listen: ":8555"
+    candidates:
+      - 172.16.10.10:8555 # <--- enter frigate host IP here
+      - stun:8555
+
+# Specify cameras
+cameras:
+  FDC:
+    zones:
+      footpath:
+        coordinates: 89,116,68,0,987,0,977,116,974,169,961,216,347,180,329,103
+      driveway:
+        coordinates: 980,221,232,176,0,382,0,720,1098,720
+    objects:
+      filters:
+        person:
+          mask:
+            - 0,310,137,154,246,121,463,53,782,54,909,63,1053,129,1070,80,1084,0,0,0
+    ffmpeg:
+      inputs:
+        - path: "rtsp://127.0.0.1:8554/fdc_hq?video=copy&audio=aac"
+          input_args: preset-rtsp-restream
+          roles: ["record"]
+        - path: "rtsp://127.0.0.1:8554/fdc_lq?video=copy"
+          input_args: preset-rtsp-restream
+          roles: ["detect"]
+    live:
+      stream_name: fdc
+
+
+  BDC:
+    objects:
+      filters:
+        person:
+          threshold: 0.81
+          mask:
+            - 1280,611,625,105,471,73,442,110,374,118,265,92,253,0,577,0,642,0,770,0,1002,0,1242,0,1280,0
+            - 0,720,300,720,293,611,242,417,229,178,253,0,0,0
+    motion:
+      mask:
+        - 626,197,1081,484,1280,385,1280,0,454,0,475,69,633,108
+    ffmpeg:
+      inputs:
+        - path: "rtsp://127.0.0.1:8554/bdc_hq?video=copy&audio=aac"
+          input_args: preset-rtsp-restream
+          roles: ["record"]
+        - path: "rtsp://127.0.0.1:8554/bdc_lq?video=copy"
+          input_args: preset-rtsp-restream
+          roles: ["detect"]
+    live:
+      stream_name: bdc
+
+
+  SDC:
+    objects:
+      filters:
+        person:
+          mask:
+            - 1280,419,1280,0,847,0
+    motion:
+      mask:
+        - 0,720,419,720,419,368,391,0,0,0
+        - 1280,446,1280,0,844,0
+    ffmpeg:
+      inputs:
+        - path: "rtsp://127.0.0.1:8554/sdc_hq?video=copy&audio=aac"
+          input_args: preset-rtsp-restream
+          roles: ["record"]
+        - path: "rtsp://127.0.0.1:8554/sdc_lq?video=copy"
+          input_args: preset-rtsp-restream
+          roles: ["detect"]
+    live:
+      stream_name: sdc
