@@ -30,3 +30,4 @@ resources:
   - ./external-secrets.yaml
   - ./rook-ceph.yaml
   - ./intel.yaml
+  - ./vector.yaml
