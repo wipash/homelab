@@ -19,7 +19,7 @@ vars:
 tasks:
 
   list:
-    desc: List all snapshots taken by restic for a given ReplicationSource (ex. task vs:list rsrc=plex [namespace=default])
+    desc: List all snapshots taken by restic for a given ReplicationSource (ex. list rsrc=plex [namespace=default])
     silent: true
     cmds:
       - envsubst < <(cat {{.listJobTemplate}}) | kubectl apply -f -
@@ -39,7 +39,7 @@ tasks:
   #  - kubectl get replicationsources --all-namespaces --no-headers | awk '{print $2, $1}' | xargs --max-procs=4 -l bash -c 'task vs:snapshot rsrc=$0 namespace=$1'
   #
   snapshot:
-    desc: Trigger a Restic ReplicationSource snapshot (ex. task vs:snapshot rsrc=plex [namespace=default])
+    desc: Trigger a Restic ReplicationSource snapshot (ex. snapshot rsrc=plex [namespace=default])
     cmds:
       - kubectl -n {{.namespace}} patch replicationsources {{.rsrc}} --type merge -p '{"spec":{"trigger":{"manual":"{{.ts}}"}}}'
       - bash {{.waitForJobScript}} volsync-src-{{.rsrc}} {{.namespace}}
@@ -59,7 +59,7 @@ tasks:
   #   - kubectl get replicationsources --all-namespaces --no-headers | awk '{print $2, $1}' | xargs --max-procs=2 -l bash -c 'task vs:restore rsrc=$0 namespace=$1'
   #
   restore:
-    desc: Trigger a Restic ReplicationSource restore (ex. task vs:restore rsrc=plex [namespace=default])
+    desc: Trigger a Restic ReplicationSource restore (ex. restore rsrc=plex [namespace=default])
     cmds:
       - task: restore-suspend-app
         vars: *task-vars
