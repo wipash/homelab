@@ -31,3 +31,4 @@ resources:
   - ./rook-ceph.yaml
   - ./intel.yaml
   - ./vector.yaml
+  - ./kyverno.yaml
