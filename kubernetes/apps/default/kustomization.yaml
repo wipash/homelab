@@ -12,3 +12,10 @@ resources:
   - ./sabnzbd/ks.yaml
   - ./frigate/ks.yaml
   - ./excalidraw/ks.yaml
+  - ./bazarr/ks.yaml
+  - ./lidarr/ks.yaml
+  - ./overseerr/ks.yaml
+  - ./prowlarr/ks.yaml
+  - ./radarr/ks.yaml
+  - ./recyclarr/ks.yaml
+  #- ./unpackerr/ks.yaml
