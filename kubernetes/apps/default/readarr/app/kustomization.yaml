@@ -9,5 +9,5 @@ resources:
   - ./volsync.yaml
 labels:
   - pairs:
-      app.kubernetes.io/name: lidarr
-      app.kubernetes.io/instance: lidarr
+      app.kubernetes.io/name: readarr
+      app.kubernetes.io/instance: readarr
