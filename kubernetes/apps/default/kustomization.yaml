@@ -19,3 +19,4 @@ resources:
   - ./radarr/ks.yaml
   - ./recyclarr/ks.yaml
   #- ./unpackerr/ks.yaml
+  - ./readarr/ks.yaml
