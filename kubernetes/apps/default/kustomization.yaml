@@ -20,4 +20,5 @@ resources:
   - ./recyclarr/ks.yaml
   #- ./unpackerr/ks.yaml
   - ./readarr/ks.yaml
+  - ./home-assistant/ks.yaml
   - ./mosquitto/ks.yaml
