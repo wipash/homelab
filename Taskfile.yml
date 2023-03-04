@@ -20,6 +20,7 @@ includes:
   vs: .taskfiles/VolSync/Tasks.yml
   fx: .taskfiles/Flux/Tasks.yml
   ku: .taskfiles/Kubernetes/Tasks.yml
+  es: .taskfiles/ExternalSecrets/Tasks.yml
 
 tasks:
 
