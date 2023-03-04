@@ -11,7 +11,7 @@ resources:
   - smtp-relay
   - hajimari
   - monica
-  - home-assistant
+  #- home-assistant
   - theme-park
   - homer
   #- frigate
