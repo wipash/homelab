@@ -32,7 +32,7 @@ spec:
   values:
     image:
       repository: paradoxalarminterface/pai
-      tag: "3.1.0"
+      tag: "3.2.1"
       pullPolicy: IfNotPresent
 
     env:
