@@ -20,3 +20,4 @@ resources:
   - ./recyclarr/ks.yaml
   #- ./unpackerr/ks.yaml
   - ./readarr/ks.yaml
+  - ./mosquitto/ks.yaml
