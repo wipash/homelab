@@ -24,11 +24,11 @@ spec:
   upgrade:
     remediation:
       retries: 300
-  dependsOn:
-    - name: mosquitto
-      namespace: home
-    - name: home-assistant
-      namespace: home
+  # dependsOn:
+  #   - name: mosquitto
+  #     namespace: home
+  #   - name: home-assistant
+  #     namespace: home
   values:
     image:
       repository: ghcr.io/koenkk/zigbee2mqtt
