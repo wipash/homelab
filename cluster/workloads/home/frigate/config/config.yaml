@@ -1,5 +1,5 @@
 mqtt:
-  host: mosquitto.home
+  host: mosquitto.default.svc.cluster.local
   port: 1883
   topic_prefix: frigate
   user: "frigate"
