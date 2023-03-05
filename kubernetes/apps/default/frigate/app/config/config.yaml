@@ -108,7 +108,7 @@ cameras:
           input_args: preset-rtsp-restream
           roles: ["detect"]
     live:
-      stream_name: fdc
+      stream_name: fdc_hq
 
 
   BDC:
@@ -131,7 +131,7 @@ cameras:
           input_args: preset-rtsp-restream
           roles: ["detect"]
     live:
-      stream_name: bdc
+      stream_name: bdc_hq
 
 
   SDC:
@@ -153,4 +153,4 @@ cameras:
           input_args: preset-rtsp-restream
           roles: ["detect"]
     live:
-      stream_name: sdc
+      stream_name: sdc_hq
