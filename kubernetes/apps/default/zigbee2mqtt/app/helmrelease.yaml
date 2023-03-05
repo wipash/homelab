@@ -114,10 +114,10 @@ spec:
     securityContext:
       privileged: true
     podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: OnRootMismatch
+      # runAsUser: 568
+      # runAsGroup: 568
+      # fsGroup: 568
+      # fsGroupChangePolicy: OnRootMismatch
       supplementalGroups:
         - 20 # dialout for /dev/ttyUSB0
     volumeClaimTemplates:
