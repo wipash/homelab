@@ -1,8 +1,8 @@
 mqtt:
-  host: mosquitto.home
+  host: mosquitto.default.svc.cluster.local
   port: 1883
   topic_prefix: frigate
-  user: "frigate"
+  user: "{FRIGATE_MQTT_USERNAME}"
   password: "{FRIGATE_MQTT_PASSWORD}"
 
 ui:
