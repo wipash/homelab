@@ -38,8 +38,8 @@ spec:
       TIMEZONE: Pacific/Auckland
       CONTAINER_CACHE: /data/container_cache
       CONTAINER_PATCHES: /data/container_patches
-      FOUNDRY_HOSTNAME: "{{ .Release.Name }}.${SECRET_DOMAIN_2}"
-      FOUNDRY_LOCAL_HOSTNAME: "{{ .Release.Name }}.${SECRET_DOMAIN_2}"
+      FOUNDRY_HOSTNAME: &host "foundry.${SECRET_DOMAIN_2}"
+      FOUNDRY_LOCAL_HOSTNAME: *host
       FOUNDRY_MINIFY_STATIC_FILES: "true"
       FOUNDRY_PROTOCOL: "4"
       FOUNDRY_VERSION: "11.292"
@@ -60,7 +60,7 @@ spec:
           external-dns.alpha.kubernetes.io/target: "tunnel.mcgrath.nz"
           hajimari.io/icon: mdi:dice-d20
         hosts:
-          - host: &host "{{ .Release.Name }}.${SECRET_DOMAIN_2}"
+          - host: *host
             paths:
               - path: /
                 pathType: Prefix
