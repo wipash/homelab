@@ -23,3 +23,4 @@ resources:
   - ./home-assistant/ks.yaml
   - ./mosquitto/ks.yaml
   - ./zigbee2mqtt/ks.yaml
+  - ./foundryvtt/ks.yaml
