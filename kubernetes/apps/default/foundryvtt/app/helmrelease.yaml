@@ -38,6 +38,7 @@ spec:
       TIMEZONE: Pacific/Auckland
       CONTAINER_CACHE: /data/container_cache
       CONTAINER_PATCHES: /data/container_patches
+      CONTAINER_PRESERVE_CONFIG: "true"
       FOUNDRY_HOSTNAME: &host "foundry.${SECRET_DOMAIN_2}"
       FOUNDRY_LOCAL_HOSTNAME: *host
       FOUNDRY_MINIFY_STATIC_FILES: "true"
@@ -67,11 +68,11 @@ spec:
         tls:
           - hosts:
               - *host
-    podSecurityContext:
-      runAsUser: 421
-      runAsGroup: 421
-      fsGroup: 421
-      fsGroupChangePolicy: OnRootMismatch
+    # podSecurityContext:
+    #   runAsUser: 421
+    #   runAsGroup: 421
+    #   fsGroup: 421
+    #   fsGroupChangePolicy: OnRootMismatch
     volumeClaimTemplates:
       - name: config
         mountPath: /data
