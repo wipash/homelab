@@ -49,7 +49,7 @@ spec:
                 html: true
                 sound: gamelan
                 priority: |-
-                  {{ if eq .Status "firing" }}1{{ else }}0{{ end }}
+                  {{ if eq .Status "firing" }}0{{ else }}-1{{ end }}
                 title: |-
                   [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}
                 message: |-
