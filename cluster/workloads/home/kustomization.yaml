@@ -6,7 +6,7 @@ resources:
   - mealie
   #- zigbee2mqtt
   - pai
-  - node-red
+  # - node-red
   #- mosquitto
   - smtp-relay
   - hajimari
@@ -15,11 +15,11 @@ resources:
   - theme-park
   - homer
   #- frigate
-  - esphome
+  # - esphome
   - n8n
   - paperless
 #  - valheim
-  - homebox
+  # - homebox
   - your-spotify
-  - grocy
-  - firefly-iii
+  # - grocy
+  # - firefly-iii
