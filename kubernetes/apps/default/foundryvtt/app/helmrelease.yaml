@@ -33,7 +33,7 @@ spec:
         reloader.stakater.com/auto: "true"
     image:
       repository: felddy/foundryvtt
-      tag: 11.292.0
+      tag: release
     env:
       TIMEZONE: Pacific/Auckland
       CONTAINER_CACHE: /data/container_cache
@@ -43,7 +43,7 @@ spec:
       FOUNDRY_LOCAL_HOSTNAME: *host
       FOUNDRY_MINIFY_STATIC_FILES: "true"
       FOUNDRY_PROTOCOL: "4"
-      FOUNDRY_VERSION: "11.292"
+      #FOUNDRY_VERSION: "11.292"
     envFrom:
       - secretRef:
           name: foundryvtt-secret
