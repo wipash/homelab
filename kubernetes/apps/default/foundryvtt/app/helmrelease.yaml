@@ -39,11 +39,13 @@ spec:
       CONTAINER_CACHE: /data/container_cache
       CONTAINER_PATCHES: /data/container_patches
       #CONTAINER_PRESERVE_CONFIG: "true"
+      CONTAINER_VERBOSE: "true"
       FOUNDRY_HOSTNAME: &host "foundry.${SECRET_DOMAIN_2}"
       FOUNDRY_LOCAL_HOSTNAME: *host
-      FOUNDRY_MINIFY_STATIC_FILES: "true"
+      FOUNDRY_MINIFY_STATIC_FILES: "false"
       FOUNDRY_PROTOCOL: "4"
       #FOUNDRY_VERSION: "11.292"
+      NODE_DEBUG: "*"
     envFrom:
       - secretRef:
           name: foundryvtt-secret
