@@ -40,8 +40,8 @@ spec:
       CONTAINER_PATCHES: /data/container_patches
       FOUNDRY_GID: "568"
       FOUNDRY_UID: "568"
-      FOUNDRY_HOSTNAME: *host
-      FOUNDRY_LOCAL_HOSTNAME: *host
+      FOUNDRY_HOSTNAME: "{{ .Release.Name }}.${SECRET_DOMAIN_2}"
+      FOUNDRY_LOCAL_HOSTNAME: "{{ .Release.Name }}.${SECRET_DOMAIN_2}"
       FOUNDRY_MINIFY_STATIC_FILES: "true"
       FOUNDRY_PROTOCOL: "4"
       FOUNDRY_VERSION: "11.292"
