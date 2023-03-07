@@ -45,7 +45,7 @@ spec:
       FOUNDRY_MINIFY_STATIC_FILES: "false"
       FOUNDRY_PROTOCOL: "4"
       #FOUNDRY_VERSION: "11.292"
-      NODE_DEBUG: "*"
+      #NODE_DEBUG: "*"
     envFrom:
       - secretRef:
           name: foundryvtt-secret
