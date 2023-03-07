@@ -38,8 +38,8 @@ spec:
       TIMEZONE: Pacific/Auckland
       CONTAINER_CACHE: /data/container_cache
       CONTAINER_PATCHES: /data/container_patches
-      FOUNDRY_GID: "568"
-      FOUNDRY_UID: "568"
+      # FOUNDRY_GID: "568"
+      # FOUNDRY_UID: "568"
       FOUNDRY_HOSTNAME: "{{ .Release.Name }}.${SECRET_DOMAIN_2}"
       FOUNDRY_LOCAL_HOSTNAME: "{{ .Release.Name }}.${SECRET_DOMAIN_2}"
       FOUNDRY_MINIFY_STATIC_FILES: "true"
