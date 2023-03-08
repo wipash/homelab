@@ -12,8 +12,6 @@ configMapGenerator:
       - pai.conf=./config/pai.conf
 generatorOptions:
   disableNameSuffixHash: true
-  annotations:
-    kustomize.toolkit.fluxcd.io/substitute: disabled
 labels:
   - pairs:
       app.kubernetes.io/name: paradox-alarm-interface
