@@ -25,8 +25,7 @@ spec:
   values:
     initContainers:
       01-init-config:
-        #image: ghcr.io/onedr0p/alpine:3.17.2@sha256:5d973006bf93ba66e38758694dfed6df091a13e712b6a075f7ed7bb6fd8c2189
-        image: public.ecr.aws/docker/library/busybox:latest
+        image: ghcr.io/onedr0p/alpine:3.17.2@sha256:5d973006bf93ba66e38758694dfed6df091a13e712b6a075f7ed7bb6fd8c2189
         imagePullPolicy: IfNotPresent
         command: ["/bin/sh", "-c"]
         args: ["echo 'Running' && envsubst < /data/pai.conf > /etc/pai/pai.conf && cat /etc/pai/pai.conf >> /proc/1/fd/1 && tail -f /dev/null"]
@@ -45,7 +44,7 @@ spec:
           - name: config
             mountPath: /etc/pai
           - name: config-file
-            mountPath: /data/pai.conf
+            mountPath: /data
     controller:
       type: statefulset
       annotations:
@@ -61,7 +60,7 @@ spec:
         type: configMap
         name: paradox-alarm-interface-configmap
         subPath: pai.conf
-        mountPath: /data/pai.conf
+        mountPath: /data
         readOnly: true
       config:
         enabled: true
