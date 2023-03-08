@@ -25,3 +25,4 @@ resources:
   - ./zigbee2mqtt/ks.yaml
   - ./foundryvtt/ks.yaml
   - ./node-red/ks.yaml
+  - ./paradox-alarm-interface/ks.yaml
