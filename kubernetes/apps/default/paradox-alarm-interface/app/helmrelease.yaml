@@ -40,7 +40,7 @@ spec:
         subPath: pai.conf
         mountPath: /etc/pai/pai.conf
         readOnly: true
-      usb:
+      serial:
         enabled: true
         type: hostPath
         hostPath: /dev/serial
