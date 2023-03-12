@@ -32,3 +32,4 @@ resources:
   - ./intel.yaml
   - ./vector.yaml
   - ./kyverno.yaml
+  - ./descheduler.yaml
