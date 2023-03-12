@@ -12,9 +12,14 @@ spec:
         enabled: true
         image:
           repository: ghcr.io/coder/code-server
-          tag: 4.10.0
+          tag: 4.10.1
         env:
           TZ: Pacific/Auckland
+        envFrom:
+          - secretRef:
+              name: &secret home-assistant-code-secret
+        git:
+          deployKeySecret: *secret
         workingDir: /config
         args:
           - --auth
