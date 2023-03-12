@@ -15,6 +15,7 @@ spec:
           tag: 4.10.1
         env:
           TZ: Pacific/Auckland
+          HASS_SERVER: home-assistant.default.svc.cluster.local
         envFrom:
           - secretRef:
               name: &secret home-assistant-code-secret
