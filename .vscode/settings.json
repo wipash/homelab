@@ -1,24 +1,31 @@
 {
+    "yaml.schemaStore.enable": true,
     "yaml.schemas": {
-        "https://json.schemastore.org/taskfile.json": [
-            "file:///home/sean/homelab/.taskfiles/cluster.yml",
-            "file:///home/sean/homelab/.taskfiles/flux.yml",
-            "file:///home/sean/homelab/.taskfiles/ansible.yml"
-        ],
-        "https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible.json#/$defs/playbook": [
-            "file:///home/sean/homelab/ansible/homelab-k3s-nuke.yaml",
-            "file:///home/sean/homelab/ansible/homelab-k3s.yaml",
-            "file:///home/sean/homelab/ansible/udm-config.yaml"
-        ],
-        "kubernetes": [
-            "kubernetes/**/*.yaml",
-            "cluster/**/*.yaml"
-        ]
+      "ansible": "ansible/**/*.yml",
+      "kubernetes": "kubernetes/**/*.yaml"
     },
     "sops.creationEnabled": true,
     "files.associations": {
+        "*.json5": "jsonc",
         "**/cluster/**/*.sops.toml": "plaintext"
     },
+    "files.trimTrailingWhitespace": true,
     "sops.beta": false,
-    "sops.defaults.ageKeyFile": "/home/sean/.config/sops/age/keys.txt"
+    "sops.defaults.ageKeyFile": "/home/sean/.config/sops/age/keys.txt",
+    "material-icon-theme.folders.associations": {
+        ".taskfiles": "utils",
+        "bootstrap": "import",
+        "charts": "kubernetes",
+        "hack": "scripts",
+        "repositories": "database",
+        "terraforms": "terraform",
+        "vars": "other",
+        // namespaces
+        "cert-manager": "guard",
+        "external-secrets": "keys",
+        "kube-system": "kubernetes",
+        "monitoring": "event",
+        "networking": "connection",
+        "rook-ceph": "dump",
+    },
 }

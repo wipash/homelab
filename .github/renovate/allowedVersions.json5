@@ -1,9 +1,10 @@
 {
-  packageRules: [
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
     {
-      matchDatasources: ["docker"],
-      matchPackageNames: ["docker.io/kopia/kopia"],
-      allowedVersions: "<2",
-    },
-  ],
+      "matchDatasources": ["docker"],
+      "matchPackagePatterns": ["kopia"],
+      "allowedVersions": "<10"
+    }
+  ]
 }
