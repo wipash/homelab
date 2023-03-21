@@ -26,3 +26,4 @@ resources:
   - ./foundryvtt/ks.yaml
   - ./node-red/ks.yaml
   - ./paradox-alarm-interface/ks.yaml
+  - ./cyberchef/ks.yaml
