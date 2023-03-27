@@ -44,6 +44,9 @@ spec:
       FOUNDRY_LOCAL_HOSTNAME: *host
       FOUNDRY_MINIFY_STATIC_FILES: "true"
       FOUNDRY_PROTOCOL: "4"
+      FOUNDRY_PROXY_PORT: "443"
+      FOUNDRY_PROXY_SSL: "true"
+      FOUNDRY_WORLD: "menace-under-otari"
       #FOUNDRY_VERSION: "11.292"
       #NODE_DEBUG: "*"
     envFrom:
