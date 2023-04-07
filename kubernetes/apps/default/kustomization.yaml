@@ -29,4 +29,4 @@ resources:
   - ./cyberchef/ks.yaml
   - ./glauth/ks.yaml
   - ./redis/ks.yaml
-  #- ./authelia/ks.yaml
+  - ./authelia/ks.yaml
