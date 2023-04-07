@@ -28,5 +28,5 @@ resources:
   - ./paradox-alarm-interface/ks.yaml
   - ./cyberchef/ks.yaml
   - ./glauth/ks.yaml
-  #- ./redis/ks.yaml
+  - ./redis/ks.yaml
   #- ./authelia/ks.yaml
