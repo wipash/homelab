@@ -8,7 +8,7 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
-  path: './kubernetes/apps/services/filebrowser-foundry/app/'
+  path: './kubernetes/apps/default/filebrowser-foundry/app/'
   prune: true
   sourceRef:
     kind: GitRepository
@@ -24,3 +24,5 @@ spec:
   dependsOn:
     - name: cluster-apps-rook-ceph-cluster
     - name: cluster-apps-foundryvtt
+    - name: cluster-apps-volsync
+
