@@ -31,3 +31,4 @@ resources:
   - ./redis/ks.yaml
   - ./authelia/ks.yaml
   - ./foundry-browser/ks.yaml
+  - ./miniflux/ks.yaml
