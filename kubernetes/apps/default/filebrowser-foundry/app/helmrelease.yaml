@@ -77,7 +77,7 @@ spec:
       filebrowser:
         enabled: true
         type: configMap
-        name: filebrowser-config
+        name: filebrowser-foundry-config
         subPath: filebrowser.json
         mountPath: /.filebrowser.json
         readOnly: true
