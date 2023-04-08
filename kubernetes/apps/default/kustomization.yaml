@@ -30,3 +30,4 @@ resources:
   - ./glauth/ks.yaml
   - ./redis/ks.yaml
   - ./authelia/ks.yaml
+  - ./filebroswer-foundry/ks.yaml
