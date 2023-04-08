@@ -31,11 +31,11 @@ spec:
       create: true
       username: admin
       # passwordHash: from valuesFrom
-      # oidcSecret:
-      #   create: true
-      #   clientID: weave-gitops
-      #   issuerURL: https://auth.mcgrath.nz
-      #   redirectURL: https://gitops.mcgrath.nz/oauth2/callback
+      oidcSecret:
+        create: true
+        clientID: weave-gitops
+        issuerURL: https://auth.mcgrath.nz
+        redirectURL: https://gitops.mcgrath.nz/oauth2/callback
     ingress:
       enabled: true
       className: nginx
@@ -55,6 +55,6 @@ spec:
       secret.reloader.stakater.com/reload: weave-gitops
   valuesFrom:
     - kind: Secret
-      name: weave-gitops
+      name: weave-gitops-secret
       valuesKey: adminPassword
       targetPath: adminUser.passwordHash
