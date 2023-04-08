@@ -1,9 +1,9 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.trux.dev/helmrelease_v2beta1.json
+# yaml-language-server: $schema=https://kubernetes-schemas.devbu.io/helmrelease_v2beta1.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: &app filebrowser-foundry
+  name: foundry-browser
   namespace: default
 spec:
   interval: 15m
@@ -15,23 +15,30 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
+  maxHistory: 3
   install:
     createNamespace: true
     remediation:
-      retries: 5
+      retries: 3
   upgrade:
+    cleanupOnFail: true
     remediation:
-      retries: 5
+      retries: 3
+  uninstall:
+    keepHistory: false
   values:
     controller:
       type: statefulset
-      annotations:
-        reloader.stakater.com/auto: "true"
     image:
+      # https://github.com/filebrowser/filebrowser/issues/1571
       repository: ghcr.io/onedr0p/filebrowser
       tag: v2.23.0
     env:
-      TZ: "${TZ}"
+      TZ: Pacific/Auckland
+      FB_DATABASE: "/config/filebrowser.db"
+      FB_ROOT: "/foundry"
+      FB_LOG: "stdout"
+      FB_NOAUTH: "true"
     service:
       main:
         ports:
@@ -55,7 +62,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: "nginx"
+        ingressClassName: nginx
         annotations:
           auth.home.arpa/enabled: "true"
           external-dns/is-public: "true"
@@ -69,25 +76,17 @@ spec:
         tls:
           - hosts:
               - *host
-    persistence:
-      foundry:
-        enabled: true
-        existingClaim: config-foundryvtt-0
-        mountPath: /foundry
-      filebrowser:
-        enabled: true
-        type: configMap
-        name: filebrowser-foundry-config
-        subPath: filebrowser.json
-        mountPath: /.filebrowser.json
-        readOnly: true
     volumeClaimTemplates:
       - name: config
         mountPath: /config
         accessMode: ReadWriteOnce
         size: 1Gi
         storageClass: ceph-block
-
+    persistence:
+      foundry:
+        enabled: true
+        existingClaim: config-foundryvtt-0
+        mountPath: /foundry
     affinity:
       podAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
