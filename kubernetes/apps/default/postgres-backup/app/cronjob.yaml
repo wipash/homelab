@@ -1,0 +1,53 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-backup
+  namespace: database
+spec:
+  schedule: "0 4 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          automountServiceAccountToken: false
+          enableServiceLinks: false
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            fsGroup: 568
+            supplementalGroups:
+              - 65537
+
+          containers:
+            - name: postgres-backup
+              image: docker.io/prodrigestivill/postgres-backup-local:15@sha256:9a08323f39ff6cf0244b1462686d56a0911f8e41a23febf07b59840eacee9361
+              imagePullPolicy: IfNotPresent
+              command:
+                - "/backup.sh"
+              env:
+                - name: POSTGRES_EXTRA_OPTS
+                  value: "-n public -Z6"
+                - name: POSTGRES_PORT
+                  value: "5431"
+                - name: POSTGRES_HOST
+                  value: 10.0.16.16
+                - name: POSTGRES_USER
+                  value: postgres
+                - name: POSTGRES_DB
+                  value: "authelia,home_assistant,miniflux,grafana,fireflyiii"
+              envFrom:
+                - secretRef:
+                    name: postgres-backup-secret
+              volumeMounts:
+                - name: nas-backups
+                  mountPath: /backups
+
+          restartPolicy: OnFailure
+
+          volumes:
+            - name: nas-backups
+              nfs:
+                server: 10.0.16.16
+                path: /volume1/Backup/Home/Homelab/Postgres
