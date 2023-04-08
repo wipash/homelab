@@ -32,3 +32,4 @@ resources:
   - ./authelia/ks.yaml
   - ./foundry-browser/ks.yaml
   - ./miniflux/ks.yaml
+  - ./postgres-backup/ks.yaml
