@@ -39,6 +39,11 @@ spec:
       FB_ROOT: "/foundry/Data"
       FB_LOG: "stdout"
       FB_NOAUTH: "true"
+    podSecurityContext:
+      runAsUser: 421
+      runAsGroup: 421
+      fsGroup: 421
+      fsGroupChangePolicy: OnRootMismatch
     service:
       main:
         ports:
