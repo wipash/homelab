@@ -36,7 +36,7 @@ spec:
     env:
       TZ: Pacific/Auckland
       FB_DATABASE: "/config/filebrowser.db"
-      FB_ROOT: "/foundry"
+      FB_ROOT: "/foundry/Data"
       FB_LOG: "stdout"
       FB_NOAUTH: "true"
     service:
