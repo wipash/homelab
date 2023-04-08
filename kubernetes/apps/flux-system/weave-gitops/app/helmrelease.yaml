@@ -31,6 +31,11 @@ spec:
       create: true
       username: admin
       # passwordHash: from valuesFrom
+      oidcSecret:
+        create: true
+        clientID: weave-gitops
+        issuerURL: https://auth.mcgrath.nz
+        redirectURL: https://gitops.mcgrath.nz/oauth2/callback
     ingress:
       enabled: true
       className: nginx
