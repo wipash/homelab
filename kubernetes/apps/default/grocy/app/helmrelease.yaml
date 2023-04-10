@@ -35,8 +35,8 @@ spec:
       GROCY_CULTURE: "en_GB"
       GROCY_CURRENCY: "NZD"
       GROCY_AUTH_CLASS: Grocy\Middleware\ReverseProxyAuthMiddleware
-      # PUID: "568"
-      # PGID: "568"
+      PUID: "1000"
+      PGID: "1000"
 
     service:
       main:
@@ -61,11 +61,11 @@ spec:
         tls:
           - hosts:
               - *host
-    podSecurityContext:
-      runAsUser: 1000
-      runAsGroup: 1000
-      fsGroup: 1000
-      fsGroupChangePolicy: "OnRootMismatch"
+    # podSecurityContext:
+    #   runAsUser: 1000
+    #   runAsGroup: 1000
+    #   fsGroup: 1000
+    #   fsGroupChangePolicy: "OnRootMismatch"
     volumeClaimTemplates:
       - name: config
         mountPath: /config
