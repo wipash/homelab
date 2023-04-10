@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: grocy
+  name: mealie
   namespace: default
 spec:
   interval: 15m
@@ -28,13 +28,14 @@ spec:
       annotations:
         reloader.stakater.com/auto: "true"
     image:
-      repository: linuxserver/grocy
-      tag: 3.3.2
+      repository: hkotel/mealie
+      tag: frontend-v1.0.0beta-5
+
     env:
       TZ: "${TIMEZONE}"
-      GROCY_CULTURE: "en_GB"
-      GROCY_CURRENCY: "NZD"
-      GROCY_AUTH_CLASS: Grocy\Middleware\ReverseProxyAuthMiddleware
+      mealie_CULTURE: "en_GB"
+      mealie_CURRENCY: "NZD"
+      mealie_AUTH_CLASS: mealie\Middleware\ReverseProxyAuthMiddleware
       PUID: "1000"
       PGID: "1000"
 
@@ -54,7 +55,7 @@ spec:
           external-dns.alpha.kubernetes.io/target: "tunnel.${SECRET_DOMAIN}"
           hajimari.io/icon: cart-variant
         hosts:
-          - host: &host "grocy.mcgrath.nz"
+          - host: &host "mealie.mcgrath.nz"
             paths:
               - path: /
                 pathType: Prefix
@@ -76,6 +77,7 @@ spec:
         enabled: true
         type: emptyDir
         mountPath: /config/data/viewcache
+
     resources:
       requests:
         cpu: 22m
