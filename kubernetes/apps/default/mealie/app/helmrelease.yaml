@@ -69,14 +69,10 @@ spec:
       fsGroupChangePolicy: "OnRootMismatch"
     volumeClaimTemplates:
       - name: config
+        mountPath: /app/data/
         accessMode: ReadWriteOnce
         size: 2Gi
         storageClass: ceph-block
-    persistence:
-      viewcache:
-        enabled: true
-        type: emptyDir
-        mountPath: /config/data/viewcache
 
     resources:
       requests:

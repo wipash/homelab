@@ -35,8 +35,8 @@ spec:
       GROCY_CULTURE: "en_GB"
       GROCY_CURRENCY: "NZD"
       GROCY_AUTH_CLASS: Grocy\Middleware\ReverseProxyAuthMiddleware
-      PUID: "1000"
-      PGID: "1000"
+      # PUID: "568"
+      # PGID: "568"
 
     service:
       main:
