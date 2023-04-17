@@ -232,3 +232,48 @@ host = 4.2.2.2
 menu = Quad9
 title = Quad9 DNS 9.9.9.9
 host = 9.9.9.9
+
++ Local Internet
+
+menu = Local Internet
+title = Local Internet Connectivity
+
+++ FirstHop
+menu = First Hop
+title = First Hop
+host = 101.98.165.65
+
+++ SlingshotDNS1
+menu = Slingshot DNS 1
+title = Slingshot DNS 202.180.64.10
+host = 202.180.64.10
+
+++ SlingshotDNS2
+menu = Slingshot DNS 2
+title = Slingshot DNS 202.180.64.11
+host = 202.180.64.11
+
+++ AKLTranzPeer
+menu = AKL Tranzpeer
+title = AKL Tranzpeer
+host = 101.98.0.124
+
+++ as9790ix
+menu = AKL IX 2Degrees
+title = AKL IX 2Degrees - AS9790
+host = as9790.akl.ix.nz
+
+++ as4049ix
+menu = AKL IX Cello
+title = AKL IX Cello - AS4049
+host = as4049.akl.ix.nz
+
+++ as38195ix
+menu = AKL IX Superloop
+title = AKL IX Superloop - AS38195
+host = as38195.akl.ix.nz
+
+++ SuperloopSYD
+menu = Superloop SYD
+title = Superloop 47bourke-syd
+host = 111.118.196.22
