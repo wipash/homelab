@@ -182,11 +182,6 @@ host = 9.9.9.9
 menu = Local Internet
 title = Local Internet Connectivity
 
-++ FirstHop
-menu = First Hop
-title = First Hop
-host = 101.98.165.65
-
 ++ SlingshotDNS1
 menu = Slingshot DNS 1
 title = Slingshot DNS 202.180.64.10
@@ -216,8 +211,3 @@ host = as4049.akl.ix.nz
 menu = AKL IX Superloop
 title = AKL IX Superloop - AS38195
 host = as38195.akl.ix.nz
-
-++ SuperloopSYD
-menu = Superloop SYD
-title = Superloop 47bourke-syd
-host = 111.118.196.22
