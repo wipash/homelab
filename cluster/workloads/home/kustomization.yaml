@@ -9,7 +9,6 @@ resources:
   # - node-red
   #- mosquitto
   - smtp-relay
-  - hajimari
   - monica
   #- home-assistant
   - theme-park
