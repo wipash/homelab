@@ -80,7 +80,7 @@ spec:
         type: emptyDir
         mountPath: /config
       configfiles:
-        enable: true
+        enabled: true
         type: configMap
         name: smokeping-configmap
         mountPath: /configmap
