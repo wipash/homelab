@@ -11,7 +11,6 @@ configMapGenerator:
     files:
       - General=./config/General
       - Presentation=./config/Presentation
-      - Database=./config/Database
       - Targets=./config/Targets
 generatorOptions:
   disableNameSuffixHash: true
