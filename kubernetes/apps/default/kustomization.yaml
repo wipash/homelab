@@ -34,3 +34,4 @@ resources:
   - ./miniflux/ks.yaml
   - ./postgres-backup/ks.yaml
   - ./grocy/ks.yaml
+  - ./smokeping/ks.yaml

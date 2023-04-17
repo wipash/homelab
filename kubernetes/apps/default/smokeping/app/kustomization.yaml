@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: default
+resources:
+  - ./helmrelease.yaml
+  - ./volsync.yaml
+configMapGenerator:
+  - name: smokeping-configmap
+    files:
+      - General=./config/General
+      - Presentation=./config/Presentation
+      - Database=./config/Database
+      - Targets=./config/Targets
+labels:
+  - pairs:
+      app.kubernetes.io/name: smokeping
+      app.kubernetes.io/instance: smokeping
