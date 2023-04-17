@@ -35,3 +35,4 @@ resources:
   - ./postgres-backup/ks.yaml
   - ./grocy/ks.yaml
   - ./smokeping/ks.yaml
+  - ./hajimari/ks.yaml
