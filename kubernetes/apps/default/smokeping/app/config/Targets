@@ -32,66 +32,10 @@ menu = Google
 title = google.com
 host = google.com
 
-++ GoogleSearchIpv6
-menu = Google
-probe = FPing6
-title = ipv6.google.com
-host = ipv6.google.com
-
 ++ linuxserverio
 menu = linuxserver.io
 title = linuxserver.io
 host = linuxserver.io
-
-+ Europe
-
-menu = Europe
-title = European Connectivity
-
-++ Germany
-
-menu = Germany
-title = The Fatherland
-
-+++ TelefonicaDE
-
-menu = Telefonica DE
-title = Telefonica DE
-host = www.telefonica.de
-
-++ Switzerland
-
-menu = Switzerland
-title = Switzerland
-
-+++ CernIXP
-
-menu = CernIXP
-title = Cern Internet eXchange Point
-host = cixp.web.cern.ch
-
-+++ SBB
-
-menu = SBB
-title = SBB
-host = www.sbb.ch/en
-
-++ UK
-
-menu = United Kingdom
-title = United Kingdom
-
-+++ CambridgeUni
-
-menu = Cambridge
-title = Cambridge
-host = cam.ac.uk
-
-+++ UEA
-
-menu = UEA
-title = UEA
-host = www.uea.ac.uk
 
 + USA
 
