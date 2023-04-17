@@ -83,7 +83,7 @@ spec:
         enabled: true
         type: configMap
         name: smokeping-configmap
-        mountPath: /configmap
+        mountPath: "-"
     resources:
       requests:
         cpu: 10m

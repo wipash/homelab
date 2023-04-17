@@ -1,12 +1,12 @@
 *** General ***
 
-owner    = LinuxServer.io
+owner    = Sean McGrath
 contact  = admin@linuxserver.io
 mailhost = my.mail.host
 # NOTE: do not put the Image Cache below cgi-bin
 # since all files under cgi-bin will be executed ... this is not
 # good for images.
-cgiurl   = http://localhost/smokeping.cgi
+cgiurl   = https://ping.mcgrath.nz/smokeping/smokeping.cgi
 # specify this to get syslog logging
 syslogfacility = local0
 # each probe is now run in its own process
