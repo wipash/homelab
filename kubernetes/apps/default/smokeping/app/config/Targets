@@ -177,7 +177,7 @@ menu = Quad9
 title = Quad9 DNS 9.9.9.9
 host = 9.9.9.9
 
-+ Local Internet
++ LocalInternet
 
 menu = Local Internet
 title = Local Internet Connectivity
