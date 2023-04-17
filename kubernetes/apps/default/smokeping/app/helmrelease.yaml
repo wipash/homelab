@@ -39,10 +39,10 @@ spec:
         command: ["/bin/sh", "-c"]
         args: ["cp /configmap/* /config"]
         volumeMounts:
-          - name: configmap
-            mount: /configmap
+          - name: smokeping-configmap
+            mountPath: /configmap
           - name: config
-            mount: /config
+            mountPath: /config
     env:
       TZ: ${TIMEZONE}
       PUID: "1000"
