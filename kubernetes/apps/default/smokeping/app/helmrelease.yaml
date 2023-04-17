@@ -39,7 +39,7 @@ spec:
         command: ["/bin/sh", "-c"]
         args: ["cp /configmap/* /config"]
         volumeMounts:
-          - name: smokeping-configmap
+          - name: configfiles
             mountPath: /configmap
           - name: config
             mountPath: /config
@@ -79,7 +79,7 @@ spec:
         enabled: true
         type: emptyDir
         mountPath: /config
-      smokeping-configmap:
+      configfiles:
         enable: true
         type: configMap
         name: smokeping-configmap
