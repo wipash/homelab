@@ -13,6 +13,10 @@ configMapGenerator:
       - Presentation=./config/Presentation
       - Database=./config/Database
       - Targets=./config/Targets
+generatorOptions:
+  disableNameSuffixHash: true
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
 labels:
   - pairs:
       app.kubernetes.io/name: smokeping
