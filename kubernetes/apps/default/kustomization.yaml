@@ -36,3 +36,4 @@ resources:
   - ./grocy/ks.yaml
   - ./smokeping/ks.yaml
   - ./hajimari/ks.yaml
+  - ./qbittorrent/ks.yaml
