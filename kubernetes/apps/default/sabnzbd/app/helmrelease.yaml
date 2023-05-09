@@ -115,7 +115,7 @@ spec:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
-            matchExpressions:
+            - matchExpressions:
               - key: kubernetes.io/hostname
                 operator: In
                 values: ["hp1"]
