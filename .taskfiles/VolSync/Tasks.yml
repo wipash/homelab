@@ -15,6 +15,7 @@ vars:
   waitForJobScript: "{{.ROOT_DIR}}/.taskfiles/VolSync/wait-for-job.sh"
   listJobTemplate: "{{.ROOT_DIR}}/.taskfiles/VolSync/ListJob.tmpl.yaml"
   listLocksTemplate: "{{.ROOT_DIR}}/.taskfiles/VolSync/ListLocks.tmpl.yaml"
+  unlockTemplate: "{{.ROOT_DIR}}/.taskfiles/VolSync/Unlock.tmpl.yaml"
   ts: '{{now | date "150405"}}'
 
 tasks:
@@ -36,15 +37,15 @@ tasks:
       - sh: test -f {{.waitForJobScript}}
       - sh: test -f {{.listJobTemplate}}
 
-  listLocks:
-    desc: List all snapshots taken by restic for a given ReplicationSource (ex. list rsrc=plex [namespace=default])
+  listlocks:
+    desc: List all locks for a given ReplicationSource (ex. listlocks rsrc=plex [namespace=default])
     silent: true
     cmds:
       - envsubst < <(cat {{.listLocksTemplate}}) | kubectl apply -f -
-      - bash {{.waitForJobScript}} list-{{.rsrc}}-{{.ts}} {{.namespace}}
-      - kubectl -n {{.namespace}} wait job/list-{{.rsrc}}-{{.ts}} --for condition=complete --timeout=1m
-      - kubectl -n {{.namespace}} logs job/list-{{.rsrc}}-{{.ts}} --container list
-      - kubectl -n {{.namespace}} delete job list-{{.rsrc}}-{{.ts}}
+      - bash {{.waitForJobScript}} listlocks-{{.rsrc}}-{{.ts}} {{.namespace}}
+      - kubectl -n {{.namespace}} wait job/listlocks-{{.rsrc}}-{{.ts}} --for condition=complete --timeout=1m
+      - kubectl -n {{.namespace}} logs job/listlocks-{{.rsrc}}-{{.ts}} --container listlocks
+      - kubectl -n {{.namespace}} delete job listlocks-{{.rsrc}}-{{.ts}}
     vars:
       rsrc: '{{ or .rsrc (fail "ReplicationSource `rsrc` is required") }}'
       namespace: '{{.namespace | default "default"}}'
@@ -52,6 +53,23 @@ tasks:
     preconditions:
       - sh: test -f {{.waitForJobScript}}
       - sh: test -f {{.listLocksTemplate}}
+
+  unlock:
+    desc: Unlock a given ReplicationSource (ex. unlock rsrc=plex [namespace=default])
+    silent: true
+    cmds:
+      - envsubst < <(cat {{.unlockTemplate}}) | kubectl apply -f -
+      - bash {{.waitForJobScript}} unlock-{{.rsrc}}-{{.ts}} {{.namespace}}
+      - kubectl -n {{.namespace}} wait job/unlock-{{.rsrc}}-{{.ts}} --for condition=complete --timeout=1m
+      - kubectl -n {{.namespace}} logs job/unlock-{{.rsrc}}-{{.ts}} --container unlock
+      - kubectl -n {{.namespace}} delete job unlock-{{.rsrc}}-{{.ts}}
+    vars:
+      rsrc: '{{ or .rsrc (fail "ReplicationSource `rsrc` is required") }}'
+      namespace: '{{.namespace | default "default"}}'
+    env: *task-vars
+    preconditions:
+      - sh: test -f {{.waitForJobScript}}
+      - sh: test -f {{.unlockTemplate}}
 
   # To run backup jobs in parallel for all replicationsources:
   #  - kubectl get replicationsources --all-namespaces --no-headers | awk '{print $2, $1}' | xargs --max-procs=4 -l bash -c 'task vs:snapshot rsrc=$0 namespace=$1'

@@ -14,6 +14,15 @@ spec:
         - name: list
           image: docker.io/restic/restic:0.14.0
           args: ["snapshots"]
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            seccompProfile:
+              type: "RuntimeDefault"
+            capabilities:
+              drop: ["ALL"]
           envFrom:
             - secretRef:
                 name: "${rsrc}-restic-secret"
