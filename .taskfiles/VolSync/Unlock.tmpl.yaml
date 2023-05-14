@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "listlocks-${rsrc}-${ts}"
+  name: "unlock-${rsrc}-${ts}"
   namespace: "${namespace}"
 spec:
   ttlSecondsAfterFinished: 3600
@@ -11,9 +11,9 @@ spec:
       automountServiceAccountToken: false
       restartPolicy: OnFailure
       containers:
-        - name: listlocks
+        - name: unlock
           image: docker.io/restic/restic:0.14.0
-          args: ["list", "locks"]
+          args: ["unlock"]
           securityContext:
             runAsUser: 568
             runAsGroup: 568
