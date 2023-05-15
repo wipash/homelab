@@ -6,7 +6,7 @@ metadata:
   name: workloads
   namespace: flux-system
 spec:
-  interval: 2m0s
+  interval: 10m
   path: ./cluster/workloads
   prune: true
   sourceRef:
@@ -17,7 +17,6 @@ spec:
     secretRef:
       name: sops-age
   postBuild:
-    substitute: {}
     substituteFrom:
       - kind: ConfigMap
         name: cluster-settings
@@ -41,4 +40,6 @@ spec:
               - kind: Secret
                 name: cluster-secrets
       target:
-        labelSelector: substitution.flux.home.arpa/enabled=true
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: substitution.flux.home.arpa/disabled notin (true)
