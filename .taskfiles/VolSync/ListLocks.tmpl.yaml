@@ -13,7 +13,7 @@ spec:
       containers:
         - name: listlocks
           image: docker.io/restic/restic:0.14.0
-          args: ["list", "locks"]
+          args: ["list", "locks", "--no-lock", "--verbose"]
           securityContext:
             runAsUser: 568
             runAsGroup: 568
