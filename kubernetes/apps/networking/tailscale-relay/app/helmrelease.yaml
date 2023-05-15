@@ -30,7 +30,7 @@ spec:
   values:
     replicas: 1
     annotations:
-      secret.reloader.stakater.com/reload: tailscale-token-secret
+      secret.reloader.stakater.com/reload: tailscale-relay-secret
     image:
       repository: docker.io/mvisonneau/tailscale
       pullPolicy: IfNotPresent
