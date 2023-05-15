@@ -7,12 +7,12 @@ metadata:
 data:
   config.yaml: |
     peers:
-      - peer-address: ${GATEWAY_ADDRESS}
+      - peer-address: 10.0.16.1
         peer-asn: 65510
         my-asn: 65511
     address-pools:
       - name: default
         protocol: bgp
         addresses:
-          - ${NETWORK_BGP_SVC_CIDR}
+          - 172.16.10.0/24
         avoid-buggy-ips: true
