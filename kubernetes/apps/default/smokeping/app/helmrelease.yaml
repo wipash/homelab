@@ -33,7 +33,7 @@ spec:
         reloader.stakater.com/auto: "true"
     image:
       repository: ghcr.io/linuxserver/smokeping
-      tag: 2.7.3
+      tag: 2.8.2
     initContainers:
       01-init-config:
         image: ghcr.io/onedr0p/alpine:3.18.0@sha256:dd504f02473c176a0e68e4550ccaf6f6c0f14e9f64c08a59877f9c6153bf48a9
