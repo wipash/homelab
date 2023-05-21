@@ -34,7 +34,7 @@ spec:
     image:
       repository: docker.io/mvisonneau/tailscale
       pullPolicy: IfNotPresent
-      tag: 'v1.36.1'
+      tag: 'v1.40.1'
     resources:
       requests:
         cpu: 50m
