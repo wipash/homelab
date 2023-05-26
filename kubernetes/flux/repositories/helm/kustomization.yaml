@@ -33,3 +33,4 @@ resources:
   - ./vector.yaml
   - ./kyverno.yaml
   - ./descheduler.yaml
+  - ./actions-runner-controller.yaml
