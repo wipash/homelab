@@ -6,7 +6,6 @@
     ":disableRateLimiting",
     ":dependencyDashboard",
     ":semanticCommits",
-    ":enablePreCommit",
     ":automergeDigest",
     ":automergeBranch",
     "github>wipash/homelab//.github/renovate/allowedVersions.json5",

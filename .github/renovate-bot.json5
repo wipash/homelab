@@ -1,0 +1,6 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "username": "ShipWasher[bot]",
+    "gitAuthor": "ShipWasher <134689731+ShipWasher[bot]@users.noreply.github.com>",
+    "repositories": ["wipash/homelab"]
+}
