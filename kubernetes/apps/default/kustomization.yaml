@@ -37,3 +37,4 @@ resources:
   - ./smokeping/ks.yaml
   - ./hajimari/ks.yaml
   - ./qbittorrent/ks.yaml
+  - ./shlink/ks.yaml
