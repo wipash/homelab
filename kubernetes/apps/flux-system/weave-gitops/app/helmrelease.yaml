@@ -11,11 +11,11 @@ spec:
     spec:
       chart: weave-gitops
       version: 4.0.22
-      interval: 30m
       sourceRef:
         kind: HelmRepository
         name: weave-gitops
-  maxHistory: 3
+        namespace: flux-system
+  maxHistory: 2
   install:
     createNamespace: true
     remediation:
@@ -31,11 +31,11 @@ spec:
       create: true
       username: admin
       # passwordHash: from valuesFrom
-      oidcSecret:
-        create: true
-        clientID: weave-gitops
-        issuerURL: https://auth.mcgrath.nz
-        redirectURL: https://gitops.mcgrath.nz/oauth2/callback
+      # oidcSecret:
+      #   create: true
+      #   clientID: weave-gitops
+      #   issuerURL: https://auth.mcgrath.nz
+      #   redirectURL: https://gitops.mcgrath.nz/oauth2/callback
     ingress:
       enabled: true
       className: nginx
