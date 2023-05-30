@@ -54,7 +54,7 @@ spec:
           external-dns/is-public: "true"
           external-dns.alpha.kubernetes.io/target: "tunnel.mcgrath.nz"
         hosts:
-          - host: &host s.${SECRET_DOMAIN_2}
+          - host: &host shlink.mcgrath.nz
             paths:
               - path: /
                 pathType: Prefix
