@@ -116,9 +116,9 @@ spec:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
             - matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: In
-                values: ["hp1"]
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values: ["hp1"]
     resources:
       requests:
         cpu: 10m
