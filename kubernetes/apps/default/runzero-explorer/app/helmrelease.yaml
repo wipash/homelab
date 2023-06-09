@@ -33,7 +33,7 @@ spec:
         reloader.stakater.com/auto: "true"
     image:
       repository: ghcr.io/wipash/runzero
-      tag: latest@sha256:31c50fb7955957b3e975e12845e71d7447e87324f50a7bc5ff00de4c4a7e6124
+      tag: latest@sha256:3fa0b2fc2259485660e27f8e70e05701077bb48c2e87e274242d630b73db62b6
     env:
       TZ: Pacific/Auckland
       RUMBLE_AGENT_LOG_DEBUG: false
