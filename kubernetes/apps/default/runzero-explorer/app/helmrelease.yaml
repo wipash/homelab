@@ -33,11 +33,13 @@ spec:
         reloader.stakater.com/auto: "true"
     image:
       repository: ghcr.io/wipash/runzero
-      tag: latest@sha256:632668c929e014d292d794fd542624be1be120442b2f38bc6483b47e41c503a4
+      tag: latest@sha256:eb006aa000f5dbd9145d79c23e817e33d5e92d8c8af08805758af073c840eee4
     env:
       TZ: Pacific/Auckland
-      RUMBLE_AGENT_HOST_ID: 495da5856ba3c92d0f3d4cf7986d1725
       RUMBLE_AGENT_LOG_DEBUG: false
+    envFrom:
+      - secretRef:
+          name: runzero-explorer-secret
     service:
       main:
         enabled: false
