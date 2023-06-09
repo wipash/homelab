@@ -43,6 +43,8 @@ spec:
     service:
       main:
         enabled: false
+    securityContext:
+      privileged: true
     ingress:
       main:
         enabled: false
