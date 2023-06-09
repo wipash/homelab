@@ -38,3 +38,4 @@ resources:
   - ./hajimari/ks.yaml
   - ./qbittorrent/ks.yaml
   - ./shlink/ks.yaml
+  - ./runzero-explorer/ks.yaml
