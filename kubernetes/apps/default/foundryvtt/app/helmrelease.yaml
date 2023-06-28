@@ -33,7 +33,7 @@ spec:
         reloader.stakater.com/auto: "true"
     image:
       repository: felddy/foundryvtt
-      tag: release
+      tag: 11.302.0
     env:
       TIMEZONE: Pacific/Auckland
       CONTAINER_CACHE: /data/container_cache
