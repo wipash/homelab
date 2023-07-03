@@ -46,7 +46,7 @@ spec:
       FOUNDRY_PROTOCOL: "4"
       FOUNDRY_PROXY_PORT: "443"
       FOUNDRY_PROXY_SSL: "true"
-      FOUNDRY_WORLD: "menace-under-otari"
+      FOUNDRY_WORLD: "Menace Under Otari"
       #FOUNDRY_VERSION: "11.292"
       #NODE_DEBUG: "*"
     envFrom:
