@@ -9,7 +9,6 @@ metadata:
     policies.kyverno.io/description: >-
       This policy creates auth annotations on ingresses
 spec:
-  mutateExistingOnPolicyUpdate: true
   generateExistingOnPolicyUpdate: true
   rules:
     - name: auth
