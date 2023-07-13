@@ -24,6 +24,15 @@ tasks:
     cmds:
       - kubectl delete pods --field-selector status.phase=Failed -A --ignore-not-found=true
 
+  delete-terminating-pods:
+    desc: Delete pods in Terminating state
+    cmds:
+      - kubectl get pods -n default | grep Terminating | awk '{print $1}' | xargs kubectl delete pod --force --grace-period=0 -n default
+      - kubectl get pods -n home | grep Terminating | awk '{print $1}' | xargs kubectl delete pod --force --grace-period=0 -n home
+      - kubectl get pods -n web | grep Terminating | awk '{print $1}' | xargs kubectl delete pod --force --grace-period=0 -n web
+      - kubectl get pods -n networking | grep Terminating | awk '{print $1}' | xargs kubectl delete pod --force --grace-period=0 -n networking
+      - kubectl get pods -n monitoring | grep Terminating | awk '{print $1}' | xargs kubectl delete pod --force --grace-period=0 -n monitoring
+
   hr-restart:
     desc: Restart all failed Helm Releases
     cmds:
