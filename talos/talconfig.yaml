@@ -1,7 +1,7 @@
 ---
 clusterName: cluster-0
 
-talosVersion: v1.4.4
+talosVersion: v1.4.6
 kubernetesVersion: v1.27.1
 endpoint: https://cluster-0.${domainName}:6443
 
@@ -34,21 +34,32 @@ nodes:
     ipAddress: 10.0.16.134
     controlPlane: true
     installDisk: /dev/sda
+  - hostname: hp2.${domainName}
+    ipAddress: 10.0.16.135
+    controlPlane: true
+    installDisk: /dev/sda
+  - hostname: hp3.${domainName}
+    ipAddress: 10.0.16.136
+    controlPlane: true
+    installDisk: /dev/sda
 
 
 controlPlane:
   patches:
-    - "@./customInstaller-patch.yaml"
+    # - "@./customInstaller-patch.yaml" # Not needed when running stock Talos
     - "@./clusterMetricsExtraArgs-patch.yaml"
+    # - "@./unprivilegedPorts-patch.yaml" # Included in config below
+    - "@./removeAdmissionControl-patch.yaml"
+    # - "@./local-path-patch.yaml" # Included in config below
     - |-
       cluster:
         allowSchedulingOnMasters: true
         apiServer:
           extraArgs:
-            feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+            feature-gates: MixedProtocolLBService=true
         controllerManager:
           extraArgs:
-            feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+            feature-gates: MixedProtocolLBService=true
         discovery:
           registries:
             service:
