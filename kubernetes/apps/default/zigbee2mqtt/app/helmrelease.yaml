@@ -134,9 +134,10 @@ spec:
     resources:
       requests:
         cpu: 10m
-        memory: 100Mi
+        memory: 127M
       limits:
-        memory: 500Mi
+        cpu: 16m
+        memory: 222M
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -170,3 +171,10 @@ spec:
               secretKeyRef:
                 name: mosquitto-secret
                 key: password
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32M
+          limits:
+            cpu: 16m
+            memory: 37M

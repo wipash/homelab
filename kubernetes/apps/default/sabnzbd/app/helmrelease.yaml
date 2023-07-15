@@ -121,7 +121,8 @@ spec:
                   values: ["hp1"]
     resources:
       requests:
-        cpu: 10m
-        memory: 250Mi
+        cpu: 15m
+        memory: 204M
       limits:
-        memory: 8000Mi
+        cpu: 16m
+        memory: 1087M
