@@ -67,10 +67,10 @@ controlPlane:
         proxy:
           disabled: true
           extraArgs:
-            feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+            feature-gates: MixedProtocolLBService=true
         scheduler:
           extraArgs:
-            feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+            feature-gates: MixedProtocolLBService=true
 
       machine:
         files:
