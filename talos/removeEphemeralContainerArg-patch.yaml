@@ -1,0 +1,19 @@
+# This patch was required to remove the EphemeralContainers=True arg from some running nodes
+# Applied with:
+#  talosctl patch mc --nodes 10.0.16.135 --patch @removeEphemeralContainerArg-patch.yaml
+- op: replace
+  path: /cluster/scheduler/extraArgs
+  value:
+    feature-gates: MixedProtocolLBService=true
+- op: replace
+  path: /cluster/apiServer/extraArgs
+  value:
+    feature-gates: MixedProtocolLBService=true
+- op: replace
+  path: /cluster/controllerManager/extraArgs
+  value:
+    feature-gates: MixedProtocolLBService=true
+- op: replace
+  path: /cluster/proxy/extraArgs
+  value:
+    feature-gates: MixedProtocolLBService=true
