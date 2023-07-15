@@ -72,8 +72,8 @@ spec:
         nodes:
           - name: hp1
             devices:
-              - name: /dev/disk/by-id/ata-Samsung_SSD_860_EVO_500GB_S3YANB0M116883P
-              #- name: /dev/disk/by-id/nvme-WD_PC_SN810_SDCPNRY-256G-1006_22341Q800595
+              #- name: /dev/disk/by-id/ata-Samsung_SSD_860_EVO_500GB_S3YANB0M116883P
+              - name: /dev/disk/by-id/nvme-WD_PC_SN810_SDCPNRY-256G-1006_22341Q800595
           - name: lappy1
             devices:
               - name: /dev/disk/by-id/nvme-SAMSUNG_MZVLB512HAJQ-000H1_S3WTNX0M227157
