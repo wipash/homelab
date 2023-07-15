@@ -88,7 +88,8 @@ spec:
         mountPath: "-"
     resources:
       requests:
-        cpu: 10m
-        memory: 100Mi
+        cpu: 15m
+        memory: 94M
       limits:
-        memory: 750Mi
+        cpu: 53m
+        memory: 144M

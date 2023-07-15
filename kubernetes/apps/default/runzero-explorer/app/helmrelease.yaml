@@ -50,7 +50,8 @@ spec:
         enabled: false
     resources:
       requests:
-        cpu: 10m
-        memory: 100Mi
+        cpu: 125m
+        memory: 1168M
       limits:
-        memory: 4000Mi
+        cpu: 494m
+        memory: 1790M
