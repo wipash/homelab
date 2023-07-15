@@ -110,15 +110,15 @@ spec:
       incomplete:
         enabled: true
         type: emptyDir
-    # Pin to HP1 as it has a better temp drive
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: kubernetes.io/hostname
-                  operator: In
-                  values: ["hp1"]
+    # # Pin to HP1 as it has a better temp drive
+    # affinity:
+    #   nodeAffinity:
+    #     requiredDuringSchedulingIgnoredDuringExecution:
+    #       nodeSelectorTerms:
+    #         - matchExpressions:
+    #             - key: kubernetes.io/hostname
+    #               operator: In
+    #               values: ["hp1"]
     resources:
       requests:
         cpu: 15m
