@@ -64,6 +64,7 @@ spec:
         ssl: false
         urlPrefix: "/"
         port: 8080
+      removeOSDsIfOutAndSafeToRemove: true
       storage:
         useAllNodes: false
         useAllDevices: false
