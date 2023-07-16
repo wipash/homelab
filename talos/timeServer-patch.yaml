@@ -1,0 +1,8 @@
+---
+- op: replace
+  path: /machine/time
+  value:
+    disabled: false
+    servers:
+      #- 0.nz.pool.ntp.org
+      - 10.0.16.1
