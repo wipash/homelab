@@ -25,6 +25,14 @@ nodes:
   - hostname: hp1.${domainName}
     ipAddress: 10.0.16.132
     controlPlane: true
+    installDisk: /dev/disk/by-id/ata-Samsung_SSD_850_EVO_500GB_S2R9NX0H701141P
+  - hostname: lappy1.${domainName}
+    ipAddress: 10.0.16.133
+    controlPlane: true
+    installDisk: /dev/sda
+  - hostname: lappy2.${domainName}
+    ipAddress: 10.0.16.134
+    controlPlane: true
     installDisk: /dev/sda
   - hostname: hp2.${domainName}
     ipAddress: 10.0.16.135

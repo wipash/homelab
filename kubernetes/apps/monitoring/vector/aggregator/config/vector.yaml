@@ -51,6 +51,8 @@ transforms:
       - talos_kernel_logs
     source: |-
       .__host = replace!(.__host, "10.0.16.132", "hp1")
+      .__host = replace(.__host, "10.0.16.133", "lappy1")
+      .__host = replace(.__host, "10.0.16.134", "lappy2")
       .__host = replace(.__host, "10.0.16.135", "hp2")
       .__host = replace(.__host, "10.0.16.136", "hp3")
   talos_service_logs_xform:
@@ -59,6 +61,8 @@ transforms:
       - talos_service_logs
     source: |-
       .__host = replace!(.__host, "10.0.16.132", "hp1")
+      .__host = replace(.__host, "10.0.16.133", "lappy1")
+      .__host = replace(.__host, "10.0.16.134", "lappy2")
       .__host = replace(.__host, "10.0.16.135", "hp2")
       .__host = replace(.__host, "10.0.16.136", "hp3")
   kubernetes_remap:
