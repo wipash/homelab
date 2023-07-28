@@ -50,6 +50,10 @@ spec:
         ports:
           http:
             port: *port
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "1"
     probes:
       liveness: &probes
         enabled: true
