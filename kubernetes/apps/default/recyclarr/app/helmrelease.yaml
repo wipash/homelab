@@ -52,6 +52,10 @@ spec:
     service:
       main:
         enabled: false
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "1"
     podSecurityContext:
       runAsUser: 568
       runAsGroup: 568
