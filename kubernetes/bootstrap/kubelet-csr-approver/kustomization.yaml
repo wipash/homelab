@@ -10,6 +10,7 @@ helmCharts:
     releaseName: kubelet-csr-approver
     namespace: kube-system
     valuesInline:
+      bypassDnsResolution: true
       providerRegex: |
         ^.*$
 commonAnnotations:
