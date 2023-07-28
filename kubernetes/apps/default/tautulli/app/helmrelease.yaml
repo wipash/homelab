@@ -39,6 +39,10 @@ spec:
         ports:
           http:
             port: 8181
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "1"
     ingress:
       main:
         enabled: true
