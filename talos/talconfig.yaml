@@ -25,15 +25,45 @@ nodes:
   - hostname: hp1.${domainName}
     ipAddress: 10.0.16.132
     controlPlane: true
-    installDisk: /dev/disk/by-id/ata-Samsung_SSD_850_EVO_500GB_S2R9NX0H701141P
+    installDisk: /dev/sda
+    disableSearchDomain: true
+    nameservers:
+      - 10.0.16.4
+    networkInterfaces:
+      - interface: eth0
+        addresses:
+          - 10.0.16.132/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.16.1
   - hostname: hp2.${domainName}
     ipAddress: 10.0.16.135
     controlPlane: true
     installDisk: /dev/sda
+    disableSearchDomain: true
+    nameservers:
+      - 10.0.16.4
+    networkInterfaces:
+      - interface: eth0
+        addresses:
+          - 10.0.16.135/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.16.1
   - hostname: hp3.${domainName}
     ipAddress: 10.0.16.136
     controlPlane: true
     installDisk: /dev/sda
+    disableSearchDomain: true
+    nameservers:
+      - 10.0.16.4
+    networkInterfaces:
+      - interface: eth0
+        addresses:
+          - 10.0.16.136/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.16.1
 
 
 controlPlane:
@@ -74,8 +104,10 @@ controlPlane:
             op: create
         kubelet:
           extraArgs:
-            feature-gates: GracefulNodeShutdown=true,MixedProtocolLBService=true
+            feature-gates: CronJobTimeZone=true,GracefulNodeShutdown=true,NewVolumeManagerReconstruction=false
             rotate-server-certificates: "true"
+          extraConfig:
+            maxPods: 150
           extraMounts:
             - destination: /opt/local-path-provisioner
               type: bind
@@ -87,18 +119,25 @@ controlPlane:
         install:
           extraKernelArgs:
             - "talos.logging.kernel=udp://172.16.10.5:6050/"
+            - "cpufreq.default_governor=performance"
+          extensions:
+            - image: ghcr.io/siderolabs/i915-ucode:20230625
+            - image: ghcr.io/siderolabs/intel-ucode:20230613
         logging:
           destinations:
             - endpoint: "udp://172.16.10.5:6051/"
               format: json_lines
+        ## Disabled to rely on DNS instead
         network:
           extraHostEntries:
-            - ip: ${clusterEndpointIP}
+            - ip: 10.0.16.132
               aliases:
                 - cluster-0.${domainName}
         sysctls:
           fs.inotify.max_user_watches: "1048576"
           fs.inotify.max_user_instances: "8192"
+          # For CloudflareD QUIC, sets maximum receive buffer size to roughly 2.5 MB.
+          net.core.rmem_max: 2500000
         time:
           disabled: false
           servers:
