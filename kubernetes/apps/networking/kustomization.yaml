@@ -13,3 +13,4 @@ resources:
   - ./tailscale-relay/ks.yaml
   # Standard Resources
   #- ./external-services
+  - ./cloudflared/ks.yaml
