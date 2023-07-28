@@ -58,3 +58,7 @@ spec:
       persistentVolumeClaimName: wordpress-1-v1
     mariadb:
       enabled: false
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "1"
