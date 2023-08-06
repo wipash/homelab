@@ -6,7 +6,7 @@ metadata:
   name: local-path-provisioner
   namespace: kube-system
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: ./deploy/chart/local-path-provisioner
@@ -14,9 +14,8 @@ spec:
         kind: GitRepository
         name: local-path-provisioner
         namespace: flux-system
-  maxHistory: 3
+  maxHistory: 2
   install:
-    createNamespace: true
     remediation:
       retries: 3
   upgrade:
@@ -26,6 +25,7 @@ spec:
   uninstall:
     keepHistory: false
   values:
+    replicaCount: 2
     helperImage:
       repository: public.ecr.aws/docker/library/busybox
       tag: latest
