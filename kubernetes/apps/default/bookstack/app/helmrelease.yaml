@@ -85,7 +85,7 @@ spec:
       main:
         ports:
           http:
-            port: &port 8080
+            port: &port 6875
     # serviceMonitor:
     #   main:
     #     enabled: true
@@ -105,21 +105,21 @@ spec:
         tls:
           - hosts:
               - *host
-    probes:
-      liveness: &probes
-        enabled: true
-        custom: true
-        spec:
-          httpGet:
-            path: /healthcheck
-            port: *port
-          initialDelaySeconds: 0
-          periodSeconds: 10
-          timeoutSeconds: 1
-          failureThreshold: 3
-      readiness: *probes
-      startup:
-        enabled: false
+    # probes:
+    #   liveness: &probes
+    #     enabled: true
+    #     custom: true
+    #     spec:
+    #       httpGet:
+    #         path: /healthcheck
+    #         port: *port
+    #       initialDelaySeconds: 0
+    #       periodSeconds: 10
+    #       timeoutSeconds: 1
+    #       failureThreshold: 3
+    #   readiness: *probes
+    #   startup:
+    #     enabled: false
     volumeClaimTemplates:
       - name: config
         mountPath: /config
