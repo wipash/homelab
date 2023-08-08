@@ -46,6 +46,8 @@ spec:
       repository: ghcr.io/linuxserver/bookstack
       tag: version-v21.10.3
     env:
+      PUID: 568
+      PGID: 568
       TZ: Pacific/Auckland
       APP_URL: https://bookstack.mcgrath.nz/
       APP_VIEWS_BOOKS: list
@@ -118,11 +120,6 @@ spec:
       readiness: *probes
       startup:
         enabled: false
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: OnRootMismatch
     volumeClaimTemplates:
       - name: config
         mountPath: /config
