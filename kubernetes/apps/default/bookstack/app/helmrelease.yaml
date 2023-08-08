@@ -85,7 +85,7 @@ spec:
       main:
         ports:
           http:
-            port: &port 6875
+            port: &port 80
     # serviceMonitor:
     #   main:
     #     enabled: true
