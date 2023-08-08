@@ -1,0 +1,138 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.devbu.io/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: &app bookstack
+  namespace: default
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.5.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    initContainers:
+      backup:
+        image: alpine:latest
+        command:
+          - /bin/sh
+          - -c
+        args:
+          - mkdir -p /config/backup && chown 568:568 /config/backup
+        volumeMounts:
+          - name: config
+            mountPath: /config
+    controller:
+      type: statefulset
+      annotations:
+        reloader.stakater.com/auto: "true"
+    image:
+      repository: ghcr.io/linuxserver/bookstack
+      tag: version-v21.10.3
+    env:
+      TZ: Pacific/Auckland
+      APP_URL: https://bookstack.mcgrath.nz/
+      APP_VIEWS_BOOKS: list
+      APP_VIEWS_BOOKSHELVES: grid
+      APP_VIEWS_BOOKSHELF: grid
+      DB_HOST: "10.0.16.16"
+      DB_PORT: 3306
+      DB_DATABASE: bookstack
+      DB_USERNAME: bookstack
+      # MAIL_FROM_NAME: "BookStack"
+      # MAIL_FROM: ${SECRET_SMTP_USER}
+      # MAIL_HOST: ${SECRET_SMTP}
+      # MAIL_PORT: 587
+      # MAIL_USERNAME: ${SECRET_SMTP_USER}
+      # MAIL_PASSWORD: ${SECRET_SMTP_PASSWORD}
+      # MAIL_ENCRYPTION: SSL
+      AUTH_METHOD: oidc
+      OIDC_NAME: Authelia
+      OIDC_DISPLAY_NAME_CLAIMS: name
+      OIDC_CLIENT_ID: bookstack
+      OIDC_ISSUER: https://auth.mcgrath.nz
+      OIDC_ISSUER_DISCOVER: true
+      OIDC_AUTH_ENDPOINT: https://auth.mcgrath.nz/api/oidc/authorization
+      OIDC_TOKEN_ENDPOINT: https://auth.mcgrath.nz/api/oidc/token
+      # STORAGE_TYPE: s3
+      # STORAGE_S3_KEY: ${SECRET_MINIO_ACCESS_KEY}
+      # STORAGE_S3_SECRET: ${SECRET_MINIO_SECRET_KEY}
+      # STORAGE_S3_BUCKET: bookstack
+      # STORAGE_S3_REGION: minio
+      # STORAGE_S3_ENDPOINT: https://${SECRET_MINIO_HOST}
+    envFrom:
+      - secretRef:
+          name: bookstack-secret
+    service:
+      main:
+        ports:
+          http:
+            port: &port 8080
+    # serviceMonitor:
+    #   main:
+    #     enabled: true
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: nginx
+        annotations:
+          external-dns/is-public: "true"
+          external-dns.alpha.kubernetes.io/target: "tunnel.mcgrath.nz"
+          hajimari.io/icon: notebook-edit-outline
+        hosts:
+          - host: &host "{{ .Release.Name }}.mcgrath.nz"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+    probes:
+      liveness: &probes
+        enabled: true
+        custom: true
+        spec:
+          httpGet:
+            path: /healthcheck
+            port: *port
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
+      readiness: *probes
+      startup:
+        enabled: false
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: OnRootMismatch
+    volumeClaimTemplates:
+      - name: config
+        mountPath: /config
+        accessMode: ReadWriteOnce
+        size: 5Gi
+        storageClass: ceph-block
+    resources:
+      requests:
+        cpu: 15m
+        memory: 64M
+      limits:
+        cpu: 16m
+        memory: 500M
