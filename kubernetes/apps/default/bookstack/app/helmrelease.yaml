@@ -65,6 +65,7 @@ spec:
       # MAIL_PASSWORD: ${SECRET_SMTP_PASSWORD}
       # MAIL_ENCRYPTION: SSL
       AUTH_METHOD: oidc
+      AUTH_AUTO_INITIATE: true
       OIDC_NAME: Authelia
       OIDC_DISPLAY_NAME_CLAIMS: name
       OIDC_CLIENT_ID: bookstack
