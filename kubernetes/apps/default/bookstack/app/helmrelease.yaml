@@ -66,13 +66,17 @@ spec:
       # MAIL_ENCRYPTION: SSL
       AUTH_METHOD: oidc
       AUTH_AUTO_INITIATE: true
-      OIDC_NAME: Authelia
+      OIDC_NAME: AzureAD
+      #OIDC_CLIENT_ID: from secret
+      #OIDC_CLIENT_SECRET: from secret
       OIDC_DISPLAY_NAME_CLAIMS: name
-      OIDC_CLIENT_ID: bookstack
-      OIDC_ISSUER: https://auth.mcgrath.nz
+      #OIDC_ISSUER: from secret
       OIDC_ISSUER_DISCOVER: true
-      OIDC_AUTH_ENDPOINT: https://auth.mcgrath.nz/api/oidc/authorization
-      OIDC_TOKEN_ENDPOINT: https://auth.mcgrath.nz/api/oidc/token
+      #OIDC_NAME: Authelia
+      #OIDC_CLIENT_ID: bookstack
+      #OIDC_ISSUER: https://auth.mcgrath.nz
+      #OIDC_AUTH_ENDPOINT: https://auth.mcgrath.nz/api/oidc/authorization
+      #OIDC_TOKEN_ENDPOINT: https://auth.mcgrath.nz/api/oidc/token
       # STORAGE_TYPE: s3
       # STORAGE_S3_KEY: ${SECRET_MINIO_ACCESS_KEY}
       # STORAGE_S3_SECRET: ${SECRET_MINIO_SECRET_KEY}
