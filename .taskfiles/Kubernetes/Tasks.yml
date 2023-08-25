@@ -11,7 +11,7 @@ tasks:
       namespace: '{{.namespace | default "default"}}'
     cmds:
       - |
-        kubectl run -n {{.namespace}} debug-{{.claim}} -i --tty --rm --image=null --privileged --overrides='
+        kubectl run -n {{.namespace}} debug-podmount -i --tty --rm --image=null --privileged --overrides='
           {
             "apiVersion": "v1",
             "spec": {
