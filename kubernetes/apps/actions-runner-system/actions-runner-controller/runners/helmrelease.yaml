@@ -9,7 +9,7 @@ spec:
   interval: 30m
   chart:
     spec:
-      chart: actions-runner-controller-charts/gha-runner-scale-set
+      chart: gha-runner-scale-set
       version: 0.5.0
       sourceRef:
         kind: HelmRepository
@@ -17,7 +17,6 @@ spec:
         namespace: flux-system
   maxHistory: 2
   install:
-    createNamespace: true
     remediation:
       retries: 3
   upgrade:
