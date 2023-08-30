@@ -44,7 +44,7 @@ spec:
         reloader.stakater.com/auto: "true"
     image:
       repository: ghcr.io/linuxserver/bookstack
-      tag: 23.06.20230703
+      tag: 23.08.20230830
     env:
       PUID: 568
       PGID: 568
