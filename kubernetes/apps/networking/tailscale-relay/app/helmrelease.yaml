@@ -42,7 +42,7 @@ spec:
     config:
       variables:
         TAILSCALE_ADVERTISE_EXIT_NODE: "true"
-        TAILSCALE_ADVERTISE_ROUTES: "${NETWORK_K8S_POD_CIDR},${NETWORK_BGP_SVC_CIDR},10.0.16.0/24"
+        TAILSCALE_ADVERTISE_ROUTES: "${NETWORK_K8S_POD_CIDR},${NETWORK_BGP_SVC_CIDR},10.0.16.0/24,10.0.10.0/24"
         TAILSCALE_HOST_ROUTES: "true"
   valuesFrom:
     - kind: Secret
