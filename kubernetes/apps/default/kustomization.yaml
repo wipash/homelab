@@ -40,3 +40,4 @@ resources:
   - ./shlink/ks.yaml
   - ./runzero-explorer/ks.yaml
   - ./bookstack/ks.yaml
+  - ./wordpress/ks.yaml
