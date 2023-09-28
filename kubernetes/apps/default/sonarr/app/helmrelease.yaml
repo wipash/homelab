@@ -37,6 +37,8 @@ spec:
     env:
       TZ: Pacific/Auckland
       PUSHOVER_DEBUG: "false"
+      SONARR__AUTHENTICATION_METHOD: External
+      SONARR__AUTHENTICATION_REQUIRED: DisabledForLocalAddresses
       SONARR__INSTANCE_NAME: Sonarr
       SONARR__PORT: &port 80
       SONARR__LOG_LEVEL: info

@@ -38,6 +38,8 @@ spec:
       TZ: Pacific/Auckland
       PUSHOVER_DEBUG: "false"
       PUSHOVER_APP_URL: &host "{{ .Release.Name }}.mcgrath.nz"
+      RADARR__AUTHENTICATION_METHOD: External
+      RADARR__AUTHENTICATION_REQUIRED: DisabledForLocalAddresses
       RADARR__INSTANCE_NAME: Radarr
       RADARR__PORT: &port 80
       RADARR__APPLICATION_URL: "https://{{ .Release.Name }}.mcgrath.nz"
