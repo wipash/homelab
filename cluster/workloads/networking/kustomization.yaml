@@ -5,5 +5,5 @@ resources:
   - namespace.yaml
   - external-dns
   - external-dns-pihole
-  - external-services
+  #- external-services
   - unifi
