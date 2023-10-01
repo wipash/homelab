@@ -78,6 +78,14 @@ spec:
     #   readiness: *probes
     #   startup:
     #     enabled: false
+    persistence:
+      php-config-file:
+        enabled: true
+        type: configMap
+        name: wordpress-sparkle-php-configmap
+        subPath: uploads.ini
+        mountPath: /usr/local/etc/php/conf.d/uploads.ini
+        readOnly: true
     volumeClaimTemplates:
       - name: config
         mountPath: /var/www/html
