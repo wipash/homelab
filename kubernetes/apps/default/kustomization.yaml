@@ -41,3 +41,4 @@ resources:
   - ./runzero-explorer/ks.yaml
   - ./bookstack/ks.yaml
   - ./wordpress/ks.yaml
+  - ./paperless/ks.yaml
