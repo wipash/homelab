@@ -37,6 +37,7 @@ spec:
         externalTrafficPolicy: Local
       ingressClassResource:
         default: true
+      allowSnippetAnnotations: true
       config:
         client-body-buffer-size: 100M
         client-body-timeout: 120
