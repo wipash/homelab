@@ -15,7 +15,7 @@ resources:
   #- frigate
   # - esphome
   - n8n
-  - paperless
+  # - paperless
 #  - valheim
   # - homebox
   #- your-spotify
