@@ -10,8 +10,11 @@ data:
   PAPERLESS_ALLOWED_HOSTS: paperless.mcgrath.nz
   PAPERLESS_PORT: "8000"
   PAPERLESS_TIME_ZONE: "Pacific/Auckland"
-  PAPERLESS_WEBSERVER_WORKERS: "2"
-  PAPERLESS_TASK_WORKERS: "2"
+
+  # Directly impacts performance and ram usage
+  PAPERLESS_WEBSERVER_WORKERS: "1"
+  PAPERLESS_TASK_WORKERS: "1"
+  PAPERLESS_THREADS_PER_WORKER: "1"
 
   # Configure Remote User auth
   PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
