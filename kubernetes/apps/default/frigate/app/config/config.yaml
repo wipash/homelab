@@ -64,6 +64,8 @@ snapshots:
     default: 14
 
 go2rtc:
+  log:
+    exec: trace
   streams:
     fdc_hq:
       - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.11:554/cam/realmonitor?channel=1&subtype=0#audio=aac"
