@@ -64,19 +64,20 @@ snapshots:
     default: 14
 
 go2rtc:
-  log:
-    exec: trace
   streams:
     fdc_hq:
-      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.11:554/cam/realmonitor?channel=1&subtype=0#audio=aac"
+      - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.11:554/cam/realmonitor?channel=1&subtype=0"
+      - ffmpeg:fdc_hq#audio=aac
     fdc_lq:
       - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.11:554/cam/realmonitor?channel=1&subtype=2"
     sdc_hq:
-      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.12:554/cam/realmonitor?channel=1&subtype=0#audio=aac"
+      - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.12:554/cam/realmonitor?channel=1&subtype=0"
+      - ffmpeg:sdc_hq#audio=aac
     sdc_lq:
       - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.12:554/cam/realmonitor?channel=1&subtype=2"
     bdc_hq:
-      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.13:554/cam/realmonitor?channel=1&subtype=0#audio=aac"
+      - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.13:554/cam/realmonitor?channel=1&subtype=0"
+      - ffmpeg:bdc_hq#audio=aac
     bdc_lq:
       - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.13:554/cam/realmonitor?channel=1&subtype=2"
   webrtc:
@@ -100,10 +101,10 @@ cameras:
             - 0,310,137,154,246,121,463,53,782,54,909,63,1053,129,1070,80,1084,0,0,0
     ffmpeg:
       inputs:
-        - path: rtsp://127.0.0.1:8554/fdc_hq
+        - path: "rtsp://127.0.0.1:8554/fdc_hq?video=copy&audio=aac"
           input_args: preset-rtsp-restream
           roles: ["record"]
-        - path: rtsp://127.0.0.1:8554/fdc_lq
+        - path: "rtsp://127.0.0.1:8554/fdc_lq?video=copy"
           input_args: preset-rtsp-restream
           roles: ["detect"]
     live:
@@ -123,10 +124,10 @@ cameras:
         - 626,197,1081,484,1280,385,1280,0,454,0,475,69,633,108
     ffmpeg:
       inputs:
-        - path: rtsp://127.0.0.1:8554/bdc_hq
+        - path: "rtsp://127.0.0.1:8554/bdc_hq?video=copy&audio=aac"
           input_args: preset-rtsp-restream
           roles: ["record"]
-        - path: rtsp://127.0.0.1:8554/bdc_lq
+        - path: "rtsp://127.0.0.1:8554/bdc_lq?video=copy"
           input_args: preset-rtsp-restream
           roles: ["detect"]
     live:
@@ -145,10 +146,10 @@ cameras:
         - 1280,446,1280,0,844,0
     ffmpeg:
       inputs:
-        - path: rtsp://127.0.0.1:8554/sdc_hq
+        - path: "rtsp://127.0.0.1:8554/sdc_hq?video=copy&audio=aac"
           input_args: preset-rtsp-restream
           roles: ["record"]
-        - path: rtsp://127.0.0.1:8554/sdc_lq
+        - path: "rtsp://127.0.0.1:8554/sdc_lq?video=copy"
           input_args: preset-rtsp-restream
           roles: ["detect"]
     live:
