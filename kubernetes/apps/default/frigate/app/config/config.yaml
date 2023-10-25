@@ -70,15 +70,15 @@ go2rtc:
     fdc_hq:
       - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.11:554/cam/realmonitor?channel=1&subtype=0#audio=aac"
     fdc_lq:
-      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.11:554/cam/realmonitor?channel=1&subtype=2"
+      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.11:554/cam/realmonitor?channel=1&subtype=2#audio=aac"
     sdc_hq:
       - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.12:554/cam/realmonitor?channel=1&subtype=0#audio=aac"
     sdc_lq:
-      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.12:554/cam/realmonitor?channel=1&subtype=2"
+      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.12:554/cam/realmonitor?channel=1&subtype=2#audio=aac"
     bdc_hq:
       - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.13:554/cam/realmonitor?channel=1&subtype=0#audio=aac"
     bdc_lq:
-      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.13:554/cam/realmonitor?channel=1&subtype=2"
+      - "ffmpeg:rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.13:554/cam/realmonitor?channel=1&subtype=2#audio=aac"
   webrtc:
     listen: ":8555"
     candidates:
