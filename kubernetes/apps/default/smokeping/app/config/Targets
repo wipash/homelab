@@ -212,22 +212,22 @@ menu = AKL IX Superloop
 title = AKL IX Superloop - AS38195
 host = as38195.akl.ix.nz
 
-++ as64073ix - Veta
+++ as64073ix
 menu = AKL IX Veta
 title = AKL IX Veta - AS64073
 host = as64073.akl.ix.nz
 
-++ Quic - BNG1
+++ QuicBNG1
 menu = Quic - BNG1
 title = Quic - BNG1
 host = bng1.quic.net.nz
 
-++ Quic - BNG2 - Christchurch
+++ QuicBNG2Christchurch
 menu = Quic - BNG2 - Christchurch
 title = Quic - BNG2 - Christchurch
 host = bng2.quic.net.nz
 
-++ Quic - BNG3 - Auckland
+++ QuicBNG3Auckland
 menu = Quic - BNG3 - Auckland
 title = Quic - BNG3 - Auckland
 host = bng3.quic.net.nz
