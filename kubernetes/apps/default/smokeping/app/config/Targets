@@ -237,7 +237,8 @@ host = bng3.quic.net.nz
 menu = AWS Regions
 title = AWS Regions
 probe = Curl
-urlformat = http://%host%/latency-test.json
+urlformat = https://%host%/latency-test.json
+insecure_ssl = 1
 
 ++ Sydney
 menu = Sydney
