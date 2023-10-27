@@ -12,6 +12,7 @@ configMapGenerator:
       - General=./config/General
       - Presentation=./config/Presentation
       - Targets=./config/Targets
+      - Probes=./config/Probes
 generatorOptions:
   disableNameSuffixHash: true
   annotations:
