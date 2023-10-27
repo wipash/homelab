@@ -236,46 +236,40 @@ host = bng3.quic.net.nz
 
 menu = AWS Regions
 title = AWS Regions
-probe = EchoPingHttp
+probe = Curl
+urlformat = http://%host%/latency-test.json
 
 ++ Sydney
 menu = Sydney
 title = Sydney - ap-southeast-2
 host = astap-southeast-2.s3.ap-southeast-2.amazonaws.com
-url = /latency-test.json
 
 ++ Melbourne
 menu = Melbourne
 title = Melbourne - ap-southeast-4
 host = astap-southeast-4.s3.ap-southeast-4.amazonaws.com
-url = /latency-test.json
 
 ++ NCalifornia
 menu = N. California
 title = N. California - us-west-1
 host = astus-west-1.s3.us-west-1.amazonaws.com
-url = /latency-test.json
 
 ++ Oregon
 menu = Oregon
 title = Oregon - us-west-2
 host = astus-west-2.s3.us-west-2.amazonaws.com
-url = /latency-test.json
 
 ++ NVirginia
 menu = N. Virginia
 title = N. Virginia - us-east-1
 host = astus-east-1.s3.amazonaws.com
-url = /latency-test.json
 
 ++ Ohio
 menu = Ohio
 title = Ohio - us-east-2
 host = astus-east-2.s3.us-east-2.amazonaws.com
-url = /latency-test.json
 
 ++ London
 menu = London
 title = London - eu-west-2
 host = asteu-west-2.s3.eu-west-2.amazonaws.com
-url = /latency-test.json
