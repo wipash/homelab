@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://frigate.mcgrath.nz/api/config/schema.json
 mqtt:
   host: mosquitto.default.svc.cluster.local
   port: 1883
@@ -41,7 +42,7 @@ ffmpeg:
 detect:
   width: 704
   height: 576
-  fps: 10
+  fps: 5
 
 # Global recording configuration
 record:
