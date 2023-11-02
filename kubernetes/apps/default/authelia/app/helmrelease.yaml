@@ -59,7 +59,7 @@ spec:
       AUTHELIA_DUO_API_DISABLE: "true"
       AUTHELIA_LOG_LEVEL: info
       AUTHELIA_NOTIFIER_SMTP_DISABLE_REQUIRE_TLS: "true"
-      AUTHELIA_NOTIFIER_SMTP_HOST: smtp-relay.home.svc.cluster.local
+      AUTHELIA_NOTIFIER_SMTP_HOST: smtp-relay.default.svc.cluster.local
       AUTHELIA_NOTIFIER_SMTP_PORT: 2525
       AUTHELIA_NOTIFIER_SMTP_SENDER: "Authelia <authelia@mail.mcgrath.nz>"
       AUTHELIA_NOTIFIER_DISABLE_STARTUP_CHECK: "true"

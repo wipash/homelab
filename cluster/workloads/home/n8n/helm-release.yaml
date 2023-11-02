@@ -53,7 +53,7 @@ spec:
       EXECUTIONS_DATA_PRUNE: true
       EXECUTIONS_DATA_MAX_AGE: 336
       N8N_EMAIL_MODE: smtp
-      N8N_SMTP_HOST: smtp-relay.home.svc.cluster.local
+      N8N_SMTP_HOST: smtp-relay.default.svc.cluster.local
       N8N_SMTP_PORT: 2525
       N8N_SMTP_SSL: false
       N8N_SMTP_SENDER: n8n@${SECRET_DOMAIN}

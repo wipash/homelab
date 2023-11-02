@@ -51,7 +51,7 @@ spec:
               ALLOW_SIGNUP: false
               API_DOCS: false
               TZ: Pacific/Auckland
-              SMTP_HOST: smtp-relay.home.svc.cluster.local
+              SMTP_HOST: smtp-relay.default.svc.cluster.local
               SMTP_PORT: 2525
               SMTP_AUTH_STRATEGY: NONE
               SMTP_FROM_EMAIL: mealie@mail.mcgrath.nz
