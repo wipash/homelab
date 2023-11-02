@@ -8,7 +8,7 @@ resources:
   #- pai
   # - node-red
   #- mosquitto
-  - smtp-relay
+  #- smtp-relay
   - monica
   #- home-assistant
   - homer

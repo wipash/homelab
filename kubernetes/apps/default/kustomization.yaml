@@ -43,3 +43,4 @@ resources:
   - ./wordpress/ks.yaml
   - ./paperless/ks.yaml
   - ./mealie/ks.yaml
+  - ./smtp-relay/ks.yaml
