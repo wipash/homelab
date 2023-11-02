@@ -13,6 +13,9 @@ data:
         group: internal
         url: https://homebox.mcgrath.nz
         interval: 1m
+        ui:
+          hide-hostname: true
+          hide-url: true
         client:
           insecure: true
         conditions:
