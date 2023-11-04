@@ -96,6 +96,9 @@ cameras:
       driveway:
         coordinates: 980,221,232,176,0,382,0,720,1098,720
     objects:
+      track:
+        - person
+        - car
       filters:
         person:
           mask:
