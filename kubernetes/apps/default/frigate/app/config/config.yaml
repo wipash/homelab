@@ -98,7 +98,7 @@ cameras:
     objects:
       track:
         - person
-        - car
+        # - car
       filters:
         person:
           mask:
