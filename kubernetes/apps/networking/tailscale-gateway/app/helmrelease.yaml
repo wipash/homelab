@@ -38,7 +38,7 @@ spec:
             env:
               TZ: ${TIMEZONE}
               NO_AUTOUPDATE: "true"
-              SA_NAME: tailscale
+              SA_NAME: tailscale-gateway
               TS_USERSPACE: true
               TS_KUBE_SECRET: tailscale-state
               TS_EXTRA_ARGS: --advertise-exit-node
