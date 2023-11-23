@@ -47,7 +47,7 @@ spec:
               TS_HOSTNAME: "tailscale-k8s-gateway"
             envFrom:
               - secretRef:
-                  name: tailscale-secret
+                  name: tailscale-gateway-secret
             resources:
               requests:
                 cpu: 5m
