@@ -83,7 +83,7 @@ spec:
       #       port: *port
       #       protocol: UDP
     serviceAccount:
-      name: tailscale
+      name: tailscale-gateway
     serviceMonitor:
       main:
         enabled: true
