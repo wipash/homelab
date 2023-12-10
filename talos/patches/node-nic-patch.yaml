@@ -1,0 +1,10 @@
+---
+# Was used as a one-off to change IP of HP1, and assign a VIP to all nodes
+- op: add
+  path: /machine/network/interfaces/0/vip
+  value:
+    ip: 10.0.16.132
+# - op: replace
+#   path: /machine/network/interfaces/0/addresses
+#   value:
+#     - 10.0.16.133/24
