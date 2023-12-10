@@ -82,23 +82,12 @@ controlPlane:
     - |-
       cluster:
         allowSchedulingOnMasters: true
-        apiServer:
-          extraArgs:
-            feature-gates: MixedProtocolLBService=true
-        controllerManager:
-          extraArgs:
-            feature-gates: MixedProtocolLBService=true
         discovery:
           registries:
             service:
               disabled: true
         proxy:
           disabled: true
-          extraArgs:
-            feature-gates: MixedProtocolLBService=true
-        scheduler:
-          extraArgs:
-            feature-gates: MixedProtocolLBService=true
 
       machine:
         files:
@@ -112,6 +101,9 @@ controlPlane:
           extraArgs:
             feature-gates: CronJobTimeZone=true,GracefulNodeShutdown=true,NewVolumeManagerReconstruction=false
             rotate-server-certificates: "true"
+          nodeIP:
+            validSubnets:
+              - 10.0.16.0/24
           extraConfig:
             maxPods: 150
           extraMounts:
