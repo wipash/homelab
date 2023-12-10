@@ -2,27 +2,28 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: paperless-nfs
+  name: frigate-nfs
 spec:
-  storageClassName: paperless-nfs
+  storageClassName: frigate-nfs
   capacity:
     storage: 1Mi # Size does not matter
   accessModes: ["ReadWriteMany"]
   persistentVolumeReclaimPolicy: Retain
   nfs:
     server: 10.0.16.16
-    path: /volume1/Data/Docs/paperless/
+    path: /volume1/Frigate
   # Note: The first two options are strictly for NFSv4.2
   #mountOptions: ["nfsvers=4.2", "nconnect=8", "hard", "noatime"]
+  mountOptions: ["hard", "noatime"]
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: paperless-nfs
+  name: frigate-nfs
   namespace: default
 spec:
   accessModes: ["ReadWriteMany"]
-  storageClassName: paperless-nfs
+  storageClassName: frigate-nfs
   resources:
     requests:
       storage: 1Mi # Size does not matter
