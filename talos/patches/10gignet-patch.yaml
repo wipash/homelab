@@ -1,0 +1,6 @@
+machine:
+  network:
+    interfaces:
+      - interface: eth1
+        addresses:
+          - 127.20.0.4/24
