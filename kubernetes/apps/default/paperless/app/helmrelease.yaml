@@ -84,6 +84,10 @@ spec:
 
     persistence:
       library:
-        existingClaim: paperless-nfs
+        enabled: true
+        type: nfs
+        server: 172.20.0.1
+        path: /volume1/Data/Docs/paperless
+        mountPath: /library
         globalMounts:
           - path: /library
