@@ -10,7 +10,7 @@ spec:
   accessModes: ["ReadWriteMany"]
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    server: 10.0.16.16
+    server: 172.20.0.1
     path: /volume1/Frigate
   # Note: The first two options are strictly for NFSv4.2
   #mountOptions: ["nfsvers=4.2", "nconnect=8", "hard", "noatime"]
