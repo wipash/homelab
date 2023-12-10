@@ -11,7 +11,7 @@ talhelper genconfig
 talosctl config merge ./clusterconfig/talosconfig
 
 echo "Applying to hp1"
-talosctl apply-config --insecure --nodes 10.0.16.132 --file "$(find ./clusterconfig -name "*hp1*")"
+talosctl apply-config --insecure --nodes 10.0.16.133 --file "$(find ./clusterconfig -name "*hp1*")"
 
 echo "Applying to hp2"
 talosctl apply-config --insecure --nodes 10.0.16.135 --file "$(find ./clusterconfig -name "*hp2*")"
@@ -23,7 +23,7 @@ echo "Waiting 2 mins"
 sleep 120
 
 echo "Bootstrapping cluster"
-talosctl bootstrap -n 10.0.16.132
+talosctl bootstrap -n 10.0.16.133
 
 echo "Waiting 3 mins"
 sleep 180
