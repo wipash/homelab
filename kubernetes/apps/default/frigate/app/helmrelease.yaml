@@ -118,8 +118,10 @@ spec:
         readOnly: true
       media:
         enabled: true
-        existingClaim: frigate-nfs
         mountPath: /media
+        type: nfs
+        server: 172.20.0.1
+        path: /volume1/Frigate
       cache:
         enabled: true
         type: emptyDir
