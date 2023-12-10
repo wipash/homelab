@@ -23,7 +23,7 @@ additionalMachineCertSans:
 
 nodes:
   - hostname: hp1.${domainName}
-    ipAddress: 10.0.16.132
+    ipAddress: 10.0.16.133
     controlPlane: true
     installDisk: /dev/sda
     disableSearchDomain: true
@@ -31,8 +31,10 @@ nodes:
       - 10.0.16.4
     networkInterfaces:
       - interface: eth0
+        vip:
+          ip: ${clusterEndpointIP}
         addresses:
-          - 10.0.16.132/24
+          - 10.0.16.133/24
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.16.1
@@ -45,6 +47,8 @@ nodes:
       - 10.0.16.4
     networkInterfaces:
       - interface: eth0
+        vip:
+          ip: ${clusterEndpointIP}
         addresses:
           - 10.0.16.135/24
         routes:
@@ -59,6 +63,8 @@ nodes:
       - 10.0.16.4
     networkInterfaces:
       - interface: eth0
+        vip:
+          ip: ${clusterEndpointIP}
         addresses:
           - 10.0.16.136/24
         routes:
@@ -68,11 +74,11 @@ nodes:
 
 controlPlane:
   patches:
-    # - "@./customInstaller-patch.yaml" # Not needed when running stock Talos
-    - "@./clusterMetricsExtraArgs-patch.yaml"
-    # - "@./unprivilegedPorts-patch.yaml" # Included in config below
-    - "@./removeAdmissionControl-patch.yaml"
-    # - "@./local-path-patch.yaml" # Included in config below
+    # - "@./patches/customInstaller-patch.yaml" # Not needed when running stock Talos
+    - "@./patches/clusterMetricsExtraArgs-patch.yaml"
+    # - "@./patches/unprivilegedPorts-patch.yaml" # Included in config below
+    - "@./patches/removeAdmissionControl-patch.yaml"
+    # - "@./patches/local-path-patch.yaml" # Included in config below
     - |-
       cluster:
         allowSchedulingOnMasters: true
