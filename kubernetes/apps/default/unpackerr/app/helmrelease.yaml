@@ -69,7 +69,7 @@ spec:
       complete:
         enabled: true
         type: nfs
-        server: 172.20.0.1
+        server: 10.0.16.16
         path: /volume1/Media/Downloads/qbittorrent/complete
         mountPath: /complete
     resources:
