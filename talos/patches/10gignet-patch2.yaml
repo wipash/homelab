@@ -1,0 +1,10 @@
+---
+- op: replace
+  path: /machine/network/interfaces/1
+  value:
+    interface: eth1
+    addresses:
+      - 172.20.0.2/24
+    routes:
+      - network: 172.20.0.0/24
+    dhcp: false
