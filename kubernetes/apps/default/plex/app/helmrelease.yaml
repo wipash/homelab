@@ -85,7 +85,7 @@ spec:
       media:
         enabled: true
         type: nfs
-        server: 10.0.16.16
+        server: 172.20.0.1
         path: /volume1/Media
         mountPath: /media
         readOnly: true
