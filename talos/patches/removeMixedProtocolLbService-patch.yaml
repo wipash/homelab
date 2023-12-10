@@ -1,0 +1,11 @@
+# This patch was required to remove the MixedProtocolLBService=True arg from some running nodes
+# Applied with:
+#  talosctl patch mc --nodes 10.0.16.133 --patch @./talos/patches/removeMixedProtocolLbService-patch.yaml
+- op: remove
+  path: /cluster/scheduler/extraArgs
+- op: remove
+  path: /cluster/apiServer/extraArgs
+- op: remove
+  path: /cluster/controllerManager/extraArgs
+- op: remove
+  path: /cluster/proxy/extraArgs
