@@ -1,6 +1,6 @@
 ---
 # Area
-rea/docs:
+area/docs:
   - changed-files:
       - any-glob-to-any-file: docs/**/*
       - any-glob-to-any-file: README.md
@@ -17,7 +17,3 @@ area/taskfile:
 area/terraform:
   - changed-files:
       - any-glob-to-any-file: terraform/**/*
-# Cluster
-cluster/main:
-  - changed-files:
-      - any-glob-to-any-file: kubernetes/**/*
