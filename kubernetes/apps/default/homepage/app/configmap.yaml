@@ -34,7 +34,7 @@ data:
             widget:
               type: sonarr
               url: http://sonarr.default.svc.cluster.local
-              key: {{HOMEPAGE_VAR_RADARR_TOKEN}}
+              key: {{HOMEPAGE_VAR_SONARR_TOKEN}}
     - Network:
         - PiHole:
             href: http://10.0.16.4/
