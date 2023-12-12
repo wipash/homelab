@@ -25,7 +25,7 @@ data:
             description: Movies Management
             widget:
               type: radarr
-              url: http://radarr.default.svc.cluster.local:7878
+              url: http://radarr.default.svc.cluster.local
               key: {{HOMEPAGE_VAR_RADARR_KEY}}
         - Sonarr:
             icon: sonarr.png
@@ -33,16 +33,8 @@ data:
             description: TV Shows Management
             widget:
               type: sonarr
-              url: http://sonarr.default.svc.cluster.local:8989
+              url: http://sonarr.default.svc.cluster.local
               key: {{HOMEPAGE_VAR_SONARR_KEY}}
-        - Bazarr:
-            icon: bazarr.png
-            href: https://bazarr.${SECRET_DOMAIN}
-            description: Subtitles Management
-            widget:
-              type: bazarr
-              url: http://bazarr.default.svc.cluster.local:6767
-              key: {{HOMEPAGE_VAR_BAZARR_KEY}}
     - Network:
         - PiHole:
             href: http://10.0.16.4
@@ -50,7 +42,7 @@ data:
             widget:
               type: pihole
               url: http://10.0.16.4
-              key: {{HOMEPAGE_VAR_AGH_USERNAME}}
+              key: {{HOMEPAGE_VAR_PIHOLE_TOKEN}}
     - Favorites:
         - My GitHub Repo:
             icon: si-github
