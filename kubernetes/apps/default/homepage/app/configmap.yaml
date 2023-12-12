@@ -26,7 +26,7 @@ data:
             widget:
               type: radarr
               url: http://radarr.default.svc.cluster.local
-              key: {{HOMEPAGE_VAR_RADARR_KEY}}
+              key: {{HOMEPAGE_VAR_RADARR_TOKEN}}
         - Sonarr:
             icon: sonarr.png
             href: https://tv.${SECRET_DOMAIN}
@@ -34,14 +34,14 @@ data:
             widget:
               type: sonarr
               url: http://sonarr.default.svc.cluster.local
-              key: {{HOMEPAGE_VAR_SONARR_KEY}}
+              key: {{HOMEPAGE_VAR_RADARR_TOKEN}}
     - Network:
         - PiHole:
-            href: http://10.0.16.4
+            href: http://10.0.16.4/admin
             description: Ad Blocking DNS
             widget:
               type: pihole
-              url: http://10.0.16.4
+              url: http://10.0.16.4/admin
               key: {{HOMEPAGE_VAR_PIHOLE_TOKEN}}
     - Favorites:
         - My GitHub Repo:
