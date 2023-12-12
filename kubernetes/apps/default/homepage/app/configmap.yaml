@@ -37,11 +37,11 @@ data:
               key: {{HOMEPAGE_VAR_RADARR_TOKEN}}
     - Network:
         - PiHole:
-            href: http://10.0.16.4/admin
+            href: http://10.0.16.4/
             description: Ad Blocking DNS
             widget:
               type: pihole
-              url: http://10.0.16.4/admin
+              url: http://10.0.16.4/
               key: {{HOMEPAGE_VAR_PIHOLE_TOKEN}}
     - Favorites:
         - My GitHub Repo:
