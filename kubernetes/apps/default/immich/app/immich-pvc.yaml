@@ -39,3 +39,19 @@ spec:
   resources:
     requests:
       storage: 1Mi # Size does not matter ...twss
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: immich-config
+  namespace: default
+  labels:
+    app.kubernetes.io/name: &name immich
+    app.kubernetes.io/instance: *name
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-block
+  resources:
+    requests:
+      storage: 1Gi
