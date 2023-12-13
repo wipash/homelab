@@ -6,35 +6,42 @@ metadata:
   name: &app immich-machine-learning
   namespace: default
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
       version: 2.4.0
+      interval: 30m
       sourceRef:
         kind: HelmRepository
-        name: bjw-s-charts
+        name: bjw-s
         namespace: flux-system
-  maxHistory: 3
-  install:
-    createNamespace: true
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
   dependsOn:
     - name: immich-server
+    - name: immich-redis
   values:
     controllers:
       main:
-        strategy: RollingUpdate
+        strategy: Recreate
         annotations:
-          secret.reloader.stakater.com/reload: immich-secret
-          configmap.reloader.stakater.com/reload: immich-configmap
+          configmap.reloader.stakater.com/reload: &configMap immich-configmap
+          secret.reloader.stakater.com/reload: &secret immich-secret
+        containers:
+          main:
+            image:
+              repository: ghcr.io/immich-app/immich-machine-learning
+              tag: v1.90.2@sha256:db29ac9e6c1205912df176b81c5c605a98ee18220e438b17151e84c5c5becfa1
+            envFrom:
+              - configMapRef:
+                  name: *configMap
+              - secretRef:
+                  name: *secret
+            resources:
+              requests:
+                cpu: 100m
+                memory: 274M
+              limits:
+                memory: 3949M
         pod:
           enableServiceLinks: false
           securityContext:
@@ -49,16 +56,6 @@ spec:
               labelSelector:
                 matchLabels:
                   app.kubernetes.io/name: *app
-        containers:
-          main:
-            image:
-              repository: ghcr.io/immich-app/immich-machine-learning
-              tag: v1.90.2
-            envFrom:
-              - secretRef:
-                  name: immich-secret
-              - configMapRef:
-                  name: immich-configmap
     service:
       main:
         ports:
