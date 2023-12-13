@@ -113,7 +113,7 @@ spec:
         globalMounts:
           - path: /config
       library:
-        existingClaim: immich
+        existingClaim: immich-nfs
         globalMounts:
           - path: *mediaLocation
       geocoding-dump:
