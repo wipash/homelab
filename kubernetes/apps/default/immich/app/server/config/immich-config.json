@@ -68,7 +68,7 @@
       "enabled": true,
       "issuerUrl": "https://auth.mcgrath.nz/.well-known/openid-configuration",
       "clientId": "immich",
-      "clientSecret": "${SECRET_IMMICH_OAUTH_CLIENT_SECRET}",
+      "clientSecret": "${IMMICH_OAUTH_CLIENT_SECRET}",
       "mobileOverrideEnabled": false,
       "mobileRedirectUri": "",
       "scope": "openid email profile",
