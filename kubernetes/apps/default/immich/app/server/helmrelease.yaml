@@ -68,7 +68,7 @@ spec:
           main:
             image:
               repository: ghcr.io/immich-app/immich-server
-              tag: v1.91.2@sha256:abea8ea524fb96499bdc40e2e7b149e1e2b33e00514e6df73d0987bb81252a27
+              tag: v1.91.3@sha256:9ebde1aa53d9decc29ac387babd92fbc8e679c534397189256df15213f8ffe98
             args: ["start-server.sh"]
             envFrom: *envFrom
             env:
