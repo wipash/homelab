@@ -6,4 +6,4 @@ resources:
   - external-dns
   - external-dns-pihole
   #- external-services
-  - unifi
+  # - unifi
