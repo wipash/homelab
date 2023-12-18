@@ -11,7 +11,7 @@ resources:
   #- smtp-relay
   - monica
   #- home-assistant
-  - homer
+  # - homer
   #- frigate
   # - esphome
   - n8n
