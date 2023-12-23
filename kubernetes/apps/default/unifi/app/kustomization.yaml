@@ -5,4 +5,4 @@ kind: Kustomization
 resources:
   - gatus.yaml
   - helmrelease.yaml
-  - volsync.yaml
+  # - volsync.yaml
