@@ -1,6 +1,5 @@
-- op: add
+- op: replace
   path: /machine/kubelet/nodeIP
   value:
     validSubnets:
       - 10.0.16.0/24
-      - 172.20.0.0/24

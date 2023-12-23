@@ -4,7 +4,5 @@
   value:
     interface: eth1
     addresses:
-      - 172.20.0.2/24
-    routes:
-      - network: 172.20.0.0/24
+      - 172.20.0.4/24
     dhcp: false
