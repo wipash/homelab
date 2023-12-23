@@ -119,6 +119,6 @@ spec:
       requests:
         cpu: 15m
         memory: 204M
-      limits:
-        cpu: 16m
-        memory: 1087M
+      # limits:
+      #   cpu: 16m
+      #   memory: 1087M
