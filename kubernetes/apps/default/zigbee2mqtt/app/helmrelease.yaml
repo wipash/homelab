@@ -150,7 +150,7 @@ spec:
                     - "true"
     sidecars:
       exporter:
-        image: ghcr.io/kpetremann/mqtt-exporter:1.3.0
+        image: ghcr.io/kpetremann/mqtt-exporter:1.4.1
         imagePullPolicy: IfNotPresent
         env:
           - { name: LOG_LEVEL, value: DEBUG }
