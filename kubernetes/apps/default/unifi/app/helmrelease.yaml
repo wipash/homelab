@@ -96,7 +96,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/icon: unifi.png
           gethomepage.dev/name: Unifi
-          gethomepage.dev/group: Infrastructure
+          gethomepage.dev/group: Network
         hosts:
           - host: &host "{{ .Release.Name }}.mcgrath.nz"
             paths:
