@@ -196,6 +196,10 @@ spec:
         kubernetes-pods:
           url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-pods.json
           datasource: Prometheus
+        speedtest-exporter:
+          gnetId: 13665
+          revision: 4
+          datasource: Prometheus
     sidecar:
       dashboards:
         enabled: true
