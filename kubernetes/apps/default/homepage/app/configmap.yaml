@@ -10,6 +10,15 @@ metadata:
 data:
   bookmarks.yaml: |
     ---
+    - Git:
+        - k8s-at-home:
+            - icon: kubernetes-dashboard.png
+              description: Helm Chart Search
+              href: https://nanne.dev/k8s-at-home-search/
+        - home-cluster:
+            - icon: github.png
+              description: Renovate Dashboard
+              href: https://github.com/wipash/homelab/issues/674
   docker.yaml: |
     ---
   kubernetes.yaml: |
@@ -94,26 +103,15 @@ data:
 
 
     - Favorites:
-        - My GitHub Repo:
-            icon: si-github
-            href: https://github.com/wipash/homelab
-            description: My Code Repository
         - Grafana Dashboard:
             icon: si-grafana
             href: https://grafana.${SECRET_DOMAIN}
-            description: My Cluster Metrics Visualization
-        - k8s-at-home-search:
-            icon: si-kubernetes
-            href: https://nanne.dev/k8s-at-home-search/
-            description: Search KAH HelmReleases
         - onedr0p home-ops:
             icon: si-github
             href: https://github.com/onedr0p/home-ops
-            description: onedr0p HomeOps Repository
         - bjw-s Chart Values:
             icon: si-github
             href: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common#values
-            description: app-template Helm Chart Values
 
   settings.yaml: |
     ---
@@ -128,6 +126,7 @@ data:
         columns: 4
       Network:
         style: row
+        columns: 3
       Favorites:
         style: row
         columns: 3
