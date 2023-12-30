@@ -121,6 +121,7 @@ data:
     color: slate
     headerStyle: clean
     target: _blank
+    useEqualHeights: true
     layout:
       Media Acquisition:
         style: row
