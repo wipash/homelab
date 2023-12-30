@@ -43,6 +43,15 @@ data:
               type: pihole
               url: http://10.0.16.4/
               key: {{HOMEPAGE_VAR_PIHOLE_TOKEN}}
+
+        - Cloudflare:
+            href: https://dash.cloudflare.com/
+            description: Cloudflare Tunnel Management
+            widget:
+              type: cloudflared
+              accountid: {{HOMEPAGE_VAR_CLOUDFLARE_ACCOUNT_ID}}
+              tunnelid: {{HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_ID}}
+              key: {{HOMEPAGE_VAR_CLOUDFLARE_KEY}}
     - Favorites:
         - My GitHub Repo:
             icon: si-github
