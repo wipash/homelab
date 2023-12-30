@@ -77,11 +77,6 @@ data:
             description: Network Management
             namespace: default
             app: unifi
-            widget:
-              type: unifi
-              url: https://unifi.mcgrath.nz
-              username: {{HOMEPAGE_VAR_UNIFI_USERNAME}}
-              password: {{HOMEPAGE_VAR_UNIFI_PASSWORD}}
 
     - Favorites:
         - My GitHub Repo:
