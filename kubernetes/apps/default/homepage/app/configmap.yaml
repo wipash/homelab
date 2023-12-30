@@ -23,6 +23,8 @@ data:
             icon: radarr.png
             href: https://radarr.${SECRET_DOMAIN}
             description: Movies Management
+            namespace: default
+            app: radarr
             widget:
               type: radarr
               url: http://radarr.default.svc.cluster.local
@@ -31,12 +33,15 @@ data:
             icon: sonarr.png
             href: https://tv.${SECRET_DOMAIN}
             description: TV Shows Management
+            namespace: default
+            app: sonarr
             widget:
               type: sonarr
               url: http://sonarr.default.svc.cluster.local
               key: {{HOMEPAGE_VAR_SONARR_TOKEN}}
     - Network:
         - PiHole:
+            icon: pi-hole.png
             href: http://10.0.16.4/
             description: Ad Blocking DNS
             widget:
@@ -45,6 +50,7 @@ data:
               key: {{HOMEPAGE_VAR_PIHOLE_TOKEN}}
 
         - Cloudflare:
+            icon: cloudflare.png
             href: https://dash.cloudflare.com/
             description: Cloudflare Tunnel Management
             widget:
@@ -52,6 +58,17 @@ data:
               accountid: {{HOMEPAGE_VAR_CLOUDFLARE_ACCOUNT_ID}}
               tunnelid: {{HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_ID}}
               key: {{HOMEPAGE_VAR_CLOUDFLARE_KEY}}
+
+        - Unifi:
+            icon: unifi.png
+            href: https://unifi.mcgrath.nz
+            description: Network Management
+            widget:
+              type: unifi
+              url: https://unifi.mcgrath.nz
+              username: {{HOMEPAGE_VAR_UNIFI_USERNAME}}
+              password: {{HOMEPAGE_VAR_UNIFI_PASSWORD}}
+
     - Favorites:
         - My GitHub Repo:
             icon: si-github
