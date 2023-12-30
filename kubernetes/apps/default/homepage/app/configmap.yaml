@@ -18,7 +18,7 @@ data:
 
   services.yaml: |
     ---
-    - Media:
+    - Media Acquisition:
         - Radarr:
             icon: radarr.png
             href: https://radarr.${SECRET_DOMAIN}
@@ -39,7 +39,6 @@ data:
               type: sonarr
               url: http://sonarr.default.svc.cluster.local
               key: {{HOMEPAGE_VAR_SONARR_TOKEN}}
-
         - SABnzbd:
             icon: sabnzbd.png
             href: https://sabnzbd.${SECRET_DOMAIN}
@@ -51,6 +50,17 @@ data:
               url: http://sabnzbd.default.svc.cluster.local:8080
               key: {{HOMEPAGE_VAR_SABNZBD_KEY}}
 
+    - Media Services:
+        - Overseerr:
+            icon: overseerr.png
+            href: https://overseerr.${SECRET_DOMAIN_2}
+            description: Media Request Management
+            namespace: default
+            app: overseerr
+            widget:
+              type: overseerr
+              url: http://overseerr.default.svc.cluster.local
+              key: {{HOMEPAGE_VAR_OVERSEERR_KEY}}
         - Tautulli:
             icon: tautulli.png
             href: https://tautulli.${SECRET_DOMAIN}
