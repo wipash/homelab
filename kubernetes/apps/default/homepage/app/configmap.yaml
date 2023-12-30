@@ -43,6 +43,15 @@ data:
               type: pihole
               url: http://10.0.16.4/
               key: {{HOMEPAGE_VAR_PIHOLE_TOKEN}}
+        - CloudFlare Tunnels:
+            href: https://dash.cloudflare.com/
+            description: DNS Management
+            widget:
+              type: cloudflare
+              accountid: accountid # from zero trust dashboard url e.g. https://one.dash.cloudflare.com/<accountid>/home/quick-start
+              tunnelid: tunnelid # found in tunnels dashboard under the tunnel name
+              key: cloudflareapitoken # api token with `Account.Cloudflare Tunnel:Read` https://dash.cloudflare.com/profile/api-tokens
+
     - Favorites:
         - My GitHub Repo:
             icon: si-github
@@ -103,7 +112,7 @@ data:
           show: true
           cpu: true
           memory: true
-          showLabel: true
-          label: flux-cluster
+          # showLabel: true
+          # label: flux-cluster
         nodes:
           show: true
