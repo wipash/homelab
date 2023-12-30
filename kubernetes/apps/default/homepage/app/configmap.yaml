@@ -51,6 +51,17 @@ data:
               url: http://sabnzbd.default.svc.cluster.local:8080
               key: {{HOMEPAGE_VAR_SABNZBD_KEY}}
 
+        - Tautulli:
+            icon: tautulli.png
+            href: https://tautulli.${SECRET_DOMAIN}
+            description: Plex Monitoring
+            namespace: default
+            app: tautulli
+            widget:
+              type: tautulli
+              url: http://tautulli.default.svc.cluster.local:8181
+              key: {{HOMEPAGE_VAR_TAUTULLI_KEY}}
+
     - Network:
         - PiHole:
             icon: pi-hole.png
