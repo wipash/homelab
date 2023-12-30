@@ -15,10 +15,23 @@ data:
             - icon: kubernetes-dashboard.png
               description: Helm Chart Search
               href: https://nanne.dev/k8s-at-home-search/
-        - home-cluster:
+        - homelab:
             - icon: github.png
               description: Renovate Dashboard
               href: https://github.com/wipash/homelab/issues/674
+    - Monitoring:
+        - Grafana:
+            - icon: si-grafana
+              description: Grafana Dashboards
+              href: https://grafana.${SECRET_DOMAIN}
+        - AlertManager:
+            - icon: si-prometheus
+              description: AlertManager
+              href: https://alertmanager.${SECRET_DOMAIN}
+        - Prometheus:
+            - icon: si-prometheus
+              description: Prometheus
+              href: https://prometheus.${SECRET_DOMAIN}
   docker.yaml: |
     ---
   kubernetes.yaml: |
@@ -101,39 +114,26 @@ data:
               tunnelid: {{HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_ID}}
               key: {{HOMEPAGE_VAR_CLOUDFLARE_KEY}}
 
-
-    - Favorites:
-        - Grafana Dashboard:
-            icon: si-grafana
-            href: https://grafana.${SECRET_DOMAIN}
-        - onedr0p home-ops:
-            icon: si-github
-            href: https://github.com/onedr0p/home-ops
-        - bjw-s Chart Values:
-            icon: si-github
-            href: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common#values
-
   settings.yaml: |
     ---
-    title: My Personal Home Dashboard
+    title: Homelab Dashboard
     theme: dark
     color: slate
     headerStyle: clean
     target: _blank
     layout:
-      Media:
-        style: row
-        columns: 4
-      Network:
+      Media Acquisition:
         style: row
         columns: 3
-      Favorites:
+      Media Servuces:
+        style: row
+        columns: 2
+      Network:
         style: row
         columns: 3
     quicklaunch:
       searchDescription: true
       hideInternetSearch: true
-      hideVisitURL: true
 
   widgets.yaml: |
     ---
@@ -152,7 +152,6 @@ data:
           show: true
           cpu: true
           memory: true
-          showLabel: true
-          label: flux-cluster
+          showLabel: false
         nodes:
           show: true
