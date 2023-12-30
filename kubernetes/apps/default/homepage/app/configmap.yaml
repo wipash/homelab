@@ -156,3 +156,4 @@ data:
           showLabel: false
         nodes:
           show: true
+          showLabel: true
