@@ -48,7 +48,7 @@ data:
             app: sabnzbd
             widget:
               type: sabnzbd
-              url: http://sabnzbd.default.svc.cluster.local
+              url: http://sabnzbd.default.svc.cluster.local:8080
               key: {{HOMEPAGE_VAR_SABNZBD_KEY}}
 
     - Network:
@@ -71,12 +71,6 @@ data:
               tunnelid: {{HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_ID}}
               key: {{HOMEPAGE_VAR_CLOUDFLARE_KEY}}
 
-        - Unifi:
-            icon: unifi.png
-            href: https://unifi.mcgrath.nz
-            description: Network Management
-            namespace: default
-            app: unifi
 
     - Favorites:
         - My GitHub Repo:
