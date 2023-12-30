@@ -39,6 +39,18 @@ data:
               type: sonarr
               url: http://sonarr.default.svc.cluster.local
               key: {{HOMEPAGE_VAR_SONARR_TOKEN}}
+
+        - SABnzbd:
+            icon: sabnzbd.png
+            href: https://sabnzbd.${SECRET_DOMAIN}
+            description: NZB Downloader
+            namespace: default
+            app: sabnzbd
+            widget:
+              type: sabnzbd
+              url: http://sabnzbd.default.svc.cluster.local
+              key: {{HOMEPAGE_VAR_SABNZBD_KEY}}
+
     - Network:
         - PiHole:
             icon: pi-hole.png
