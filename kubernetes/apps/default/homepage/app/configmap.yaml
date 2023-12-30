@@ -125,7 +125,7 @@ data:
       Media Acquisition:
         style: row
         columns: 3
-      Media Servuces:
+      Media Services:
         style: row
         columns: 2
       Network:
