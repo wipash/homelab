@@ -75,6 +75,8 @@ data:
             icon: unifi.png
             href: https://unifi.mcgrath.nz
             description: Network Management
+            namespace: default
+            app: unifi
             widget:
               type: unifi
               url: https://unifi.mcgrath.nz

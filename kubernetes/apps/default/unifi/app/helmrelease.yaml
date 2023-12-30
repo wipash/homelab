@@ -93,10 +93,6 @@ spec:
         className: nginx
         annotations:
           nginx.ingress.kubernetes.io/backend-protocol: HTTPS
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: unifi.png
-          gethomepage.dev/name: Unifi
-          gethomepage.dev/group: Network
         hosts:
           - host: &host "{{ .Release.Name }}.mcgrath.nz"
             paths:
