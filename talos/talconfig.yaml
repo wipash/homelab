@@ -142,14 +142,6 @@ controlPlane:
               - 10.0.16.0/24
           extraConfig:
             maxPods: 150
-          extraMounts:
-            - destination: /opt/local-path-provisioner
-              type: bind
-              source: /opt/local-path-provisioner
-              options:
-                - bind
-                - rshared
-                - rw
 
         logging:
           destinations:
