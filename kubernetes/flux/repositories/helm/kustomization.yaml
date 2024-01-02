@@ -34,3 +34,4 @@ resources:
   - ./kyverno.yaml
   - ./descheduler.yaml
   - ./actions-runner-controller.yaml
+  - ./democratic-csi.yaml
