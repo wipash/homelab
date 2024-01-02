@@ -5,7 +5,6 @@ resources:
   #- namespace.yaml
   # - metrics-server
   #- cilium
-  # - local-path-provisioner
   - nfs-subdir-external-provisioner
   # - reflector
   #- node-feature-discovery
