@@ -70,17 +70,17 @@ tasks:
                   "tty": true,
                   "volumeMounts": [
                     {
-                      "name": "serial",
-                      "mountPath": "/dev/serial"
+                      "name": "persistentstorage",
+                      "mountPath": "/var/lib/rancher/k3s"
                     }
                   ]
                 }
               ],
               "volumes": [
                 {
-                  "name": "serial",
+                  "name": "persistentstorage",
                   "hostPath": {
-                    "path": "/dev/serial",
+                    "path": "/var/lib/rancher/k3s",
                     "type": "Directory"
                   }
                 }
