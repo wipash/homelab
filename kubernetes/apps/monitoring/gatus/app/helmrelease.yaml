@@ -108,7 +108,7 @@ spec:
           external-dns.alpha.kubernetes.io/target: "tunnel.mcgrath.nz"
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: Gatus
-          gethomepage.dev/icon: mdi:server-network
+          gethomepage.dev/icon: mdi-server-network
           gethomepage.dev/group: Apps
         hosts:
           - host: &host status.mcgrath.nz
