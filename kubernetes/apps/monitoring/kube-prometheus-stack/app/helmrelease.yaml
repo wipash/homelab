@@ -124,6 +124,10 @@ spec:
             10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10
           hajimari.io/appName: Prometheus
           hajimari.io/icon: simple-icons:prometheus
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: Prometheus
+          gethomepage.dev/icon: si-prometheus
+          gethomepage.dev/group: Monitoring
         pathType: Prefix
         hosts:
           - &host prometheus.mcgrath.nz
