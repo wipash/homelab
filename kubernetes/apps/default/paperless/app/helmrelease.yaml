@@ -71,6 +71,10 @@ spec:
         className: nginx
         annotations:
           nginx.ingress.kubernetes.io/auth-snippet: proxy_set_header X-Forwarded-Host $http_host;
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: Paperless
+          gethomepage.dev/icon: mdi-file-document-outline
+          gethomepage.dev/group: Apps
         hosts:
           - host: &host "paperless.mcgrath.nz"
             paths:

@@ -48,6 +48,10 @@ spec:
         ingressClassName: nginx
         annotations:
           hajimari.io/icon: mdi:sitemap
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: Node-RED
+          gethomepage.dev/icon: mdi-sitemap
+          gethomepage.dev/group: Apps
         hosts:
           - host: &host "nodered.mcgrath.nz"
             paths:

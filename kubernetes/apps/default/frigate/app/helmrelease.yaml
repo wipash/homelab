@@ -92,6 +92,10 @@ spec:
           nginx.ingress.kubernetes.io/whitelist-source-range: |
             10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10
           hajimari.io/icon: mdi:cctv
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: Frigate
+          gethomepage.dev/icon: mdi-cctv
+          gethomepage.dev/group: Apps
         hosts:
           - host: &host "{{ .Release.Name }}.mcgrath.nz"
             paths:

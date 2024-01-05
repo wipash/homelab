@@ -75,6 +75,10 @@ spec:
           auth.home.arpa/enabled: "true"
           external-dns/is-public: "true"
           external-dns.alpha.kubernetes.io/target: "tunnel.mcgrath.nz"
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: Mealie
+          gethomepage.dev/icon: mdi-food-apple-outline
+          gethomepage.dev/group: Apps
         hosts:
           - host: &host "mealie.mcgrath.nz"
             paths:
