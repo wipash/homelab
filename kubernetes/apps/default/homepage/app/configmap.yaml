@@ -132,6 +132,8 @@ data:
       Network:
         style: row
         columns: 3
+      Apps:
+        style: column
     quicklaunch:
       searchDescription: true
       hideInternetSearch: true
