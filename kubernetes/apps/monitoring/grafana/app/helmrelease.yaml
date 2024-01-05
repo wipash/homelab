@@ -226,6 +226,10 @@ spec:
       ingressClassName: nginx
       annotations:
         hajimari.io/icon: simple-icons:grafana
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/name: Grafana
+        gethomepage.dev/icon: si-grafana
+        gethomepage.dev/group: Monitoring
       hosts:
         - &host grafana.mcgrath.nz
       tls:
