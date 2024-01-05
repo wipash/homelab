@@ -78,6 +78,10 @@ spec:
           external-dns.alpha.kubernetes.io/target: "tunnel.${SECRET_DOMAIN}"
           nginx.org/websocket-services: home-assistant
           hajimari.io/icon: mdi:home-assistant
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: Home Assistant
+          gethomepage.dev/icon: mdi-home-assistant
+          gethomepage.dev/group: Apps
         hosts:
           - host: &host hass.mcgrath.nz
             paths:

@@ -38,6 +38,10 @@ spec:
             10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10
           hajimari.io/appName: "Rook"
           hajimari.io/icon: mdi:chess-rook
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: Rook
+          gethomepage.dev/icon: mdi-chess-rook
+          gethomepage.dev/group: Apps
         host:
           name: &host rook.mcgrath.nz
           path: /
