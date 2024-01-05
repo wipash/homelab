@@ -48,6 +48,7 @@ spec:
           gethomepage.dev/name: Goldilocks
           gethomepage.dev/icon: mdi-align-vertical-top
           gethomepage.dev/group: Monitoring
+          gethomepage.dev/pod-selector: ""
         hosts:
           - host: &host goldilocks.mcgrath.nz
             paths:
