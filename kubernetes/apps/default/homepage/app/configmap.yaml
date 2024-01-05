@@ -53,7 +53,7 @@ data:
               key: {{HOMEPAGE_VAR_RADARR_TOKEN}}
         - Sonarr:
             icon: sonarr.png
-            href: https://tv.${SECRET_DOMAIN}
+            href: https://sonarr.${SECRET_DOMAIN}
             description: TV Shows Management
             namespace: default
             app: sonarr
@@ -97,7 +97,7 @@ data:
     - Network:
         - PiHole:
             icon: pi-hole.png
-            href: http://10.0.16.4/
+            href: http://pi.hole/
             description: Ad Blocking DNS
             widget:
               type: pihole
