@@ -65,7 +65,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: Smokeping
           gethomepage.dev/icon: mdi-table-tennis
-          gethomepage.dev/group: Apps
+          gethomepage.dev/group: Infrastructure
         hosts:
           - host: &host "ping.mcgrath.nz"
             paths:

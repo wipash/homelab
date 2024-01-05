@@ -81,7 +81,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: Home Assistant
           gethomepage.dev/icon: mdi-home-assistant
-          gethomepage.dev/group: Apps
+          gethomepage.dev/group: Home
         hosts:
           - host: &host hass.mcgrath.nz
             paths:

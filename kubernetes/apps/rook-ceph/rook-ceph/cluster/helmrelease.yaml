@@ -41,7 +41,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: Rook
           gethomepage.dev/icon: mdi-chess-rook
-          gethomepage.dev/group: Apps
+          gethomepage.dev/group: Infrastructure
         host:
           name: &host rook.mcgrath.nz
           path: /

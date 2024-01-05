@@ -54,7 +54,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: Bazarr
           gethomepage.dev/icon: mdi-subtitles-outline
-          gethomepage.dev/group: Apps
+          gethomepage.dev/group: Media Acquisition
         hosts:
           - host: &host "{{ .Release.Name }}.mcgrath.nz"
             paths:
