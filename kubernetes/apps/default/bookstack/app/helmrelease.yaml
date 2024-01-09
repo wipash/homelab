@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.devbu.io/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -44,7 +44,7 @@ spec:
         reloader.stakater.com/auto: "true"
     image:
       repository: ghcr.io/linuxserver/bookstack
-      tag: 23.10.20231030
+      tag: 23.12.20240108
     env:
       PUID: 568
       PGID: 568
@@ -101,7 +101,6 @@ spec:
         annotations:
           external-dns/is-public: "true"
           external-dns.alpha.kubernetes.io/target: "tunnel.mcgrath.nz"
-          hajimari.io/icon: notebook-edit-outline
         hosts:
           - host: &host "{{ .Release.Name }}.mcgrath.nz"
             paths:
