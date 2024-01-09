@@ -42,3 +42,4 @@ resources:
   - ./homepage/ks.yaml
   # - ./immich/ks.yaml
   - ./unifi/ks.yaml
+  - ./bookstack/ks.yaml
