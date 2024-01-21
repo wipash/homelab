@@ -23,19 +23,11 @@ sonarr:
         min_format_score: 0
         quality_sort: top
         qualities:
-          - name: Bluray-1080p
-            qualities:
-              - Bluray-1080p Remux
-              - Bluray-1080p
           - name: Web-1080p
             qualities:
               - WEBDL-1080p
               - WEBRip-1080p
           - name: HDTV-1080p
-          - name: Blueray-720p
-            qualities:
-              - Bluray-720p Remux
-              - Bluray-720p
           - name: Web-720p
             qualities:
               - WEBDL-720p
@@ -120,19 +112,14 @@ radarr:
         min_format_score: 0
         quality_sort: top
         qualities:
+          - name: Remux-1080p
           - name: Bluray-1080p
-            qualities:
-              - Bluray-1080p Remux
-              - Bluray-1080p
           - name: Web-1080p
             qualities:
               - WEBDL-1080p
               - WEBRip-1080p
           - name: HDTV-1080p
           - name: Blueray-720p
-            qualities:
-              - Bluray-720p Remux
-              - Bluray-720p
           - name: Web-720p
             qualities:
               - WEBDL-720p
