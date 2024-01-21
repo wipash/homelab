@@ -25,7 +25,7 @@ sonarr:
         qualities:
           - name: Bluray-1080p
             qualities:
-              - Remux-1080p
+              - Bluray-1080p Remux
               - Bluray-1080p
           - name: Web-1080p
             qualities:
@@ -34,7 +34,7 @@ sonarr:
           - name: HDTV-1080p
           - name: Blueray-720p
             qualities:
-              - Remux-720p
+              - Bluray-720p Remux
               - Bluray-720p
           - name: Web-720p
             qualities:
@@ -122,7 +122,7 @@ radarr:
         qualities:
           - name: Bluray-1080p
             qualities:
-              - Remux-1080p
+              - Bluray-1080p Remux
               - Bluray-1080p
           - name: Web-1080p
             qualities:
@@ -131,7 +131,7 @@ radarr:
           - name: HDTV-1080p
           - name: Blueray-720p
             qualities:
-              - Remux-720p
+              - Bluray-720p Remux
               - Bluray-720p
           - name: Web-720p
             qualities:
@@ -202,7 +202,7 @@ radarr:
           - dc98083864ea246d05a42df0d05f81cc # x265 (720/1080p)
 
       - quality_profiles:
-          - name: HD-1080p
+          - name: HD
         trash_ids:
           - 4b900e171accbfb172729b63323ea8ca # Optional: Multi
           - 923b6abef9b17f937fab56cfcf89e1f1 # Optional: DV (WEBDL) without fallback to HDR, set to manual score 0 or -10000
