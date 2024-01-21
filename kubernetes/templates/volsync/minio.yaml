@@ -19,9 +19,7 @@ spec:
         AWS_SECRET_ACCESS_KEY: "{{ .MINIO_ROOT_PASSWORD }}"
   dataFrom:
     - extract:
-        key: minio
-    - extract:
-        key: volsync-minio-template
+        key: volsync-restic-template
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/volsync.backube/replicationsource_v1alpha1.json
 apiVersion: volsync.backube/v1alpha1
