@@ -5,16 +5,10 @@ kind: Kustomization
 namespace: default
 resources:
   - ./helmrelease.yaml
-  - ./volsync.yaml
+  - ../../../../templates/volsync
 configMapGenerator:
   - name: recyclarr-configmap
     files:
       - recyclarr.yml=./config/recyclarr.yml
 generatorOptions:
   disableNameSuffixHash: true
-  annotations:
-    kustomize.toolkit.fluxcd.io/substitute: disabled
-labels:
-  - pairs:
-      app.kubernetes.io/name: recyclarr
-      app.kubernetes.io/instance: recyclarr
