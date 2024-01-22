@@ -305,7 +305,22 @@ menu = AAD Registration Service
 title = AAD Registration Service - enterpriseregistration.windows.net
 host = enterpriseregistration.windows.net
 
+++ AADIAM
+menu = AAD IAM Service
+title = AAD IAM Service - main.iam.ad.ext.azure.com
+host = main.iam.ad.ext.azure.com
+
+++ AADGraph
+menu = AAD Graph API
+title = AAD Graph API - graph.windows.net
+host = graph.windows.net
+
 ++ MSGraph
 menu = Microsoft Graph API
 title = MS Graph API - graph.microsoft.com
 host = graph.microsoft.com
+
+++ AzureRESTAPI
+menu = Azure REST API
+title = Azure REST API - management.azure.com
+host = management.azure.com
