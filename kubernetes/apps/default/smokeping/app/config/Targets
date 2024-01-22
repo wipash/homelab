@@ -282,30 +282,30 @@ title = Azure Service
 
 ++ AzurePortal
 menu = Azure Portal
-title = Azure Portal
+title = Azure Portal - portal.azure.com
 host = portal.azure.com
 
 ++ OfficeAdmin
-menu = Office 365 Admin Portal
-title = Office 365 Admin Portal
+menu = O365 Admin Portal
+title = O365 Admin Portal - admin.microsoft.com
 host = admin.microsoft.com
 
 ++ OfficeAuthService
-menu = Office Authentication Service
-title = Office Authentication Service
+menu = O365 Authentication Service
+title = O365 Auth Service - login.microsoftonline.com
 host = login.microsoftonline.com
 
 ++ IntuneEnrollment
 menu = Intune Enrollment Service
-title = Intune Enrollment Service
+title = Intune Enrollment Service - enrollment.manage.microsoft.com
 host = enrollment.manage.microsoft.com
 
 ++ AzureADRegistration
-menu = Azure AD Registration Service
-title = Azure AD Registration Service
+menu = AAD Registration Service
+title = AAD Registration Service - enterpriseregistration.windows.net
 host = enterpriseregistration.windows.net
 
 ++ MSGraph
 menu = Microsoft Graph API
-title = Microsoft Graph API
+title = MS Graph API - graph.microsoft.com
 host = graph.microsoft.com
