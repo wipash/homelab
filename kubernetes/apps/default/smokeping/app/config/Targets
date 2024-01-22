@@ -236,41 +236,76 @@ host = bng3.quic.net.nz
 
 menu = AWS Regions
 title = AWS Regions
-probe = Curl
-urlformat = https://%host%/latency-test.json
-insecure_ssl = 1
+# probe = Curl
+# urlformat = https://%host%/latency-test.json
+# insecure_ssl = 1
 
 ++ Sydney
 menu = Sydney
 title = Sydney - ap-southeast-2
-host = astap-southeast-2.s3.ap-southeast-2.amazonaws.com
+host = ec2.ap-southeast-2.amazonaws.com
 
 ++ Melbourne
 menu = Melbourne
 title = Melbourne - ap-southeast-4
-host = astap-southeast-4.s3.ap-southeast-4.amazonaws.com
+host = ec2.ap-southeast-4.amazonaws.com
 
 ++ NCalifornia
 menu = N. California
 title = N. California - us-west-1
-host = astus-west-1.s3.us-west-1.amazonaws.com
+host = ec2.us-west-1.amazonaws.com
 
 ++ Oregon
 menu = Oregon
 title = Oregon - us-west-2
-host = astus-west-2.s3.us-west-2.amazonaws.com
+host = ec2.us-west-2.amazonaws.com
 
 ++ NVirginia
 menu = N. Virginia
 title = N. Virginia - us-east-1
-host = astus-east-1.s3.amazonaws.com
+host = ec2.us-east-1.amazonaws.com
 
 ++ Ohio
 menu = Ohio
 title = Ohio - us-east-2
-host = astus-east-2.s3.us-east-2.amazonaws.com
+host = ec2.us-east-2.amazonaws.com
 
 ++ London
 menu = London
 title = London - eu-west-2
-host = asteu-west-2.s3.eu-west-2.amazonaws.com
+host = ec2.eu-west-2.amazonaws.com
+
++ Azure
+
+menu = Azure Services
+title = Azure Service
+
+++ AzurePortal
+menu = Azure Portal
+title = Azure Portal
+host = portal.azure.com
+
+++ OfficeAdmin
+menu = Office 365 Admin Portal
+title = Office 365 Admin Portal
+host = admin.microsoft.com
+
+++ OfficeAuthService
+menu = Office Authentication Service
+title = Office Authentication Service
+host = login.microsoftonline.com
+
+++ IntuneEnrollment
+menu = Intune Enrollment Service
+title = Intune Enrollment Service
+host = enrollment.manage.microsoft.com
+
+++ AzureADRegistration
+menu = Azure AD Registration Service
+title = Azure AD Registration Service
+host = enterpriseregistration.windows.net
+
+++ MSGraph
+menu = Microsoft Graph API
+title = Microsoft Graph API
+host = graph.microsoft.com
