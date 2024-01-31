@@ -33,7 +33,7 @@ spec:
         reloader.stakater.com/auto: "true"
     image:
       repository: ghcr.io/blakeblackshear/frigate
-      tag: 0.13.0-beta6
+      tag: 0.13.0
     env:
       TZ: Pacific/Auckland
       LIBVA_DRIVER_NAME: i965
