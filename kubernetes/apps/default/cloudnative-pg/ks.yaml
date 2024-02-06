@@ -6,7 +6,7 @@ metadata:
   name: &app cloudnative-pg
   namespace: flux-system
 spec:
-  targetNamespace: database
+  targetNamespace: default
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -29,7 +29,7 @@ metadata:
   name: &app cloudnative-pg-cluster
   namespace: flux-system
 spec:
-  targetNamespace: database
+  targetNamespace: default
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
