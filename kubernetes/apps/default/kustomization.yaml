@@ -40,7 +40,7 @@ resources:
   - ./smtp-relay/ks.yaml
   - ./homebox/ks.yaml
   - ./homepage/ks.yaml
-  # - ./immich/ks.yaml
+  - ./immich/ks.yaml
   - ./unifi/ks.yaml
   - ./bookstack/ks.yaml
   - ./cloudnative-pg/ks.yaml
