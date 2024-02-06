@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.4.0
+      version: 2.5.0
       interval: 30m
       sourceRef:
         kind: HelmRepository
@@ -28,9 +28,7 @@ spec:
   uninstall:
     keepHistory: false
   dependsOn:
-    - name: immich-redis
     - name: immich-server
-    - name: immich-typesense
   values:
     defaultPodOptions:
       enableServiceLinks: false
@@ -75,6 +73,23 @@ spec:
               limits:
                 gpu.intel.com/i915: 1
                 memory: 6000Mi
+        pod:
+          enableServiceLinks: false
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            fsGroup: 568
+            fsGroupChangePolicy: OnRootMismatch
+            supplementalGroups: [65537]
+          topologySpreadConstraints:
+            - maxSkew: 1
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: *app
+          nodeSelector:
+            intel.feature.node.kubernetes.io/gpu: "true"
     service:
       main:
         enabled: false

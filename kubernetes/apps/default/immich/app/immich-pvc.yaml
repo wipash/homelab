@@ -10,7 +10,7 @@ spec:
   accessModes: ["ReadWriteMany"]
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    server: 10.0.16.16
+    server: 172.20.0.1
     path: /volume1/Data/Immich
   # mountOptions:
   #   - nfsvers=4.2
@@ -31,19 +31,3 @@ spec:
   resources:
     requests:
       storage: 1Mi # Size does not matter ...twss
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: immich-config
-  namespace: default
-  labels:
-    app.kubernetes.io/name: &name immich
-    app.kubernetes.io/instance: *name
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: ceph-block
-  resources:
-    requests:
-      storage: 1Gi
