@@ -1,92 +1,139 @@
 {
-    "ffmpeg": {
-      "crf": 23,
-      "threads": 0,
-      "preset": "ultrafast",
-      "targetVideoCodec": "h264",
-      "targetAudioCodec": "aac",
-      "targetResolution": "720",
-      "maxBitrate": "0",
-      "twoPass": false,
-      "transcode": "required",
-      "tonemap": "hable",
-      "accel": "disabled"
+  "ffmpeg": {
+    "crf": 23,
+    "threads": 0,
+    "preset": "ultrafast",
+    "targetVideoCodec": "h264",
+    "acceptedVideoCodecs": [
+      "h264"
+    ],
+    "targetAudioCodec": "aac",
+    "acceptedAudioCodecs": [
+      "aac"
+    ],
+    "targetResolution": "720",
+    "maxBitrate": "0",
+    "bframes": -1,
+    "refs": 0,
+    "gopSize": 0,
+    "npl": 0,
+    "temporalAQ": false,
+    "cqMode": "auto",
+    "twoPass": false,
+    "preferredHwDevice": "auto",
+    "transcode": "required",
+    "tonemap": "hable",
+    "accel": "disabled"
+  },
+  "job": {
+    "backgroundTask": {
+      "concurrency": 5
     },
-    "job": {
-      "backgroundTask": {
-        "concurrency": 5
-      },
-      "clipEncoding": {
-        "concurrency": 2
-      },
-      "metadataExtraction": {
-        "concurrency": 5
-      },
-      "objectTagging": {
-        "concurrency": 2
-      },
-      "recognizeFaces": {
-        "concurrency": 2
-      },
-      "search": {
-        "concurrency": 5
-      },
-      "sidecar": {
-        "concurrency": 5
-      },
-      "storageTemplateMigration": {
-        "concurrency": 5
-      },
-      "thumbnailGeneration": {
-        "concurrency": 5
-      },
-      "videoConversion": {
-        "concurrency": 1
-      }
+    "smartSearch": {
+      "concurrency": 2
     },
-    "machineLearning": {
-      "classification": {
-        "minScore": 0.7,
-        "enabled": true,
-        "modelName": "microsoft/resnet-50"
-      },
-      "enabled": true,
-      "url": "http://immich-machine-learning.default.svc.cluster.local:3003",
-      "clip": {
-        "enabled": true,
-        "modelName": "ViT-B-32::openai"
-      },
-      "facialRecognition": {
-        "enabled": true,
-        "modelName": "buffalo_l",
-        "minScore": 0.7,
-        "maxDistance": 0.6,
-        "minFaces": 1
-      }
+    "metadataExtraction": {
+      "concurrency": 5
     },
-    "oauth": {
-      "enabled": true,
-      "issuerUrl": "https://auth.mcgrath.nz/.well-known/openid-configuration",
-      "clientId": "immich",
-      "clientSecret": "${IMMICH_OAUTH_CLIENT_SECRET}",
-      "mobileOverrideEnabled": false,
-      "mobileRedirectUri": "",
-      "scope": "openid email profile",
-      "storageLabelClaim": "preferred_username",
-      "buttonText": "Login with Authelia",
-      "autoRegister": true,
-      "autoLaunch": true
+    "faceDetection": {
+      "concurrency": 2
     },
-    "passwordLogin": {
-      "enabled": true
+    "search": {
+      "concurrency": 5
     },
-    "storageTemplate": {
-      "template": "{{y}}/{{y}}-{{MM}}-{{dd}}/{{filename}}"
+    "sidecar": {
+      "concurrency": 5
     },
-    "thumbnail": {
-      "webpSize": 250,
-      "jpegSize": 1440,
-      "quality": 90,
-      "colorspace": "p3"
+    "library": {
+      "concurrency": 5
+    },
+    "migration": {
+      "concurrency": 5
+    },
+    "thumbnailGeneration": {
+      "concurrency": 5
+    },
+    "videoConversion": {
+      "concurrency": 1
     }
+  },
+  "logging": {
+    "enabled": true,
+    "level": "log"
+  },
+  "machineLearning": {
+    "enabled": true,
+    "url": "http://immich-machine-learning.default.svc.cluster.local:3003",
+    "clip": {
+      "enabled": true,
+      "modelName": "ViT-B-32__openai"
+    },
+    "facialRecognition": {
+      "enabled": true,
+      "modelName": "buffalo_l",
+      "minScore": 0.7,
+      "maxDistance": 0.6,
+      "minFaces": 3
+    }
+  },
+  "map": {
+    "enabled": true,
+    "lightStyle": "",
+    "darkStyle": ""
+  },
+  "reverseGeocoding": {
+    "enabled": true
+  },
+  "oauth": {
+    "enabled": true,
+    "issuerUrl": "https://auth.mcgrath.nz/.well-known/openid-configuration",
+    "clientId": "immich",
+    "clientSecret": "${IMMICH_OAUTH_CLIENT_SECRET}",
+    "mobileOverrideEnabled": false,
+    "mobileRedirectUri": "",
+    "scope": "openid email profile",
+    "storageLabelClaim": "preferred_username",
+    "buttonText": "Login with Authelia",
+    "autoRegister": true,
+    "autoLaunch": false
+  },
+  "passwordLogin": {
+    "enabled": true
+  },
+  "storageTemplate": {
+    "enabled": true,
+    "hashVerificationEnabled": true,
+    "template": "{{y}}/{{y}}-{{MM}}-{{dd}}/{{filename}}"
+  },
+  "thumbnail": {
+    "webpSize": 250,
+    "jpegSize": 1440,
+    "quality": 80,
+    "colorspace": "p3"
+  },
+  "newVersionCheck": {
+    "enabled": true
+  },
+  "trash": {
+    "enabled": true,
+    "days": 30
+  },
+  "theme": {
+    "customCss": ""
+  },
+  "library": {
+    "scan": {
+      "enabled": true,
+      "cronExpression": "0 0 * * *"
+    },
+    "watch": {
+      "enabled": false,
+      "usePolling": false,
+      "interval": 10000
+    }
+  },
+  "server": {
+    "externalDomain": "",
+    "loginPageMessage": ""
   }
+}

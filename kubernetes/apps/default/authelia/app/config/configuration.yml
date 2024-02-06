@@ -63,3 +63,12 @@ identity_providers:
         scopes: ["openid", "profile", "groups", "email"]
         redirect_uris: ["https://bookstack.mcgrath.nz/oidc/callback"]
         userinfo_signing_algorithm: none
+      - id: immich
+        description: Immich
+        secret: "${IMMICH_OAUTH_CLIENT_SECRET}"
+        public: false
+        authorization_policy: two_factor
+        pre_configured_consent_duration: 1y
+        scopes: ["openid", "profile", "email"]
+        redirect_uris: ["https://photos.mcgrath.nz/auth/login", "https://photos.mcgrath.nz/user-settings", "app.immich:/"]
+        userinfo_signing_algorithm: none
