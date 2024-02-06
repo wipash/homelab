@@ -10,9 +10,9 @@ data:
   IMMICH_SERVER_URL: http://immich-server.default.svc.cluster.local:3001
   IMMICH_WEB_URL: http://immich-web.default.svc.cluster.local:3000
   LOG_LEVEL: verbose
-  # {"sentinels":[{"host":"redis.default.svc.cluster.local","port":26379}],"name":"redis-sentinel"}
+  # {"sentinels":[{"host":"redis.default.svc.cluster.local","port":26379}],"name":"sentinel"}
   # base64 encode that string
-  REDIS_URL: ioredis://eyJzZW50aW5lbHMiOlt7Imhvc3QiOiJyZWRpcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwicG9ydCI6MjYzNzl9XSwibmFtZSI6InJlZGlzLXNlbnRpbmVsIn0=
+  REDIS_URL: ioredis://eyJzZW50aW5lbHMiOlt7Imhvc3QiOiJyZWRpcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwicG9ydCI6MjYzNzl9XSwibmFtZSI6InNlbnRpbmVsIn0=
   REDIS_DBINDEX: "15"
   TRANSFORMERS_CACHE: /usr/src/app/.transformers_cache
   TYPESENSE_DATA_DIR: /config
