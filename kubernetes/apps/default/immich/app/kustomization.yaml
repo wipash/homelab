@@ -9,5 +9,5 @@ resources:
   - ./microservices
   - ./machine-learning
   - ./server
-  - ./volumes.yaml
+  - ./immich-pvc.yaml
   - ../../../../templates/gatus/external
