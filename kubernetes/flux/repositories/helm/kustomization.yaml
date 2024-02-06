@@ -35,3 +35,4 @@ resources:
   - ./descheduler.yaml
   - ./actions-runner-controller.yaml
   - ./democratic-csi.yaml
+  - ./cloudnative-pg.yaml
