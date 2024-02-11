@@ -44,7 +44,8 @@ spec:
     service:
       main:
         type: LoadBalancer
-        loadBalancerIP: ${SVC_SMTP_RELAY_ADDR}
+        annotations:
+          io.cilium/lb-ipam-ips: "${SVC_SMTP_RELAY_ADDR}"
         externalIPs:
           - "${SVC_SMTP_RELAY_ADDR}"
         externalTrafficPolicy: Local
