@@ -165,3 +165,22 @@ controlPlane:
             - 1.nz.pool.ntp.org
             - 2.nz.pool.ntp.org
             - 3.nz.pool.ntp.org
+
+    # Enable KubePrism
+    - |-
+      machine:
+        features:
+          kubePrism:
+            enabled: true
+            port: 7445
+
+    # Enable K8s Talos API Access
+    - |-
+      machine:
+        features:
+          kubernetesTalosAPIAccess:
+            enabled: true
+            allowedRoles:
+              - os:admin
+            allowedKubernetesNamespaces:
+              - system-controllers
