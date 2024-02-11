@@ -54,13 +54,12 @@ spec:
       [global]
       bdev_enable_discard = true
       bdev_async_discard = true
+      bluefs_buffered_io = false
     cephClusterSpec:
       network:
         provider: host
         connections:
-          compression:
-            # TODO: Test out enabling this on next cluster rebuild
-            enabled: false
+          requireMsgr2: true
       crashCollector:
         disable: false
       dashboard:
@@ -146,6 +145,7 @@ spec:
           isDefault: true
           reclaimPolicy: Delete
           allowVolumeExpansion: true
+          volumeBindingMode: Immediate
           parameters:
             imageFormat: "2"
             imageFeatures: layering
@@ -156,6 +156,11 @@ spec:
             csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
             csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
             csi.storage.k8s.io/fstype: ext4
+    cephBlockPoolsVolumeSnapshotClass:
+      enabled: true
+      name: csi-ceph-blockpool
+      isDefault: false
+      deletionPolicy: Delete
     cephFileSystems:
       - name: ceph-filesystem
         spec:
@@ -176,6 +181,7 @@ spec:
                 memory: 64M
               limits:
                 memory: 800M
+            priorityClassName: system-cluster-critical
         storageClass:
           enabled: true
           isDefault: false
@@ -183,6 +189,7 @@ spec:
           pool: data0
           reclaimPolicy: Delete
           allowVolumeExpansion: true
+          volumeBindingMode: Immediate
           parameters:
             csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
             csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
@@ -191,6 +198,11 @@ spec:
             csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
             csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
             csi.storage.k8s.io/fstype: ext4
+    cephFileSystemVolumeSnapshotClass:
+      enabled: true
+      name: csi-ceph-filesystem
+      isDefault: false
+      deletionPolicy: Delete
     cephObjectStores:
       - name: ceph-objectstore
         spec:
@@ -212,7 +224,8 @@ spec:
                 memory: 128M
               limits:
                 memory: 2Gi
-            instances: 1
+            instances: 2
+            priorityClassName: system-cluster-critical
           healthCheck:
             bucket:
               interval: 60s
@@ -220,5 +233,15 @@ spec:
           enabled: true
           name: ceph-bucket
           reclaimPolicy: Delete
+          volumeBindingMode: Immediate
           parameters:
             region: nz
+        ingress:
+          enabled: true
+          ingressClassName: nginx
+          host:
+            name: &host rgw.mcgrath.nz
+            path: /
+          tls:
+            - hosts:
+                - *host
