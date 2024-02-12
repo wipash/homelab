@@ -64,7 +64,7 @@ spec:
           public:
             - 10.0.16.0/24
           cluster:
-            - 172.20.0.0/24
+            - 127.20.0.0/24
       crashCollector:
         disable: false
       dashboard:
