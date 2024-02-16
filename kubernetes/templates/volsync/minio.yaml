@@ -27,7 +27,7 @@ kind: ReplicationSource
 metadata:
   name: "${APP}"
 spec:
-  sourcePVC: "${APP}"
+  sourcePVC: "${VOLSYNC_CLAIM:-${APP}}"
   trigger:
     schedule: "0 * * * *"
   restic:
@@ -41,9 +41,9 @@ spec:
     storageClassName: "${VOLSYNC_STORAGECLASS:-ceph-block}"
     accessModes: ["${VOLSYNC_ACCESSMODES:-ReadWriteOnce}"]
     moverSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
+      runAsUser: ${APP_UID:-568}
+      runAsGroup: ${APP_GID:-568}
+      fsGroup: ${APP_GID:-568}
     retain:
       hourly: 24
       daily: 7
@@ -66,8 +66,8 @@ spec:
     cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:-8Gi}"
     storageClassName: "${VOLSYNC_STORAGECLASS:-ceph-block}"
     accessModes: ["${VOLSYNC_ACCESSMODES:-ReadWriteOnce}"]
-    capacity: "${VOLSYNC_CAPACITY}"
-    # moverSecurityContext:
-    #   runAsUser: 568
-    #   runAsGroup: 568
-    #   fsGroup: 568
+    capacity: "${VOLSYNC_CAPACITY:-1Gi}"
+    moverSecurityContext:
+      runAsUser: ${APP_UID:-568}
+      runAsGroup: ${APP_GID:-568}
+      fsGroup: ${APP_GID:-568}
