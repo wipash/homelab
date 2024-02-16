@@ -44,3 +44,4 @@ resources:
   - ./unifi/ks.yaml
   - ./bookstack/ks.yaml
   - ./cloudnative-pg/ks.yaml
+  - ./actual/ks.yaml
