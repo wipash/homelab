@@ -62,6 +62,16 @@ spec:
         enabled: true
         globalMounts:
           - path: /.config/medusa
+      cache:
+        type: emptyDir
+        enabled: true
+        globalMounts:
+          - path: /app/medusa/.cache
+      uploads:
+        type: emptyDir
+        enabled: true
+        globalMounts:
+          - path: /app/medusa/uploads
 
     ingress:
       main:
