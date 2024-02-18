@@ -47,8 +47,8 @@ spec:
               STORE_CORS: http://localhost:8000,http://localhost:7001
               ADMIN_CORS: /mcgrath\.nz$/
               REDIS_URL: redis://sparkleandspin-redis.default.svc.cluster.local:6379
-              NODE_ENV: production
-              NPM_CONFIG_PRODUCTION: false
+              # NODE_ENV: production
+              # NPM_CONFIG_PRODUCTION: false
 
     service:
       main:
