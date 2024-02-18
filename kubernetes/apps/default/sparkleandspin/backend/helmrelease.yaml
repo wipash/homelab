@@ -17,6 +17,10 @@ spec:
         namespace: flux-system
 
   values:
+    defaultPodOptions:
+      imagePullSecrets:
+        - name: ghcr-imagepullsecret
+
     controllers:
       main:
         annotations:
@@ -35,8 +39,6 @@ spec:
             image:
               repository: ghcr.io/wipash/sparkleandspin-backend
               tag: latest
-            imagePullSecrets:
-              - name: ghcr-imagepullsecret
             envFrom:
               - secretRef:
                   name: sparkleandspin-backend-secret
