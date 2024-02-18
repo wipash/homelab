@@ -46,9 +46,7 @@ spec:
               DATABASE_TYPE: postgres
               STORE_CORS: http://localhost:8000,http://localhost:7001
               ADMIN_CORS: /mcgrath\.nz$/
-              # {"db":13,"sentinels":[{"host":"redis-node-0.redis-headless.default.svc.cluster.local","port":26379},{"host":"redis-node-1.redis-headless.default.svc.cluster.local","port":26379},{"host":"redis-node-2.redis-headless.default.svc.cluster.local","port":26379}],"name":"redis-master"}
-              # base64 encode that string
-              REDIS_URL: ioredis://eyJkYiI6MTMsInNlbnRpbmVscyI6W3siaG9zdCI6InJlZGlzLW5vZGUtMC5yZWRpcy1oZWFkbGVzcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwicG9ydCI6MjYzNzl9LHsiaG9zdCI6InJlZGlzLW5vZGUtMS5yZWRpcy1oZWFkbGVzcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwicG9ydCI6MjYzNzl9LHsiaG9zdCI6InJlZGlzLW5vZGUtMi5yZWRpcy1oZWFkbGVzcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwicG9ydCI6MjYzNzl9XSwibmFtZSI6InJlZGlzLW1hc3RlciJ9
+              REDIS_URL: redis://sparkleandspin-redis.default.svc.cluster.local:6379
               NODE_ENV: production
               NPM_CONFIG_PRODUCTION: false
 
