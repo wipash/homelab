@@ -45,13 +45,22 @@ spec:
             env:
               DATABASE_TYPE: postgres
               STORE_CORS: http://localhost:8000,http://localhost:7001
+              ADMIN_CORS: /mcgrath\.nz$/
               REDIS_URL: redis://redis.default.svc.cluster.local:6379/13
+              NODE_ENV: production
+              NPM_CONFIG_PRODUCTION: false
 
     service:
       main:
         ports:
           http:
-            port: 8080
+            port: 9000
+
+    persistence:
+      config:
+        type: emptyDir
+        globalMounts:
+          - path: /.config/medusa
 
     ingress:
       main:
