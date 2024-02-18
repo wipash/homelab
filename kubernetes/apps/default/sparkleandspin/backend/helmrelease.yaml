@@ -59,6 +59,7 @@ spec:
     persistence:
       config:
         type: emptyDir
+        enabled: true
         globalMounts:
           - path: /.config/medusa
 
