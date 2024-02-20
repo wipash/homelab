@@ -7,6 +7,7 @@
       "automergeType": "branch",
       "requiredStatusChecks": null,
       "schedule": "after 1am and before 5am",
+      "timezone": "Pacific/Auckland",
       "updateTypes": ["minor", "patch"],
       "packageNames": [
         "ghcr.io/onedr0p/home-assistant",
