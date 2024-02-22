@@ -47,3 +47,4 @@ resources:
   - ./actual/ks.yaml
   - ./ghcr-imagepullsecret/ks.yaml
 #  - ./sparkleandspin/ks.yaml
+  - ./atuin/ks.yaml
