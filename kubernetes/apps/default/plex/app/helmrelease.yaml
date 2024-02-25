@@ -92,20 +92,21 @@ spec:
         type: emptyDir
     nodeSelector:
       intel.feature.node.kubernetes.io/gpu: "true"
-    affinity:
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-                - key: app.kubernetes.io/name
-                  operator: In
-                  values: ["frigate"]
-            topologyKey: kubernetes.io/hostname
+    # affinity:
+    #   podAntiAffinity:
+    #     requiredDuringSchedulingIgnoredDuringExecution:
+    #       - labelSelector:
+    #           matchExpressions:
+    #             - key: app.kubernetes.io/name
+    #               operator: In
+    #               values: ["frigate"]
+    #         topologyKey: kubernetes.io/hostname
     resources:
       requests:
         gpu.intel.com/i915: 1
         cpu: 15m
-        memory: 1554M
+        # memory: 1554M
+        memory: 1024M
       limits:
         gpu.intel.com/i915: 1
         cpu: 119m
