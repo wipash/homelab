@@ -142,15 +142,6 @@ spec:
     nodeSelector:
       google.feature.node.kubernetes.io/coral: "true"
       intel.feature.node.kubernetes.io/gpu: "true"
-    affinity:
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-                - key: app.kubernetes.io/name
-                  operator: In
-                  values: ["plex"]
-            topologyKey: kubernetes.io/hostname
     resources:
       requests:
         cpu: 975m
