@@ -5,7 +5,4 @@ kind: Kustomization
 namespace: default
 resources:
   - ./helmrelease.yaml
-labels:
-  - pairs:
-      app.kubernetes.io/name: excalidraw
-      app.kubernetes.io/instance: excalidraw
+  - ../../../../templates/gatus/external

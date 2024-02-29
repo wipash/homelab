@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: cluster-apps-glauth
+    - name: glauth
     - name: cluster-apps-external-secrets-stores
     - name: cluster-apps-redis
   path: ./kubernetes/apps/default/authelia/app
