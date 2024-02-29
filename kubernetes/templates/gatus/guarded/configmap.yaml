@@ -10,14 +10,11 @@ data:
     endpoints:
       - name: "${APP}"
         group: guarded
-        url: 1.1.1.1
+        url: "https://${GATUS_SUBDOMAIN:-${APP}}.${GATUS_DOMAIN:-mcgrath.nz}${GATUS_PATH:-/}"
         interval: 1m
         ui:
           hide-hostname: true
           hide-url: true
-        dns:
-          query-name: "${GATUS_SUBDOMAIN:-${APP}}.mcgrath.nz"
-          query-type: A
         conditions:
           - "[STATUS] == ${GATUS_STATUS:-200}"
         alerts:
