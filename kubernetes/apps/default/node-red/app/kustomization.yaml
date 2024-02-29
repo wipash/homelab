@@ -7,7 +7,4 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./volsync.yaml
-labels:
-  - pairs:
-      app.kubernetes.io/name: node-red
-      app.kubernetes.io/instance: node-red
+  - ../../../../templates/gatus/guarded

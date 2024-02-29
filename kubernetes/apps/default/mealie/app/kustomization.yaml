@@ -6,7 +6,4 @@ namespace: default
 resources:
   - ./helmrelease.yaml
   - ./volsync.yaml
-labels:
-  - pairs:
-      app.kubernetes.io/name: mealie
-      app.kubernetes.io/instance: mealie
+  - ../../../../templates/gatus/guarded
