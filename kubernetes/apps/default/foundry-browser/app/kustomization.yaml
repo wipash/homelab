@@ -5,7 +5,4 @@ kind: Kustomization
 namespace: default
 resources:
   - ./helmrelease.yaml
-labels:
-  - pairs:
-      app.kubernetes.io/name: foundry-browser
-      app.kubernetes.io/instance: foundry-browser
+  - ../../../../templates/gatus/external

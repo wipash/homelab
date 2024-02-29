@@ -3,9 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cluster-apps-foundry-browser
+  name: &app foundry-browser
   namespace: flux-system
 spec:
+  targetNamespace: default
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   dependsOn:
     - name: cluster-apps-rook-ceph-cluster
     - name: cluster-apps-foundryvtt
@@ -14,7 +18,10 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-cluster
-  wait: true
+  wait: false
   interval: 30m
   retryInterval: 1m
   timeout: 5m
+  postBuild:
+    substitute:
+      APP: *app

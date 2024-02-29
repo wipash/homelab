@@ -21,13 +21,13 @@ resources:
   - ./home-assistant/ks.yaml
   - ./mosquitto/ks.yaml
   - ./zigbee2mqtt/ks.yaml
-  - ./foundryvtt/ks.yaml
+  # - ./foundryvtt/ks.yaml
   - ./node-red/ks.yaml
   - ./cyberchef/ks.yaml
   - ./glauth/ks.yaml
   - ./redis/ks.yaml
   - ./authelia/ks.yaml
-  - ./foundry-browser/ks.yaml
+  # - ./foundry-browser/ks.yaml
   - ./miniflux/ks.yaml
   - ./postgres-backup/ks.yaml
   - ./smokeping/ks.yaml
