@@ -19,6 +19,6 @@ data:
           query-name: "${GATUS_SUBDOMAIN:-${APP}}.mcgrath.nz"
           query-type: A
         conditions:
-          - "len([BODY]) == 0"
+          - "[STATUS] == ${GATUS_STATUS:-200}"
         alerts:
           - type: pushover
