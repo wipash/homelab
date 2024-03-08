@@ -103,8 +103,8 @@ spec:
       #       enabled: true
       #       port: *port
       #       protocol: UDP
-    serviceAccount:
-      name: tailscale-gateway
+    # serviceAccount:
+    #   name: tailscale-gateway
     serviceMonitor:
       main:
         enabled: true
