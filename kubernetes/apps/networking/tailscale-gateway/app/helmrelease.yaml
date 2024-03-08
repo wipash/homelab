@@ -3,14 +3,14 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
-  name: tailscale-gateway
+  name: &app tailscale-gateway
   namespace: networking
 spec:
   interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 2.3.0
+      version: 2.6.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -28,6 +28,8 @@ spec:
   values:
     controllers:
       main:
+        replicas: 2
+        strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -38,14 +40,16 @@ spec:
             env:
               TZ: ${TIMEZONE}
               NO_AUTOUPDATE: "true"
-              SA_NAME: tailscale-gateway
+              # SA_NAME: tailscale-gateway
               TS_USERSPACE: true
               TS_KUBE_SECRET: tailscale-state
               TS_EXTRA_ARGS: --advertise-exit-node
               TS_TAILSCALED_EXTRA_ARGS: --debug=0.0.0.0:2000
               TS_ROUTES: "${NETWORK_K8S_POD_CIDR},${NETWORK_BGP_SVC_CIDR},10.0.16.0/24,10.0.10.0/24"
-              TS_HOSTNAME: "tailscale-k8s-gateway"
-              #TS_SOCKET: /var/run/tailscale/tailscaled.sock
+              TS_STATE_DIR: /tmp
+              # PORT: &port ${TAILNET_PUBLIC_PORT}
+              # TS_HOSTNAME: "tailscale-k8s-gateway"
+              # TS_SOCKET: /var/run/tailscale/tailscaled.sock
             envFrom:
               - secretRef:
                   name: tailscale-gateway-secret
@@ -55,17 +59,33 @@ spec:
                 memory: 128M
               limits:
                 memory: 256M
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
         pod:
           securityContext:
             runAsUser: 568
             runAsGroup: 568
+            runAsNonRoot: true
             fsGroup: 568
             fsGroupChangePolicy: OnRootMismatch
+          topologySpreadConstraints:
+            - maxSkew: 1
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: *app
     persistence:
       cache:
         type: emptyDir
         globalMounts:
           - path: /.cache
+      tmp:
+        type: emptyDir
     service:
       main:
         ports:
