@@ -6,7 +6,7 @@ metadata:
   name: &app nginx-certificates
   namespace: flux-system
 spec:
-  targetNamespace: network
+  targetNamespace: networking
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -29,7 +29,7 @@ metadata:
   name: &app nginx-external
   namespace: flux-system
 spec:
-  targetNamespace: network
+  targetNamespace: networking
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -52,7 +52,7 @@ metadata:
   name: &app nginx-internal
   namespace: flux-system
 spec:
-  targetNamespace: network
+  targetNamespace: networking
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
