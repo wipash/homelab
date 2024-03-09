@@ -6,13 +6,13 @@ metadata:
   name: &app external-dns
   namespace: flux-system
 spec:
-  targetNamespace: network
+  targetNamespace: networking
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: cluster-apps-external-secrets-stores
-  path: ./kubernetes/main/apps/network/external-dns/app
+  path: ./kubernetes/apps/networking/external-dns/app
   prune: false
   sourceRef:
     kind: GitRepository
