@@ -45,10 +45,9 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: external
         annotations:
-          external-dns/is-public: "true"
-          external-dns.alpha.kubernetes.io/target: "tunnel.mcgrath.nz"
+          external-dns.alpha.kubernetes.io/target: "external.mcgrath.nz"
         hosts:
           - host: &host1 "${SECRET_WP_1_DOMAIN}"
             paths:

@@ -32,7 +32,7 @@ spec:
       createPrometheusRules: true
     ingress:
       dashboard:
-        ingressClassName: nginx
+        ingressClassName: internal
         annotations:
           nginx.ingress.kubernetes.io/whitelist-source-range: |
             10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10
@@ -243,7 +243,7 @@ spec:
             region: nz
         ingress:
           enabled: true
-          ingressClassName: nginx
+          ingressClassName: internal
           host:
             name: &host rgw.mcgrath.nz
             path: /
