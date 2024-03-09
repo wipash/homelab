@@ -73,10 +73,9 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: external
         annotations:
-          external-dns/is-public: "true"
-          external-dns.alpha.kubernetes.io/target: "tunnel.${SECRET_DOMAIN}"
+          external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
           nginx.org/websocket-services: home-assistant
           hajimari.io/icon: mdi:home-assistant
           gethomepage.dev/enabled: "true"

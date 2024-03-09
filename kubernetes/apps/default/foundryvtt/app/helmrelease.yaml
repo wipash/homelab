@@ -62,10 +62,9 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: external
         annotations:
-          external-dns/is-public: "true"
-          external-dns.alpha.kubernetes.io/target: "tunnel.mcgrath.nz"
+          external-dns.alpha.kubernetes.io/target: "external.mcgrath.nz"
           hajimari.io/icon: mdi:dice-d20
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: Foundry

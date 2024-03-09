@@ -49,7 +49,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: internal
         hosts:
           - host: &host monica.${SECRET_DOMAIN}
             paths:

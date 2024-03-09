@@ -68,7 +68,7 @@ spec:
     ingress:
       main:
         enabled: true
-        className: nginx
+        classname: internal
         annotations:
           nginx.ingress.kubernetes.io/auth-snippet: proxy_set_header X-Forwarded-Host $http_host;
           gethomepage.dev/enabled: "true"
