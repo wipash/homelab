@@ -81,7 +81,7 @@ spec:
     ingress:
       main:
         enabled: true
-        classname: internal
+        className: internal
         hosts:
           - host: "${HOSTNAME}"
             paths:
