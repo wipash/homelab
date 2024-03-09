@@ -4,35 +4,35 @@ originRequest:
 
 ingress:
   - hostname: "*.mcgrath.nz"
-    service: https://ingress-nginx-controller.networking.svc.cluster.local:443
+    service: https://nginx-external-controller.networking.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
   - hostname: "*.${SECRET_DOMAIN_2}"
-    service: https://ingress-nginx-controller.networking.svc.cluster.local:443
+    service: https://nginx-external-controller.networking.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
   - hostname: "*.${SECRET_DOMAIN_3}"
-    service: https://ingress-nginx-controller.networking.svc.cluster.local:443
+    service: https://nginx-external-controller.networking.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
   - hostname: "${SECRET_GHOST_DOMAIN}"
-    service: https://ingress-nginx-controller.networking.svc.cluster.local:443
+    service: https://nginx-external-controller.networking.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
   - hostname: "${SECRET_WP_0_DOMAIN}"
-    service: https://ingress-nginx-controller.networking.svc.cluster.local:443
+    service: https://nginx-external-controller.networking.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
   - hostname: "www.${SECRET_WP_0_DOMAIN}"
-    service: https://ingress-nginx-controller.networking.svc.cluster.local:443
+    service: https://nginx-external-controller.networking.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
   - hostname: "${SECRET_WP_1_DOMAIN}"
-    service: https://ingress-nginx-controller.networking.svc.cluster.local:443
+    service: https://nginx-external-controller.networking.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
   - hostname: "www.${SECRET_WP_1_DOMAIN}"
-    service: https://ingress-nginx-controller.networking.svc.cluster.local:443
+    service: https://nginx-external-controller.networking.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
   - service: http_status:404
