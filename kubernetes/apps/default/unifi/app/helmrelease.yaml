@@ -89,7 +89,7 @@ spec:
     ingress:
       main:
         enabled: true
-        classname: internal
+        className: internal
         annotations:
           nginx.ingress.kubernetes.io/backend-protocol: HTTPS
           gethomepage.dev/enabled: "true"
