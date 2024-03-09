@@ -353,7 +353,7 @@ spec:
       enabled: true
     ingress:
       enabled: true
-      ingressClassName: nginx
+      ingressClassName: internal
       annotations:
         hajimari.io/icon: simple-icons:grafana
         gethomepage.dev/enabled: "true"
