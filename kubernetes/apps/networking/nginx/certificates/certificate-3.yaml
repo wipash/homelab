@@ -2,15 +2,14 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: wildcard-tls-2
-  namespace: networking
+  name: wildcard-tls-3
 spec:
   # secretName doesn't have to match the certificate name, but it may as well, for simplicity!
-  secretName: wildcard-tls-2
+  secretName: wildcard-tls-3
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
-  commonName: "${SECRET_DOMAIN_2}"
+  commonName: "${SECRET_DOMAIN_3}"
   dnsNames:
-    - "${SECRET_DOMAIN_2}"
-    - "*.${SECRET_DOMAIN_2}"
+    - "${SECRET_DOMAIN_3}"
+    - "*.${SECRET_DOMAIN_3}"
