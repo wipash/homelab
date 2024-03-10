@@ -16,3 +16,22 @@ spec:
   selector:
     cnpg.io/cluster: postgres16
     role: primary
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-immich-lb
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: postgres-immich.mcgrath.nz
+    io.cilium/lb-ipam-ips: 172.16.10.17
+spec:
+  type: LoadBalancer
+  ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    cnpg.io/cluster: postgres16-immich
+    role: primary
