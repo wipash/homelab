@@ -85,7 +85,7 @@ identity_providers:
         pre_configured_consent_duration: 1y
         scopes: ["openid", "profile", "groups", "email"]
         redirect_uris: ["https://grafana.mcgrath.nz/login/generic_oauth"]
-        userinfo_signing_algorithm: none
+        userinfo_signed_response_alg: none
       - id: miniflux
         description: Miniflux
         secret: "$${MINIFLUX_OAUTH_CLIENT_SECRET}"
@@ -94,7 +94,7 @@ identity_providers:
         pre_configured_consent_duration: 1y
         scopes: ["openid", "profile", "groups", "email"]
         redirect_uris: ["https://miniflux.mcgrath.nz/oauth2/oidc/callback"]
-        userinfo_signing_algorithm: none
+        userinfo_signed_response_alg: none
       - id: weave-gitops
         description: Weave GitOps
         secret: "$${WEAVEGITOPS_OAUTH_CLIENT_SECRET}"
@@ -103,7 +103,7 @@ identity_providers:
         pre_configured_consent_duration: 1y
         scopes: ["openid", "profile", "groups", "email"]
         redirect_uris: ["https://gitops.mcgrath.nz/oauth2/callback"]
-        userinfo_signing_algorithm: none
+        userinfo_signed_response_alg: none
       - id: bookstack
         description: Bookstack
         secret: "$${BOOKSTACK_OAUTH_CLIENT_SECRET}"
@@ -112,7 +112,7 @@ identity_providers:
         pre_configured_consent_duration: 1y
         scopes: ["openid", "profile", "groups", "email"]
         redirect_uris: ["https://bookstack.mcgrath.nz/oidc/callback"]
-        userinfo_signing_algorithm: none
+        userinfo_signed_response_alg: none
       - id: immich
         description: Immich
         secret: "$${IMMICH_OAUTH_CLIENT_SECRET}"
@@ -121,4 +121,4 @@ identity_providers:
         pre_configured_consent_duration: 1y
         scopes: ["openid", "profile", "email"]
         redirect_uris: ["https://photos.mcgrath.nz/auth/login", "https://photos.mcgrath.nz/user-settings", "app.immich:/"]
-        userinfo_signing_algorithm: none
+        userinfo_signed_response_alg: none
