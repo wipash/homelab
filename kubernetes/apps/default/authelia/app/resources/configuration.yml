@@ -1,7 +1,42 @@
-# yaml-language-server: $schema=https://gist.githubusercontent.com/james-d-elliott/756de37a4398b3445072a60d674905c6/raw/ce90833b1ce145cb701184557dd964fa7546f19a/jsonschema.json
 ---
+# Note: Authelia vars should be escaped with $${VAR_NAME} to avoid interpolation by Flux
+authentication_backend:
+  password_reset:
+    disable: true
+  refresh_interval: 1m
+  ldap:
+    address: ldap://lldap.default.svc.cluster.local:389
+    implementation: custom
+    timeout: 5s
+    start_tls: false
+    base_dn: dc=home,dc=arpa
+    additional_users_dn: ou=people
+    users_filter: (&({username_attribute}={input})(objectClass=person))
+    additional_groups_dn: ou=groups
+    groups_filter: (member={dn})
+    group_search_mode: filter
+    user: uid=admin,ou=people,dc=home,dc=arpa
+    password: password
+    attributes:
+      username: uid
+      display_name: displayName
+      mail: mail
+      member_of: memberOf
+      group_name: cn
+
 session:
+  same_site: lax
+  inactivity: 5m
+  expiration: 1h
+  remember_me: 1M
+  cookies:
+    - name: mcgrath_session
+      domain: mcgrath.nz
+      authelia_url: https://auth.mcgrath.nz
+      default_redirection_url: https://mcgrath.nz
   redis:
+    host: redis.default.svc.cluster.local
+    database_index: 14
     high_availability:
       sentinel_name: redis-master
       nodes:
@@ -12,14 +47,29 @@ session:
         - host: redis-node-2.redis-headless.default.svc.cluster.local
           port: 26379
 
+notifier:
+  disable_startup_check: true
+  smtp:
+    address: smtp-relay.default.svc.cluster.local:25
+    sender: Authelia <authelia@mail.mcgrath.nz>
+    disable_require_tls: true
+
+totp:
+  disable: false
+  issuer: authelia.com
+
+webauthn:
+  disable: true
+
+duo_api:
+  disable: true
+
 access_control:
   default_policy: two_factor
   networks:
     - name: internal
       networks: ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "100.64.0.0/10"]
-  rules:
-    - domain: ["grafana.mcgrath.nz"]
-      policy: bypass
+  rules: []
 
 identity_providers:
   oidc:

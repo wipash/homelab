@@ -8,7 +8,7 @@ metadata:
 spec:
   dependsOn:
     - name: cluster-apps-external-secrets-stores
-    - name: cluster-apps-redis
+    - name: redis
   path: ./kubernetes/apps/default/shlink/api
   prune: true
   sourceRef:
