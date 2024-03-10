@@ -25,7 +25,7 @@ spec:
     - name: lldap
       namespace: default
     - name: redis
-      namespace: database
+      namespace: default
   values:
     controllers:
       main:
