@@ -30,6 +30,6 @@ data:
   WEATHERAPI_KEY: ${SECRET_MONICA_WEATHERAPI_KEY}
   MAIL_MAILER: smtp
   MAIL_HOST: smtp-relay.default.svc.cluster.local
-  MAIL_PORT: "2525"
+  MAIL_PORT: "25"
   MAIL_FROM_ADDRESS: monica@${SECRET_DOMAIN_MAIL}
   MAIL_FROM_NAME: Monica
