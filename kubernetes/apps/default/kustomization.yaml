@@ -48,3 +48,4 @@ resources:
   - ./ghcr-imagepullsecret/ks.yaml
 #  - ./sparkleandspin/ks.yaml
   - ./atuin/ks.yaml
+  - ./lldap/ks.yaml
