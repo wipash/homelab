@@ -49,6 +49,13 @@ spec:
               REDIS_URL: redis://sparkleandspin-redis.default.svc.cluster.local:6379
               # NODE_ENV: production
               # NPM_CONFIG_PRODUCTION: false
+            probes:
+              liveness:
+                enabled: false
+              readiness:
+                enabled: false
+              startup:
+                enabled: false
 
     service:
       main:
