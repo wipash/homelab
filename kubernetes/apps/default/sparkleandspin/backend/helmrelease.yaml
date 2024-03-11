@@ -26,14 +26,6 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
 
-        # pod:
-        #   enableServiceLinks: false
-        #   securityContext:
-        #     runAsUser: ${APP_UID}
-        #     runAsGroup: ${APP_GID}
-        #     fsGroup: ${APP_GID}
-        #     fsGroupChangePolicy: "OnRootMismatch"
-
         containers:
           main:
             image:
@@ -89,11 +81,6 @@ spec:
         enabled: true
         globalMounts:
           - path: /app/medusa/uploads
-      build:
-        type: emptyDir
-        enabled: true
-        globalMounts:
-          - path: /app/medusa/build
       tmp:
         type: emptyDir
         enabled: true
