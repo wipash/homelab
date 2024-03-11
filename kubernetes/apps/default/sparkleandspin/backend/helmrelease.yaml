@@ -73,27 +73,33 @@ spec:
           http:
             port: 9000
 
-    # persistence:
-    #   config:
-    #     type: emptyDir
-    #     enabled: true
-    #     globalMounts:
-    #       - path: /.config/medusa
-    #   cache:
-    #     type: emptyDir
-    #     enabled: true
-    #     globalMounts:
-    #       - path: /app/medusa/.cache
-    #   uploads:
-    #     type: emptyDir
-    #     enabled: true
-    #     globalMounts:
-    #       - path: /app/medusa/uploads
-    #   build:
-    #     type: emptyDir
-    #     enabled: true
-    #     globalMounts:
-    #       - path: /app/medusa/build
+    persistence:
+      config:
+        type: emptyDir
+        enabled: true
+        globalMounts:
+          - path: /.config/medusa
+      cache:
+        type: emptyDir
+        enabled: true
+        globalMounts:
+          - path: /app/medusa/.cache
+      uploads:
+        type: emptyDir
+        enabled: true
+        globalMounts:
+          - path: /app/medusa/uploads
+      build:
+        type: emptyDir
+        enabled: true
+        globalMounts:
+          - path: /app/medusa/build
+      tmp:
+        type: emptyDir
+        enabled: true
+        globalMounts:
+          - path: /tmp
+
 
     ingress:
       main:
