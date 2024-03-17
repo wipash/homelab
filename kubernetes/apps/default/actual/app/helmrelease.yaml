@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.6.0
+      version: 3.0.4
       interval: 30m
       sourceRef:
         kind: HelmRepository
@@ -18,23 +18,33 @@ spec:
 
   values:
     controllers:
-      main:
+      actual:
         annotations:
           reloader.stakater.com/auto: "true"
 
         pod:
           enableServiceLinks: false
           securityContext:
-            runAsUser: ${APP_UID}
-            runAsGroup: ${APP_GID}
-            fsGroup: ${APP_GID}
+            runAsUser: 568
+            runAsGroup: 568
+            fsGroup: 568
             fsGroupChangePolicy: "OnRootMismatch"
 
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/actualbudget/actual-server
               tag: 24.3.0
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
             resources:
               requests:
                 cpu: 12m
@@ -43,31 +53,30 @@ spec:
                 memory: 512M
 
     service:
-      main:
+      app:
+        controller: actual
         ports:
           http:
             port: 5006
 
     ingress:
-      main:
-        enabled: true
+      app:
         className: internal
         hosts:
-          - host: "${HOSTNAME}"
+          - host: &host actual.mcgrath.nz
             paths:
               - path: /
                 service:
-                  name: main
+                  identifier: app
                   port: http
         tls:
           - hosts:
-              - "${HOSTNAME}"
+              - *host
 
     persistence:
       data:
-        enabled: true
         existingClaim: "${VOLSYNC_CLAIM}"
         advancedMounts:
-          main:
-            main:
+          actual:
+            app:
               - path: /data
