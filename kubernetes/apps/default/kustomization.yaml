@@ -6,46 +6,39 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  - ./plex/ks.yaml
-  - ./tautulli/ks.yaml
-  - ./sonarr/ks.yaml
-  - ./sabnzbd/ks.yaml
-  - ./frigate/ks.yaml
-  - ./excalidraw/ks.yaml
-  - ./bazarr/ks.yaml
-  - ./overseerr/ks.yaml
-  - ./prowlarr/ks.yaml
-  - ./radarr/ks.yaml
-  - ./recyclarr/ks.yaml
-  - ./readarr/ks.yaml
-  - ./home-assistant/ks.yaml
-  - ./mosquitto/ks.yaml
-  - ./zigbee2mqtt/ks.yaml
-  # - ./foundryvtt/ks.yaml
-  - ./node-red/ks.yaml
-  - ./cyberchef/ks.yaml
-  - ./glauth/ks.yaml
-  - ./redis/ks.yaml
+  - ./actual/ks.yaml
+  - ./atuin/ks.yaml
   - ./authelia/ks.yaml
-  # - ./foundry-browser/ks.yaml
-  - ./miniflux/ks.yaml
-  - ./postgres-backup/ks.yaml
-  - ./smokeping/ks.yaml
-  - ./qbittorrent/ks.yaml
-  - ./shlink/ks.yaml
-  - ./runzero-explorer/ks.yaml
-  - ./wordpress/ks.yaml
-  - ./paperless/ks.yaml
-  - ./mealie/ks.yaml
-  - ./smtp-relay/ks.yaml
+  - ./bazarr/ks.yaml
+  - ./cloudnative-pg/ks.yaml
+  - ./cyberchef/ks.yaml
+  - ./frigate/ks.yaml
+  - ./ghcr-imagepullsecret/ks.yaml
+  - ./home-assistant/ks.yaml
   - ./homebox/ks.yaml
   - ./homepage/ks.yaml
   - ./immich/ks.yaml
-  - ./unifi/ks.yaml
-  - ./bookstack/ks.yaml
-  - ./cloudnative-pg/ks.yaml
-  - ./actual/ks.yaml
-  - ./ghcr-imagepullsecret/ks.yaml
-  - ./sparkleandspin/ks.yaml
-  - ./atuin/ks.yaml
   - ./lldap/ks.yaml
+  - ./mealie/ks.yaml
+  - ./miniflux/ks.yaml
+  - ./mosquitto/ks.yaml
+  - ./node-red/ks.yaml
+  - ./overseerr/ks.yaml
+  - ./paperless/ks.yaml
+  - ./plex/ks.yaml
+  - ./postgres-backup/ks.yaml
+  - ./prowlarr/ks.yaml
+  - ./qbittorrent/ks.yaml
+  - ./radarr/ks.yaml
+  - ./recyclarr/ks.yaml
+  - ./redis/ks.yaml
+  - ./sabnzbd/ks.yaml
+  - ./shlink/ks.yaml
+  - ./smokeping/ks.yaml
+  - ./smtp-relay/ks.yaml
+  - ./sonarr/ks.yaml
+  - ./sparkleandspin/ks.yaml
+  - ./tautulli/ks.yaml
+  - ./unifi/ks.yaml
+  - ./wordpress/ks.yaml
+  - ./zigbee2mqtt/ks.yaml
