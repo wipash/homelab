@@ -1,16 +1,16 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
-  name: bazarr
+  name: &app bazarr
   namespace: default
 spec:
   interval: 15m
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -27,88 +27,112 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    controller:
-      type: statefulset
-    image:
-      repository: ghcr.io/onedr0p/bazarr
-      tag: 1.4.2@sha256:113035f37f289f190781d9d728f2ebf56c895b972921820f5d30408427c837d9
-    env:
-      TZ: Pacific/Auckland
+    controllers:
+      bazarr:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        pod:
+          enableServiceLinks: false
+          securityContext:
+            fsGroup: 568
+            fsGroupChangePolicy: "OnRootMismatch"
+            supplementalGroups: [65537]
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/bazarr
+              tag: 1.4.2@sha256:113035f37f289f190781d9d728f2ebf56c895b972921820f5d30408427c837d9
+            env:
+              TZ: Pacific/Auckland
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              runAsUser: 568
+              runAsGroup: 568
+              runAsNonRoot: true
+              capabilities: { drop: ["ALL"] }
+
+          subcleaner:
+            image:
+              repository: registry.k8s.io/git-sync/git-sync
+              tag: v4.2.1
+            args:
+              - --repo=https://github.com/KBlixt/subcleaner.git
+              - --branch=master
+              - --depth=1
+              - --wait=21600 # 6 hours
+              - --root=/add-ons/subcleaner
+
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              runAsUser: 568
+              runAsGroup: 568
+              runAsNonRoot: true
+              capabilities: { drop: ["ALL"] }
+
+
     service:
-      main:
+      app:
+        controller: bazarr
         ports:
           http:
             port: 6767
-    dnsConfig:
-      options:
-        - name: ndots
-          value: "1"
+
     ingress:
-      main:
-        enabled: true
-        ingressClassName: internal
+      app:
+        className: internal
         annotations:
-          nginx.ingress.kubernetes.io/whitelist-source-range: |
-            10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10
           hajimari.io/icon: mdi:subtitles-outline
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: Bazarr
           gethomepage.dev/icon: mdi-subtitles-outline
           gethomepage.dev/group: Media Acquisition
         hosts:
-          - host: &host "{{ .Release.Name }}.mcgrath.nz"
+          - host: &host bazarr.mcgrath.nz
             paths:
               - path: /
-                pathType: Prefix
+                service:
+                  identifier: app
+                  port: http
         tls:
           - hosts:
               - *host
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: OnRootMismatch
-      supplementalGroups: [65537]
-    volumeClaimTemplates:
-      - name: config
-        mountPath: /config
-        accessMode: ReadWriteOnce
-        size: 1Gi
-        storageClass: ceph-block
+
     persistence:
+      config:
+        existingClaim: *app
+        globalMounts:
+          - path: /config
       media:
-        enabled: true
         type: nfs
         server: 172.20.0.1
         path: /volume1/Media
-        mountPath: /media
+        globalMounts:
+          - path: /media
       add-ons:
-        enabled: true
         type: emptyDir
-        mountPath: /add-ons
-    resources:
-      requests:
-        cpu: 10m
-        memory: 476M
-      limits:
-        cpu: 165m
-        memory: 722M
-    sidecars:
-      subcleaner:
-        image: registry.k8s.io/git-sync/git-sync:v4.2.1
-        imagePullPolicy: IfNotPresent
-        args:
-          - --repo=https://github.com/KBlixt/subcleaner.git
-          - --branch=master
-          - --depth=1
-          - --wait=21600 # 6 hours
-          - --root=/add-ons/subcleaner
-        volumeMounts:
-          - { name: add-ons, mountPath: /add-ons }
-        resources:
-          requests:
-            cpu: 10m
-            memory: 37M
-          limits:
-            cpu: 16m
-            memory: 55M
+        globalMounts:
+          - path: /add-ons
