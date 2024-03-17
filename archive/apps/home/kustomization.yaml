@@ -9,7 +9,7 @@ resources:
   # - node-red
   # - mosquitto
   # - smtp-relay
-  - monica
+  # - monica
   # - home-assistant
   # - homer
   # - frigate
