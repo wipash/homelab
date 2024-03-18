@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -26,128 +26,139 @@ spec:
       retries: 3
   uninstall:
     keepHistory: false
+  dependsOn:
+    - name: intel-device-plugin-gpu
+      namespace: kube-system
+    - name: mosquitto
+      namespace: default
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: volsync
+      namespace: volsync
   values:
-    controller:
-      type: statefulset
-      annotations:
-        reloader.stakater.com/auto: "true"
-    image:
-      repository: ghcr.io/blakeblackshear/frigate
-      tag: 0.13.2
-    env:
-      TZ: Pacific/Auckland
-      LIBVA_DRIVER_NAME: i965
-      FRIGATE_MQTT_USERNAME:
-        valueFrom:
-          secretKeyRef:
-            name: mosquitto-secret
-            key: username
-      FRIGATE_MQTT_PASSWORD:
-        valueFrom:
-          secretKeyRef:
-            name: mosquitto-secret
-            key: password
-    envFrom:
-      - secretRef:
-          name: frigate-secret
-    service:
-      main:
-        type: LoadBalancer
-        externalTrafficPolicy: Local
+    controllers:
+      frigate:
         annotations:
-          io.cilium/lb-ipam-ips: "${SVC_FRIGATE_ADDR}"
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/blakeblackshear/frigate
+              tag: 0.13.2
+            env:
+              TZ: Pacific/Auckland
+              LIBVA_DRIVER_NAME: i965
+              FRIGATE_MQTT_USERNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: mosquitto-secret
+                    key: username
+              FRIGATE_MQTT_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: mosquitto-secret
+                    key: password
+            envFrom:
+              - secretRef:
+                  name: frigate-secret
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/version
+                    port: &port 5000
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              privileged: true
+            resources:
+              requests:
+                cpu: 975m
+                memory: 1000M
+                gpu.intel.com/i915: "1"
+              limits:
+                memory: 5000M
+                gpu.intel.com/i915: "1"
+        pod:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: app.kubernetes.io/name
+                        operator: In
+                        values: ["plex"]
+                  topologyKey: kubernetes.io/hostname
+          nodeSelector:
+            google.feature.node.kubernetes.io/coral: "true"
+            intel.feature.node.kubernetes.io/gpu: "true"
+
+    service:
+      app:
+        controller: frigate
         ports:
           http:
-            port: &port 5000
+            port: *port
           rtsp:
-            enabled: true
             port: 8554
           webrtc:
-            enabled: true
             port: 8555
             protocol: TCP
           webrtc-udp:
-            enabled: true
             port: 8555
             protocol: UDP
-    probes:
-      liveness: &probes
-        enabled: true
-        custom: true
-        spec:
-          httpGet:
-            path: /api/version
-            port: *port
-          initialDelaySeconds: 0
-          periodSeconds: 10
-          timeoutSeconds: 1
-          failureThreshold: 3
-      readiness: *probes
-      startup:
-        enabled: false
+
     ingress:
-      main:
-        enabled: true
-        ingressClassName: internal
+      app:
         annotations:
-          nginx.ingress.kubernetes.io/whitelist-source-range: |
-            10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10
-          hajimari.io/icon: mdi:cctv
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: Frigate
           gethomepage.dev/icon: mdi-cctv
           gethomepage.dev/group: Home
+        className: internal
         hosts:
           - host: &host "{{ .Release.Name }}.mcgrath.nz"
             paths:
               - path: /
-                pathType: Prefix
+                service:
+                  identifier: app
+                  port: http
         tls:
           - hosts:
               - *host
-    securityContext:
-      privileged: true
-    volumeClaimTemplates:
-      - name: config
-        mountPath: /data
-        accessMode: ReadWriteOnce
-        size: 5Gi
-        storageClass: ceph-block
+
     persistence:
+      config:
+        existingClaim: frigate
+        globalMounts:
+          - path: /data
       config-file:
-        enabled: true
         type: configMap
         name: frigate-configmap
-        subPath: config.yaml
-        mountPath: /config/config.yml
-        readOnly: true
-      media:
-        enabled: true
-        mountPath: /media
-        type: nfs
-        server: 172.20.0.1
-        path: /volume1/Frigate
+        globalMounts:
+          - path: /config/config.yml
+            subPath: config.yml
+            readOnly: true
       cache:
-        enabled: true
         type: emptyDir
         medium: Memory
         sizeLimit: 4Gi
-        mountPath: /dev/shm
+        globalMounts:
+          - path: /dev/shm
       usb:
-        enabled: true
         type: hostPath
         hostPath: /dev/bus/usb
         hostPathType: Directory
-        mountPath: /dev/bus/usb
-    nodeSelector:
-      google.feature.node.kubernetes.io/coral: "true"
-      intel.feature.node.kubernetes.io/gpu: "true"
-    resources:
-      requests:
-        cpu: 975m
-        memory: 2676M
-        gpu.intel.com/i915: "1"
-      limits:
-        cpu: 2632m
-        memory: 5000M
-        gpu.intel.com/i915: "1"
+        globalMounts:
+          - path: /dev/bus/usb
+      media:
+        type: nfs
+        server: 172.20.0.1
+        path: /volume1/Frigate
+        globalMounts:
+          - path: /media

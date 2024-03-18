@@ -11,11 +11,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: mosquitto
     - name: cluster-apps-external-secrets-stores
-    - name: cluster-apps-rook-ceph-cluster
-    - name: cluster-apps-volsync
-    - name: cluster-apps-intel-device-plugin-gpu
+    - name: node-feature-discovery-rules
   path: ./kubernetes/apps/default/frigate/app
   prune: true
   sourceRef:
@@ -28,3 +25,4 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_CAPACITY: 5Gi
