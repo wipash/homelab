@@ -142,16 +142,13 @@ spec:
       limits:
         cpu: 16m
         memory: 222M
+
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                # - key: feature.node.kubernetes.io/usb-02_0451_16a8.present
-                - key: feature.node.kubernetes.io/usb-02_1a86_55d4.present
-                  operator: In
-                  values:
-                    - "true"
+          nodeSelector:
+            sonoff.feature.node.kubernetes.io/zigbee: "true"
+
     sidecars:
       exporter:
         image: ghcr.io/kpetremann/mqtt-exporter:1.4.1
