@@ -38,7 +38,7 @@ spec:
     name: flux-cluster
   wait: false
   dependsOn:
-    - name: cluster-apps-external-secrets-stores
+    - name: external-secrets-stores
     - name: ghcr-imagepullsecret
     - name: sparkleandspin-redis
   postBuild:
@@ -70,7 +70,7 @@ spec:
 #   dependsOn:
 #     - name: sparkleandspin-backend
 #     - name: ghcr-imagepullsecret
-#     - name: cluster-apps-external-secrets-stores
+#     - name: external-secrets-stores
 #   postBuild:
 #     substitute:
 #       APP: *frontend-appname

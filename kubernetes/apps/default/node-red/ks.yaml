@@ -9,9 +9,9 @@ spec:
   dependsOn:
     - name: home-assistant
     - name: mosquitto
-    - name: cluster-apps-external-secrets-stores
-    - name: cluster-apps-rook-ceph-cluster
-    - name: cluster-apps-volsync
+    - name: external-secrets-stores
+    - name: rook-ceph-cluster
+    - name: volsync
   path: ./kubernetes/apps/default/node-red/app
   prune: true
   sourceRef:
