@@ -87,6 +87,8 @@ values:
           runAsNonRoot: true
           fsGroup: 568
           fsGroupChangePolicy: OnRootMismatch
+        nodeSelector:
+          sonoff.feature.node.kubernetes.io/zigbee: "true"
   service:
     app:
       controller: zigbee2mqtt
