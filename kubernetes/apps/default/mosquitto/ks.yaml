@@ -3,23 +3,18 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app mosquitto
+  name: mosquitto
   namespace: flux-system
 spec:
   targetNamespace: default
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets-stores
-    - name: rook-ceph-cluster
-    - name: volsync
-  path: ./kubernetes/apps/default/mosquitto/app
+  path: ./kubernetes/main/apps/default/mosquitto/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-cluster
-  wait: true
+  wait: false
   interval: 30m
   retryInterval: 1m
   timeout: 5m
