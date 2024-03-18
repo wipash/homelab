@@ -84,14 +84,9 @@ spec:
               limits:
                 memory: 512Mi
         pod:
-          #securityContext:
-            # runAsUser: 568
-            # runAsGroup: 568
-            # runAsNonRoot: true
-            # fsGroup: 568
-            # fsGroupChangePolicy: OnRootMismatch
-            # supplementalGroups:
-            #   - 20
+          securityContext:
+            supplementalGroups:
+              - 20
           nodeSelector:
             sonoff.feature.node.kubernetes.io/zigbee: "true"
     service:
