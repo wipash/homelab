@@ -1,12 +1,12 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
   name: thanos
-  namespace: monitoring
 spec:
-  interval: 15m
+  interval: 30m
+  timeout: 15m
   chart:
     spec:
       chart: thanos
@@ -15,155 +15,137 @@ spec:
         kind: HelmRepository
         name: bitnami
         namespace: flux-system
-      interval: 15m
-  maxHistory: 3
   install:
-    createNamespace: true
     remediation:
       retries: 3
   upgrade:
     cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 3
-  uninstall:
-    keepHistory: false
+  dependsOn:
+    - name: openebs
+      namespace: openebs-system
+    - name: redis
+      namespace: default
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+  valuesFrom:
+    - targetPath: objstoreConfig.config.bucket
+      kind: ConfigMap
+      name: thanos-bucket-v2
+      valuesKey: BUCKET_NAME
+    - targetPath: objstoreConfig.config.endpoint
+      kind: ConfigMap
+      name: thanos-bucket-v2
+      valuesKey: BUCKET_HOST
+    - targetPath: objstoreConfig.config.region
+      kind: ConfigMap
+      name: thanos-bucket-v2
+      valuesKey: BUCKET_REGION
+    - targetPath: objstoreConfig.config.access_key
+      kind: Secret
+      name: thanos-bucket-v2
+      valuesKey: AWS_ACCESS_KEY_ID
+    - targetPath: objstoreConfig.config.secret_key
+      kind: Secret
+      name: thanos-bucket-v2
+      valuesKey: AWS_SECRET_ACCESS_KEY
   values:
-
     image:
       registry: quay.io
       repository: thanos/thanos
       tag: v0.34.1
-
-    existingObjstoreSecret: &secret thanos-objstore-secret
-
-    # objstoreConfig:
-    #   type: s3
-    #   config:
-    #     insecure: true
-    #     bucket: thanos
-    #     endpoint: ${SECRET_MINIO_ENDPOINT}
-    #     access_key: ${SECRET_MINIO_ACCESSKEY_THANOS}
-    #     secret_key: ${SECRET_MINIO_SECRETKEY_THANOS}
-
+    objstoreConfig:
+      type: s3
+      config:
+        insecure: true
+    receive:
+      enabled: false
+      networkPolicy:
+        enabled: false
+    queryFrontend:
+      enabled: true
+      replicaCount: 2
+      config: &config |-
+        type: REDIS
+        config:
+          addr: >-
+            redis-node-0.redis-headless.default.svc.cluster.local:26379,
+            redis-node-1.redis-headless.default.svc.cluster.local:26379,
+            redis-node-2.redis-headless.default.svc.cluster.local:26379
+          db: 13
+          master_name: redis-master
+      ingress:
+        enabled: true
+        ingressClassName: internal
+        hostname: &host thanos-query-frontend.mcgrath.nz
+        tls: true
+        extraTls:
+          - hosts: [*host]
+      networkPolicy:
+        enabled: false
     query:
       enabled: true
+      replicaCount: 2
+      replicaLabel: ["__replica__"]
       dnsDiscovery:
         sidecarsService: kube-prometheus-stack-thanos-discovery
         sidecarsNamespace: monitoring
-      ingress:
-        enabled: true
-        ingressClassName: "nginx"
-        annotations:
-          nginx.ingress.kubernetes.io/whitelist-source-range: |
-            10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10
-        hostname: &host "thanos.${SECRET_DOMAIN}"
-        tls: true
-        extraTls:
-          - hosts:
-              - *host
-      replicaLabels:
-        - replica
-
-    queryFrontend:
-      enabled: false
-
+      networkPolicy:
+        enabled: false
     bucketweb:
       enabled: true
-      podAnnotations:
-        secret.reloader.stakater.com/reload: *secret
-      ingress:
-        enabled: true
-        hostname: &host "thanos-bucketweb.${SECRET_DOMAIN}"
-        ingressClassName: "nginx"
-        annotations:
-          nginx.ingress.kubernetes.io/whitelist-source-range: |
-            10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10
-          hajimari.io/enable: "false"
-        tls: true
-        extraTls:
-          - hosts:
-              - *host
-
+      replicaCount: 2
+      networkPolicy:
+        enabled: false
     compactor:
       enabled: true
-      podAnnotations:
-        secret.reloader.stakater.com/reload: *secret
       extraFlags:
-        - "--compact.concurrency"
-        - "4"
-      retentionResolutionRaw: 7d
-      retentionResolution5m: 14d
-      retentionResolution1h: 30d
+        - --compact.concurrency=4
+        - --delete-delay=30m
+      retentionResolutionRaw: 14d
+      retentionResolution5m: 30d
+      retentionResolution1h: 60d
       persistence:
         enabled: true
-        storageClass: local-hostpath
+        storageClass: openebs-hostpath
         size: 10Gi
-      ingress:
-        enabled: true
-        hostname: &host "thanos-compactor.${SECRET_DOMAIN}"
-        ingressClassName: "nginx"
-        annotations:
-          hajimari.io/enable: "false"
-          nginx.ingress.kubernetes.io/whitelist-source-range: |
-            10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10
-        tls: true
-        extraTls:
-          - hosts:
-              - *host
-
+      networkPolicy:
+        enabled: false
     storegateway:
       enabled: true
-      podAnnotations:
-        secret.reloader.stakater.com/reload: *secret
+      replicaCount: 2
+      config: *config
       persistence:
         enabled: true
-        storageClass: local-hostpath
+        storageClass: openebs-hostpath
         size: 10Gi
-      ingress:
-        enabled: true
-        hostname: &host "thanos-storegateway.${SECRET_DOMAIN}"
-        ingressClassName: "nginx"
-        annotations:
-          hajimari.io/enable: "false"
-          nginx.ingress.kubernetes.io/whitelist-source-range: |
-            10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10
-        tls: true
-        extraTls:
-          - hosts:
-              - *host
-
+      networkPolicy:
+        enabled: false
     ruler:
       enabled: true
-      podAnnotations:
-        secret.reloader.stakater.com/reload: *secret
-      alertmanagers: ["http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093"]
-      # clusterName: ${CLUSTER_NAME}
+      replicaCount: 2
+      replicaLabel: __replica__
+      alertmanagers: ["http://alertmanager-operated.monitoring.svc.cluster.local:9093"]
       extraFlags: ["--web.prefix-header=X-Forwarded-Prefix"]
       config: |-
         groups:
-          - name: "PrometheusWatcher"
+          - name: PrometheusWatcher
             rules:
-              - alert: "PrometheusDown"
+              - alert: PrometheusDown
+                annotations:
+                  summary: A Prometheus has disappeared from Prometheus target discovery
                 expr: absent(up{job="kube-prometheus-stack-prometheus"})
-      dnsDiscovery:
-        enabled: true
+                for: 5m
+                labels:
+                  severity: critical
       persistence:
         enabled: true
-        storageClass: local-hostpath
+        storageClass: openebs-hostpath
         size: 10Gi
-      ingress:
-        enabled: true
-        hostname: &host "thanos-ruler.${SECRET_DOMAIN}"
-        ingressClassName: "nginx"
-        annotations:
-          hajimari.io/enable: "false"
-          nginx.ingress.kubernetes.io/whitelist-source-range: |
-            10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10
-        tls: true
-        extraTls:
-          - hosts:
-              - *host
-
+      networkPolicy:
+        enabled: false
     metrics:
       enabled: true
       serviceMonitor:
