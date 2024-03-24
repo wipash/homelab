@@ -59,14 +59,14 @@ spec:
   # Note: previousCluster needs to be set to the name of the previous
   # cluster when recovering from an existing cnpg cluster
   bootstrap:
-    initdb:
-      database: immich
-      owner: immich
-      postInitApplicationSQL:
-        - CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-        - CREATE EXTENSION IF NOT EXISTS cube;
-        - CREATE EXTENSION IF NOT EXISTS earthdistance;
-        - CREATE EXTENSION IF NOT EXISTS vectors;
+    # initdb:
+    #   database: immich
+    #   owner: immich
+    #   postInitApplicationSQL:
+    #     - CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+    #     - CREATE EXTENSION IF NOT EXISTS cube;
+    #     - CREATE EXTENSION IF NOT EXISTS earthdistance;
+    #     - CREATE EXTENSION IF NOT EXISTS vectors;
     recovery:
       source: &previousCluster postgres16-immich-v1
   # Note: externalClusters is needed when recovering from an existing cnpg cluster
