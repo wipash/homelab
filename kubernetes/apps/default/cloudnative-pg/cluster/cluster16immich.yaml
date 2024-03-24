@@ -5,12 +5,12 @@ kind: Cluster
 metadata:
   name: postgres16-immich
 spec:
-  instances: 1
+  instances: 2
   imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.2-v0.2.0
   primaryUpdateStrategy: unsupervised
   storage:
     size: 20Gi
-    storageClass: local-hostpath
+    storageClass: openebs-hostpath
   superuserSecret:
     name: cloudnative-pg-secret
   enableSuperuserAccess: true
@@ -30,7 +30,11 @@ spec:
     enablePodMonitor: true
     # Ref: https://github.com/cloudnative-pg/cloudnative-pg/issues/2501
     podMonitorMetricRelabelings:
-      - { sourceLabels: ["cluster"], targetLabel: cnpg_cluster, action: replace }
+      - {
+        sourceLabels: ["cluster"],
+        targetLabel: cnpg_cluster,
+        action: replace,
+      }
       - { regex: cluster, action: labeldrop }
   backup:
     retentionPolicy: 30d
@@ -44,7 +48,7 @@ spec:
       endpointURL: https://s3.us-west-001.backblazeb2.com
       # Note: serverName version needs to be incremented
       # when recovering from an existing cnpg cluster
-      serverName: &currentCluster postgres16-immich-v1
+      serverName: &currentCluster postgres16-immich-v2
       s3Credentials:
         accessKeyId:
           name: cloudnative-pg-secret
@@ -52,6 +56,8 @@ spec:
         secretAccessKey:
           name: cloudnative-pg-secret
           key: aws-secret-access-key
+  # Note: previousCluster needs to be set to the name of the previous
+  # cluster when recovering from an existing cnpg cluster
   bootstrap:
     initdb:
       database: immich
@@ -61,14 +67,11 @@ spec:
         - CREATE EXTENSION IF NOT EXISTS cube;
         - CREATE EXTENSION IF NOT EXISTS earthdistance;
         - CREATE EXTENSION IF NOT EXISTS vectors;
-  # # Note: previousCluster needs to be set to the name of the previous
-  # # cluster when recovering from an existing cnpg cluster
-  # bootstrap:
-  #   recovery:
-  #     source: &previousCluster postgres16-immich-v1
-  # # Note: externalClusters is needed when recovering from an existing cnpg cluster
-  # externalClusters:
-  #   - name: *previousCluster
-  #     barmanObjectStore:
-  #       <<: *barmanObjectStore
-  #       serverName: *previousCluster
+    recovery:
+      source: &previousCluster postgres16-immich-v1
+  # Note: externalClusters is needed when recovering from an existing cnpg cluster
+  externalClusters:
+    - name: *previousCluster
+      barmanObjectStore:
+        <<: *barmanObjectStore
+        serverName: *previousCluster
