@@ -52,7 +52,7 @@ spec:
         sidecarsNamespace: monitoring
       ingress:
         enabled: true
-        ingressClassName: "nginx"
+        ingressClassName: internal
         annotations:
           nginx.ingress.kubernetes.io/whitelist-source-range: |
             10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10
@@ -74,7 +74,7 @@ spec:
       ingress:
         enabled: true
         hostname: &host "thanos-bucketweb.${SECRET_DOMAIN}"
-        ingressClassName: "nginx"
+        ingressClassName: internal
         annotations:
           nginx.ingress.kubernetes.io/whitelist-source-range: |
             10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10
@@ -101,7 +101,7 @@ spec:
       ingress:
         enabled: true
         hostname: &host "thanos-compactor.${SECRET_DOMAIN}"
-        ingressClassName: "nginx"
+        ingressClassName: internal
         annotations:
           hajimari.io/enable: "false"
           nginx.ingress.kubernetes.io/whitelist-source-range: |
@@ -122,7 +122,7 @@ spec:
       ingress:
         enabled: true
         hostname: &host "thanos-storegateway.${SECRET_DOMAIN}"
-        ingressClassName: "nginx"
+        ingressClassName: internal
         annotations:
           hajimari.io/enable: "false"
           nginx.ingress.kubernetes.io/whitelist-source-range: |
@@ -154,7 +154,7 @@ spec:
       ingress:
         enabled: true
         hostname: &host "thanos-ruler.${SECRET_DOMAIN}"
-        ingressClassName: "nginx"
+        ingressClassName: internal
         annotations:
           hajimari.io/enable: "false"
           nginx.ingress.kubernetes.io/whitelist-source-range: |
