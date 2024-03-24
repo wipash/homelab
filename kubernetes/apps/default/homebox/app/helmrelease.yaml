@@ -42,7 +42,7 @@ spec:
               HBOX_MEB_MAX_UPLOAD_SIZE: 10
             resources:
               requests:
-                cpu: 100m
+                cpu: 10m
               limits:
                 memory: 256M
         statefulset:
