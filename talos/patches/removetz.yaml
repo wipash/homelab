@@ -1,0 +1,3 @@
+- op: replace
+  path: /machine/kubelet/extraArgs/feature-gates
+  value: GracefulNodeShutdown=true,NewVolumeManagerReconstruction=false
