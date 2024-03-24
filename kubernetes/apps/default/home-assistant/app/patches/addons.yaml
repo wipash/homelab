@@ -52,4 +52,4 @@ spec:
           requests:
             cpu: 10m
           limits:
-            memory: 812M
+            memory: 512M
