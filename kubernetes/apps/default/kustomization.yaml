@@ -39,6 +39,6 @@ resources:
   - ./sonarr/ks.yaml
   #- ./sparkleandspin/ks.yaml
   - ./tautulli/ks.yaml
-  #- ./unifi/ks.yaml
+  - ./unifi/ks.yaml
   - ./wordpress/ks.yaml
   - ./zigbee2mqtt/ks.yaml
