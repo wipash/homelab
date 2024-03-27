@@ -1,16 +1,16 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.4/charts/library/common/values.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
-  name: unifi
+  name: &app unifi
   namespace: default
 spec:
   interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 2.4.0
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -28,27 +28,36 @@ spec:
     keepHistory: false
   values:
     controllers:
-      main:
+      unifi:
+        pod:
+          securityContext:
+            runAsUser: 999
+            runAsGroup: 999
+            fsGroup: 999
+            fsGroupChangePolicy: "OnRootMismatch"
         annotations:
           reloader.stakater.com/auto: "true"
-
         containers:
-          main:
+          app:
             image:
-              repository: ghcr.io/goofball222/unifi
-              tag: 8.0.28
+              repository: jacobalberty/unifi
+              tag: v8.1.113@sha256:483b7f294845c9e32eeb84ad2cda20ff90e996bcb6fa3107cba35ef36e578fb6
+              pullPolicy: IfNotPresent
             env:
               TZ: Pacific/Auckland
-              DEBUG: "false"
               RUNAS_UID0: "false"
               UNIFI_UID: "999"
               UNIFI_GID: "999"
               UNIFI_STDOUT: "true"
-              JVM_INIT_HEAP_SIZE: null
+              JVM_INIT_HEAP_SIZE:
               JVM_MAX_HEAP_SIZE: 1024M
-
+            resources:
+              requests:
+                memory: 1Gi
+                cpu: 50m
     service:
-      main:
+      app:
+        controller: unifi
         annotations:
           io.cilium/lb-ipam-ips: "${SVC_UNIFI_ADDR}"
         type: LoadBalancer
@@ -85,9 +94,8 @@ spec:
             enabled: true
             port: 10001
             protocol: UDP
-
     ingress:
-      main:
+      app:
         enabled: true
         className: internal
         annotations:
@@ -100,19 +108,15 @@ spec:
           - host: &host "{{ .Release.Name }}.mcgrath.nz"
             paths:
               - path: /
-                pathType: Prefix
                 service:
-                  name: main
+                  identifier: app
                   port: http
         tls:
           - hosts:
               - *host
-
     persistence:
-      data:
+      config:
         enabled: true
-        size: 20Gi
-        storageClass: ceph-block
-        accessMode: ReadWriteOnce
+        existingClaim: *app
         globalMounts:
-          - path: /usr/lib/unifi/data
+          - path: /unifi
