@@ -49,13 +49,14 @@ spec:
               app.kubernetes.io/name: *app
       affinity:
         podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
+          preferredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchExpressions:
                   - key: google.feature.node.kubernetes.io/coral
                     operator: In
                     values: ["true"]
               topologyKey: kubernetes.io/hostname
+              weight: 100
     controllers:
       main:
         strategy: RollingUpdate
