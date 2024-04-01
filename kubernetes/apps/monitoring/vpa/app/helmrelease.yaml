@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: vpa
-      version: 4.4.5
+      version: 4.4.2
       sourceRef:
         kind: HelmRepository
         name: fairwinds
@@ -35,8 +35,9 @@ spec:
       resources:
         requests:
           cpu: 10m
-        limits:
           memory: 200M
+        limits:
+          memory: 500M
       extraArgs:
         pod-recommendation-min-cpu-millicores: 15
         pod-recommendation-min-memory-mb: 61
