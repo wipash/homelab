@@ -23,13 +23,14 @@ spec:
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: google.feature.node.kubernetes.io/coral
-                    operator: In
-                    values: ["true"]
-              topologyKey: kubernetes.io/hostname
-              weight: 100
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: google.feature.node.kubernetes.io/coral
+                      operator: In
+                      values: ["true"]
+                  topologyKey: kubernetes.io/hostname
     controllers:
       main:
         strategy: Recreate
