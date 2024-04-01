@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: goldilocks
-      version: 8.0.0
+      version: 8.0.1
       sourceRef:
         kind: HelmRepository
         name: fairwinds
@@ -58,5 +58,6 @@ spec:
       resources:
         requests:
           cpu: 25m
+          memory: 200Mi
         limits:
           memory: 200Mi
