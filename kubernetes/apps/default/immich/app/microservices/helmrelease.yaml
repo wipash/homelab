@@ -57,7 +57,7 @@ spec:
                     - key: google.feature.node.kubernetes.io/coral
                       operator: In
                       values: ["true"]
-                  topologyKey: kubernetes.io/hostname
+                topologyKey: kubernetes.io/hostname
 
     controllers:
       main:
