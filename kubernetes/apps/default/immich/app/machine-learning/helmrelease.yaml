@@ -19,6 +19,16 @@ spec:
   dependsOn:
     - name: immich-server
   values:
+    defaultPodOptions:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: google.feature.node.kubernetes.io/coral
+                    operator: In
+                    values: ["true"]
+              topologyKey: kubernetes.io/hostname
     controllers:
       main:
         strategy: Recreate
