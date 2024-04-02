@@ -32,7 +32,7 @@ spec:
           app:
             image:
               repository: ghcr.io/open-webui/open-webui
-              tag: main@sha256:ec2bae1e5d0c4faab7b83414bcc39992a8c98ebcb1333131a82cffed88d9ba41
+              tag: main
             envFrom:
               - secretRef:
                   name: openwebui-secret
