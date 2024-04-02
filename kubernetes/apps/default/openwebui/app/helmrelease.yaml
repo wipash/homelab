@@ -26,6 +26,7 @@ spec:
   values:
     controllers:
       openwebui:
+        type: deployment
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -38,7 +39,6 @@ spec:
                   name: openwebui-secret
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
             resources:
               requests:
@@ -51,10 +51,7 @@ spec:
               readiness:
                 enabled: true
               startup:
-                enabled: true
-                spec:
-                  failureThreshold: 30
-                  periodSeconds: 5
+                enabled: false
         pod:
           securityContext:
             runAsUser: 568
