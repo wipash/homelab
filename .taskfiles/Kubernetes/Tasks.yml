@@ -3,6 +3,14 @@ version: "3"
 
 tasks:
 
+  delete-failed-pods:
+    desc: Deletes pods with a fucked status
+    vars:
+      cluster: 'admin@cluster-0'
+    cmds:
+      - for: ["Evicted", "Failed", "Succeeded"]
+        cmd: kubectl --context {{.cluster}} delete pods --field-selector status.phase={{.ITEM}} -A --ignore-not-found=true
+
   mount:
     desc: Mount a PersistentVolumeClaim to a pod temporarily
     interactive: true
