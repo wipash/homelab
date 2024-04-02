@@ -37,3 +37,4 @@ resources:
   - ./democratic-csi.yaml
   - ./cloudnative-pg.yaml
   - ./openebs.yaml
+  - ./spegel.yaml
