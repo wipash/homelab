@@ -52,13 +52,13 @@ spec:
                 enabled: true
               startup:
                 enabled: false
-        pod:
-          securityContext:
-            runAsUser: 568
-            runAsGroup: 568
-            runAsNonRoot: true
-            fsGroup: 568
-            fsGroupChangePolicy: OnRootMismatch
+        # pod:
+        #   securityContext:
+        #     runAsUser: 568
+        #     runAsGroup: 568
+        #     runAsNonRoot: true
+        #     fsGroup: 568
+        #     fsGroupChangePolicy: OnRootMismatch
     service:
       app:
         controller: openwebui
