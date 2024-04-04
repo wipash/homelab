@@ -78,10 +78,10 @@ spec:
               privileged: true
             resources:
               requests:
-                cpu: 600m
+                cpu: 890m
                 gpu.intel.com/i915: "1"
               limits:
-                memory: 5000M
+                memory: 2000M
                 gpu.intel.com/i915: "1"
         pod:
           nodeSelector:
