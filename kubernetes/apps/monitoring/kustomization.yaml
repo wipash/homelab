@@ -8,10 +8,10 @@ resources:
   # Flux-Kustomizations
   - ./grafana/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
-  #- ./loki/ks.yaml
+  - ./loki/ks.yaml
   # - ./smartctl-exporter/ks.yaml
   - ./thanos/ks.yaml
-  #- ./vector/ks.yaml
+  - ./vector/ks.yaml
   - ./goldilocks/ks.yaml
   - ./vpa/ks.yaml
   - ./node-exporter/ks.yaml
