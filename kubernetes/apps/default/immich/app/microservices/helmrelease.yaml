@@ -81,10 +81,10 @@ spec:
               requests:
                 gpu.intel.com/i915: 1
                 cpu: 100m
-                memory: 256M
+                memory: 256Mi
               limits:
                 gpu.intel.com/i915: 1
-                memory: 6000Mi
+                memory: 4000Mi
         pod:
           enableServiceLinks: false
           securityContext:

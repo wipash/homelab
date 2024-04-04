@@ -53,8 +53,9 @@ spec:
               JVM_MAX_HEAP_SIZE: 1024M
             resources:
               requests:
-                memory: 1Gi
-                cpu: 50m
+                cpu: 12m
+              limits:
+                memory: 1000Mi
     service:
       app:
         controller: unifi
