@@ -59,7 +59,7 @@ spec:
               SEARXNG_REDIS_URL: dragonfly.database.svc.cluster.local:6379/1
             envFrom:
               - secretRef:
-                  name: *app
+                  name: searxng-secret
 
     service:
       app:
