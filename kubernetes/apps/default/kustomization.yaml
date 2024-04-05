@@ -43,3 +43,4 @@ resources:
   - ./wordpress/ks.yaml
   - ./zigbee2mqtt/ks.yaml
   - ./openwebui/ks.yaml
+  - ./searxng/ks.yaml
