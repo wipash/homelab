@@ -73,6 +73,6 @@ spec:
         storageClass: ceph-block
     resources:
       requests:
-        cpu: 15m
+        cpu: 10m
       limits:
-        memory: 222M
+        memory: 300Mi

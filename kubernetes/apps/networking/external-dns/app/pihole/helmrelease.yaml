@@ -36,7 +36,6 @@ spec:
               - secretRef:
                   name: external-dns-pihole-secret
             args:
-              # - --domain-filter=devbu.io
               - --interval=1m
               - --log-format=text
               - --log-level=info

@@ -167,6 +167,7 @@ spec:
             isDefault: true
             jsonData:
               prometheusType: Thanos
+              timeInterval: 1m
           - name: Loki
             type: loki
             uid: loki
@@ -178,7 +179,7 @@ spec:
             type: alertmanager
             uid: alertmanager
             access: proxy
-            url: http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093
+            url: http://alertmanager-operated.monitoring.svc.cluster.local:9093
             jsonData:
               implementation: prometheus
     dashboards:
@@ -203,8 +204,14 @@ spec:
         node-exporter-full:
           # renovate: depName="Node Exporter Full"
           gnetId: 1860
-          revision: 33
+          revision: 36
           datasource: Prometheus
+        spegel:
+          # renovate: depName="Spegel"
+          gnetId: 18089
+          revision: 1
+          datasource:
+            - { name: DS_PROMETHEUS, value: Prometheus }
         redis:
           # renovate: depName="Redis Dashboard for Prometheus Redis Exporter 1.x"
           gnetId: 763
@@ -258,27 +265,27 @@ spec:
         kubernetes-api-server:
           # renovate: depName="Kubernetes / System / API Server"
           gnetId: 15761
-          revision: 15
+          revision: 16
           datasource: Prometheus
         kubernetes-coredns:
           # renovate: depName="Kubernetes / System / CoreDNS"
           gnetId: 15762
-          revision: 16
+          revision: 17
           datasource: Prometheus
         kubernetes-global:
           # renovate: depName="Kubernetes / Views / Global"
           gnetId: 15757
-          revision: 35
+          revision: 37
           datasource: Prometheus
         kubernetes-namespaces:
           # renovate: depName="Kubernetes / Views / Namespaces"
           gnetId: 15758
-          revision: 32
+          revision: 34
           datasource: Prometheus
         kubernetes-nodes:
           # renovate: depName="Kubernetes / Views / Nodes"
           gnetId: 15759
-          revision: 27
+          revision: 29
           datasource: Prometheus
         kubernetes-pods:
           # renovate: depName="Kubernetes / Views / Pods"
