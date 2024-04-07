@@ -45,3 +45,4 @@ resources:
   - ./openwebui/ks.yaml
   - ./searxng/ks.yaml
   - ./audiobookshelf/ks.yaml
+  - ./readarr/ks.yaml

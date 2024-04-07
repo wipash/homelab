@@ -71,9 +71,7 @@ spec:
     ingress:
       app:
         enabled: true
-        className: external
-        annotations:
-          external-dns.alpha.kubernetes.io/target: "external.mcgrath.nz"
+        className: internal
         hosts:
           - host: &host search.mcgrath.nz
             paths:
