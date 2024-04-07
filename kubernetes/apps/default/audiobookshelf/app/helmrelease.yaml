@@ -1,0 +1,96 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: audiobookshelf
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 3.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 30m
+  values:
+    controllers:
+      audiobookshelf:
+        annotations:
+          secret.reloader.stakater.com/reload: &secret audiobookshelf-secret
+        pod:
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            runAsNonRoot: true
+            fsGroup: 568
+            fsGroupChangePolicy: OnRootMismatch
+            supplementalGroups: [65537]
+        containers:
+          app:
+            image:
+              repository: ghcr.io/advplyr/audiobookshelf
+              tag: 2.8.1
+            envFrom:
+              - secretRef:
+                  name: *secret
+            env:
+              TZ: Pacific/Auckland
+              PORT: &port 8080
+              AUDIOBOOKSHELF_UID: 568
+              AUDIOBOOKSHELF_GID: 568
+              CONFIG_PATH: /config
+              METADATA_PATH: /config/metadata
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthcheck
+                    port: *port
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 50m
+                memory: 200Mi
+              limits:
+                memory: 600Mi
+    service:
+      app:
+        controller: audiobookshelf
+        ports:
+          http:
+            port: *port
+    ingress:
+      main:
+        className: internal
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Media
+          gethomepage.dev/name: Audiobookshelf
+          gethomepage.dev/icon: audiobookshelf.svg
+          # gethomepage.dev/widget.type: audiobookshelf
+          # gethomepage.dev/widget.url: http://audiobookshelf.default.svc.cluster.local:8080
+          # gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_TOKEN}}"
+        hosts:
+          - host: &host audiobooks.mcgrath.nz
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+        tls: [hosts: [*host]]
+    persistence:
+      config:
+        existingClaim: ${VOLSYNC_CLAIM}
+      media:
+        type: nfs
+        server: 172.20.0.1
+        path: /volume1/Media
+        globalMounts:
+          - path: /audiobooks
+            subPath: Audiobooks
+          - path: /podcasts
+            subPath: Podcasts
