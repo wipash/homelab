@@ -44,3 +44,4 @@ resources:
   - ./zigbee2mqtt/ks.yaml
   - ./openwebui/ks.yaml
   - ./searxng/ks.yaml
+  - ./audiobookshelf/ks.yaml
