@@ -70,6 +70,9 @@ spec:
       config:
         insecure: true
 
+    additionalEndpoints:
+      - dnssrv+_grpc._tcp.kube-prometheus-stack-thanos-discovery.monitoring.svc.cluster.local
+
     query:
       enabled: true
       replicaLabel: ["__replica__"]
@@ -84,12 +87,8 @@ spec:
       config: &config |-
         type: REDIS
         config:
-          addr: >-
-            redis-node-0.redis-headless.default.svc.cluster.local:26379,
-            redis-node-1.redis-headless.default.svc.cluster.local:26379,
-            redis-node-2.redis-headless.default.svc.cluster.local:26379
-          db: 13
-          master_name: redis-master
+          addr: dragonfly.database.svc.cluster.local:6379
+          db: 2
       ingress:
         enabled: true
         ingressClassName: internal
