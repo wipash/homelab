@@ -30,18 +30,6 @@ spec:
         strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
-        initContainers:
-          init-geoip:
-            image:
-              repository: ghcr.io/maxmind/geoipupdate
-              tag: v7.0.0@sha256:f1466df25a3b4974933565c0533284a1e9d70d144888faada14d54c4c6bb3b50
-            env:
-              GEOIPUPDATE_EDITION_IDS: GeoLite2-City
-              GEOIPUPDATE_FREQUENCY: "0"
-              GEOIPUPDATE_VERBOSE: "1"
-            envFrom:
-              - secretRef:
-                  name: vector-aggregator-secret
         containers:
           app:
             image:
@@ -88,7 +76,3 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /vector-data-dir
-      geoip:
-        type: emptyDir
-        globalMounts:
-          - path: /usr/share/GeoIP
