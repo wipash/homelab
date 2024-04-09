@@ -145,6 +145,12 @@ spec:
         extraTls:
           - hosts:
               - *host
+      resources:
+        requests:
+          memory: 256Mi
+          cpu: 15m
+        limits:
+          memory: 1Gi
 
     ruler:
       enabled: true
