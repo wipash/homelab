@@ -80,6 +80,12 @@ spec:
       dnsDiscovery:
         sidecarsService: kube-prometheus-stack-thanos-discovery
         sidecarsNamespace: monitoring
+      resources:
+        requests:
+          memory: 128Mi
+          cpu: 15m
+        limits:
+          memory: 1Gi
 
     queryFrontend:
       enabled: true
@@ -89,6 +95,12 @@ spec:
         config:
           addr: dragonfly.database.svc.cluster.local:6379
           db: 2
+      resources:
+        requests:
+          memory: 128Mi
+          cpu: 15m
+        limits:
+          memory: 1Gi
       ingress:
         enabled: true
         ingressClassName: internal
@@ -147,7 +159,7 @@ spec:
               - *host
       resources:
         requests:
-          memory: 256Mi
+          memory: 128Mi
           cpu: 15m
         limits:
           memory: 1Gi
