@@ -41,7 +41,7 @@ spec:
           app:
             image:
               repository: ghcr.io/miniflux/miniflux
-              tag: 2.0.50-distroless@sha256:625f6decf8740020fabec273e0f694f218a50281e251e13514ac2be4d9147ca8
+              tag: 2.1.2@sha256:d70bc29c869aa905e9eee8218f59771e237b6f727ad88e1bc565cdc25b9e053a
             env:
               BASE_URL: https://miniflux.mcgrath.nz
               CREATE_ADMIN: "1"
