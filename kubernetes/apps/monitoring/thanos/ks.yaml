@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    #- name: dragonfly-cluster
+    - name: dragonfly-cluster
     - name: external-secrets-stores
   path: ./kubernetes/apps/monitoring/thanos/app
   prune: true
