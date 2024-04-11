@@ -1,122 +1,116 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
   name: home-assistant
-  namespace: default
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.1.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 3
   install:
-    createNamespace: true
     remediation:
       retries: 3
   upgrade:
     cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 3
-  uninstall:
-    keepHistory: false
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: volsync
+      namespace: volsync
   values:
-    initContainers:
-      01-init-db:
-        image: ghcr.io/onedr0p/postgres-initdb:14.8
-        imagePullPolicy: IfNotPresent
-        envFrom:
-          - secretRef:
-              name: home-assistant-secret
-    controller:
-      type: statefulset
-      annotations:
-        reloader.stakater.com/auto: "true"
-    image:
-      repository: ghcr.io/onedr0p/home-assistant
-      tag: 2024.4.2@sha256:871f74f8c6b74027a52803dfe8f7d6df499ba568dd8f8649e8dbd257844e7cf4
-    env:
-      TZ: Pacific/Auckland
-      POSTGRES_HOST: 10.0.16.16
-      POSTGRES_DB: home_assistant
-    envFrom:
-      - secretRef:
-          name: home-assistant-secret
+    controllers:
+      home-assistant:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 16.2@sha256:32a8038176255df63d91c2f0cf216254f7ff49e48678fc9de21b0eead00566d8
+              pullPolicy: IfNotPresent
+            envFrom:
+              - secretRef:
+                  name: home-assistant-secret
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/home-assistant
+              tag: 2024.4.2@sha256:871f74f8c6b74027a52803dfe8f7d6df499ba568dd8f8649e8dbd257844e7cf4
+            env:
+              TZ: Pacific/Auckland
+            envFrom:
+              - secretRef:
+                  name: home-assistant-secret
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 1Gi
+        pod:
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            runAsNonRoot: true
+            fsGroup: 568
+            fsGroupChangePolicy: OnRootMismatch
     service:
-      main:
+      app:
+        controller: home-assistant
         type: LoadBalancer
         annotations:
           io.cilium/lb-ipam-ips: ${SVC_HOME_ASSISTANT_ADDR}
-        externalTrafficPolicy: Local
         ports:
           http:
             port: 8123
           mdns-tcp:
-            enabled: true
             port: 5353
             protocol: TCP
             targetPort: 5353
           mdns-udp:
-            enabled: true
             port: 5353
             protocol: UDP
             targetPort: 5353
           sonos:
-            enabled: true
             port: 1400
     ingress:
-      main:
-        enabled: true
-        ingressClassName: external
+      app:
+        className: external
         annotations:
-          external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
+          external-dns.alpha.kubernetes.io/target: external.mcgrath.nz
           nginx.org/websocket-services: home-assistant
-          hajimari.io/icon: mdi:home-assistant
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/name: Home Assistant
-          gethomepage.dev/icon: mdi-home-assistant
-          gethomepage.dev/group: Home
         hosts:
           - host: &host hass.mcgrath.nz
             paths:
               - path: /
-                pathType: Prefix
+                service:
+                  identifier: app
+                  port: http
         tls:
-          - hosts:
-              - *host
-    probes:
-      liveness:
-        enabled: false
-      readiness:
-        enabled: false
-      startup:
-        enabled: false
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: OnRootMismatch
-    # volumeClaimTemplates:
-    #   - name: config
-    #     mountPath: /config
-    #     accessMode: ReadWriteOnce
-    #     size: 5Gi
-    #     storageClass: ceph-block
+          - hosts: [*host]
     persistence:
       config:
-        enabled: true
-        existingClaim: home-assistant-config-v1
-        volumeMounts:
-          - name: config
-            mountPath: /config
-    resources:
-      requests:
-        cpu: 22m
-      limits:
-        memory: 776M
+        existingClaim: home-assistant
+      logs:
+        type: emptyDir
+        globalMounts:
+          - path: /config/logs
+      tts:
+        type: emptyDir
+        globalMounts:
+          - path: /config/tts
+      tmp:
+        type: emptyDir
