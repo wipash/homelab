@@ -90,6 +90,11 @@ spec:
           path_prefix: /var/loki
           replication_factor: 2
           storage:
+            bucketNames:
+              chunks: loki-chunks
+              ruler: loki-ruler
+              admin: loki-admin
+            type: s3
             s3:
               s3: null
               insecure: true
