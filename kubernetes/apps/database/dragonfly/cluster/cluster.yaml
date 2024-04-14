@@ -18,6 +18,7 @@ spec:
     - --proactor_threads=2
     - --cluster_mode=emulated
     - --lock_on_hashtags # https://github.com/dragonflydb/dragonfly/issues/782
+    - --default_lua_flags=allow-undeclared-keys
   resources:
     requests:
       cpu: 100m
