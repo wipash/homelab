@@ -60,6 +60,8 @@ spec:
               MAX_WORKERS: 1
               WEB_CONCURRENCY: 1
 
+              DB_ENGINE: postgres
+
               # OIDC
               OIDC_AUTH_ENABLED: true
               OIDC_CLIENT_ID: mealie
