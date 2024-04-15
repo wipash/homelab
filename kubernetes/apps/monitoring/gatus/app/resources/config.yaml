@@ -38,6 +38,9 @@ endpoints:
   - name: flux-webhook
     group: external
     url: https://flux-webhook.mcgrath.nz
+    ui:
+      hide-url: true
+      hide-hostname: true
     interval: 1m
     client:
       dns-resolver: tcp://1.1.1.1:53
