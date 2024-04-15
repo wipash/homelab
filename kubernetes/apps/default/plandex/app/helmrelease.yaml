@@ -88,6 +88,7 @@ spec:
         className: external
         annotations:
           external-dns.alpha.kubernetes.io/target: "external.mcgrath.nz"
+          nginx.ingress.kubernetes.io/default-backend: plandex
         hosts:
           - host: &host plandex.mcgrath.nz
             paths:
@@ -103,3 +104,6 @@ spec:
         existingClaim: *app
         globalMounts:
           - path: /plandex-server
+
+      tmp:
+        type: emptyDir
