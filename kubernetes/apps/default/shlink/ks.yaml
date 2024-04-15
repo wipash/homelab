@@ -25,6 +25,7 @@ spec:
     substitute:
       APP: shlink-api
       GATUS_SUBDOMAIN: ln
+      GATUS_DOMAIN: ${SECRET_DOMAIN_2}
       GATUS_PATH: /nix
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
@@ -52,5 +53,5 @@ spec:
   postBuild:
     substitute:
       APP: shlink-web
-      GATUS_SUBDOMAIN: ln
+      GATUS_SUBDOMAIN: shlink
       GATUS_PATH: /nix
