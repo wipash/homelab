@@ -13,6 +13,7 @@ spec:
   dependsOn:
     - name: cloudnative-pg-cluster
     - name: external-secrets-stores
+    - name: volsync
   path: ./kubernetes/apps/default/mealie/app
   prune: true
   sourceRef:
