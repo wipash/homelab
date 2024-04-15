@@ -54,4 +54,3 @@ spec:
     substitute:
       APP: shlink-web
       GATUS_SUBDOMAIN: shlink
-      GATUS_PATH: /nix
