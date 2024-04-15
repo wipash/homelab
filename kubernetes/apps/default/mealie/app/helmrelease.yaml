@@ -63,7 +63,7 @@ spec:
               # OIDC
               OIDC_AUTH_ENABLED: true
               OIDC_CLIENT_ID: mealie
-              OIDC_CONFIGURATION_URL: https://auth.mcgrath.nz/application/o/mealie/.well-known/openid-configuration
+              OIDC_CONFIGURATION_URL: https://auth.mcgrath.nz/.well-known/openid-configuration
               OIDC_REMEMBER_ME: true
               OIDC_PROVIDER_NAME: "Authelia"
               OIDC_AUTO_REDIRECT: true
