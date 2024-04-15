@@ -33,8 +33,6 @@ spec:
       namespace: openebs-system
     - name: rook-ceph-cluster
       namespace: rook-ceph
-    - name: redis
-      namespace: default
 
   valuesFrom:
     - targetPath: objstoreConfig.config.bucket
