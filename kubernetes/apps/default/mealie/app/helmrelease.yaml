@@ -1,16 +1,15 @@
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
-  name: mealie
-  namespace: default
+  name: &app mealie
 spec:
   interval: 15m
   chart:
     spec:
       # renovate: registryUrl=https://bjw-s.github.io/helm-charts/
       chart: app-template
-      version: 2.0.3
+      version: 3.1.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -24,27 +23,27 @@ spec:
     remediation:
       retries: 3
   values:
-    # https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
     controllers:
-      main:
-        type: statefulset
+      mealie:
+        strategy: Recreate
+
         annotations:
           reloader.stakater.com/auto: "true"
 
-        statefulset:
-          volumeClaimTemplates:
-            - name: config
-              accessMode: ReadWriteOnce
-              size: 1Gi
-              storageClass: ceph-block
-              globalMounts:
-                - path: /app/data
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 16
+            envFrom: &envFrom
+              - secretRef:
+                  name: mealie-secret
 
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/mealie-recipes/mealie
-              tag: v1.0.0-RC1.1
+              tag: v1.4.0
               pullPolicy: IfNotPresent
 
             env:
@@ -61,18 +60,27 @@ spec:
               MAX_WORKERS: 1
               WEB_CONCURRENCY: 1
 
+              # OIDC
+              OIDC_AUTH_ENABLED: true
+              OIDC_CLIENT_ID: mealie
+              OIDC_CONFIGURATION_URL: https://auth.mcgrath.nz/application/o/mealie/.well-known/openid-configuration
+              OIDC_REMEMBER_ME: true
+              OIDC_PROVIDER_NAME: "Authelia"
+              OIDC_AUTO_REDIRECT: true
+
+            envFrom: *envFrom
+
     service:
-      main:
+      app:
+        controller: mealie
         ports:
           http:
             port: 9000
 
     ingress:
-      main:
-        enabled: true
-        className: "external"
+      app:
+        className: external
         annotations:
-          auth.home.arpa/enabled: "true"
           external-dns.alpha.kubernetes.io/target: "external.mcgrath.nz"
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: Mealie
@@ -84,8 +92,12 @@ spec:
               - path: /
                 pathType: Prefix
                 service:
-                  name: main
+                  identifier: app
                   port: http
         tls:
           - hosts:
               - *host
+
+    persistence:
+      data:
+        existingClaim: *app
