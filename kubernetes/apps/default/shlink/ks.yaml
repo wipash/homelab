@@ -26,7 +26,7 @@ spec:
       APP: shlink-api
       GATUS_SUBDOMAIN: ln
       GATUS_DOMAIN: ${SECRET_DOMAIN_2}
-      GATUS_PATH: /nix
+      GATUS_PATH: /rest/health
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
