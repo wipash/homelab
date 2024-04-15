@@ -46,7 +46,7 @@ spec:
             env:
               GOENV: production
               SMTP_HOST: smtp.sendgrid.net
-              SMTP_PORT: "465"
+              SMTP_PORT: "587"
               SMTP_FROM: plandex@mail.mcgrath.nz
               PORT: &port 8080
             envFrom: *envFrom
