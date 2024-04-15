@@ -128,7 +128,6 @@ identity_providers:
           ]
         userinfo_signed_response_alg: none
         token_endpoint_auth_method: 'none'
-        require_pkce: true
         pkce_challenge_method: S256
         grant_types:
           - authorization_code
