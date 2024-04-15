@@ -23,7 +23,7 @@ spec:
   timeout: 5m
   postBuild:
     substitute:
-      GATUS_APP: shlink
+      APP: shlink-api
       GATUS_SUBDOMAIN: ln
       GATUS_PATH: /nix
 ---
@@ -51,6 +51,6 @@ spec:
   timeout: 5m
   postBuild:
     substitute:
-      GATUS_APP: shlink
+      APP: shlink-web
       GATUS_SUBDOMAIN: ln
       GATUS_PATH: /nix
