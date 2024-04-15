@@ -67,6 +67,7 @@ spec:
               OIDC_REMEMBER_ME: true
               OIDC_PROVIDER_NAME: "Authelia"
               OIDC_AUTO_REDIRECT: true
+              OIDC_ADMIN_GROUP: admin_of_the_lab
 
             envFrom: *envFrom
 
