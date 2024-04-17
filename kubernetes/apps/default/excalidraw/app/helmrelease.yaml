@@ -31,7 +31,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/excalidraw-collab
-              tag: 0.17.3@sha256:f3dd635ddf351f560d52b623130476749a9ee3a930ad14b2b9c10ad9455ad473
+              tag: 0.17.3@sha256:dbab1b8285b2dc058b12a6811b2701e14799961895d3320075cdbf2a5f7b7058
               pullPolicy: IfNotPresent
             env:
               TZ: Pacific/Auckland
