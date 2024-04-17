@@ -71,8 +71,7 @@ identity_providers:
   oidc:
     cors:
       endpoints: ["authorization", "token", "revocation", "introspection", "userinfo", "pushed-authorization-request"]
-      #allowed_origins_from_client_redirect_uris: true
-      allowed_origins: "*"
+      allowed_origins_from_client_redirect_uris: true
     clients:
       - id: grafana
         description: Grafana
@@ -127,7 +126,7 @@ identity_providers:
             "https://mealie.mcgrath.nz/login?direct=1",
           ]
         userinfo_signed_response_alg: none
-        token_endpoint_auth_method: 'none'
+        token_endpoint_auth_method: none
         pkce_challenge_method: S256
         grant_types:
           - authorization_code

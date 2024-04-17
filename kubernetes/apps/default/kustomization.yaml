@@ -45,3 +45,4 @@ resources:
   - ./audiobookshelf/ks.yaml
   - ./readarr/ks.yaml
   - ./plandex/ks.yaml
+  - ./excalidraw/ks.yaml
