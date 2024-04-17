@@ -30,8 +30,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/lltr/excalidraw-collab
-              tag: v0.17.0
+              repository: ghcr.io/wipash/excalidraw-collab
+              tag: 0.17.3@sha256:f3dd635ddf351f560d52b623130476749a9ee3a930ad14b2b9c10ad9455ad473
               pullPolicy: IfNotPresent
             env:
               TZ: Pacific/Auckland
