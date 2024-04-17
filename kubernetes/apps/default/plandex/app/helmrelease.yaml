@@ -42,7 +42,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/plandex-beta
-              tag: 0.8.4@sha256:a4565b75f61121ca542077b20355c11145cc948cea914b74621073b0fb925d90
+              tag: 0.8.4@sha256:dbda4ba32ca9ae022c50baa23f0122add085636a02cfbbe96377d64e59e2302a
             env:
               GOENV: production
               SMTP_HOST: smtp.sendgrid.net
