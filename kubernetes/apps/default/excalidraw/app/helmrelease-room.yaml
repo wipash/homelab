@@ -38,11 +38,9 @@ spec:
               PORT: &port 80
             probes:
               liveness:
-                enabled: false
+                enabled: true
               readiness:
-                enabled: false
-              startup:
-                enabled: false
+                enabled: true
             resources:
               requests:
                 cpu: 5m
