@@ -46,3 +46,4 @@ resources:
   - ./readarr/ks.yaml
   - ./plandex/ks.yaml
   - ./excalidraw/ks.yaml
+  - ./openproject/ks.yaml
