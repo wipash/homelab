@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./externalsecret.yaml
+  - ./helmrelease.yaml
+  - ../../../../templates/gatus/external
+  - ../../../../templates/volsync
+configMapGenerator:
+  - name: openproject-configmap
+    files:
+      - enterprise_token.rb=./resources/enterprise_token.rb
+generatorOptions:
+  disableNameSuffixHash: true
