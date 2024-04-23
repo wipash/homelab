@@ -70,7 +70,7 @@ spec:
               OPENPROJECT_SOFTWARE__NAME: McGrath Projects
               OPENPROJECT_SOFTWARE__URL: https://project.mcgrath.nz
               OPENPROJECT_CACHE__MEMCACHE__SERVER: openproject-memcached.default.svc.cluster.local:11211
-              OPENPROJECT_AVAILABLE__LANGUAGES: en
+              #OPENPROJECT_AVAILABLE__LANGUAGES: en
               OPENPROJECT_DEFAULT__LANGUAGE: en
               OPENPROJECT_RAILS__CACHE__STORE: memcache
               OPENPROJECT_SEED__ADMIN__USER__MAIL: sean@mcgrath.nz
