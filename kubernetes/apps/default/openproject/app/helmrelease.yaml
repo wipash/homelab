@@ -63,17 +63,21 @@ spec:
               OPENPROJECT_SMTP__DOMAIN: mail.mcgrath.nz
               OPENPROJECT_SMTP__AUTHENTICATION: none
               OPENPROJECT_SMTP__SSL: "false"
+              OPENPROJECT_MAIL__FROM: project@mail.mcgrath.nz
               OPENPROJECT_HTTPS: "true"
               OPENPROJECT_HSTS: "true"
               OPENPROJECT_HOST__NAME: &host project.mcgrath.nz
+              OPENPROJECT_SOFTWARE__NAME: McGrath Projects
+              OPENPROJECT_SOFTWARE__URL: https://project.mcgrath.nz
               OPENPROJECT_CACHE__MEMCACHE__SERVER: openproject-memcached.default.svc.cluster.local:11211
               OPENPROJECT_AVAILABLE__LANGUAGES: en
               OPENPROJECT_DEFAULT__LANGUAGE: en
               OPENPROJECT_RAILS__CACHE__STORE: memcache
               OPENPROJECT_SEED__ADMIN__USER__MAIL: sean@mcgrath.nz
               OPENPROJECT_SEED__ADMIN__USER__PASSWORD__RESET: "false"
-              OPENPROJECT_DB_STATEMENT_TIMEOUT: 120
+              POSTGRES_STATEMENT_TIMEOUT: 120
               OPENPROJECT_BOARDS__DEMO__DATA__AVAILABLE: "false"
+              #OPENPROJECT_PLUGIN__COSTS: '{"costs_currency"=>"NZD", "costs_currency_format"=>"%n %u"}'
             envFrom: *envFrom
             probes:
               liveness:
