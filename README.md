@@ -30,3 +30,4 @@ Encrypt a secret:
 
 Make a secret:
 `kubectl create secret generic sopstest --from-literal=foo=bar -o yaml --dry-run=client | tee sops-test-secret.yaml`
+
