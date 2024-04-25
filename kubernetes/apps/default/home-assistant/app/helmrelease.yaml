@@ -77,6 +77,9 @@ spec:
               - "/config"
             env:
               TZ: Pacific/Auckland
+            envFrom:
+              - secretRef:
+                  name: home-assistant-code-secret
 
         pod:
           securityContext:
