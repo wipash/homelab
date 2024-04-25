@@ -1,0 +1,20 @@
+---
+version: "3"
+
+x-task-vars: &task-vars
+  cluster: '{{.cluster}}'
+
+vars:
+  backupTemplate: "{{.ROOT_DIR}}/.taskfiles/cnpg/clusterbackup.tmpl.yaml"
+
+tasks:
+  backup:
+    desc: Backup a given cluster
+    silent: true
+    cmds:
+      - envsubst < <(cat {{.backupTemplate}}) | kubectl apply -f -
+    vars:
+      cluster: '{{ or .cluster (fail "Cluster `cluster` is required") }}'
+    env: *task-vars
+    preconditions:
+      - sh: test -f {{.backupTemplate}}
