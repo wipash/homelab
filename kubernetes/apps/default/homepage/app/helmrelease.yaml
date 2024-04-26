@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/ishioni/CRDs-catalog/main/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
@@ -10,31 +10,26 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.4.0
+      version: 3.1.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 3
   install:
-    createNamespace: true
     remediation:
       retries: 3
   upgrade:
     cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 3
-  uninstall:
-    keepHistory: false
   values:
     controllers:
-      main:
+      homepage:
         annotations:
-          secret.reloader.stakater.com/reload: &secret homepage-secret
-          configmap.reloader.stakater.com/reload: &configmap homepage-config
-        strategy: RollingUpdate
+          reloader.stakater.com/auto: "true"
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/gethomepage/homepage
               tag: v0.8.12
@@ -43,36 +38,30 @@ spec:
               # LOG_LEVEL: debug
             envFrom:
               - secretRef:
-                  name: *secret
+                  name: homepage-secret
     service:
-      main:
+      app:
+        controller: homepage
         ports:
           http:
-            enabled: true
             port: 3000
     ingress:
-      main:
-        enabled: true
+      app:
         className: internal
-        annotations:
-          nginx.ingress.kubernetes.io/whitelist-source-range: |
-            10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10
-          hajimari.io/icon: "devices"
         hosts:
           - host: &host "home.mcgrath.nz"
             paths:
               - path: "/"
-                pathType: "Prefix"
                 service:
-                  name: main
+                  identifier: main
+                  port: http
         tls:
           - hosts:
               - *host
     persistence:
       config:
-        enabled: true
         type: configMap
-        name: *configmap
+        name: homepage-config
         globalMounts:
           - subPath: bookmarks.yaml
             path: /app/config/bookmarks.yaml
@@ -86,5 +75,6 @@ spec:
             path: /app/config/settings.yaml
           - subPath: widgets.yaml
             path: /app/config/widgets.yaml
+
     serviceAccount:
       create: true
