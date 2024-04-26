@@ -80,7 +80,7 @@ spec:
               - *host
 
     persistence:
-      config:
+      data:
         existingClaim: *app
       tmp:
         type: emptyDir
