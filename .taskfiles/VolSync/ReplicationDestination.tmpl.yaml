@@ -8,7 +8,7 @@ spec:
   trigger:
     manual: restore-once
   restic:
-    repository: "${rsrc}-restic-secret"
+    repository: "${rsrc}-volsync-secret"
     destinationPVC: "${claim}"
     copyMethod: Direct
     storageClassName: ceph-block
@@ -26,4 +26,4 @@ spec:
     #   from a application that started with default data in the PVC.
     #   Do not restore snapshots made after the following RFC3339 Timestamp.
     #   date --rfc-3339=seconds (--utc)
-    restoreAsOf: "2023-07-28T08:00:00-00:00"
+    restoreAsOf: "2024-04-25T08:00:00-00:00"
