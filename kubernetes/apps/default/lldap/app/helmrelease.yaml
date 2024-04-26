@@ -98,7 +98,7 @@ spec:
             paths:
               - path: /
                 service:
-                  identifier: lldap
+                  identifier: app
                   port: http
         tls:
           - hosts:
