@@ -1,110 +1,140 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
   name: plex
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.1.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 3
   install:
-    createNamespace: true
     remediation:
       retries: 3
   upgrade:
     cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 3
-  uninstall:
-    keepHistory: false
+  dependsOn:
+    - name: intel-device-plugin-gpu
+      namespace: kube-system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: volsync
+      namespace: volsync
   values:
-    controller:
-      type: statefulset
-    image:
-      repository: ghcr.io/onedr0p/plex
-      tag: 1.40.2.8395-c67dce28e@sha256:a2a3149c1326e7777bfe9def135c687d884652f78d34e92264b0dab765908215
-    env:
-      TZ: Pacific/Auckland
+    controllers:
+      plex:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/plex
+              tag: 1.40.2.8395-c67dce28e@sha256:a2a3149c1326e7777bfe9def135c687d884652f78d34e92264b0dab765908215
+            env:
+              TZ: Pacific/Auckland
+              PLEX_ADVERTISE_URL: https://plex.mcgrath.nz:443,http://${SVC_PLEX_ADDR}:32400
+              PLEX_NO_AUTH_NETWORKS: 10.0.16.0/24
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /identity
+                    port: 32400
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                gpu.intel.com/i915: 1
+                memory: 2500Gi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups: [44, 109, 65537]
+        seccompProfile: { type: RuntimeDefault }
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: google.feature.node.kubernetes.io/coral
+                    operator: In
+                    values: ["true"]
+              topologyKey: kubernetes.io/hostname
+      nodeSelector:
+        intel.feature.node.kubernetes.io/gpu: "true"
     service:
-      main:
+      app:
+        controller: plex
         type: LoadBalancer
         annotations:
-          io.cilium/lb-ipam-ips: "${SVC_PLEX_ADDR}"
-        externalTrafficPolicy: Local
+          io.cilium/lb-ipam-ips: ${SVC_PLEX_ADDR}
         ports:
           http:
             port: 32400
-    dnsConfig:
-      options:
-        - name: ndots
-          value: "1"
     ingress:
-      main:
-        enabled: true
-        ingressClassName: external
+      app:
+        className: external
         annotations:
-          external-dns.alpha.kubernetes.io/target: "external.mcgrath.nz"
+          external-dns.alpha.kubernetes.io/target: external.mcgrath.nz
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-          nginx.ingress.kubernetes.io/configuration-snippet: |
-            location = / {
-              if ($http_x_plex_device = ""){
-                return 301 $scheme://$host/web/index.html;
-              }
-            }
-          hajimari.io/icon: mdi:plex
         hosts:
-          - host: &host "{{ .Release.Name }}.mcgrath.nz"
+          - host: "{{ .Release.Name }}.mcgrath.nz"
             paths:
               - path: /
-                pathType: Prefix
-        tls:
-          - hosts:
-              - *host
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: OnRootMismatch
-      supplementalGroups: [44, 109, 65537]
-    volumeClaimTemplates:
-      - name: config
-        mountPath: /config
-        accessMode: ReadWriteOnce
-        size: 100Gi
-        storageClass: ceph-block
+                service:
+                  identifier: app
+                  port: http
     persistence:
-      media:
-        enabled: true
-        existingClaim: plex-nfs
-        mountPath: /media
-        readOnly: true
-      transcode:
-        enabled: true
+      config:
+        existingClaim: plex
+        globalMounts:
+          - path: /config/Library/Application Support/Plex Media Server
+      # Separate PVC for cache to avoid backing up cache files
+      cache:
+        existingClaim: plex-cache
+        globalMounts:
+          - path: /config/Library/Application Support/Plex Media Server/Cache
+      logs:
         type: emptyDir
-    nodeSelector:
-      intel.feature.node.kubernetes.io/gpu: "true"
-    affinity:
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-                - key: google.feature.node.kubernetes.io/coral
-                  operator: In
-                  values: ["true"]
-            topologyKey: kubernetes.io/hostname
-    resources:
-      requests:
-        gpu.intel.com/i915: 1
-        cpu: 15m
-        memory: 512M
-      limits:
-        gpu.intel.com/i915: 1
-        memory: 2392M
+        globalMounts:
+          - path: /config/Library/Application Support/Plex Media Server/Logs
+      tmp:
+        type: emptyDir
+      transcode:
+        type: emptyDir
+      media:
+        type: nfs
+        server: 172.20.0.1
+        path: /volume1/Media
+        globalMounts:
+          - path: /media
+            readOnly: true

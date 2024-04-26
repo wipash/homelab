@@ -11,20 +11,18 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: rook-ceph-cluster
-    - name: volsync
-    - name: intel-device-plugin-gpu
+    - name: external-secrets-stores
   path: ./kubernetes/apps/default/plex/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-cluster
-  wait: true
+  wait: false
   interval: 30m
   retryInterval: 1m
   timeout: 5m
   postBuild:
     substitute:
-      APP: plex
+      APP: *app
       GATUS_PATH: /web/index.html
       VOLSYNC_CAPACITY: 100Gi

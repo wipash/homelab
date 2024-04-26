@@ -26,7 +26,7 @@ tasks:
               "containers": [
                 {
                   "name": "debug",
-                  "image": "ghcr.io/onedr0p/alpine:rolling",
+                  "image": "ghcr.io/wipash/alpine:rolling",
                   "command": [
                     "/bin/bash"
                   ],
@@ -69,7 +69,7 @@ tasks:
               "containers": [
                 {
                   "name": "debug",
-                  "image": "ghcr.io/onedr0p/alpine:rolling",
+                  "image": "ghcr.io/wipash/alpine:rolling",
                   "command": [
                     "/bin/bash"
                   ],
