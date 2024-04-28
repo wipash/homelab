@@ -48,7 +48,7 @@ jobs:
           path: pull
 
       - name: Diff Resources
-        uses: docker://ghcr.io/allenporter/flux-local:v5.0.1
+        uses: docker://ghcr.io/allenporter/flux-local:v5.1.0
         with:
           args: >-
             --log-level DEBUG
