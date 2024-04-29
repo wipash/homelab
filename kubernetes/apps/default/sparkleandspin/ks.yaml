@@ -41,12 +41,10 @@ spec:
     - name: external-secrets-stores
     - name: ghcr-imagepullsecret
     - name: sparkleandspin-redis
+    - name: cloudnative-pg-cluster
   postBuild:
     substitute:
       APP: *backend-appname
-      HOSTNAME: ssbackend.mcgrath.nz
-      APP_UID: "568"
-      APP_GID: "568"
 
 # ---
 # # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json

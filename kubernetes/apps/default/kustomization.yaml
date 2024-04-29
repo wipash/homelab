@@ -36,7 +36,7 @@ resources:
   - ./smokeping/ks.yaml
   - ./smtp-relay/ks.yaml
   - ./sonarr/ks.yaml
-  #- ./sparkleandspin/ks.yaml
+  - ./sparkleandspin/ks.yaml
   - ./tautulli/ks.yaml
   - ./unifi/ks.yaml
   - ./wordpress/ks.yaml

@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
@@ -9,12 +9,21 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.6.0
+      version: 3.1.0
       interval: 30m
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
+
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
 
   values:
     defaultPodOptions:
@@ -22,18 +31,23 @@ spec:
         - name: ghcr-imagepullsecret
 
     controllers:
-      main:
+      sparkleandspin-backend:
         annotations:
           reloader.stakater.com/auto: "true"
-
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 16
+            envFrom: &envFrom
+              - secretRef:
+                  name: sparkleandspin-backend-secret
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/wipash/sparkleandspin-backend
               tag: latest
-            envFrom:
-              - secretRef:
-                  name: sparkleandspin-backend-secret
+            envFrom: *envFrom
             env:
               DATABASE_TYPE: postgres
               STORE_CORS: http://localhost:8000,http://localhost:7001
@@ -60,7 +74,8 @@ spec:
             runAsNonRoot: true
 
     service:
-      main:
+      app:
+        controller: sparkleandspin-backend
         ports:
           http:
             port: 9000
@@ -89,16 +104,15 @@ spec:
 
 
     ingress:
-      main:
-        enabled: true
+      app:
         className: internal
         hosts:
-          - host: "${HOSTNAME}"
+          - host: &host ssbackend.mcgrath.nz
             paths:
               - path: /
                 service:
-                  name: main
+                  identifier: app
                   port: http
         tls:
           - hosts:
-              - "${HOSTNAME}"
+              - *host
