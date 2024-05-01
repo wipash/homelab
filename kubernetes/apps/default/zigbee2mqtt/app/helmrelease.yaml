@@ -120,6 +120,7 @@ spec:
       usb:
         type: hostPath
         hostPathType: CharDevice
-        hostPath: /dev/serial/by-id/usb-ITEAD_SONOFF_Zigbee_3.0_USB_Dongle_Plus_V2_20220719081347-if00
+        #hostPath: /dev/serial/by-id/usb-ITEAD_SONOFF_Zigbee_3.0_USB_Dongle_Plus_V2_20220719081347-if00
+        hostPath: /dev/ttyACM0
         globalMounts:
           - path: /dev/serial/by-id/usb-ITEAD_SONOFF_Zigbee_3.0_USB_Dongle_Plus_V2_20220719081347-if00
