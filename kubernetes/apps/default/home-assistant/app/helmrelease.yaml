@@ -44,8 +44,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/onedr0p/home-assistant
-              tag: 2024.5.0@sha256:f40002f1b631e7c2e70e0efd14e5e05a0d22ff08de81b2e7bd0ad3c190d1c744
+              repository: ghcr.io/wipash/home-assistant
+              tag: 2024.5.1@sha256:09da40eba1cdcb32d2ef6742864d8480db6cf83fd805222eede2e7769e4e87ad
             env:
               TZ: Pacific/Auckland
             envFrom:
