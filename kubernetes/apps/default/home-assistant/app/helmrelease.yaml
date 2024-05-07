@@ -45,7 +45,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/home-assistant
-              tag: 2024.5.1@sha256:09da40eba1cdcb32d2ef6742864d8480db6cf83fd805222eede2e7769e4e87ad
+              tag: 2024.5.2@sha256:7b6b4ede9165376295c03f300962bf4ce7dd35ff4d005bbcca58f2a9831fd261
             env:
               TZ: Pacific/Auckland
             envFrom:
