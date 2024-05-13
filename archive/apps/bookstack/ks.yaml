@@ -14,7 +14,7 @@ spec:
     - name: cluster-apps-external-secrets-stores
     - name: cluster-apps-rook-ceph-cluster
     - name: cluster-apps-volsync
-  path: ./kubernetes/apps/default/bookstack/app
+  path: ./kubernetes/main/apps/default/bookstack/app
   prune: true
   sourceRef:
     kind: GitRepository

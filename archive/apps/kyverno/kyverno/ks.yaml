@@ -6,7 +6,7 @@ metadata:
   name: kyverno
   namespace: flux-system
 spec:
-  path: ./kubernetes/apps/kyverno/kyverno/app
+  path: ./kubernetes/main/apps/kyverno/kyverno/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -25,7 +25,7 @@ metadata:
 spec:
   dependsOn:
     - name: kyverno
-  path: ./kubernetes/apps/kyverno/kyverno/policies
+  path: ./kubernetes/main/apps/kyverno/kyverno/policies
   prune: true
   sourceRef:
     kind: GitRepository
