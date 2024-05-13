@@ -12,19 +12,52 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  changed-clusters:
+    name: Changed Clusters
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.changed-clusters.outputs.all_changed_and_modified_files }}
+    steps:
+      - name: Generate Token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: "${{ secrets.BOT_APP_ID }}"
+          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+
+      - name: Checkout Default Branch
+        uses: actions/checkout@v4
+        with:
+          token: "${{ steps.app-token.outputs.token }}"
+          fetch-depth: 0
+
+      - name: Get Changed Clusters
+        id: changed-clusters
+        uses: tj-actions/changed-files@v44
+        with:
+          files: kubernetes/**
+          dir_names: true
+          dir_names_max_depth: 2
+          matrix: true
+
+      - name: List All Changed Clusters
+        run: echo "${{ steps.changed-clusters.outputs.all_changed_and_modified_files }}"
+
   flux-diff:
     name: Flux Diff
     runs-on: ubuntu-latest
+    needs: ["changed-clusters"]
     permissions:
       pull-requests: write
     strategy:
       matrix:
+        paths: ${{ fromJSON(needs.changed-clusters.outputs.matrix) }}
         resources: ["helmrelease", "kustomization"]
       max-parallel: 4
       fail-fast: false
     steps:
       - name: Generate Token
-        uses: actions/create-github-app-token@a0de6af83968303c8c955486bf9739a57d23c7f1 # v1
+        uses: actions/create-github-app-token@v1
         id: app-token
         with:
           app-id: "${{ secrets.BOT_APP_ID }}"
@@ -49,8 +82,8 @@ jobs:
           args: >-
             diff ${{ matrix.resources }}
             --unified 6
-            --path-orig /github/workspace/default/kubernetes
-            --path /github/workspace/pull/kubernetes
+            --path /github/workspace/pull/${{ matrix.paths }}/flux
+            --path-orig /github/workspace/default/${{ matrix.paths }}/flux
             --strip-attrs "helm.sh/chart,checksum/config,app.kubernetes.io/version,chart"
             --limit-bytes 10000
             --all-namespaces
@@ -70,7 +103,7 @@ jobs:
 
       - if: ${{ steps.diff.outputs.diff != '' }}
         name: Add comment
-        uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
+        uses: mshick/add-pr-comment@v2
         with:
           repo-token: "${{ steps.app-token.outputs.token }}"
           message-id: "${{ github.event.pull_request.number }}/${{ matrix.paths }}/${{ matrix.resources }}"
