@@ -22,6 +22,7 @@ on:
   push:
     branches: ["main"]
     paths:
+      - .github/renovate-config.json5
       - .github/renovate.json5
       - .github/renovate/**.json5
 
@@ -31,17 +32,14 @@ concurrency:
 
 env:
   LOG_LEVEL: debug
-  RENOVATE_DRY_RUN: false
+  RENOVATE_DRY_RUN: "${{ inputs.dryRun == true }}"
   RENOVATE_PLATFORM: github
   RENOVATE_PLATFORM_COMMIT: true
-  RENOVATE_ONBOARDING_CONFIG_FILE_NAME: .github/renovate.json5
   RENOVATE_AUTODISCOVER: true
   RENOVATE_AUTODISCOVER_FILTER: "${{ github.repository }}"
   RENOVATE_USERNAME: "${{ secrets.BOT_USERNAME }}[bot]"
   RENOVATE_GIT_AUTHOR: "${{ secrets.BOT_USERNAME }} <${{ secrets.BOT_USER_ID }}+${{ secrets.BOT_USERNAME }}[bot]@users.noreply.github.com>"
-  WORKFLOW_RENOVATE_DRY_RUN: false
-  WORKFLOW_RENOVATE_LOG_LEVEL: debug
-  WORKFLOW_RENOVATE_VERSION: latest
+  WORKFLOW_RENOVATE_VERSION: "${{ inputs.version || 'latest' }}"
 
 jobs:
   renovate:
@@ -60,15 +58,9 @@ jobs:
         with:
           token: "${{ steps.app-token.outputs.token }}"
 
-      - name: Override Default Config
-        shell: bash
-        run: |
-          echo "RENOVATE_DRY_RUN=${{ github.event.inputs.dryRun || env.WORKFLOW_RENOVATE_DRY_RUN }}" >> "${GITHUB_ENV}"
-          echo "LOG_LEVEL=${{ github.event.inputs.logLevel || env.WORKFLOW_RENOVATE_LOG_LEVEL }}" >> "${GITHUB_ENV}"
-
       - name: Renovate
         uses: renovatebot/github-action@063e0c946b9c1af35ef3450efc44114925d6e8e6 # v40.1.11
         with:
-          configurationFile: "${{ env.RENOVATE_ONBOARDING_CONFIG_FILE_NAME }}"
+          configurationFile: .github/renovate-config.json5
           token: "${{ steps.app-token.outputs.token }}"
-          renovate-version: "${{ github.event.inputs.version || env.WORKFLOW_RENOVATE_VERSION }}"
+          renovate-version: "${{ env.WORKFLOW_RENOVATE_VERSION }}"
