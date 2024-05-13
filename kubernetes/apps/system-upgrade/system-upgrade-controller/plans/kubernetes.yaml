@@ -37,6 +37,7 @@ spec:
       - --nodes=$(NODE_IP)
       - health
       - --server=false
+      - --control-plane-nodes=10.0.16.133,10.0.16.135,10.0.16.136
   upgrade:
     <<: *prepare
     args:
