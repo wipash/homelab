@@ -8,7 +8,7 @@ metadata:
 spec:
   dependsOn:
     - name: cluster-apps-mosquitto
-  path: ./kubernetes/apps/default/paradox-alarm-interface/app
+  path: ./kubernetes/main/apps/default/paradox-alarm-interface/app
   prune: true
   sourceRef:
     kind: GitRepository

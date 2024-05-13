@@ -10,7 +10,7 @@ spec:
     - name: cluster-apps-lidarr
     - name: cluster-apps-radarr
     - name: cluster-apps-sonarr
-  path: ./kubernetes/apps/default/unpackerr/app
+  path: ./kubernetes/main/apps/default/unpackerr/app
   prune: true
   sourceRef:
     kind: GitRepository

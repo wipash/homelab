@@ -13,7 +13,7 @@ spec:
   dependsOn:
     - name: cluster-apps-rook-ceph-cluster
     - name: cluster-apps-foundryvtt
-  path: ./kubernetes/apps/default/foundry-browser/app
+  path: ./kubernetes/main/apps/default/foundry-browser/app
   prune: true
   sourceRef:
     kind: GitRepository
