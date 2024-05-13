@@ -1,0 +1,5 @@
+- op: replace
+  path: /machine/kubelet/extraArgs
+  value:
+    feature-gates: GracefulNodeShutdown=true
+    rotate-server-certificates: "true"
