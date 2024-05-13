@@ -1,0 +1,8 @@
+- op: replace
+  path: /machine/features/kubernetesTalosAPIAccess
+  value:
+    enabled: true
+    allowedRoles:
+      - os:admin
+    allowedKubernetesNamespaces:
+      - system-upgrade
