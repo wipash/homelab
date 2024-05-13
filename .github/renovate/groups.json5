@@ -2,9 +2,32 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "packageRules": [
     {
-      "description": "Flux Group",
+      "description": ["Actions Runner Controller Group"],
+      "groupName": "Actions Runner Controller",
+      "matchPackagePatterns": [
+        "gha-runner-scale-set-controller",
+        "gha-runner-scale-set"
+      ],
+      "matchDatasources": ["docker", "helm"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "separateMinorPatch": true
+    },
+    {
+      "description": ["Dragonfly Operator Group"],
+      "groupName": "Dragonfly Operator",
+      "matchPackagePatterns": ["dragonfly(?:db)?.operator"],
+      "matchDatasources": ["docker", "github-releases"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "separateMinorPatch": true
+    },
+    {
+      "description": ["Flux Group"],
       "groupName": "Flux",
-      "matchPackagePatterns": ["flux", "fluxcd"],
+      "matchPackagePatterns": ["fluxcd"],
       "matchDatasources": ["docker", "github-tags"],
       "versioning": "semver",
       "group": {
@@ -13,7 +36,7 @@
       "separateMinorPatch": true
     },
     {
-      "description": "1Password Connect and Sync images",
+      "description": ["1Password Connect and Sync images"],
       "groupName": "1Password",
       "matchPackagePatterns": ["1password"],
       "matchDatasources": ["docker"],
@@ -23,7 +46,7 @@
       "separateMinorPatch": true
     },
     {
-      "description": "Immich images",
+      "description": ["Immich images"],
       "groupName": "Immich",
       "matchPackagePatterns": ["immich"],
       "matchDatasources": ["docker"],
@@ -33,7 +56,7 @@
       "separateMinorPatch": true
     },
     {
-      "description": "Rook-Ceph Group",
+      "description": ["Rook-Ceph Group"],
       "groupName": "Rook-Ceph",
       "matchPackagePatterns": ["rook.ceph"],
       "matchDatasources": ["helm"],
@@ -43,7 +66,7 @@
       "separateMinorPatch": true
     },
     {
-      "description": "External Snapshotter Group",
+      "description": ["External Snapshotter Group"],
       "groupName": "External Snapshotter",
       "matchPackageNames": ["snapshot-controller", "snapshot-validation-webhook"],
       "matchDatasources": ["helm"],
@@ -53,7 +76,7 @@
       "separateMinorPatch": true
     },
     {
-      "description": "Thanos image and chart - mismatched versions",
+      "description": ["Thanos image and chart - mismatched versions"],
       "groupName": "Thanos",
       "matchPackagePatterns": ["thanos"],
       "matchDatasources": ["docker", "github-releases", "helm"],
@@ -62,6 +85,17 @@
         "commitMessageTopic": "{{{groupName}}} group"
       },
       "separateMinorPatch": false
+    },
+    {
+      "description": ["Volsync Group"],
+      "groupName": "Volsync",
+      "matchPackagePatterns": ["volsync"],
+      "matchDatasources": ["docker", "helm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "separateMinorPatch": true
     }
   ]
 }
