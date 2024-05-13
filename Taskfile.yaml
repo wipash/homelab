@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+vars:
+  KUBERNETES_DIR: "{{.ROOT_DIR}}/kubernetes"
+
+env:
+  KUBECONFIG: "{{.KUBERNETES_DIR}}/kubernetes/main/kubeconfig"
+  SOPS_AGE_KEY_FILE: "{{.ROOT_DIR}}/age.key"
+
+includes:
+  bootstrap: .taskfiles/Bootstrap
+  external-secrets: .taskfiles/ExternalSecrets
+  flux: .taskfiles/Flux
+  kubernetes: .taskfiles/Kubernetes
+  rook: .taskfiles/Rook
+  talos: .taskfiles/Talos
+  volsync: .taskfiles/VolSync
+  db: .taskfiles/cnpg
+
+tasks:
+
+  default:
+    silent: true
+    cmd: task -l
