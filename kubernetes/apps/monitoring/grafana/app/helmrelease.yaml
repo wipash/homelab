@@ -215,7 +215,7 @@ spec:
         redis:
           # renovate: depName="Redis Dashboard for Prometheus Redis Exporter 1.x"
           gnetId: 763
-          revision: 5
+          revision: 6
           datasource: Prometheus
         speedtest-exporter:
           # renovate: depName="Speedtest-Exporter Dashboard"
