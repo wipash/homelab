@@ -72,7 +72,7 @@ jobs:
         run: |
           declare -a repos=()
           for f in ${{ steps.changed-files.outputs.all_changed_and_modified_files }}; do
-              cluster_name="cluster-0"
+              cluster_name="main"
               repo_namespace="$(yq -r '.spec.chart.spec.sourceRef.namespace' "${f}")"
               repo_name="$(yq -r '.spec.chart.spec.sourceRef.name' "${f}")"
               repos+=("${cluster_name}:${repo_namespace}:${repo_name}")
@@ -81,7 +81,7 @@ jobs:
           for r in "${repos[@]}"; do
               IFS=':' read -r cluster_name repo_namespace repo_name <<< "${r}"
               flux \
-                  --context admin@${cluster_name} \
+                  --context ${cluster_name} \
                   --namespace ${repo_namespace} \
                   reconcile source helm ${repo_name}
           done
