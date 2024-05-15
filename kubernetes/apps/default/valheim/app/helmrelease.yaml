@@ -1,0 +1,77 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: &app valheim
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-charts
+        namespace: flux-system
+      interval: 10m
+
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+
+  values:
+    controllers:
+      valheim:
+        enabled: true
+        type: deployment
+        annotations: {}
+        labels: {}
+        replicas: 1
+
+        containers:
+          app:
+            image:
+              repository: lloesche/valheim-server
+              tag: latest@sha256:85ab5dbb0e538cd7c711231384a1b78357ac6f85611219022e1be22e856d922f
+
+            env:
+              TZ: Pacific/Auckland
+              SERVER_NAME: smellheim
+              WORLD_NAME: smellheim
+              SERVER_PORT: 2456 #udp
+              SERVER_PUBLIC: false
+              UPDATE_CRON: "*/60 * * * *"
+
+            envFrom:
+              - secretRef:
+                  name: valheim-secret
+
+            resources:
+              requests:
+                memory: 4Gi
+                cpu: 200m
+              limits:
+                memory: 8Gi
+
+    service:
+      app:
+        controller: *app
+        type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: "${SVC_VALHEIM_ADDR}"
+        ports:
+          steam1:
+            port: 2456
+            protocol: UDP
+          steam2:
+            port: 2457
+            protocol: UDP
+
+    persistence:
+      config:
+        existingClaim: *app
