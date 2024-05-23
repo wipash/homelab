@@ -3,31 +3,31 @@ module.exports = {
   credentialSecret: process.env.NODE_RED_CREDENTIAL_SECRET,
   flowFilePretty: true,
 
-  adminAuth: {
-    type: "strategy",
-    strategy: {
-      name: "openidconnect",
-      autoLogin: true,
-      label: "Sign in",
-      icon: "fa-cloud",
-      strategy: require("passport-openidconnect").Strategy,
-      options: {
-        issuer: "https://auth.mcgrath.nz",
-        authorizationURL: "https://auth.mcgrath.nz/api/oidc/authorization",
-        tokenURL: "https://auth.mcgrath.nz/api/oidc/token",
-        userInfoURL: "https://auth.mcgrath.nz/api/oidc/userinfo",
-        clientID: "nodered",
-        clientSecret: process.env.NODERED_OAUTH_CLIENT_SECRET,
-        callbackURL: "https://nodered.mcgrath.nz/auth/strategy/callback",
-        scope: ["email", "profile", "openid"],
-        proxy: true,
-        verify: function (issuer, profile, done) {
-          done(null, profile)
-        },
-      },
-    },
-    users: [{ username: "sean", permissions: ["*"] }],
-  },
+  // adminAuth: {
+  //   type: "strategy",
+  //   strategy: {
+  //     name: "openidconnect",
+  //     autoLogin: true,
+  //     label: "Sign in",
+  //     icon: "fa-cloud",
+  //     strategy: require("passport-openidconnect").Strategy,
+  //     options: {
+  //       issuer: "https://auth.mcgrath.nz",
+  //       authorizationURL: "https://auth.mcgrath.nz/api/oidc/authorization",
+  //       tokenURL: "https://auth.mcgrath.nz/api/oidc/token",
+  //       userInfoURL: "https://auth.mcgrath.nz/api/oidc/userinfo",
+  //       clientID: "nodered",
+  //       clientSecret: process.env.NODERED_OAUTH_CLIENT_SECRET,
+  //       callbackURL: "https://nodered.mcgrath.nz/auth/strategy/callback",
+  //       scope: ["email", "profile", "openid"],
+  //       proxy: true,
+  //       verify: function (issuer, profile, done) {
+  //         done(null, profile)
+  //       },
+  //     },
+  //   },
+  //   users: [{ username: "sean", permissions: ["*"] }],
+  // },
 
   uiPort: process.env.PORT || 1880,
 
