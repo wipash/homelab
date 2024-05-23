@@ -8,3 +8,11 @@ resources:
   - ./helmrelease.yaml
   - ../../../../templates/gatus/internal
   - ../../../../templates/volsync
+configMapGenerator:
+  - name: node-red-configmap
+    files:
+      - resources/settings.js
+generatorOptions:
+  disableNameSuffixHash: true
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
