@@ -47,3 +47,4 @@ resources:
   - ./plandex/ks.yaml
   - ./excalidraw/ks.yaml
   - ./openproject/ks.yaml
+  - ./valheim/ks.yaml
