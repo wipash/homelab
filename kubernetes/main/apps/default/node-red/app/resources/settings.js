@@ -1,85 +1,85 @@
 module.exports = {
-    flowFile: "flows.json",
-    credentialSecret: process.env.NODE_RED_CREDENTIAL_SECRET,
-    flowFilePretty: true,
+  flowFile: "flows.json",
+  credentialSecret: process.env.NODE_RED_CREDENTIAL_SECRET,
+  flowFilePretty: true,
 
-    adminAuth: {
-      type: "strategy",
-      strategy: {
-        name: "openidconnect",
-        autoLogin: true,
-        label: "Sign in",
-        icon: "fa-cloud",
-        strategy: require("passport-openidconnect").Strategy,
-        options: {
-          issuer: "https://auth.mcgrath.nz",
-          authorizationURL: "https://auth.mcgrath.nz/api/oidc/authorization",
-          tokenURL: "https://auth.mcgrath.nz/api/oidc/token",
-          userInfoURL: "https://auth.mcgrath.nz/api/oidc/userinfo",
-          clientID: process.env.NODERED_OAUTH_CLIENT_ID,
-          clientSecret: process.env.NODERED_OAUTH_CLIENT_SECRET,
-          callbackURL: "https://nodered.mcgrath.nz/auth/strategy/callback",
-          scope: ["email", "profile", "openid"],
-          proxy: true,
-          verify: function (issuer, profile, done) {
-            done(null, profile)
-          },
+  adminAuth: {
+    type: "strategy",
+    strategy: {
+      name: "openidconnect",
+      autoLogin: true,
+      label: "Sign in",
+      icon: "fa-cloud",
+      strategy: require("passport-openidconnect").Strategy,
+      options: {
+        issuer: "https://auth.mcgrath.nz",
+        authorizationURL: "https://auth.mcgrath.nz/api/oidc/authorization",
+        tokenURL: "https://auth.mcgrath.nz/api/oidc/token",
+        userInfoURL: "https://auth.mcgrath.nz/api/oidc/userinfo",
+        clientID: process.env.NODERED_OAUTH_CLIENT_ID,
+        clientSecret: process.env.NODERED_OAUTH_CLIENT_SECRET,
+        callbackURL: "https://nodered.mcgrath.nz/auth/strategy/callback",
+        scope: ["email", "profile", "openid"],
+        proxy: true,
+        verify: function (issuer, profile, done) {
+          done(null, profile)
         },
       },
-      users: [{username: "wipash", permissions: ["*"]}],
     },
+    users: [{ username: "wipash", permissions: ["*"] }],
+  },
 
-    uiPort: process.env.PORT || 1880,
+  uiPort: process.env.PORT || 1880,
 
-    diagnostics: {
-      enabled: true,
-      ui: true,
+  diagnostics: {
+    enabled: true,
+    ui: true,
+  },
+
+  runtimeState: {
+    enabled: false,
+    ui: false,
+  },
+
+  logging: {
+    console: {
+      level: "info",
+      metrics: false,
+      audit: false,
     },
+  },
 
-    runtimeState: {
+  contextStorage: {
+    default: {
+      module: "localfilesystem",
+    },
+  },
+
+  exportGlobalContextKeys: false,
+
+  externalModules: {},
+
+  editorTheme: {
+    tours: false,
+
+    projects: {
       enabled: false,
-      ui: false,
-    },
-
-    logging: {
-      console: {
-        level: "info",
-        metrics: false,
-        audit: false,
+      workflow: {
+        mode: "manual",
       },
     },
 
-    contextStorage: {
-      default: {
-        module: "localfilesystem",
-      },
+    codeEditor: {
+      lib: "monaco",
+      options: {},
     },
+  },
 
-    exportGlobalContextKeys: false,
+  functionExternalModules: true,
+  functionGlobalContext: {},
 
-    externalModules: {},
+  debugMaxLength: 1000,
 
-    editorTheme: {
-      tours: false,
-
-      projects: {
-        enabled: false,
-        workflow: {
-          mode: "manual",
-        },
-      },
-
-      codeEditor: {
-        lib: "monaco",
-        options: {},
-      },
-    },
-
-    functionExternalModules: true,
-    functionGlobalContext: {},
-
-    debugMaxLength: 1000,
-
-    mqttReconnectTime: 15000,
-    serialReconnectTime: 15000,
-  }
+  mqttReconnectTime: 15000,
+  serialReconnectTime: 15000,
+}
