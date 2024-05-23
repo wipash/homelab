@@ -103,6 +103,8 @@ spec:
               USERMAP_GID: "65537" # NAS Permission group
 
             envFrom: *envFrom
+            securityContext:
+              supplementalGroups: ["568", "65537"]
             resources:
               requests:
                 cpu: 25m
