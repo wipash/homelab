@@ -39,7 +39,7 @@ resources:
   - ./sparkleandspin/ks.yaml
   - ./tautulli/ks.yaml
   - ./unifi/ks.yaml
-  - ./wordpress/ks.yaml
+  #- ./wordpress/ks.yaml
   - ./zigbee2mqtt/ks.yaml
   #- ./openwebui/ks.yaml
   - ./audiobookshelf/ks.yaml
