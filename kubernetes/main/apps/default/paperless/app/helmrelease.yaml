@@ -1,94 +1,155 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: paperless
-  namespace: default
+  name: &app paperless
 spec:
   interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 2.0.3
-      interval: 30m
+      version: 3.1.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-
+  maxHistory: 2
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  uninstall:
+    keepHistory: false
   values:
     controllers:
-      main:
-        type: statefulset
-
+      paperless:
+        strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
-
-        containers:
-          main:
+        initContainers:
+          init-db:
             image:
-              repository: ghcr.io/paperless-ngx/paperless-ngx
-              tag: 2.8.6
-            envFrom:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 16
+            envFrom: &envFrom
               - secretRef:
                   name: paperless-secret
-              - configMapRef:
-                  name: paperless-configmap
+        containers:
+          app:
+            image:
+              repository: ghcr.io/paperless-ngx/paperless-ngx
+              tag: 2.8.6@sha256:2744572313cf3026520243f00e064d8fa82d838173a160d63b7e481575a86fdc
+            env:
+              PAPERLESS_URL: https://paperless.mcgrath.nz
+              PAPERLESS_ALLOWED_HOSTS: paperless.mcgrath.nz
+              PAPERLESS_PORT: "8000"
+              PAPERLESS_TIME_ZONE: "Pacific/Auckland"
+
+              PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
+              PAPERLESS_SECRET_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: paperless-secret
+                    key: PAPERLESS_SECRET_KEY
+
+              # Configure Remote User auth
+              PAPERLESS_ACCOUNT_ALLOW_SIGNUPS: "false"
+              PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS: "false"
+              PAPERLESS_SOCIALACCOUNT_PROVIDERS:
+                valueFrom:
+                  secretKeyRef:
+                    name: paperless-secret
+                    key: PAPERLESS_SOCIALACCOUNT_PROVIDERS
+
+              # Directly impacts performance and ram usage
+              PAPERLESS_WEBSERVER_WORKERS: "2"
+              PAPERLESS_TASK_WORKERS: "2"
+              PAPERLESS_THREADS_PER_WORKER: "1"
+
+              # Configure Remote User auth
+              PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
+              PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: HTTP_X_AUTH_REQUEST_EMAIL
+
+              # Configure folders
+              PAPERLESS_CONSUMPTION_DIR: /data/nas/incoming
+              PAPERLESS_DATA_DIR: /data/local/data
+              PAPERLESS_EXPORT_DIR: /data/nas/export
+              PAPERLESS_MEDIA_ROOT: /data/local/media
+
+              # Configure folder importer
+              PAPERLESS_CONSUMER_POLLING: "60"
+              PAPERLESS_CONSUMER_RECURSIVE: "true"
+              PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
+
+              # OCR
+              PAPERLESS_OCR_LANGUAGE: eng
+              PAPERLESS_OCR_LANGUAGES: eng
+
+              # Configure redis integration
+              PAPERLESS_REDIS: redis://dragonfly.database.svc.cluster.local:6379/5
+
+              # TIKA Config
+              PAPERLESS_TIKA_ENABLED: "true"
+              PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://localhost:3000
+              PAPERLESS_TIKA_ENDPOINT: http://localhost:9998
+
+              # Configure user permissions
+              USERMAP_GID: "65537" # NAS Permission group
+
+            envFrom: *envFrom
             resources:
               requests:
-                cpu: 11m
-                memory: 256M
+                cpu: 25m
+                memory: 512Mi
               limits:
-                memory: 1812M
+                memory: 2Gi
 
           gotenburg:
             image:
-              repository: thecodingmachine/gotenberg
+              repository: docker.io/thecodingmachine/gotenberg
               tag: 8.5.1
             env:
-              - { name: DISABLE_GOOGLE_CHROME, value: "1" }
+              - {name: DISABLE_GOOGLE_CHROME, value: "1"}
 
           tika:
             image:
               repository: ghcr.io/paperless-ngx/tika
               tag: 2.9.1-full
-
-          redis:
-            image:
-              repository: public.ecr.aws/docker/library/redis
-              tag: 7.2.5
-
     service:
-      main:
+      app:
+        controller: *app
         ports:
           http:
             port: 8000
-
     ingress:
-      main:
-        enabled: true
+      app:
         className: internal
-        annotations:
-          nginx.ingress.kubernetes.io/auth-snippet: proxy_set_header X-Forwarded-Host $http_host;
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/name: Paperless
-          gethomepage.dev/icon: mdi-file-document-outline
-          gethomepage.dev/group: Apps
         hosts:
-          - host: &host "paperless.mcgrath.nz"
+          - host: &host "{{ .Release.Name }}.${SECRET_CLUSTER_DOMAIN}"
             paths:
               - path: /
                 service:
-                  name: main
+                  identifier: app
                   port: http
         tls:
           - hosts:
               - *host
-
     persistence:
-      library:
-        enabled: true
-        existingClaim: paperless-nfs
+      data:
+        existingClaim: *app
+        advancedMounts:
+          paperless:
+            app:
+              - path: /data/local
+      nas:
+        type: nfs
+        server: 172.20.0.1
+        path: /volume1/Data/Docs/paperless/
         globalMounts:
-          - path: /library
+          - path: /data/nas
