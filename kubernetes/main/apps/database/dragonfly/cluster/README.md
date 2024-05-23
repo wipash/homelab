@@ -3,4 +3,5 @@
 2. thanos
 3. immich
 4. authelia
-5.
+5. paperless
+6.
