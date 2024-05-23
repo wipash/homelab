@@ -103,3 +103,5 @@ spec:
     persistence:
       data:
         existingClaim: *app
+        globalMounts:
+          - path: /app/data
