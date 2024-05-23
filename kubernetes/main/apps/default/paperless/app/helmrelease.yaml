@@ -60,7 +60,7 @@ spec:
 
               # Configure Remote User auth
               PAPERLESS_ACCOUNT_ALLOW_SIGNUPS: "false"
-              PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS: "false"
+              PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS: "true"
               PAPERLESS_SOCIALACCOUNT_PROVIDERS:
                 valueFrom:
                   secretKeyRef:
