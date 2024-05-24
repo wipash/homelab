@@ -5,10 +5,13 @@ metadata:
   name: immich-configmap
 data:
   TZ: Pacific/Auckland
+  NODE_ENV: production
+  ENABLE_MAPBOX: "false"
+  DISABLE_REVERSE_GEOCODING: "true"
+  LOG_LEVEL: verbose
   IMMICH_MACHINE_LEARNING_URL: http://immich-machine-learning.default.svc.cluster.local:3003
   IMMICH_SERVER_URL: http://immich-server.default.svc.cluster.local:3001
   IMMICH_WEB_URL: http://immich-web.default.svc.cluster.local:3000
-  LOG_LEVEL: verbose
   REDIS_HOSTNAME: dragonfly.database.svc.cluster.local
   REDIS_PORT: "6379"
   REDIS_DBINDEX: "3"

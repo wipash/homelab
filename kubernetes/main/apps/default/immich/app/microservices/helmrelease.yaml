@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.1.0
+      version: 3.2.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -102,15 +102,15 @@ spec:
         existingClaim: immich-nfs
         globalMounts:
           - path: /usr/src/app/upload
-      geocoding-dump:
-        type: emptyDir
-        globalMounts:
-          - path: /usr/src/app/.reverse-geocoding-dump
-      geoname-dump:
-        type: emptyDir
-        globalMounts:
-          - path: /usr/src/app/node_modules/local-reverse-geocoder/geonames_dump
-      transformers-cache:
-        type: emptyDir
-        globalMounts:
-          - path: /usr/src/app/.transformers_cache
+      # geocoding-dump:
+      #   type: emptyDir
+      #   globalMounts:
+      #     - path: /usr/src/app/.reverse-geocoding-dump
+      # geoname-dump:
+      #   type: emptyDir
+      #   globalMounts:
+      #     - path: /usr/src/app/node_modules/local-reverse-geocoder/geonames_dump
+      # transformers-cache:
+      #   type: emptyDir
+      #   globalMounts:
+      #     - path: /usr/src/app/.transformers_cache
