@@ -50,6 +50,8 @@ spec:
             envFrom:
               - secretRef:
                   name: valheim-secret
+              - configMapRef:
+                  name: valheimplus-config
 
             resources:
               requests:
