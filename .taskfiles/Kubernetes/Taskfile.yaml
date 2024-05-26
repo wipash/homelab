@@ -14,9 +14,10 @@ tasks:
     interactive: true
     cmd: kubectl browse-pvc --context {{.cluster}} --namespace {{.ns}} {{.claim}}
     vars:
+      cluster: '{{.cluster | default "main"}}'
       ns: '{{.ns | default "default"}}'
     requires:
-      vars: ["cluster", "claim"]
+      vars: ["claim"]
 
   drain:
     desc: Drain a node
@@ -25,8 +26,10 @@ tasks:
         cluster: Cluster to run command against (required)
         node: Node to drain (required)
     cmd: kubectl --context {{.cluster}} drain {{.node}} --ignore-daemonsets --delete-local-data --force
+    vars:
+      cluster: '{{.cluster | default "main"}}'
     requires:
-      vars: ["cluster", "node"]
+      vars: ["node"]
 
   delete-failed-pods:
     desc: Deletes pods with a fucked status
@@ -36,5 +39,5 @@ tasks:
     cmds:
       - for: ["Evicted", "Failed", "Succeeded"]
         cmd: kubectl --context {{.cluster}} delete pods --field-selector status.phase={{.ITEM}} -A --ignore-not-found=true
-    requires:
-      vars: ["cluster"]
+    vars:
+      cluster: '{{.cluster | default "main"}}'
