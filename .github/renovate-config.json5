@@ -22,7 +22,7 @@
     ],
     "dependencyDashboardTitle": "Renovate Dashboard 🤖",
     "suppressNotifications": ["prEditedNotification", "prIgnoreNotification"],
-    "ignorePaths": ["**/*.sops.*", "**/.archive/**", "**/resources/**"],
+    "ignorePaths": ["**/*.sops.*", "**/.archive/**", "**/archive/**", "**/resources/**"],
     "flux": {
       "fileMatch": [
         "(^|/)kubernetes/.+\\.ya?ml(?:\\.j2)?$"
