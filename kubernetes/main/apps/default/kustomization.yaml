@@ -41,9 +41,8 @@ resources:
   - ./unifi/ks.yaml
   #- ./wordpress/ks.yaml
   - ./zigbee2mqtt/ks.yaml
-  #- ./openwebui/ks.yaml
+  - ./openwebui/ks.yaml
   - ./audiobookshelf/ks.yaml
-  - ./readarr/ks.yaml
   - ./plandex/ks.yaml
   - ./excalidraw/ks.yaml
   - ./openproject/ks.yaml
