@@ -18,8 +18,8 @@ data:
   VPCFG_Beehive_autoDepositRange: "10" # default 10, max 50
   VPCFG_Beehive_showDuration: "true"
   ### brightness
-  VPCFG_Brightness_enabled: "true"
-  VPCFG_Brightness_nightBrightnessMultiplier: "2" # default 0; 7-ish will 2x brightness at night
+  VPCFG_Brightness_enabled: "false"
+  # VPCFG_Brightness_nightBrightnessMultiplier: "2" # default 0; 7-ish will 2x brightness at night
   ### camera
   VPCFG_Camera_enabled: "true"
   VPCFG_Camera_cameraMaximumZoomDistance: "8" # default 6
