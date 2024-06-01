@@ -10,6 +10,8 @@ data:
   VALHEIM_PLUS: "true"
   VALHEIM_PLUS_REPO: "Grantapher/ValheimPlus"
   VALHEIM_PLUS_RELEASE: "latest"
+  VPCFG_Game_enabled: "true"
+  VPCFG_Game_disableFog: "true"
   ### beehive
   VPCFG_Beehive_enabled: "true"
   VPCFG_Beehive_honeyProductionSpeed: "600" # default 1200 s == 24 in-game hours
