@@ -61,6 +61,7 @@ spec:
         controller: unifi
         annotations:
           io.cilium/lb-ipam-ips: "${SVC_UNIFI_ADDR}"
+          io.cilium/lb-ipam-sharing-key: unifi
         type: LoadBalancer
         externalTrafficPolicy: Local
         ports:
