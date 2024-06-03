@@ -121,4 +121,4 @@ spec:
         enabled: true
         existingClaim: *app
         globalMounts:
-          - path: /unifi
+          - path: /usr/lib/unifi
