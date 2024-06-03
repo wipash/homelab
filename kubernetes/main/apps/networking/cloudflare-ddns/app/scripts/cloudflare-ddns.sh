@@ -25,7 +25,7 @@ update_ipv4=$(curl -s -X PUT \
     "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records/$record_ipv4_identifier" \
     -H "Authorization: Bearer {{ .CLOUDFLARE_API_KEY }}" \
     -H "Content-Type: application/json" \
-    --data "{\"id\":\"$zone_id\",\"type\":\"A\",\"proxied\":true,\"name\":\"{{ .CLOUDFLARE_RECORD_NAME }}\",\"content\":\"$current_ipv4\"}" \
+    --data "{\"id\":\"$zone_id\",\"type\":\"A\",\"proxied\":false,\"name\":\"{{ .CLOUDFLARE_RECORD_NAME }}\",\"content\":\"$current_ipv4\"}" \
 )
 if [[ "$(echo "$update_ipv4" | jq --raw-output '.success')" == "true" ]]; then
     printf "%s - Success - IP Address '%s' has been updated" "$(date -u)" "$current_ipv4"
