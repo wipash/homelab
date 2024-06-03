@@ -11,3 +11,4 @@ resources:
   - ./tailscale-gateway/ks.yaml
   # Standard Resources
   - ./cloudflared/ks.yaml
+  - ./cloudflare-ddns/ks.yaml
