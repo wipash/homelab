@@ -6,13 +6,13 @@ set -o errexit
 current_ipv4="$(curl -s https://ipv4.icanhazip.com/)"
 zone_id=$(curl -s -X GET \
     "https://api.cloudflare.com/client/v4/zones?name={{ .CLOUDFLARE_DDNS_DOMAIN }}&status=active" \
-    -H "Authorization: Bearer {{ .CLOUDFLARE_API_KEY }}" \
+    -H "Authorization: Bearer {{ .ddns_api_token }}" \
     -H "Content-Type: application/json" \
         | jq --raw-output ".result[0] | .id"
 )
 record_ipv4=$(curl -s -X GET \
     "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records?name={{ .CLOUDFLARE_RECORD_NAME }}&type=A" \
-    -H "Authorization: Bearer {{ .CLOUDFLARE_API_KEY }}" \
+    -H "Authorization: Bearer {{ .ddns_api_token }}" \
     -H "Content-Type: application/json"
 )
 old_ip4=$(echo "$record_ipv4" | jq --raw-output '.result[0] | .content')
@@ -23,7 +23,7 @@ fi
 record_ipv4_identifier="$(echo "$record_ipv4" | jq --raw-output '.result[0] | .id')"
 update_ipv4=$(curl -s -X PUT \
     "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records/$record_ipv4_identifier" \
-    -H "Authorization: Bearer {{ .CLOUDFLARE_API_KEY }}" \
+    -H "Authorization: Bearer {{ .ddns_api_token }}" \
     -H "Content-Type: application/json" \
     --data "{\"id\":\"$zone_id\",\"type\":\"A\",\"proxied\":false,\"name\":\"{{ .CLOUDFLARE_RECORD_NAME }}\",\"content\":\"$current_ipv4\"}" \
 )
