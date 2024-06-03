@@ -45,7 +45,7 @@ spec:
               pullPolicy: IfNotPresent
             env:
               TZ: Pacific/Auckland
-              DEBUG: "true"
+              DEBUG: "false"
               RUNAS_UID0: "false"
               UNIFI_UID: "999"
               UNIFI_GID: "999"
