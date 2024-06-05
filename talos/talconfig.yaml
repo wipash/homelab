@@ -42,6 +42,7 @@ nodes:
           ip: ${clusterEndpointIP}
         addresses:
           - 10.0.16.133/24
+        mtu: 1500
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.16.1
@@ -67,6 +68,7 @@ nodes:
           ip: ${clusterEndpointIP}
         addresses:
           - 10.0.16.135/24
+        mtu: 1500
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.16.1
@@ -92,6 +94,7 @@ nodes:
           ip: ${clusterEndpointIP}
         addresses:
           - 10.0.16.136/24
+        mtu: 1500
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.16.1
@@ -133,10 +136,21 @@ controlPlane:
     - |-
       cluster:
         allowSchedulingOnMasters: true
+        allowSchedulingOnControlPlanes: true
+        controllerManager:
+          extraArgs:
+            bind-address: 0.0.0.0
+        coreDNS:
+          disabled: true
         proxy:
           disabled: true
+        scheduler:
+          extraArgs:
+            bind-address: 0.0.0.0
         discovery:
           registries:
+            kubernetes:
+              disabled: false
             service:
               disabled: true
 
@@ -144,6 +158,8 @@ controlPlane:
     - |-
       cluster:
         etcd:
+          extraArgs:
+            listen-metrics-urls: http://0.0.0.0:2381
           advertisedSubnets:
             - 10.0.16.0/24
 
@@ -158,6 +174,10 @@ controlPlane:
                 [plugins."io.containerd.grpc.v1.cri"]
                   enable_unprivileged_ports = true
                   enable_unprivileged_icmp = true
+                [plugins."io.containerd.grpc.v1.cri".containerd]
+                  discard_unpacked_layers = false
+                [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+                  discard_unpacked_layers = false
 
     # Configure nfs mount options
     - |-
@@ -202,15 +222,6 @@ controlPlane:
             validSubnets:
                 - 10.0.16.0/24
 
-    # Custom sysctls
-    - |-
-      machine:
-        sysctls:
-          fs.inotify.max_user_watches: "1048576"
-          fs.inotify.max_user_instances: "8192"
-          # For CloudflareD QUIC, sets maximum receive buffer size to roughly 2.5 MB.
-          net.core.rmem_max: 2500000
-
     # Configure logging
     - |-
       machine:
@@ -252,7 +263,8 @@ controlPlane:
       machine:
         sysctls:
           fs.inotify.max_queued_events: "65536"
+          fs.inotify.max_user_watches: "1048576"
           fs.inotify.max_user_instances: "8192"
-          fs.inotify.max_user_watches: "524288"
+          # For CloudflareD QUIC, sets maximum receive buffer size to roughly 2.5 MB.
           net.core.rmem_max: "2500000"
           net.core.wmem_max: "2500000"
