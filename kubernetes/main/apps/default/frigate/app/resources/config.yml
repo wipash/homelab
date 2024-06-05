@@ -6,10 +6,6 @@ mqtt:
   user: "{FRIGATE_MQTT_USERNAME}"
   password: "{FRIGATE_MQTT_PASSWORD}"
 
-ui:
-  live_mode: mse
-  #experimental_ui: True
-
 database:
   path: /data/frigate.db
 
