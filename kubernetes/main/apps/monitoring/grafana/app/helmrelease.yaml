@@ -163,7 +163,7 @@ spec:
             type: prometheus
             uid: prometheus
             access: proxy
-            url: http://thanos-query.monitoring.svc.cluster.local:9090
+            url: http://thanos-query-frontend.monitoring.svc.cluster.local:9090
             isDefault: true
             jsonData:
               prometheusType: Thanos
@@ -212,11 +212,6 @@ spec:
           revision: 1
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
-        redis:
-          # renovate: depName="Redis Dashboard for Prometheus Redis Exporter 1.x"
-          gnetId: 763
-          revision: 6
-          datasource: Prometheus
         speedtest-exporter:
           # renovate: depName="Speedtest-Exporter Dashboard"
           gnetId: 13665
