@@ -38,3 +38,4 @@ resources:
   - ./cloudnative-pg.yaml
   - ./openebs.yaml
   - ./spegel.yaml
+  - ./coredns.yaml
