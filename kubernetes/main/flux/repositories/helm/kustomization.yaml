@@ -39,3 +39,4 @@ resources:
   - ./openebs.yaml
   - ./spegel.yaml
   - ./coredns.yaml
+  - ./postfinance.yaml
