@@ -3,6 +3,8 @@ autoDirectNodeRoutes: true
 bandwidthManager:
   bbr: true
   enabled: true
+bgpControlPlane:
+  enabled: true
 bpf:
   masquerade: true
   tproxy: true
