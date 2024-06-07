@@ -27,10 +27,8 @@ spec:
 
       dashboards:
         enabled: true
-        label: grafana_dashboard
-        namespace: monitoring
-        labelValue: "1"
-        annotations: {}
+        annotations:
+          grafana_folder: Cilium
 
       relay:
         prometheus:
@@ -48,10 +46,22 @@ spec:
                 - *host
 
     prometheus:
+      enabled: true
       serviceMonitor:
         enabled: true
+        trustCRDsExist: true
 
     operator:
       prometheus:
+        enabled: true
         serviceMonitor:
           enabled: true
+      dashboards:
+        enabled: true
+        annotations:
+          grafana_folder: Cilium
+
+    dashboards:
+      enabled: true
+      annotations:
+        grafana_folder: Cilium
