@@ -47,6 +47,7 @@ spec:
             image:
               repository: ghcr.io/wipash/sparkleandspin-backend
               tag: latest
+              pullPolicy: Always
             envFrom: *envFrom
             env:
               DATABASE_TYPE: postgres
