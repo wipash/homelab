@@ -55,8 +55,7 @@ spec:
               ADMIN_CORS: /mcgrath\.nz$/
               REDIS_URL: redis://sparkleandspin-redis.default.svc.cluster.local:6379
               MEDUSA_FF_PRODUCT_CATEGORIES: "true"
-              NODE_ENV: test
-              NPM_CONFIG_PRODUCTION: false
+              NODE_ENV: production
             probes:
               liveness:
                 enabled: false
