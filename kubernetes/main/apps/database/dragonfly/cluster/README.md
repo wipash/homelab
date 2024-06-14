@@ -4,4 +4,4 @@
 3. immich
 4. authelia
 5. paperless
-6.
+6. sparkle

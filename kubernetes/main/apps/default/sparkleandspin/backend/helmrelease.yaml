@@ -51,9 +51,9 @@ spec:
             envFrom: *envFrom
             env:
               DATABASE_TYPE: postgres
-              STORE_CORS: http://localhost:8000,http://localhost:7001
+              STORE_CORS: http://localhost:8000,http://localhost:7001,https://${SECRET_DOMAIN_SPARKLE}
               ADMIN_CORS: /mcgrath\.nz$/
-              REDIS_URL: redis://sparkleandspin-redis.default.svc.cluster.local:6379
+              REDIS_URL: redis://dragonfly.database.svc.cluster.local:6379/6
               MEDUSA_FF_PRODUCT_CATEGORIES: "true"
               NODE_ENV: production
             probes:
@@ -108,7 +108,7 @@ spec:
       app:
         className: internal
         hosts:
-          - host: &host ssbackend.mcgrath.nz
+          - host: &host api.${SECRET_DOMAIN_SPARKLE}
             paths:
               - path: /
                 service:
