@@ -87,3 +87,9 @@ spec:
         tls:
           - hosts:
               - *host
+    persistence:
+      cache:
+        type: emptyDir
+        enabled: true
+        globalMounts:
+          - path: /app/.next/cache/images
