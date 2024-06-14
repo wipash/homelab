@@ -106,7 +106,7 @@ spec:
 
     ingress:
       app:
-        className: internal
+        className: external
         hosts:
           - host: &host api.${SECRET_DOMAIN_SPARKLE}
             paths:
