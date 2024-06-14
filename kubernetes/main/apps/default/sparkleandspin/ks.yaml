@@ -26,33 +26,33 @@ spec:
       APP: *backend-appname
       GATUS_SUBDOMAIN: api
       GATUS_DOMAIN: ${SECRET_DOMAIN_SPARKLE}
+      GATUS_PATH: /health
 
-# ---
-# # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
-# apiVersion: kustomize.toolkit.fluxcd.io/v1
-# kind: Kustomization
-# metadata:
-#   name: &frontend-appname sparkleandspin-frontend
-#   namespace: flux-system
-# spec:
-#   targetNamespace: default
-#   commonMetadata:
-#     labels:
-#       app.kubernetes.io/name: *frontend-appname
-#   interval: 10m
-#   path: "./kubernetes/main/apps/default/sparkleandspin/frontend"
-#   prune: true
-#   sourceRef:
-#     kind: GitRepository
-#     name: flux-cluster
-#   wait: false
-#   dependsOn:
-#     - name: sparkleandspin-backend
-#     - name: ghcr-imagepullsecret
-#     - name: external-secrets-stores
-#   postBuild:
-#     substitute:
-#       APP: *frontend-appname
-#       HOSTNAME: sparkleandspin.mcgrath.nz
-#       APP_UID: "568"
-#       APP_GID: "568"
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &frontend-appname sparkleandspin-frontend
+  namespace: flux-system
+spec:
+  targetNamespace: default
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *frontend-appname
+  interval: 10m
+  path: "./kubernetes/main/apps/default/sparkleandspin/frontend"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-cluster
+  wait: false
+  dependsOn:
+    - name: sparkleandspin-backend
+    - name: ghcr-imagepullsecret
+    - name: external-secrets-stores
+  postBuild:
+    substitute:
+      APP: *frontend-appname
+      GATUS_SUBDOMAIN: www
+      GATUS_DOMAIN: ${SECRET_DOMAIN_SPARKLE}
