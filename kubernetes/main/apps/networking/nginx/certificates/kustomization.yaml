@@ -6,3 +6,4 @@ resources:
   - ./certificate-1.yaml
   - ./certificate-2.yaml
   - ./certificate-3.yaml
+  - ./certificate-sparkle.yaml
