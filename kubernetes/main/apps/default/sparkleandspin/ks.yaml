@@ -50,7 +50,6 @@ spec:
   dependsOn:
     - name: sparkleandspin-backend
     - name: ghcr-imagepullsecret
-    - name: external-secrets-stores
   postBuild:
     substitute:
       APP: *frontend-appname
