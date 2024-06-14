@@ -1,0 +1,15 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-tls-sparkle
+spec:
+  # secretName doesn't have to match the certificate name, but it may as well, for simplicity!
+  secretName: wildcard-tls-sparkle
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: "${SECRET_DOMAIN_SPARKLE}"
+  dnsNames:
+    - "${SECRET_DOMAIN_SPARKLE}"
+    - "*.${SECRET_DOMAIN_SPARKLE}"
