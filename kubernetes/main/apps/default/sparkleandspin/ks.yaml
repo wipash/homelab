@@ -24,6 +24,8 @@ spec:
   postBuild:
     substitute:
       APP: *backend-appname
+      GATUS_SUBDOMAIN: api
+      GATUS_DOMAIN: ${SECRET_DOMAIN_SPARKLE}
 
 # ---
 # # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
