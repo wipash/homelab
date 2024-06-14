@@ -32,6 +32,7 @@ spec:
             image:
               repository: ghcr.io/wipash/sparkleandspin-frontend
               tag: latest
+              pullPolicy: Always
             env:
               TZ: Pacific/Auckland
             probes:
