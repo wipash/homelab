@@ -36,10 +36,10 @@ spec:
               tag: 0.26.1@sha256:a5a8c2df471a760596dc3b2701a60af755a6fd63c85c73fa52c199b08504d584
             env:
               TZ: Pacific/Auckland
-              DOCKER_ENABLE_SECURITY: true
-              SECURITY_ENABLE_LOGIN: true
-              SECURITY_OAUTH2_ENABLED: true
-              SECURITY_OAUTH2_AUTOCREATEUSER: true
+              DOCKER_ENABLE_SECURITY: "true"
+              SECURITY_ENABLE_LOGIN: "true"
+              SECURITY_OAUTH2_ENABLED: "true"
+              SECURITY_OAUTH2_AUTOCREATEUSER: "true"
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
