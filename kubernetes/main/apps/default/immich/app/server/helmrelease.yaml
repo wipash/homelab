@@ -78,7 +78,6 @@ spec:
               # IMMICH_CONFIG_FILE: /config/immich-config.json
               IMMICH_MEDIA_LOCATION: &mediaLocation /usr/src/app/upload
               IMMICH_PORT: &port 3001
-              IMMICH_WORKERS_INCLUDE: api
             resources:
               requests:
                 cpu: 100m
