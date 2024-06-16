@@ -1,0 +1,97 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app stirling-pdf
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    controllers:
+      stirling-pdf:
+        replicas: 1
+        strategy: RollingUpdate
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/stirling-tools/s-pdf
+              tag: 0.26.1@sha256:a5a8c2df471a760596dc3b2701a60af755a6fd63c85c73fa52c199b08504d584
+            env:
+              TZ: Pacific/Auckland
+              DOCKER_ENABLE_SECURITY: true
+              SECURITY_ENABLE_LOGIN: true
+              SECURITY_OAUTH2_ENABLED: true
+              SECURITY_OAUTH2_AUTOCREATEUSER: true
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        seccompProfile: { type: RuntimeDefault }
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: *app
+    service:
+      app:
+        controller: stirling-pdf
+        ports:
+          http:
+            port: 8080
+    ingress:
+      app:
+        annotations:
+          external-dns.alpha.kubernetes.io/target: external.mcgrath.nz
+          nginx.ingress.kubernetes.io/proxy-body-size: 50m
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+        className: external
+        hosts:
+          - host: pdf.mcgrath.nz
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+    persistence:
+      config:
+        type: emptyDir
+        globalMounts:
+          - path: /configs
+      logs:
+        type: emptyDir
+      tmp:
+        type: emptyDir
+      tessdata:
+        type: emptyDir
+        globalMounts:
+          - path: /usr/share/tessdata
