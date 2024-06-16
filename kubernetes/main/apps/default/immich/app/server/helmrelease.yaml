@@ -71,14 +71,14 @@ spec:
           app:
             image:
               repository: ghcr.io/immich-app/immich-server
-              tag: v1.105.1@sha256:658b40420d7a39d6eb34c797cec8d36ff315f5adb168301aaf27dc4eafc8e228
-            args: ["start-server.sh"]
+              tag: v1.106.4@sha256:d39cb7ecbcc9924f2c51a3e0deb8a469075996c6ba9e1384eb2ddb550984848e
             envFrom: *envFrom
             env:
               LOG_LEVEL: log
               # IMMICH_CONFIG_FILE: /config/immich-config.json
               IMMICH_MEDIA_LOCATION: &mediaLocation /usr/src/app/upload
-              SERVER_PORT: &port 3001
+              IMMICH_PORT: &port 3001
+              IMMICH_WORKERS_INCLUDE: api
             resources:
               requests:
                 cpu: 100m
