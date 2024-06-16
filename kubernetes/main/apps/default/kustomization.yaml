@@ -48,3 +48,4 @@ resources:
   - ./excalidraw/ks.yaml
   # - ./openproject/ks.yaml
   - ./valheim/ks.yaml
+  - ./stirling-pdf/ks.yaml
