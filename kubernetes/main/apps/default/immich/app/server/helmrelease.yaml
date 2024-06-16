@@ -95,7 +95,7 @@ spec:
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
-                  failureThreshold: 5
+                  failureThreshold: 30
               readiness: *probes
               startup:
                 enabled: false
