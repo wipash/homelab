@@ -113,7 +113,7 @@ spec:
       media:
         type: nfs
         server: 172.20.0.1
-        path: /volume1/Media/Downloads/QB
+        path: /volume1/Media
         globalMounts:
           - path: /media/Downloads/qbittorrent
             subPath: Downloads/qbittorrent
