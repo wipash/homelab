@@ -62,7 +62,7 @@ spec:
         controller: *app
         type: LoadBalancer
         annotations:
-          io.cilium/lb-ipam-ips: "${SVC_VALHEIM_ADDR}"
+          io.cilium/lb-ipam-ips: "${SVC_VALHEIM_ADDR:=temp}"
         ports:
           steam1:
             port: 2456

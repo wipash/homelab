@@ -69,7 +69,7 @@ spec:
         type: LoadBalancer
         annotations:
           external-dns.alpha.kubernetes.io/hostname: mosquitto.mcgrath.nz
-          io.cilium/lb-ipam-ips: ${SVC_MOSQUITTO_ADDR}
+          io.cilium/lb-ipam-ips: ${SVC_MOSQUITTO_ADDR:=temp}
         ports:
           http:
             port: 1883

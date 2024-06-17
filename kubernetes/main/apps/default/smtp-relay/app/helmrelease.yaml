@@ -74,7 +74,7 @@ spec:
         controller: smtp-relay
         type: LoadBalancer
         annotations:
-          io.cilium/lb-ipam-ips: "${SVC_SMTP_RELAY_ADDR}"
+          io.cilium/lb-ipam-ips: "${SVC_SMTP_RELAY_ADDR:=temp}"
         ports:
           http:
             primary: true

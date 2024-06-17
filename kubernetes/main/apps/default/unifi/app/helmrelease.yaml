@@ -62,7 +62,7 @@ spec:
         controller: unifi
         annotations:
           external-dns.alpha.kubernetes.io/hostname: unifi-mgmt.mcgrath.nz
-          io.cilium/lb-ipam-ips: "${SVC_UNIFI_ADDR}"
+          io.cilium/lb-ipam-ips: "${SVC_UNIFI_ADDR:=temp}"
           io.cilium/lb-ipam-sharing-key: unifi
         type: LoadBalancer
         externalTrafficPolicy: Local

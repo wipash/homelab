@@ -73,7 +73,7 @@ spec:
         annotations:
           external-dns.alpha.kubernetes.io/target: "external.mcgrath.nz"
         hosts:
-          - host: &host1 "${SECRET_DOMAIN_SPARKLE:=example.com}" # Default value to make flux-local work
+          - host: &host1 "${SECRET_DOMAIN_SPARKLE:=temp}" # Default value to make flux-local work
             paths:
               - path: /
                 service:
