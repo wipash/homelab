@@ -40,8 +40,12 @@ spec:
               SECURITY_ENABLELOGIN: "true"
               SECURITY_OAUTH2_ENABLED: "true"
               SECURITY_OAUTH2_AUTOCREATEUSER: "true"
+
               PUID: 568
               PGID: 568
+            envFrom:
+              - secretRef:
+                  name: stirling-pdf-secret
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
