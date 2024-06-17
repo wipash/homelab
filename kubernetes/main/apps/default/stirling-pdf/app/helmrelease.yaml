@@ -37,7 +37,7 @@ spec:
             env:
               TZ: Pacific/Auckland
               DOCKER_ENABLE_SECURITY: "true"
-              SECURITY_ENABLE_LOGIN: "true"
+              SECURITY_ENABLELOGIN: "true"
               SECURITY_OAUTH2_ENABLED: "true"
               SECURITY_OAUTH2_AUTOCREATEUSER: "true"
             securityContext:
