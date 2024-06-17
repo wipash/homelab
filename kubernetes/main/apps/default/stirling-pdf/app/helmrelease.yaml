@@ -42,7 +42,6 @@ spec:
               SECURITY_OAUTH2_AUTOCREATEUSER: "true"
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
             resources:
               requests:
