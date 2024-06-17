@@ -73,13 +73,13 @@ spec:
         annotations:
           external-dns.alpha.kubernetes.io/target: "external.mcgrath.nz"
         hosts:
-          - host: &host1 ${SECRET_DOMAIN_SPARKLE}
+          - host: &host1 "${SECRET_DOMAIN_SPARKLE}"
             paths:
               - path: /
                 service:
                   identifier: app
                   port: http
-          - host: &host2 www.${SECRET_DOMAIN_SPARKLE}
+          - host: &host2 "www.${SECRET_DOMAIN_SPARKLE}"
             paths:
               - path: /
                 service:

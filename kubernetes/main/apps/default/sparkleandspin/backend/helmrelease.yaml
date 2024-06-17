@@ -111,7 +111,7 @@ spec:
         annotations:
           external-dns.alpha.kubernetes.io/target: "external.mcgrath.nz"
         hosts:
-          - host: &host api.${SECRET_DOMAIN_SPARKLE}
+          - host: &host "api.${SECRET_DOMAIN_SPARKLE}"
             paths:
               - path: /
                 service:
