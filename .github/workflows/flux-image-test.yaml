@@ -93,6 +93,7 @@ jobs:
             --enable-images
             --output yaml
             --output-file default.yaml
+            --log-level=DEBUG
 
       - name: Gather Images in Pull Request Branch
         uses: docker://ghcr.io/allenporter/flux-local:v5.3.1
