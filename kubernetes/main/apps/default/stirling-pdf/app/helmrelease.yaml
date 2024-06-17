@@ -38,9 +38,9 @@ spec:
               TZ: Pacific/Auckland
               DOCKER_ENABLE_SECURITY: "true"
               SECURITY_ENABLELOGIN: "true"
-              SECURITY_OAUTH2_ENABLED: "true"
+              SECURITY_OAUTH2_ENABLED: "false" # Can't get this working with Authelia
               SECURITY_OAUTH2_AUTOCREATEUSER: "true"
-              SECURITY_OAUTH2_ISSUER: "https://auth.mcgrath.nz/.well-known/oauth-authorization-server"
+              SECURITY_OAUTH2_ISSUER: "https://auth.mcgrath.nz/.well-known/openid-configuration"
               SECURITY_OAUTH2_CLIENTID: "stirlingpdf"
               SECURITY_OAUTH2_PROVIDER: "oidc"
               SECURITY_OAUTH2_USEASUSERNAME: "email"
@@ -96,7 +96,7 @@ spec:
                   port: http
     persistence:
       config:
-        type: emptyDir
+        existingClaim: *app
         globalMounts:
           - path: /configs
       logs:
