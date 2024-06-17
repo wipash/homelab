@@ -89,7 +89,7 @@ spec:
         controller: qbittorrent
         type: LoadBalancer
         annotations:
-          io.cilium/lb-ipam-ips: "${SVC_QBITTORRENT_ADDR}"
+          io.cilium/lb-ipam-ips: "${SVC_QBITTORRENT_ADDR:=1.1.1.1}" # Default value to make flux-local work
         ports:
           http:
             port: *port
