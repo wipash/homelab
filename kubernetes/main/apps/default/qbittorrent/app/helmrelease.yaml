@@ -1,115 +1,119 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: qbittorrent
-  namespace: default
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.2.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 2
   install:
-    createNamespace: true
     remediation:
       retries: 3
   upgrade:
     cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 3
-  uninstall:
-    keepHistory: false
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: volsync
+      namespace: volsync
   values:
-    controller:
-      type: statefulset
-      annotations:
-        reloader.stakater.com/auto: "true"
-    image:
-      repository: ghcr.io/onedr0p/qbittorrent
-      tag: 4.6.5@sha256:c019af23966ebafcaf1713d4553bc043246858b711a7d57d8bee358a89990a3e
-    env:
-      TZ: Pacific/Auckland
-      QBITTORRENT__PORT: &port 80
-      QBITTORRENT__BT_PORT: &port-bt 50413
+    controllers:
+      qbittorrent:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/qbittorrent-beta
+              tag: 4.6.5@sha256:251916c90b09018e747b775f4924da711d8b4545b5b959030eb428571b38be2f
+            env:
+              TZ: Pacific/Auckland
+              QBITTORRENT__PORT: &port 80
+              QBITTORRENT__BT_PORT: &bittorrentPort 50413
+              QBT_Application__MemoryWorkingSetLimit: 10000
+              QBT_Preferences__WebUI__AlternativeUIEnabled: false
+              QBT_Preferences__WebUI__AuthSubnetWhitelistEnabled: true
+              QBT_Preferences__WebUI__AuthSubnetWhitelist: |-
+                10.0.16.0/24, 192.168.42.0/24
+              QBT_Preferences__WebUI__LocalHostAuth: false
+              QBT_BitTorrent__Session__Interface: eth0
+              QBT_BitTorrent__Session__InterfaceAddress:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.podIP
+              QBT_BitTorrent__Session__InterfaceName: eth0
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v2/app/version
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 12Gi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups: [65537]
+        seccompProfile: { type: RuntimeDefault }
     service:
-      main:
-        ports:
-          http:
-            port: *port
-      bittorrent:
-        enabled: true
+      app:
+        controller: qbittorrent
         type: LoadBalancer
         annotations:
           io.cilium/lb-ipam-ips: ${SVC_QBITTORRENT_ADDR}
         ports:
+          http:
+            port: *port
           bittorrent:
             enabled: true
-            port: *port-bt
+            port: *bittorrentPort
             protocol: TCP
-            targetPort: *port-bt
-        externalTrafficPolicy: Local
-    dnsConfig:
-      options:
-        - name: ndots
-          value: "1"
     ingress:
-      main:
-        enabled: true
-        ingressClassName: internal
-        annotations:
-          nginx.ingress.kubernetes.io/configuration-snippet: |
-            proxy_hide_header "x-webkit-csp";
-            proxy_hide_header "content-security-policy";
-            proxy_hide_header "X-Frame-Options";
-          nginx.ingress.kubernetes.io/whitelist-source-range: |
-            10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10
-          hajimari.io/icon: mdi:download
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/name: qBittorrent
-          gethomepage.dev/icon: mdi-download
-          gethomepage.dev/group: Media Acquisition
+      app:
+        className: internal
         hosts:
-          - host: &host qb.mcgrath.nz
+          - host: qb.mcgrath.nz
             paths:
               - path: /
-                pathType: Prefix
-        tls:
-          - hosts:
-              - *host
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: OnRootMismatch
-      supplementalGroups: [65537]
-    volumeClaimTemplates:
-      - name: config
-        mountPath: /config
-        accessMode: ReadWriteOnce
-        size: 1Gi
-        storageClass: ceph-block
-    # Note: If downloading very large torrents it might be worth using NFS for your download directory.
-    # Beware if you are downloading torrents directly to a ZFS dataset that dataset will accrue fragmentation.
+                service:
+                  identifier: app
+                  port: http
     persistence:
+      config:
+        existingClaim: qbittorrent
       media:
-        enabled: true
         type: nfs
         server: 172.20.0.1
-        path: /volume1/Media
-        mountPath: /media
-      incomplete:
-        enabled: true
-        type: emptyDir
-    resources:
-      requests:
-        cpu: 10m
-        memory: 256M
-      limits:
-        memory: 6000Mi
+        path: /volume1/Media/Downloads/QB
+        globalMounts:
+          - path: /media/Downloads/qbittorrent
+            subPath: Downloads/qbittorrent
