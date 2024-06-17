@@ -88,12 +88,12 @@ jobs:
         uses: docker://ghcr.io/allenporter/flux-local:v5.3.1
         with:
           args: >-
+            --log-level=DEBUG
             get cluster
             --path /github/workspace/default/${{ matrix.paths }}/flux
             --enable-images
             --output yaml
             --output-file default.yaml
-            --log-level=DEBUG
 
       - name: Gather Images in Pull Request Branch
         uses: docker://ghcr.io/allenporter/flux-local:v5.3.1
