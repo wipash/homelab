@@ -9,14 +9,14 @@ resources:
   - ./actual/ks.yaml
   - ./atuin/ks.yaml
   - ./authelia/ks.yaml
-  #- ./bazarr/ks.yaml
+  # - ./bazarr/ks.yaml
   - ./cloudnative-pg/ks.yaml
   - ./cyberchef/ks.yaml
   - ./frigate/ks.yaml
   - ./ghcr-imagepullsecret/ks.yaml
   - ./home-assistant/ks.yaml
   - ./homebox/ks.yaml
-  - ./homepage/ks.yaml
+  # - ./homepage/ks.yaml
   - ./immich/ks.yaml
   - ./lldap/ks.yaml
   - ./mealie/ks.yaml
@@ -40,7 +40,7 @@ resources:
   - ./sparkleandspin/ks.yaml
   - ./tautulli/ks.yaml
   - ./unifi/ks.yaml
-  #- ./wordpress/ks.yaml
+  # - ./wordpress/ks.yaml
   - ./zigbee2mqtt/ks.yaml
   # - ./openwebui/ks.yaml
   - ./audiobookshelf/ks.yaml
