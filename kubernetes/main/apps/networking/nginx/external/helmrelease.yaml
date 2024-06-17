@@ -28,7 +28,7 @@ spec:
       service:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: external.mcgrath.nz
-          io.cilium/lb-ipam-ips: ${SVC_EXTERNAL_INGRESS_ADDR}
+          io.cilium/lb-ipam-ips: ${SVC_EXTERNAL_INGRESS_ADDR:=temp}
       ingressClassResource:
         name: external
         default: false
