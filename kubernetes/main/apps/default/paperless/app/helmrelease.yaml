@@ -29,7 +29,6 @@ spec:
   values:
     controllers:
       paperless:
-        strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
         initContainers:
