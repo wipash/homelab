@@ -49,3 +49,4 @@ resources:
   # - ./openproject/ks.yaml
   - ./valheim/ks.yaml
   - ./stirling-pdf/ks.yaml
+  - ./autobrr/ks.yaml
