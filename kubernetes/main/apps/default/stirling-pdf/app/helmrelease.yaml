@@ -40,6 +40,12 @@ spec:
               SECURITY_ENABLELOGIN: "true"
               SECURITY_OAUTH2_ENABLED: "true"
               SECURITY_OAUTH2_AUTOCREATEUSER: "true"
+              SECURITY_OAUTH2_ISSUER: "https://auth.mcgrath.nz/.well-known/openid-configuration"
+              SECURITY_OAUTH2_CLIENTID: "stirlingpdf"
+              SECURITY_OAUTH2_PROVIDER: "Authelia"
+              SECURITY_OAUTH2_USEASUSERNAME: "email"
+              SECURITY_OAUTH2_SCOPES: "openid, profile, email"
+
 
               PUID: 568
               PGID: 568
