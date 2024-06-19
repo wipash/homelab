@@ -104,7 +104,7 @@ spec:
       prometheusSpec:
         podMetadata:
           annotations:
-            secret.reloader.stakater.com/reload: &secret thanos-objstore-config
+            secret.reloader.stakater.com/reload: &secret thanos-objstore-secret
         replicas: 2
         replicaExternalLabelName: __replica__
         scrapeInterval: 1m # Must match interval in Grafana Helm chart
@@ -125,7 +125,7 @@ spec:
           objectStorageConfig:
             existingSecret:
               name: *secret
-              key: config
+              key: objstore.yml
         retention: 2d
         retentionSize: 15GB
         externalLabels:
