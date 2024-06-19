@@ -14,8 +14,8 @@ resources:
   - ./vector/ks.yaml
   - ./goldilocks/ks.yaml
   - ./vpa/ks.yaml
-  - ./node-exporter/ks.yaml
-  - ./kube-state-metrics/ks.yaml
+  #- ./node-exporter/ks.yaml
+  #- ./kube-state-metrics/ks.yaml
   - ./gatus/ks.yaml
   - ./speedtest-exporter/ks.yaml
   - ./snmp-exporter/ks.yaml
