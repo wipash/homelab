@@ -1,12 +1,11 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: grafana
-  namespace: monitoring
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: grafana
@@ -15,25 +14,24 @@ spec:
         kind: HelmRepository
         name: grafana
         namespace: flux-system
-  maxHistory: 3
   install:
-    createNamespace: true
     remediation:
       retries: 3
   upgrade:
     cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 3
-  uninstall:
-    keepHistory: false
+  dependsOn:
+    - name: kube-prometheus-stack
+      namespace: observability
   values:
-    # extraInitContainers:
-    #   - name: init-db
-    #     image: ghcr.io/onedr0p/postgres-initdb:14.7
-    #     imagePullPolicy: IfNotPresent
-    #     envFrom:
-    #       - secretRef:
-    #           name: grafana-secret
+    extraInitContainers:
+      - name: 01-init-db
+        image: ghcr.io/onedr0p/postgres-init:16
+        envFrom:
+          - secretRef:
+              name: &secret grafana-secret
     replicas: 2
     rbac:
       pspEnabled: false
@@ -52,10 +50,11 @@ spec:
       # GF_PATHS_PLUGINS: /var/lib/grafana/plugins
       # GF_PATHS_PROVISIONING: /etc/grafana/provisioning
       GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
+      GF_SECURITY_ANGULAR_SUPPORT_ENABLED: true
       GF_SECURITY_COOKIE_SAMESITE: grafana
       GF_SERVER_ROOT_URL: https://grafana.mcgrath.nz
     envFromSecrets:
-      - name: grafana-secret
+      - name: *secret
     grafana.ini:
       # auth:
       #   signout_redirect_url: https://auth.mcgrath.nz/logout
@@ -385,9 +384,6 @@ spec:
       - natel-discrete-panel
       - pr0ps-trackmap-panel
       - vonage-status-panel
-    serviceAccount:
-      create: true
-      autoMount: true
     serviceMonitor:
       enabled: true
     ingress:
