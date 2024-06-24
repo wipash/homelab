@@ -187,6 +187,8 @@ spec:
                 subPath: data
               - path: /home/appuser/.local
                 subPath: .local
+              - path: /.local
+                subPath: .rootlocal
 
     secrets:
       config:
