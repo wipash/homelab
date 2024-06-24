@@ -43,7 +43,7 @@ spec:
               # SA_NAME: tailscale-gateway
               TS_USERSPACE: true
               TS_KUBE_SECRET: ""
-              TS_EXTRA_ARGS: --advertise-exit-node
+              TS_EXTRA_ARGS: --advertise-exit-node --login-server https://ts.mcgrath.nz
               TS_TAILSCALED_EXTRA_ARGS: --debug=0.0.0.0:2000
               TS_ROUTES: "${NETWORK_K8S_POD_CIDR},${NETWORK_BGP_SVC_CIDR},10.0.16.0/24,10.0.10.0/24"
               TS_STATE_DIR: /tmp
