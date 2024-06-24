@@ -53,6 +53,11 @@ spec:
             envFrom:
               - secretRef:
                   name: shlink-secret
+            resources:
+              requests:
+                cpu: 15m
+              limits:
+                memory: 64M
     service:
       app:
         controller: shlink

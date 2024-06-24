@@ -56,7 +56,7 @@ spec:
               requests:
                 cpu: 12m
               limits:
-                memory: 1100Mi
+                memory: 1100M
     service:
       app:
         controller: unifi

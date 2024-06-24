@@ -83,7 +83,7 @@ spec:
                 cpu: 10m
                 memory: 64Mi
               limits:
-                memory: 600Mi
+                memory: 150M
         pod:
           securityContext:
             supplementalGroups:

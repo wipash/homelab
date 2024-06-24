@@ -67,6 +67,11 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 15m
+              limits:
+                memory: 350M
         pod:
           enableServiceLinks: false
           securityContext:
