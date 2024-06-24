@@ -77,8 +77,8 @@ spec:
               HEADSCALE_OIDC_ISSUER: "https://auth.mcgrath.nz"
               HEADSCALE_OIDC_CLIENT_ID: headscale
 
-              HEADSCALE_DB_TYPE: sqlite
-              HEADSCALE_DB_SQLITE_PATH: "/etc/headscale/db.sqlite"
+              HEADSCALE_DB_TYPE: sqlite3
+              HEADSCALE_DB_PATH: "/etc/headscale/db.sqlite"
 
             envFrom:
               - secretRef:
