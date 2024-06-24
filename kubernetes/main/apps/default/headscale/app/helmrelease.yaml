@@ -162,7 +162,7 @@ spec:
               - path: /etc/headscale/config.yaml
                 subPath: config.yaml
 
-      private_keys:
+      privatekeys:
         enabled: true
         type: secret
         name: headscale-secret
