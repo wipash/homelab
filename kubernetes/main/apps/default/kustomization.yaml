@@ -51,4 +51,3 @@ resources:
   - ./stirling-pdf/ks.yaml
   - ./autobrr/ks.yaml
   - ./unpackerr/ks.yaml
-  - ./headscale/ks.yaml
