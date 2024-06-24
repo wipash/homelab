@@ -107,6 +107,8 @@ spec:
         runAsNonRoot: true
         runAsUser: 65534
         runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     service:
       headscale:
@@ -151,6 +153,7 @@ spec:
 
     persistence:
       config:
+        enabled: true
         type: secret
         name: headscale-config
         advancedMounts:
@@ -158,10 +161,18 @@ spec:
             app:
               - path: /etc/headscale/config.yaml
                 subPath: config.yaml
+
+      private_keys:
+        enabled: true
+        type: secret
+        name: headscale-secret
+        advancedMounts:
+          headscale:
+            app:
               - path: /etc/headscale/private.key
-                subPath: private.key
+                subPath: PRIVATE_KEY
               - path: /etc/headscale/noise_private.key
-                subPath: noise_private.key
+                subPath: NOISE_PRIVATE_KEY
 
       tmp:
         type: emptyDir
@@ -176,3 +187,20 @@ spec:
                 subPath: data
               - path: /home/appuser/.local
                 subPath: .local
+
+    secrets:
+      config:
+        enabled: true
+        stringData:
+          config.yaml: "{}"
+
+    serviceMonitor:
+      main:
+        enabled: true
+        serviceName: headscale
+        endpoints:
+          - port: metrics
+            scheme: http
+            path: /metrics
+            interval: 1m
+            scrapeTimeout: 10s
