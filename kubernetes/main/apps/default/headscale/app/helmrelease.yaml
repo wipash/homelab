@@ -164,22 +164,13 @@ spec:
             app:
               - path: /etc/headscale/config.yaml
                 subPath: config.yaml
-              - subPath: private.key
-                path: /etc/headscale/private.key
-              - subPath: noise_private.key
-                path: /etc/headscale/noise_private.key
 
-      # privatekeys:
-      #   enabled: true
-      #   type: secret
-      #   name: headscale-secret
-      #   advancedMounts:
-      #     headscale:
-      #       app:
-      #         - path: /etc/headscale/private.key
-      #           subPath: PRIVATE_KEY
-      #         - path: /etc/headscale/noise_private.key
-      #           subPath: NOISE_PRIVATE_KEY
+      privatekeys:
+        existingClaim: headscale
+        advancedMounts:
+          headscale:
+            app:
+              - path: /etc/headscale
 
       tmp:
         type: emptyDir
@@ -192,10 +183,10 @@ spec:
             app:
               - path: /data
                 subPath: data
-              - path: /home/appuser/.local
-                subPath: .local
               - path: /.local
-                subPath: .rootlocal
+                subPath: .local
+              - path: /.config
+                subPath: .config
 
     secrets:
       config:
