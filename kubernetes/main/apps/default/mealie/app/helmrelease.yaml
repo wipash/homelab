@@ -72,6 +72,11 @@ spec:
               OIDC_ADMIN_GROUP: admin_of_the_lab
 
             envFrom: *envFrom
+            resources:
+              requests:
+                cpu: 15m
+              limits:
+                memory: 352M
 
     service:
       app:

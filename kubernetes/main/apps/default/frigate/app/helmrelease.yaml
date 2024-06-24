@@ -81,7 +81,7 @@ spec:
                 cpu: 890m
                 gpu.intel.com/i915: "1"
               limits:
-                memory: 2500M
+                memory: 2163M
                 gpu.intel.com/i915: "1"
         pod:
           nodeSelector:
