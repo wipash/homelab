@@ -74,7 +74,7 @@ spec:
               HEADSCALE_DNS_CONFIG_MAGIC_DNS: "true"
               HEADSCALE_DNS_CONFIG_BASE_DOMAIN: ts.mcgrath.nz
 
-              HEADSCALE_OIDC_ISSUER: "https://auth.mcgrath.nz/.well-known/openid-configuration"
+              HEADSCALE_OIDC_ISSUER: "https://auth.mcgrath.nz"
               HEADSCALE_OIDC_CLIENT_ID: headscale
 
             envFrom: *envFrom
@@ -130,6 +130,8 @@ spec:
     ingress:
       headscale:
         className: external
+        annotations:
+          external-dns.alpha.kubernetes.io/target: external.mcgrath.nz
         hosts:
           - host: &host "ts.mcgrath.nz"
             paths:
@@ -143,6 +145,8 @@ spec:
 
       ui:
         className: external
+        annotations:
+          external-dns.alpha.kubernetes.io/target: external.mcgrath.nz
         hosts:
           - host: *host
             paths:
