@@ -183,9 +183,9 @@ spec:
             server_url: https://ts.mcgrath.nz
             listen_addr: 0.0.0.0:8080
             metrics_listen_addr: 0.0.0.0:9090
-            private_key_path: /etc/headscale/p/private.key
+            private_key_path: /etc/headscale/private.key
             noise:
-              private_key_path: /etc/headscale/p/noise_private.key
+              private_key_path: /etc/headscale/noise_private.key
             prefixes:
               v6: fd7a:115c:a1e0::/48
               v4: 100.64.0.0/10
