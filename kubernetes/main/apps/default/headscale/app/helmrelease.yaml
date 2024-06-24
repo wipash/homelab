@@ -130,7 +130,7 @@ spec:
             paths:
               - path: /
                 service:
-                  identifier: app
+                  identifier: headscale
                   port: http
         tls:
           - hosts:
