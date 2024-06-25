@@ -40,3 +40,4 @@ resources:
   - ./spegel.yaml
   - ./coredns.yaml
   - ./postfinance.yaml
+  - ./tailscale.yaml
