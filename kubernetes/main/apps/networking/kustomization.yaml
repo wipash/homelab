@@ -12,4 +12,3 @@ resources:
   # Standard Resources
   - ./cloudflared/ks.yaml
   - ./cloudflare-ddns/ks.yaml
-  - ./headscale/ks.yaml
