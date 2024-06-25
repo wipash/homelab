@@ -159,12 +159,12 @@ identity_providers:
         scopes: ["openid", "profile", "groups", "email"]
         redirect_uris: ["https://pdf.mcgrath.nz/oauth2/authorization/oidc"]
         userinfo_signed_response_alg: none
-      - id: headscale
-        description: Headscale
-        secret: "$${HEADSCALE_OIDC_CLIENT_SECRET}"
-        public: false
-        authorization_policy: two_factor
-        pre_configured_consent_duration: 1y
-        scopes: ["openid", "profile", "groups", "email"]
-        redirect_uris: ["https://ts.mcgrath.nz/oidc/callback"]
-        userinfo_signed_response_alg: none
+      # - id: headscale
+      #   description: Headscale
+      #   secret: "$${HEADSCALE_OIDC_CLIENT_SECRET}"
+      #   public: false
+      #   authorization_policy: two_factor
+      #   pre_configured_consent_duration: 1y
+      #   scopes: ["openid", "profile", "groups", "email"]
+      #   redirect_uris: ["https://ts.mcgrath.nz/oidc/callback"]
+      #   userinfo_signed_response_alg: none
