@@ -33,7 +33,7 @@ spec:
         reloader.stakater.com/auto: "true"
     image:
       repository: wordpress
-      tag: 6.5.4
+      tag: 6.5.5
     envFrom:
       - secretRef:
           name: wordpress-sparkle-secret
