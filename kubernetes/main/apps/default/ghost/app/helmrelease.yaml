@@ -1,0 +1,64 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ghost
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+      interval: 15m
+  values:
+    controllers:
+      ghost:
+        containers:
+          app:
+            image:
+              repository: ghost
+              tag: 5.87.0
+            env:
+              TZ: "Pacific/Auckland"
+              url: "https://${SECRET_GHOST_DOMAIN}"
+              database__client: mysql
+              database__connection__host: ghost-mariadb.default.svc.cluster.local
+              database__connection__user: ghost
+              database__connection__database: ghost
+              NODE_ENV: production
+            envFrom:
+              - secretRef:
+                  name: ghost-secret
+    service:
+      app:
+        controller: ghost
+        ports:
+          http:
+            port: 2368
+    ingress:
+      app:
+        enabled: true
+        className: external
+        annotations:
+          external-dns.alpha.kubernetes.io/target: "external.mcgrath.nz"
+        hosts:
+          - host: &host ${SECRET_GHOST_DOMAIN}
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+        tls:
+          - hosts: [*host]
+            secretName: "ghost-tls"
+    persistence:
+      content:
+        enabled: true
+        globalMounts:
+          - path: /var/lib/ghost/content
+        existingClaim: ghost

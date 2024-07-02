@@ -31,8 +31,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/hay-kot/homebox
-              tag: v0.10.3
+              repository: ghcr.io/sysadminsmedia/homebox
+              tag: 0.11.1
             env:
               TZ: Pacific/Auckland
               HBOX_LOG_LEVEL: info
