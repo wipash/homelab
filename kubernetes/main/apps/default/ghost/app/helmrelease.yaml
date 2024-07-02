@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: ghost
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
@@ -14,7 +14,21 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-      interval: 15m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: volsync
+      namespace: volsync
+    - name: ghost-mariadb
+      namespace: default
   values:
     controllers:
       ghost:

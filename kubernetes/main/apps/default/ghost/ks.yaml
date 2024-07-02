@@ -43,8 +43,6 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/main/apps/default/ghost/app
   prune: true
-  dependsOn:
-    - name: ghost-mariadb
   sourceRef:
     kind: GitRepository
     name: flux-cluster
@@ -55,3 +53,4 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_CAPACITY: 5Gi
