@@ -44,7 +44,7 @@ resources:
   - ./zigbee2mqtt/ks.yaml
   # - ./openwebui/ks.yaml
   - ./audiobookshelf/ks.yaml
-  # - ./plandex/ks.yaml
+  - ./plandex/ks.yaml
   - ./excalidraw/ks.yaml
   # - ./openproject/ks.yaml
   - ./valheim/ks.yaml
