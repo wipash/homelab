@@ -71,7 +71,7 @@ spec:
               requests:
                 cpu: 15m
               limits:
-                memory: 350M
+                memory: 512M
         pod:
           enableServiceLinks: false
           securityContext:
