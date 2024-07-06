@@ -31,8 +31,6 @@ spec:
       namespace: monitoring
     - name: openebs
       namespace: openebs-system
-    - name: thanos
-      namespace: monitoring
   values:
     crds:
       enabled: false
