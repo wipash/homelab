@@ -52,3 +52,4 @@ resources:
   - ./autobrr/ks.yaml
   - ./unpackerr/ks.yaml
   - ./ghost/ks.yaml
+  - ./snapcrop-pdf/ks.yaml
