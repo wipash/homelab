@@ -36,7 +36,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/snapcrop-pdf
-              tag: latest@sha256:ba9091ab884639bff1c3e50597f4e82f626578f7fad45cc9add4f319a98f2590
+              tag: latest@sha256:8c6d87f7df43e7c5fe563052652c5fee8f162e361defc4d98a676c9b16b95f8a
             env:
               TZ: Pacific/Auckland
             probes:
@@ -78,7 +78,7 @@ spec:
         controller: snapcrop-pdf
         ports:
           http:
-            port: 80
+            port: 8080
 
     ingress:
       app:
@@ -97,7 +97,7 @@ spec:
               - *host
 
     persistence:
-      cache:
+      tmp:
         type: emptyDir
         globalMounts:
-          - path: /var/cache/nginx
+          - path: /tmp
