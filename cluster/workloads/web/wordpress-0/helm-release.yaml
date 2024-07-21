@@ -54,7 +54,7 @@ spec:
             - "www.${SECRET_WP_0_DOMAIN}"
           secretName: "wordpress-0-tls"
     storage:
-      persistentVolumeClaimName: wordpress-0-v1
+      persistentVolumeClaimName: wordpress-0-nfs
     mariadb:
       enabled: false
     dnsConfig:

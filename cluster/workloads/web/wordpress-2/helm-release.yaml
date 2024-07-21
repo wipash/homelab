@@ -48,7 +48,7 @@ spec:
         - hosts:
             - "${SECRET_WP_2_DOMAIN}"
     storage:
-      persistentVolumeClaimName: wordpress-2-v1
+      persistentVolumeClaimName: wordpress-2-nfs
     mariadb:
       enabled: false
     dnsConfig:

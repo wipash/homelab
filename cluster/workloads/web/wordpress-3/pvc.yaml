@@ -1,15 +1,28 @@
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: wordpress-3-nfs
+  namespace: web
+spec:
+  storageClassName: wordpress-3-nfs
+  capacity:
+    storage: 1Mi # Size does not matter ...twss
+  accessModes: ["ReadWriteMany"]
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 172.20.0.1
+    path: /volume2/K3S/web/wordpress-3
+
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: wordpress-3-v1
+  name: wordpress-3-nfs
   namespace: web
-  annotations:
-    nfs.io/storage-path: "wordpress-3"
 spec:
-  accessModes:
-    - ReadWriteOnce
+  accessModes: ["ReadWriteMany"]
+  storageClassName: wordpress-3-nfs
   resources:
     requests:
-      storage: 10Gi
-  storageClassName: nfs-provisioner
+      storage: 1Mi # Size does not matter ...twss
