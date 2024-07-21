@@ -10,7 +10,6 @@ resources:
   - ./atuin/ks.yaml
   - ./authelia/ks.yaml
   # - ./bazarr/ks.yaml
-  - ./cloudnative-pg/ks.yaml
   - ./cyberchef/ks.yaml
   - ./frigate/ks.yaml
   - ./ghcr-imagepullsecret/ks.yaml
