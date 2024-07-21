@@ -1,8 +1,9 @@
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: wordpress-0
+  name: wordpress-2
   namespace: web
 spec:
   chart:
@@ -27,12 +28,12 @@ spec:
   values:
     image:
       repository: wordpress
-      tag: 6.1.1-php7.4-apache@sha256:d6afa3d31c57cea278f30aecdab123611f0fc2672f3dc167e8fd3116c0b0af5e
+      tag: 6.1.1-apache
     externalDatabase:
       host: ${SECRET_MARIADB_SERVER}
-      name: ${SECRET_WP_0_MARIADB_DB}
-      user: ${SECRET_WP_0_MARIADB_USER}
-      password: ${SECRET_WP_0_MARIADB_PASS}
+      name: ${SECRET_WP_2_MARIADB_DB}
+      user: ${SECRET_WP_2_MARIADB_USER}
+      password: ${SECRET_WP_2_MARIADB_PASS}
     ingress:
       enabled: true
       className: external
@@ -40,21 +41,15 @@ spec:
         cert-manager.io/cluster-issuer: "letsencrypt-production"
         external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
       hosts:
-        - host: "${SECRET_WP_0_DOMAIN}"
-          paths:
-            - path: /
-              pathType: Prefix
-        - host: "www.${SECRET_WP_0_DOMAIN}"
+        - host: "${SECRET_WP_2_DOMAIN}"
           paths:
             - path: /
               pathType: Prefix
       tls:
         - hosts:
-            - "${SECRET_WP_0_DOMAIN}"
-            - "www.${SECRET_WP_0_DOMAIN}"
-          secretName: "wordpress-0-tls"
+            - "${SECRET_WP_2_DOMAIN}"
     storage:
-      persistentVolumeClaimName: wordpress-0-nfs
+      persistentVolumeClaimName: wordpress-2-nfs
     mariadb:
       enabled: false
     dnsConfig:
