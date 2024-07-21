@@ -1,8 +1,9 @@
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: wordpress-2
+  name: wordpress-3
   namespace: web
 spec:
   chart:
@@ -30,9 +31,9 @@ spec:
       tag: 6.1.1-apache
     externalDatabase:
       host: ${SECRET_MARIADB_SERVER}
-      name: ${SECRET_WP_2_MARIADB_DB}
-      user: ${SECRET_WP_2_MARIADB_USER}
-      password: ${SECRET_WP_2_MARIADB_PASS}
+      name: ${SECRET_WP_3_MARIADB_DB}
+      user: ${SECRET_WP_3_MARIADB_USER}
+      password: ${SECRET_WP_3_MARIADB_PASS}
     ingress:
       enabled: true
       className: external
@@ -40,15 +41,15 @@ spec:
         cert-manager.io/cluster-issuer: "letsencrypt-production"
         external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
       hosts:
-        - host: "${SECRET_WP_2_DOMAIN}"
+        - host: "${SECRET_WP_3_DOMAIN}"
           paths:
             - path: /
               pathType: Prefix
       tls:
         - hosts:
-            - "${SECRET_WP_2_DOMAIN}"
+            - "${SECRET_WP_3_DOMAIN}"
     storage:
-      persistentVolumeClaimName: wordpress-2-nfs
+      persistentVolumeClaimName: wordpress-3-nfs
     mariadb:
       enabled: false
     dnsConfig:
