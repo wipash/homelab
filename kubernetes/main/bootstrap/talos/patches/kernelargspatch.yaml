@@ -1,0 +1,4 @@
+- op: replace
+  path: /machine/install/extraKernelArgs
+  value:
+    - mitigations=off
