@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: tailscale-operator
-      version: 1.68.1
+      version: 1.70.0
       interval: 30m
       sourceRef:
         kind: HelmRepository
@@ -20,10 +20,10 @@ spec:
       hostname: tailscale-operator
       image:
         repository: ghcr.io/tailscale/k8s-operator
-        tag: v1.68.1@sha256:75376081deb8387dfd14e7e76c261cda979524005629adb67c1fd779c4477ca6
+        tag: v1.70.0@sha256:8edd06cf5bacc17b55d8dbde5303e7dc1478cd6a58c8ec92904cde07d0bed908
     proxyConfig:
       image:
         repository: ghcr.io/tailscale/tailscale
-        tag: v1.68.1@sha256:a0d1a9ed2abfacf905c0e3423aea00181064162e548f875f422a03924b9cc5c4
+        tag: v1.70.0@sha256:19c66f261912cd19fa5362d36cf6f4770ad6f273b410f940a0eba39b376fe326
     apiServerProxyConfig:
       mode: noauth
