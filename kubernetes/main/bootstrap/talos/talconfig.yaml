@@ -29,7 +29,6 @@ nodes:
     ipAddress: 10.0.16.133
     controlPlane: true
     installDisk: /dev/sda
-    talosImageURL: &talosImage factory.talos.dev/installer/bdecaf9d90522b3e0dd746fbc4a10ec4a082363a9d1801ed70c269cbe0964e3b
     schematic: &schematic
       customization:
         extraKernelArgs:
@@ -56,7 +55,6 @@ nodes:
     ipAddress: 10.0.16.135
     controlPlane: true
     installDisk: /dev/sda
-    talosImageURL: *talosImage
     schematic: *schematic
     networkInterfaces:
       - deviceSelector: *deviceSelector
@@ -71,7 +69,6 @@ nodes:
     ipAddress: 10.0.16.136
     controlPlane: true
     installDisk: /dev/sda
-    talosImageURL: *talosImage
     schematic: *schematic
     networkInterfaces:
       - deviceSelector: *deviceSelector
