@@ -13,3 +13,4 @@ resources:
   - ./cloudflared/ks.yaml
   - ./cloudflare-ddns/ks.yaml
   - ./tailscale-operator/ks.yaml
+  - ./e1000e-fix/ks.yaml
