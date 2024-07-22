@@ -121,7 +121,7 @@ spec:
               storageClassName: openebs-hostpath
               resources:
                 requests:
-                  storage: 50Gi
+                  storage: 55Gi
     nodeExporter:
       enabled: true
     prometheus-node-exporter:
