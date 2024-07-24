@@ -101,4 +101,4 @@ spec:
         - name: TEMPLATE_NAME
           value: lost-in-space
         - name: SHOW_DETAILS
-          value: "false"
+          value: "true"
