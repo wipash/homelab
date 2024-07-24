@@ -6,8 +6,6 @@ metadata:
   name: vpa
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: thanos
   path: ./kubernetes/main/apps/monitoring/vpa/app
   prune: true
   sourceRef:
