@@ -31,7 +31,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/sparkleandspin-frontend
-              tag: latest@sha256:eadd6887287665634889dd58352ab9f8f944998d78ba043f7c5022717a63b5ae
+              tag: latest@sha256:a3a027d899fdd125eeac2e1b85e422ec47ef344baf3fc6508fe6f175b4a00323
               pullPolicy: Always
             env:
               TZ: Pacific/Auckland
