@@ -14,7 +14,7 @@ jobs:
           fetch-depth: 0
 
       - name: Scan
-        uses: GitGuardian/ggshield-action@e281794b3f64c7c081c54510ab43914927327cf7 # v1.30.1
+        uses: GitGuardian/ggshield-action@301d924983d28713330391607e96c389e2262849 # v1.30.2
         with:
           args: -v --ignore-known-secrets
         env:
