@@ -36,7 +36,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/snapcrop-pdf
-              tag: latest@sha256:e179f5cdca69464ae31338ab7f5152e50edad73ab18af2446dfd62fc8edf38a7
+              tag: latest@sha256:697c01d4a3e933d71fc8f4a05936ac4397e5dd05e16a6e29f3fe6863f6008fc6
             env:
               TZ: Pacific/Auckland
             probes:
