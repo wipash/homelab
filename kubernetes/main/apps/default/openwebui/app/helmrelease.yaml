@@ -35,6 +35,7 @@ spec:
               repository: ghcr.io/open-webui/open-webui
               tag: 0.3.13@sha256:4f47ce928054a51e47e890aad593971f5294e9effe4e9c827033129e8a51494b
             env:
+              ENABLE_OLLAMA_API: "false"
               ENABLE_OPENAI_API: "true"
               OPENAI_API_BASE_URLS: "https://api.openai.com/v1"
               ENV: "prod"
