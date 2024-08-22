@@ -33,7 +33,7 @@ spec:
           app:
             image:
               repository: ghcr.io/danny-avila/librechat-dev
-              tag: latest@sha256:8757f850ad402c9d37417db3f7698b6aa07346acd6de55a440cc87e9dec8e82f
+              tag: latest@sha256:df953688cf917a6bc7bb388716831ae35e566f521e115d9c70db2ad66e0b194b
             env:
               UID: "568"
               GID: "568"
