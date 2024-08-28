@@ -52,4 +52,4 @@ resources:
   - ./autobrr/ks.yaml
   - ./unpackerr/ks.yaml
   - ./ghost/ks.yaml
-  - ./xteve/ks.yaml
+  # - ./xteve/ks.yaml
