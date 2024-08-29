@@ -15,3 +15,5 @@ configMapGenerator:
   - name: litellm-config
     files:
       - ./resources/litellm.yaml
+generatorOptions:
+  disableNameSuffixHash: true
