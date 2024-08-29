@@ -66,25 +66,25 @@ speech:
 
 # # Definition of custom endpoints
 
-endpoints:
-  custom:
-    - name: "LLM Router"
-      apiKey: "sk-from-config-file"
-      baseURL: "http://127.0.0.1:4000"
-      models:
-        default: ["gpt-4o"]
-        fetch: true
-      titleConvo: true
-      titleModel: "gpt-4o-mini"
-      summarize: true
-      summaryModel: "gpt-4o-mini"
-      forcePrompt: false
-      #modelDisplayLabel: "LibreChat"
+# endpoints:
+#   custom:
+#     - name: "LLM Router"
+#       apiKey: "sk-from-config-file"
+#       baseURL: "http://127.0.0.1:4000"
+#       models:
+#         default: ["gpt-4o"]
+#         fetch: true
+#       titleConvo: true
+#       titleModel: "gpt-4o-mini"
+#       summarize: true
+#       summaryModel: "gpt-4o-mini"
+#       forcePrompt: false
+#       #modelDisplayLabel: "LibreChat"
 
-  assistants:
-    disableBuilder: false
-    pollIntervalMs: 3000
-    timeoutMs: 180000
+  # assistants:
+  #   disableBuilder: false
+  #   pollIntervalMs: 3000
+  #   timeoutMs: 180000
 
 # endpoints:
 #   # assistants:
