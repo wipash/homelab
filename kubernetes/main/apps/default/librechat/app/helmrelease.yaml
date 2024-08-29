@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.1.0
+      version: 3.4.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -29,39 +29,107 @@ spec:
         type: deployment
         annotations:
           reloader.stakater.com/auto: "true"
+          secret.reloader.stakater.com/reload: &secret librechat-secret
+          configmap.reloader.stakater.com/reload: &configMap librechat-configmap
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 16
+            envFrom: &envFrom
+              - secretRef:
+                  name: *secret
+              - configMapRef:
+                  name: *configMap
         containers:
           app:
             image:
-              repository: ghcr.io/danny-avila/librechat-dev
-              tag: latest@sha256:fe55ac20200f227756933abd911b6cd7d5b198cceba643e4fdfd644494d1795b
+              repository: ghcr.io/danny-avila/librechat-dev-api
+              tag: latest
             env:
-              UID: "568"
-              GID: "568"
               PORT: "3080"
-            envFrom:
-              - secretRef:
-                  name: librechat-secret
-            securityContext:
+              NODE_ENV: "production"
+              MONGO_URI: "mongodb://librechatmongodb.default.svc.cluster.local:27017/LibreChat"
+
+            envFrom: *envFrom
+            securityContext: &securityContext
               allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 10m
               limits:
                 memory: 1000Mi
-            probes:
+            probes: &probes
               liveness:
                 enabled: true
               readiness:
                 enabled: true
               startup:
                 enabled: false
+          ragapi:
+            image:
+              repository: ghcr.io/danny-avila/librechat-rag-api-dev-lite
+              tag: latest
+            envFrom: *envFrom
+            securityContext: *securityContext
+            probes: *probes
+
+          meilisearch:
+            image:
+              repository: getmeili/meilisearch
+              tag: v1.7.3
+            envFrom: *envFrom
+            securityContext: *securityContext
+            probes: *probes
+
+          litellm:
+            image:
+              repository: ghcr.io/berriai/litellm
+              tag: main-latest
+            command: ["--config", "/app/litellm.yaml", "--port", "4000"]
+            envFrom: *envFrom
+            securityContext: *securityContext
+            probes: *probes
+
+          mongodb:
+            image:
+              repository: mongo
+              tag: latest
+            command: ["mongod", "--noauth"]
+            securityContext: *securityContext
+            probes: *probes
+
+          mongo-express:
+            image:
+              repository: mongo-express
+              tag: latest
+            env:
+              ME_CONFIG_MONGODB_SERVER: localhost
+              PORT: 8081
+            securityContext: *securityContext
+            probes: *probes
+
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+
     service:
       app:
         controller: librechat
         ports:
           http:
-            port: 8080
+            port: 3080
+          mongo-express:
+            port: 8081
+
     ingress:
       app:
         enabled: true
@@ -78,11 +146,52 @@ spec:
         tls:
           - hosts:
               - *host
-    persistence:
-      pgdata:
+
+      mongo-express:
         enabled: true
-        existingClaim: *app
+        className: internal
+        hosts:
+          - host: mongolibre.mcgrath.nz
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: mongo-express
+        tls:
+          - hosts:
+              - *host
+
+    persistence:
+      config:
+        enabled: true
+        type: configMap
+        name: librechat-config
         advancedMounts:
           librechat:
             app:
-              - path: /var/lib/postgresql/data
+              - subPath: librechat.yaml
+                path: /app
+
+      litellmconfig:
+        enabled: true
+        type: configMap
+        name: litellm-config
+        advancedMounts:
+          litellm:
+            app:
+              - path: /app
+
+      data:
+        enabled: true
+        existingClaim: *app
+        advancedMounts:
+          mongodb:
+            mongodb:
+              - subPath: mongodb
+                path: /data/db
+          librechat:
+            app:
+              - subPath: logs
+                path: /app/api/logs
+              - subPath: images
+                path: /app/client/public/images

@@ -1,0 +1,30 @@
+---
+model_list:
+  - model_name: gpt-4o-2024-08-06 ### RECEIVED MODEL NAME ###
+    litellm_params: # all params accepted by litellm.completion() - https://docs.litellm.ai/docs/completion/input
+      model: openai/gpt-4o-2024-08-06 ### MODEL NAME sent to `litellm.completion()` ###
+      api_key: os.environ/OPENAI_API_KEY # does os.getenv("OPENAI_API_KEY")
+  - model_name: claude-3-5-sonnet-20240620
+    litellm_params:
+      model: claude-3-5-sonnet-20240620
+      api_key: "os.environ/ANTHROPIC_API_KEY"
+
+litellm_settings: # module level litellm settings - https://github.com/BerriAI/litellm/blob/main/litellm/__init__.py
+  drop_params: "true"
+  success_callback: ["langfuse"] # OPTIONAL - if you want to start sending LLM Logs to Langfuse. Make sure to set `LANGFUSE_PUBLIC_KEY` and `LANGFUSE_SECRET_KEY` in your env
+  cache: "true"
+  cache_params:
+    type: redis
+    host: os.environ/REDIS_HOST
+    port: os.environ/REDIS_PORT
+    db: os.environ/REDIS_DB
+
+router_settings:
+  routing_strategy: usage-based-routing-v2
+  redis_host: os.environ/REDIS_HOST
+  redis_port: os.environ/REDIS_PORT
+  redis_db: os.environ/REDIS_DB
+
+general_settings:
+  # master_key: sk-1234 # [OPTIONAL] Only use this if you to require all calls to contain this key (Authorization: Bearer sk-1234)
+  # alerting: ["slack"] # [OPTIONAL] If you want Slack Alerts for Hanging LLM requests, Slow llm responses, Budget Alerts. Make sure to set `SLACK_WEBHOOK_URL` in your env
