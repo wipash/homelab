@@ -44,12 +44,12 @@ speech:
       cacheTTS: true
   tts:
     openai:
-      apiKey: '${OPENAI_API_KEY}'
+      apiKey: '${SPEECH_API_KEY}'
       model: 'tts-1'
       voices: ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer']
   stt:
     openai:
-      apiKey: '${OPENAI_API_KEY}'
+      apiKey: '${SPEECH_API_KEY}'
       model: 'whisper-1'
 
 # rateLimits:
