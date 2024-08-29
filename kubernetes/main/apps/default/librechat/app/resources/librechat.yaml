@@ -81,10 +81,10 @@ endpoints:
       forcePrompt: false
       #modelDisplayLabel: "LibreChat"
 
-  # assistants:
-  #   disableBuilder: false
-  #   pollIntervalMs: 3000
-  #   timeoutMs: 180000
+  assistants:
+    disableBuilder: false
+    pollIntervalMs: 3000
+    timeoutMs: 180000
 
 
 modelSpecs:
