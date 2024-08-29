@@ -6,7 +6,7 @@ metadata:
   name: postgres16-librechat
 spec:
   instances: 2
-  imageName: pgvector/pgvector:0.7.4-pg16
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.4-5
   primaryUpdateStrategy: unsupervised
   storage:
     size: 20Gi
