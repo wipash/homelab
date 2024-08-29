@@ -82,7 +82,7 @@ spec:
           meilisearch:
             image:
               repository: getmeili/meilisearch
-              tag: v1.7.3
+              tag: v1.10.0
             envFrom: *envFrom
             securityContext: *securityContext
             probes: *probes
