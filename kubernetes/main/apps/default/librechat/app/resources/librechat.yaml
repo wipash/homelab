@@ -35,7 +35,7 @@ registration:
 
 speech:
   speechTab:
-    conversationMode: true
+    conversationMode: false
     advancedMode: false
     speechToText:
       engineSTT: "external"
@@ -47,7 +47,7 @@ speech:
       engineTTS: "external"
       voice: "alloy"
       languageTTS: "en"
-      automaticPlayback: true
+      automaticPlayback: false
       playbackRate: 1.0
       cacheTTS: true
   tts:
