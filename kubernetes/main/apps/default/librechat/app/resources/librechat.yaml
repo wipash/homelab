@@ -67,7 +67,7 @@ endpoints:
       summarize: true
       summaryModel: "gpt-4o-mini"
       forcePrompt: false
-      modelDisplayLabel: "LibreChat"
+      #modelDisplayLabel: "LibreChat"
 
   assistants:
     disableBuilder: false
