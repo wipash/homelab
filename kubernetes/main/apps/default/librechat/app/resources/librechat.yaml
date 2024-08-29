@@ -19,8 +19,8 @@ interface:
   #   externalUrl: 'https://librechat.ai/tos'
   #   openNewTab: true
 
-  endpointsMenu: true
-  modelSelect: true
+  endpointsMenu: false
+  modelSelect: false
   parameters: false
   sidePanel: true
   presets: false
@@ -39,7 +39,7 @@ speech:
     advancedMode: false
     speechToText:
       engineSTT: "external"
-      languageSTT: "English (US)"
+      languageSTT: "English (New Zealand)"
       autoTranscribeAudio: true
       decibelValue: -45
       autoSendText: 0
