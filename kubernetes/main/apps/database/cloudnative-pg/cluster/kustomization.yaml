@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./cluster16.yaml
   - ./cluster16immich.yaml
+  - ./cluster16librechat.yaml
   - ./scheduledbackup.yaml
   - ./prometheusrule.yaml
   - ./service.yaml
