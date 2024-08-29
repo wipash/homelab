@@ -110,6 +110,8 @@ spec:
               tag: latest
             env:
               ME_CONFIG_MONGODB_SERVER: 127.0.0.1
+              ME_CONFIG_BASICAUTH_USERNAME: admin
+              ME_CONFIG_BASICAUTH_PASSWORD: password
               PORT: 8081
             securityContext: *securityContext
             probes: *probes
