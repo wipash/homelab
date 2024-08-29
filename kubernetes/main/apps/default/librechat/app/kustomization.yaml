@@ -5,5 +5,13 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  - ../../../../templates/gatus/internal
+  - ./configmap.yaml
+  - ../../../../templates/gatus/external
   - ../../../../templates/volsync
+configMapGenerator:
+  - name: librechat-config
+    files:
+      - ./resources/librechat.yaml
+  - name: litellm-config
+    files:
+      - ./resources/litellm.yaml
