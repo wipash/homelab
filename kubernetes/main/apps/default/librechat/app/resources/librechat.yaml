@@ -9,15 +9,23 @@ cache: true
 
 # Custom interface configuration
 interface:
-  # Privacy policy settings
-  privacyPolicy:
-    externalUrl: 'https://librechat.ai/privacy-policy'
-    openNewTab: true
+  # # Privacy policy settings
+  # privacyPolicy:
+  #   externalUrl: 'https://librechat.ai/privacy-policy'
+  #   openNewTab: true
 
-  # Terms of service
-  termsOfService:
-    externalUrl: 'https://librechat.ai/tos'
-    openNewTab: true
+  # # Terms of service
+  # termsOfService:
+  #   externalUrl: 'https://librechat.ai/tos'
+  #   openNewTab: true
+
+  endpointsMenu: true
+  modelSelect: true
+  parameters: false
+  sidePanel: true
+  presets: false
+  prompts: true
+  bookmarks: true
 
 # Example Registration Object Structure (optional)
 registration:
@@ -94,7 +102,9 @@ modelSpecs:
     - name: "gpt-4o"
       label: "GPT-4o"
       description: "The GPT-4o model is a powerful, general-purpose conversational model that can be used for a wide range of tasks."
-      #iconUrl: "https://librechat.ai/assets/img/models/gpt-4o.png"
+      iconUrl: "https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt.png"
+      showIconInMenu: true
+      showIconInHeader: true
       default: false
       preset:
         endpoint: "LLM Router"
@@ -110,6 +120,9 @@ modelSpecs:
     - name: "claude-3-5-sonnet"
       label: "Claude"
       description: "The Claude model is a powerful, general-purpose conversational model that can be used for a wide range of tasks."
+      iconUrl: "https://holmesazaepubshare.blob.core.windows.net/pub/claude.png"
+      showIconInMenu: true
+      showIconInHeader: true
       default: true
       preset:
         endpoint: "LLM Router"
