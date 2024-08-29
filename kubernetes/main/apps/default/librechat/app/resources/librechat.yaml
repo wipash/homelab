@@ -56,7 +56,7 @@ registration:
 
 endpoints:
   custom:
-    - name: "Lite LLM"
+    - name: "LLM Router"
       apiKey: "sk-from-config-file"
       baseURL: "http://127.0.0.1:4000"
       models:
@@ -67,7 +67,7 @@ endpoints:
       summarize: true
       summaryModel: "gpt-4o-mini"
       forcePrompt: false
-      modelDisplayLabel: "LLM Router"
+      modelDisplayLabel: "LibreChat"
 
 # endpoints:
 #   # assistants:

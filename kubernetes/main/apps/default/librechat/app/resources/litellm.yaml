@@ -21,7 +21,7 @@ litellm_settings: # module level litellm settings - https://github.com/BerriAI/l
   cache: True
   cache_params:
     type: redis
-    supported_call_types: []
+    supported_call_types: ["acompletion", "completion", "embedding", "aembedding"]
     host: dragonfly.database.svc.cluster.local
     port: 6379
     db: 7
