@@ -211,6 +211,14 @@ spec:
             ragapi:
               - path: /app/uploads
 
+      app-uploads:
+        enabled: true
+        type: emptyDir
+        advancedMounts:
+          librechat:
+            app:
+              - path: /app/uploads
+
       tmp:
         enabled: true
         type: emptyDir
