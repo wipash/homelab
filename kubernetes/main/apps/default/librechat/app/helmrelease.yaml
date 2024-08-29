@@ -173,7 +173,7 @@ spec:
           librechat:
             app:
               - subPath: librechat.yaml
-                path: /app
+                path: /app/librechat.yaml
 
       litellmconfig:
         enabled: true
