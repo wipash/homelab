@@ -12,7 +12,7 @@ model_list:
 litellm_settings: # module level litellm settings - https://github.com/BerriAI/litellm/blob/main/litellm/__init__.py
   drop_params: "true"
   success_callback: ["langfuse"] # OPTIONAL - if you want to start sending LLM Logs to Langfuse. Make sure to set `LANGFUSE_PUBLIC_KEY` and `LANGFUSE_SECRET_KEY` in your env
-  cache: "true"
+  cache: "false"
   cache_params:
     type: redis
     host: os.environ/REDIS_HOST
