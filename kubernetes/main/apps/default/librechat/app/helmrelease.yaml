@@ -181,6 +181,28 @@ spec:
             litellm:
               - path: /app
 
+      meilisearch:
+        enabled: true
+        type: emptyDir
+        advancedMounts:
+          librechat:
+            meilisearch:
+              - path: /meili_data
+
+      rag-api:
+        enabled: true
+        type: emptyDir
+        advancedMounts:
+          librechat:
+            ragapi:
+              - path: /app/uploads
+
+      tmp:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+
       data:
         enabled: true
         existingClaim: *app
