@@ -32,9 +32,9 @@ data:
 
   LITELLM_MODE: "production"
 
-  REDIS_HOST: dragonfly.database.svc.cluster.local
-  REDIS_PORT: "6379"
-  REDIS_DB: "7"
+  # REDIS_HOST: dragonfly.database.svc.cluster.local
+  # REDIS_PORT: "6379"
+  # REDIS_DB: "7"
 
   #============#
   # Plugins    #
