@@ -52,13 +52,13 @@ spec:
               MONGO_URI: "mongodb://localhost:27017/LibreChat"
 
               # Disable these to just use LiteLLM
-              OPENAI_API_KEY: ""
-              ANTHROPIC_API_KEY: ""
+              # OPENAI_API_KEY: ""
+              # ANTHROPIC_API_KEY: ""
 
             dependsOn:
               - mongodb
               - meilisearch
-              - litellm
+              # - litellm
               - ragapi
 
             envFrom: *envFrom
@@ -98,15 +98,15 @@ spec:
             securityContext: *securityContext
             probes: *probes
 
-          litellm:
-            image:
-              repository: ghcr.io/berriai/litellm
-              tag: main-latest
-            command:
-              ["litellm", "--config", "/app/litellm.yaml", "--port", "4000"]
-            envFrom: *envFrom
-            securityContext: *securityContext
-            probes: *probes
+          # litellm:
+          #   image:
+          #     repository: ghcr.io/berriai/litellm
+          #     tag: main-latest
+          #   command:
+          #     ["litellm", "--config", "/app/litellm.yaml", "--port", "4000"]
+          #   envFrom: *envFrom
+          #   securityContext: *securityContext
+          #   probes: *probes
 
           mongodb:
             image:
@@ -145,8 +145,8 @@ spec:
             port: 3080
           mongo-express:
             port: 8081
-          litellm:
-            port: 4000
+          # litellm:
+          #   port: 4000
 
     ingress:
       app:
@@ -190,14 +190,14 @@ spec:
               - subPath: librechat.yaml
                 path: /app/librechat.yaml
 
-      litellmconfig:
-        enabled: true
-        type: configMap
-        name: litellm-config
-        advancedMounts:
-          librechat:
-            litellm:
-              - path: /app
+      # litellmconfig:
+      #   enabled: true
+      #   type: configMap
+      #   name: litellm-config
+      #   advancedMounts:
+      #     librechat:
+      #       litellm:
+      #         - path: /app
 
       meilisearch:
         enabled: true
