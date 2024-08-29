@@ -52,9 +52,9 @@ spec:
               MONGO_URI: "mongodb://librechatmongodb.default.svc.cluster.local:27017/LibreChat"
 
             envFrom: *envFrom
-            securityContext: &securityContext
+            securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               capabilities: { drop: ["ALL"] }
             resources:
               requests:
@@ -73,7 +73,10 @@ spec:
               repository: ghcr.io/danny-avila/librechat-rag-api-dev-lite
               tag: latest
             envFrom: *envFrom
-            securityContext: *securityContext
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
             probes: *probes
 
           meilisearch:
