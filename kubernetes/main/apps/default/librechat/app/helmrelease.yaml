@@ -141,6 +141,8 @@ spec:
             port: 3080
           mongo-express:
             port: 8081
+          litellm:
+            port: 4000
 
     ingress:
       app:
