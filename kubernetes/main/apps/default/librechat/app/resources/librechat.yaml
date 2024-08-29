@@ -69,6 +69,11 @@ endpoints:
       forcePrompt: false
       modelDisplayLabel: "LibreChat"
 
+  assistants:
+    disableBuilder: false
+    pollIntervalMs: 3000
+    timeoutMs: 180000
+
 # endpoints:
 #   # assistants:
 #   #   disableBuilder: false # Disable Assistants Builder Interface by setting to `true`
