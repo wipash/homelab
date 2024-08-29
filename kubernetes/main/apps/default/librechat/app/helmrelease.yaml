@@ -177,21 +177,20 @@ spec:
         type: configMap
         name: litellm-config
         advancedMounts:
-          litellm:
-            app:
+          librechat:
+            litellm:
               - path: /app
 
       data:
         enabled: true
         existingClaim: *app
         advancedMounts:
-          mongodb:
-            mongodb:
-              - subPath: mongodb
-                path: /data/db
           librechat:
             app:
               - subPath: logs
                 path: /app/api/logs
               - subPath: images
                 path: /app/client/public/images
+            mongodb:
+              - subPath: mongodb
+                path: /data/db
