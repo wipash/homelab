@@ -109,7 +109,7 @@ spec:
               repository: mongo-express
               tag: latest
             env:
-              ME_CONFIG_MONGODB_SERVER: localhost
+              ME_CONFIG_MONGODB_SERVER: 127.0.0.1
               PORT: 8081
             securityContext: *securityContext
             probes: *probes

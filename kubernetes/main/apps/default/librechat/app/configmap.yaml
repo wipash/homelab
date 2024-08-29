@@ -21,13 +21,13 @@ data:
   #==================================================#
   SEARCH: "true"
   MEILI_NO_ANALYTICS: "true"
-  MEILI_HOST: http://localhost:7700
+  MEILI_HOST: http://127.0.0.1:7700
 
   #==================================================#
   #                      RAG                         #
   #==================================================#
   RAG_PORT: "8000"
-  RAG_API_URL: "http://localhost:8000"
+  RAG_API_URL: "http://127.0.0.1:8000"
 
 
   LITELLM_MODE: "production"
