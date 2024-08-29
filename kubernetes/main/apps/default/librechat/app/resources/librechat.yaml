@@ -58,7 +58,7 @@ endpoints:
   custom:
     - name: "Lite LLM"
       apiKey: "sk-from-config-file"
-      baseURL: "http://localhost:4000"
+      baseURL: "http://127.0.0.1:4000"
       models:
         default: ["gpt-4o"]
         fetch: true
