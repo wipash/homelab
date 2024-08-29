@@ -53,6 +53,22 @@ registration:
 #     userWindowInMinutes: 60  # Rate limit window for conversation imports per user
 
 # # Definition of custom endpoints
+
+endpoints:
+  custom:
+    - name: "Lite LLM"
+      apiKey: "sk-from-config-file"
+      baseURL: "http://localhost:4000"
+      models:
+        default: ["gpt-4o"]
+        fetch: true
+      titleConvo: true
+      titleModel: "gpt-4o"
+      summarize: true
+      summaryModel: "gpt-4o"
+      forcePrompt: false
+      modelDisplayLabel: "Lite LLM"
+
 # endpoints:
 #   # assistants:
 #   #   disableBuilder: false # Disable Assistants Builder Interface by setting to `true`

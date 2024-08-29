@@ -1,10 +1,10 @@
 ---
 model_list:
-  - model_name: gpt-4o-2024-08-06 ### RECEIVED MODEL NAME ###
+  - model_name: gpt-4o ### RECEIVED MODEL NAME ###
     litellm_params: # all params accepted by litellm.completion() - https://docs.litellm.ai/docs/completion/input
       model: openai/gpt-4o-2024-08-06 ### MODEL NAME sent to `litellm.completion()` ###
       api_key: os.environ/OPENAI_API_KEY # does os.getenv("OPENAI_API_KEY")
-  - model_name: claude-3-5-sonnet-20240620
+  - model_name: claude-3-5-sonnet
     litellm_params:
       model: claude-3-5-sonnet-20240620
       api_key: "os.environ/ANTHROPIC_API_KEY"
