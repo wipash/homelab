@@ -88,7 +88,7 @@ spec:
             image:
               repository: ghcr.io/berriai/litellm
               tag: main-latest
-            command: ["--config", "/app/litellm.yaml", "--port", "4000"]
+            command: ["litellm", "--config", "/app/litellm.yaml", "--port", "4000"]
             envFrom: *envFrom
             securityContext: *securityContext
             probes: *probes
