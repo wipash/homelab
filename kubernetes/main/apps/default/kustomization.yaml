@@ -53,4 +53,4 @@ resources:
   - ./unpackerr/ks.yaml
   - ./ghost/ks.yaml
   # - ./xteve/ks.yaml
-  - ./librechat.yaml
+  - ./librechat/ks.yaml
