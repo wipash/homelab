@@ -1,0 +1,31 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: librechat-configmap
+data:
+  #=============#
+  # Permissions #
+  #=============#
+  UID: "568"
+  GID: "568"
+
+  #==================================================#
+  #                      Search                      #
+  #==================================================#
+  SEARCH: "true"
+  MEILI_NO_ANALYTICS: "true"
+  MEILI_HOST: "http://meilisearch.default.svc.cluster.local:7700"
+
+  #==================================================#
+  #                      RAG                         #
+  #==================================================#
+  RAG_PORT: "8000"
+  RAG_API_URL: "http://localhost:8000"
+
+
+  LITELLM_MODE: "production"
+
+  REDIS_HOST: dragonfly.database.svc.cluster.local
+  REDIS_PORT: "6379"
+  REDIS_DB: "7"

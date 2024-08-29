@@ -5,3 +5,4 @@
 4. authelia
 5. paperless
 6. sparkle
+7. librechat
