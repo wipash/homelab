@@ -99,6 +99,12 @@ data:
   SESSION_EXPIRY: 1000 * 60 * 15
   REFRESH_TOKEN_EXPIRY: (1000 * 60 * 60 * 24) * 7
 
+  EMAIL_HOST: smtp-relay.default.svc.cluster.local
+  EMAIL_PORT: "25"
+  EMAIL_FROM_NAME: "LibreChat"
+  EMAIL_FROM: "librechat@mail.mcgrath.nz"
+
+
   #========================#
   # Shared Links           #
   #========================#

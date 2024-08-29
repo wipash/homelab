@@ -51,6 +51,10 @@ spec:
               NODE_ENV: "production"
               MONGO_URI: "mongodb://localhost:27017/LibreChat"
 
+              # Disable these to just use LiteLLM
+              OPENAI_API_KEY: ""
+              ANTHROPIC_API_KEY: ""
+
             dependsOn:
               - mongodb
               - meilisearch
