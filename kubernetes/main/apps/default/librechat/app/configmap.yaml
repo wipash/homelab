@@ -21,7 +21,7 @@ data:
   #==================================================#
   SEARCH: "true"
   MEILI_NO_ANALYTICS: "true"
-  MEILI_HOST: "http://meilisearch.default.svc.cluster.local:7700"
+  MEILI_HOST: http://localhost:7700
 
   #==================================================#
   #                      RAG                         #
