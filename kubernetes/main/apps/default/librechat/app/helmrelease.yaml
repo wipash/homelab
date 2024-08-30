@@ -161,9 +161,16 @@ spec:
                 service:
                   identifier: app
                   port: http
+          - host: &host2 chat.mcgrath.nz
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
         tls:
           - hosts:
               - *host
+              - *host2
 
       mongo-express:
         enabled: true
