@@ -89,7 +89,7 @@ data:
   #========================#
 
   ALLOW_EMAIL_LOGIN: "true"
-  ALLOW_REGISTRATION: "false"
+  ALLOW_REGISTRATION: "true"
   ALLOW_SOCIAL_LOGIN: "true"
   ALLOW_SOCIAL_REGISTRATION: "true"
   ALLOW_PASSWORD_RESET: "true"
