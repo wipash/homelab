@@ -110,7 +110,7 @@ modelSpecs:
         endpoint: "LLM Router"
         model: "gpt-4o"
         maxContextTokens: 128000 # Maximum context tokens
-        max_tokens: 4096 # Maximum output tokens
+        max_tokens: 16384 # Maximum output tokens
         temperature: 0.8
         modelLabel: "GPT"
         greeting: "Hello! How can I help you today?"
@@ -156,8 +156,8 @@ modelSpecs:
       preset:
         endpoint: "LLM Router"
         model: "claude-3-5-sonnet"
-        maxContextTokens: 128000 # Maximum context tokens
-        max_tokens: 4096 # Maximum output tokens
+        maxContextTokens: 200000 # Maximum context tokens
+        max_tokens: 8192 # Maximum output tokens
         temperature: 0.8
         modelLabel: "Claude"
         greeting: "Hello! How can I help you today?"
