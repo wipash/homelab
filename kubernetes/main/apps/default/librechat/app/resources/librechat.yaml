@@ -102,7 +102,7 @@ modelSpecs:
     - name: "gpt-4o"
       label: "GPT-4o"
       description: "The GPT-4o model is a powerful, general-purpose conversational model that can be used for a wide range of tasks."
-      iconUrl: "https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt.png"
+      iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt.png"
       showIconInMenu: true
       showIconInHeader: true
       default: false
@@ -121,7 +121,7 @@ modelSpecs:
     - name: "claude-3-5-sonnet"
       label: "Claude"
       description: "The Claude model is a powerful, general-purpose conversational model that can be used for a wide range of tasks."
-      iconUrl: "https://holmesazaepubshare.blob.core.windows.net/pub/claude.png"
+      iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/claude.png"
       showIconInMenu: true
       showIconInHeader: true
       default: true
