@@ -92,7 +92,7 @@ data:
   ALLOW_REGISTRATION: "false"
   ALLOW_SOCIAL_LOGIN: "true"
   ALLOW_SOCIAL_REGISTRATION: "true"
-  ALLOW_PASSWORD_RESET: "false"
+  ALLOW_PASSWORD_RESET: "true"
   ALLOW_ACCOUNT_DELETION: "true" # note: enabled by default if omitted/commented out
   ALLOW_UNVERIFIED_EMAIL_LOGIN: "true"
 
