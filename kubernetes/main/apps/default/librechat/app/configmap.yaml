@@ -88,7 +88,7 @@ data:
   # Registration and Login #
   #========================#
 
-  ALLOW_EMAIL_LOGIN: "false"
+  ALLOW_EMAIL_LOGIN: "true"
   ALLOW_REGISTRATION: "false"
   ALLOW_SOCIAL_LOGIN: "true"
   ALLOW_SOCIAL_REGISTRATION: "true"
