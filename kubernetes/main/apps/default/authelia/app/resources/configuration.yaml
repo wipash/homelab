@@ -111,7 +111,7 @@ identity_providers:
           [
             "https://photos.mcgrath.nz/auth/login",
             "https://photos.mcgrath.nz/user-settings",
-            "app.immich:/",
+            "app.immich:///oauth-callback",
           ]
         userinfo_signed_response_alg: none
       - id: mealie
