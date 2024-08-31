@@ -110,7 +110,7 @@ modelSpecs:
       showIconInHeader: true
       default: false
       preset:
-        endpoint: "openai"
+        endpoint: "openAI"
         model: "gpt-4o-2024-08-06"
         maxContextTokens: 128000 # Maximum context tokens
         max_tokens: 16384 # Maximum output tokens
