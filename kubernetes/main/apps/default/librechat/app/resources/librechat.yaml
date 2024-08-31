@@ -103,7 +103,7 @@ modelSpecs:
   prioritize: true
   list:
     - name: "gpt-4o"
-      label: "GPT-4o"
+      label: "ChatGPT 4o"
       description: "GPT-4o is the latest, most capable model in OpenAI's lineup."
       iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt.png"
       showIconInMenu: true
@@ -115,7 +115,7 @@ modelSpecs:
         maxContextTokens: 128000 # Maximum context tokens
         max_tokens: 16384 # Maximum output tokens
         temperature: 0.7
-        modelLabel: "GPT"
+        modelLabel: "ChatGPT"
         greeting: "Hello! How can I help you today?"
         promptPrefix: |
           You are ChatGPT, a large language model trained by OpenAI, based on the GPT-4 architecture.
