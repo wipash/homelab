@@ -100,7 +100,7 @@ endpoints:
 
 modelSpecs:
   enforce: false
-  prioritize: true
+  prioritize: false
   list:
     - name: "gpt-4o"
       label: "ChatGPT 4o"
