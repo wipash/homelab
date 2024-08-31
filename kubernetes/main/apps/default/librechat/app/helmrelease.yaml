@@ -204,6 +204,15 @@ spec:
             litellm:
               - path: /app
 
+      app-data:
+        enabled: true
+        type: emptyDir
+        advancedMounts:
+          librechat:
+            app:
+              - path: /app/data
+              - path: /app/api/data
+
       tmp:
         enabled: true
         type: emptyDir
@@ -222,8 +231,6 @@ spec:
                 path: /app/client/public/images
               - subPath: uploads
                 path: /app/uploads
-              - subPath: data
-                path: /app/api/data
             mongodb:
               - subPath: mongodb
                 path: /data/db
