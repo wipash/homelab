@@ -89,7 +89,7 @@ data:
   #========================#
 
   ALLOW_EMAIL_LOGIN: "true"
-  ALLOW_REGISTRATION: "true"
+  ALLOW_REGISTRATION: "false"
   ALLOW_SOCIAL_LOGIN: "true"
   ALLOW_SOCIAL_REGISTRATION: "true"
   ALLOW_PASSWORD_RESET: "true"
@@ -106,6 +106,7 @@ data:
 
   OPENID_SCOPE: "openid profile email"
   OPENID_CALLBACK_URL: "/oauth/openid/callback"
+  OPENID_BUTTON_LABEL: "Sign in with Entra ID"
 
   DOMAIN_CLIENT: "https://librechat.mcgrath.nz"
   DOMAIN_SERVER: "https://librechat.mcgrath.nz"
