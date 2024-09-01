@@ -23,7 +23,7 @@ interface:
   modelSelect: false
   parameters: true
   sidePanel: true
-  presets: false
+  presets: true
   prompts: true
   bookmarks: true
 
