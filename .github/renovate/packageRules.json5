@@ -18,6 +18,12 @@
         "matchDatasources": ["docker"],
         "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>)$",
         "matchPackagePatterns": ["miniflux"]
+      },
+      {
+        "description": "Wait until Ghost releases are a couple of days old",
+        "matchDatasources": ["docker"],
+        "matchPackagePatterns": ["ghost"],
+        "minimumReleaseAge": "2 days"
       }
     ]
   }

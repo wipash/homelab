@@ -9,8 +9,8 @@
       "schedule": "after 1am and before 5am",
       "updateTypes": ["minor", "patch"],
       "packageNames": [
-        //"ghcr.io/onedr0p/home-assistant",
-        //"ghcr.io/wipash/home-assistant",
+        "ghcr.io/onedr0p/home-assistant",
+        "ghcr.io/wipash/home-assistant",
         "ghcr.io/onedr0p/radarr-develop",
         "ghcr.io/onedr0p/sonarr-develop",
         "ghcr.io/onedr0p/prowlarr-develop",
