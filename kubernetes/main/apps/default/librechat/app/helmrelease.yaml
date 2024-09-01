@@ -44,8 +44,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/danny-avila/librechat-dev-api
-              tag: latest
+              repository: ghcr.io/danny-avila/librechat-dev
+              tag: latest@sha256:fe730512c1ce935e63761c4e94ef2ba71618e53d9ea374d7339d6770925e52db
             env:
               PORT: "3080"
               NODE_ENV: "production"
@@ -82,7 +82,7 @@ spec:
           ragapi:
             image:
               repository: ghcr.io/danny-avila/librechat-rag-api-dev-lite
-              tag: latest
+              tag: latest@sha256:3876a03aad28b410005b11ac99cb901212ea11c93bb15898c2a92782f42bcc5a
             envFrom: *envFrom
             securityContext: &securityContext
               allowPrivilegeEscalation: false
@@ -93,15 +93,17 @@ spec:
           meilisearch:
             image:
               repository: getmeili/meilisearch
-              tag: v1.10.0
+              tag: v1.10.0@sha256:77728dfc9daa3a28ffb857b267ab0f601cea1962d438af3c97c0b16988a65a46
             envFrom: *envFrom
+            env:
+              MEILI_DB_PATH: "/meili_data"
             securityContext: *securityContext
             probes: *probes
 
           litellm:
             image:
               repository: ghcr.io/berriai/litellm
-              tag: main-latest
+              tag: main-latest@sha256:b8e4c7cf7b11515bfa76ac200949b5a373e7f7e7ad4e4afbd291c886491f1275
             command:
               ["litellm", "--config", "/app/litellm.yaml", "--port", "4000"]
             envFrom: *envFrom
@@ -111,7 +113,7 @@ spec:
           mongodb:
             image:
               repository: mongo
-              tag: latest
+              tag: 7.0.14@sha256:1a7b344b3ee8b07190fa15555726333e38f5db0a3bfb38b2ce9a1d3973b060be
             command: ["mongod", "--noauth"]
             securityContext: *securityContext
             probes: *probes
@@ -119,7 +121,7 @@ spec:
           mongo-express:
             image:
               repository: mongo-express
-              tag: latest
+              tag: 1.0.2@sha256:1b23d7976f0210dbec74045c209e52fbb26d29b2e873d6c6fa3d3f0ae32c2a64
             env:
               ME_CONFIG_MONGODB_SERVER: 127.0.0.1
               ME_CONFIG_BASICAUTH_USERNAME: admin
@@ -156,17 +158,13 @@ spec:
           external-dns.alpha.kubernetes.io/target: "external.mcgrath.nz"
         hosts:
           - host: &host librechat.mcgrath.nz
-            paths:
+            paths: &paths
               - path: /
                 service:
                   identifier: app
                   port: http
           - host: &host2 chat.mcgrath.nz
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+            paths: *paths
         tls:
           - hosts:
               - *host
@@ -206,36 +204,13 @@ spec:
             litellm:
               - path: /app
 
-      meilisearch:
-        enabled: true
-        type: emptyDir
-        advancedMounts:
-          librechat:
-            meilisearch:
-              - path: /meili_data
-
-      rag-api:
-        enabled: true
-        type: emptyDir
-        advancedMounts:
-          librechat:
-            ragapi:
-              - path: /app/uploads
-
-      app-uploads:
-        enabled: true
-        type: emptyDir
-        advancedMounts:
-          librechat:
-            app:
-              - path: /app/uploads
-
       app-data:
         enabled: true
         type: emptyDir
         advancedMounts:
           librechat:
             app:
+              - path: /app/data
               - path: /app/api/data
 
       tmp:
@@ -254,6 +229,14 @@ spec:
                 path: /app/api/logs
               - subPath: images
                 path: /app/client/public/images
+              - subPath: uploads
+                path: /app/uploads
             mongodb:
               - subPath: mongodb
                 path: /data/db
+            meilisearch:
+              - subPath: meilisearch
+                path: /meili_data
+            ragapi:
+              - subPath: ragapi
+                path: /app/uploads
