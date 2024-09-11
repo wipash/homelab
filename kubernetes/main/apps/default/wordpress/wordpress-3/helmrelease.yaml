@@ -27,7 +27,7 @@ spec:
   values:
     image:
       repository: wordpress
-      tag: 6.6.1-apache
+      tag: 6.6.2-apache
     externalDatabase:
       host: ${SECRET_MARIADB_SERVER}
       name: ${SECRET_WP_3_MARIADB_DB}
