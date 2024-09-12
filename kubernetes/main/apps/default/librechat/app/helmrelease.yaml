@@ -103,7 +103,7 @@ spec:
           litellm:
             image:
               repository: ghcr.io/berriai/litellm
-              tag: main-latest@sha256:bd6f0e90cd5a460c0ef2814642e58256872d43ab0a5c37437bb6a35d294c430b
+              tag: main-latest@sha256:c06484d997bc7fd3fc720df67d8a20d07a5454b3d200849430af95a12a5f6a54
             command:
               ["litellm", "--config", "/app/litellm.yaml", "--port", "4000"]
             envFrom: *envFrom
