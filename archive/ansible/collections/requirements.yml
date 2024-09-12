@@ -7,4 +7,4 @@ roles:
   - src: xanmanning.k3s
     version: v3.4.4
   - src: oefenweb.dns
-    version: v1.1.37
+    version: v1.1.39
