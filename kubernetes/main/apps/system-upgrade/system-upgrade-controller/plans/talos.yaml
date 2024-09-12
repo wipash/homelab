@@ -21,6 +21,12 @@ spec:
       - key: feature.node.kubernetes.io/system-os_release.VERSION_ID
         operator: NotIn
         values: ["${TALOS_VERSION}"]
+      - key: factory.talos.dev/schematic-id.part-0
+        operator: In
+        values: ["${TALOS_SCHEMATIC_ID:0:32}"]
+      - key: factory.talos.dev/schematic-id.part-1
+        operator: In
+        values: ["${TALOS_SCHEMATIC_ID:32}"]
   tolerations:
     - key: CriticalAddonsOnly
       operator: Exists
@@ -44,6 +50,6 @@ spec:
     args:
       - --nodes=$(NODE_IP)
       - upgrade
-      - --image=factory.talos.dev/installer/bdecaf9d90522b3e0dd746fbc4a10ec4a082363a9d1801ed70c269cbe0964e3b:$(SYSTEM_UPGRADE_PLAN_LATEST_VERSION)
+      - --image=factory.talos.dev/installer/${TALOS_SCHEMATIC_ID}:$(SYSTEM_UPGRADE_PLAN_LATEST_VERSION)
       - --preserve=true
       - --wait=false
