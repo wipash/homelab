@@ -85,7 +85,7 @@ spec:
       config:
         type: emptyDir
       data:
-        existingClaim: ${VOLSYNC_CLAIM}
+        existingClaim: *app
       configmap:
         type: configMap
         name: smokeping-configmap
