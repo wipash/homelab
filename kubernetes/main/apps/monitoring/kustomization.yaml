@@ -20,3 +20,4 @@ resources:
   - ./speedtest-exporter/ks.yaml
   - ./snmp-exporter/ks.yaml
   - ./prometheus-operator-crds/ks.yaml
+  - ./smokeping/ks.yaml
