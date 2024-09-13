@@ -41,3 +41,4 @@ resources:
   - ./coredns.yaml
   - ./postfinance.yaml
   - ./tailscale.yaml
+  - ./external-dns.yaml
