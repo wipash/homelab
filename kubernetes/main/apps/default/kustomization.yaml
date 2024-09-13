@@ -33,7 +33,6 @@ resources:
   # - ./runzero-explorer/ks.yaml
   - ./sabnzbd/ks.yaml
   - ./shlink/ks.yaml
-  - ./smokeping/ks.yaml
   - ./smtp-relay/ks.yaml
   - ./sonarr/ks.yaml
   - ./sparkleandspin/ks.yaml
