@@ -1,5 +1,4 @@
----
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -9,7 +8,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.6.0
+      version: 3.4.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -20,19 +19,20 @@ spec:
   upgrade:
     cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 3
   dependsOn:
     - name: nginx-external
       namespace: networking
   values:
     controllers:
-      main:
+      cloudflared:
         replicas: 2
         strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
-          main:
+          app:
             image:
               repository: docker.io/cloudflare/cloudflared
               tag: 2024.9.1@sha256:0b88e00d8f93f9d18197f11506f0f6bf0d9266b5a0361c068930a3fe45b68b72
@@ -49,7 +49,7 @@ spec:
               - --config
               - /etc/cloudflared/config/config.yaml
               - run
-              - "${SECRET_CLOUDFLARE_TUNNEL_ID}"
+              - "${SECRET_CLOUDFLARE_TUNNEL_ID:-tempvalue}"
             probes:
               liveness: &probes
                 enabled: true
@@ -63,8 +63,6 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
-              startup:
-                enabled: false
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -72,6 +70,7 @@ spec:
             resources:
               requests:
                 cpu: 10m
+                memory: 128Mi
               limits:
                 memory: 256Mi
         pod:
@@ -87,16 +86,18 @@ spec:
                 matchLabels:
                   app.kubernetes.io/name: *app
     service:
-      main:
+      app:
+        controller: cloudflared
         ports:
           http:
             port: *port
     serviceMonitor:
-      main:
-        enabled: true
+      app:
+        serviceName: cloudflared
+        endpoints:
+          - port: http
     persistence:
       config:
-        enabled: true
         type: configMap
         name: cloudflared-configmap
         globalMounts:
