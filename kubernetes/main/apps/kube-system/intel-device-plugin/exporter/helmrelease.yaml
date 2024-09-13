@@ -33,7 +33,6 @@ spec:
         intel.feature.node.kubernetes.io/gpu: "true"
     controllers:
       intel-gpu-exporter:
-        type: daemonset
         containers:
           app:
             image:
