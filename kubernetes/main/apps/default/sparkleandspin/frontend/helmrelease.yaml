@@ -35,6 +35,8 @@ spec:
               pullPolicy: Always
             env:
               TZ: Pacific/Auckland
+              STORE_URL: "https://${SECRET_DOMAIN_SPARKLE}/"
+              NEXT_PUBLIC_BASE_URL: "https://${SECRET_DOMAIN_SPARKLE}/"
             probes:
               liveness:
                 enabled: false
