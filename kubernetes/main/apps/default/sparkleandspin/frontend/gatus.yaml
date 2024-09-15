@@ -21,3 +21,5 @@ data:
           - "[STATUS] == 200"
         alerts:
           - type: pushover
+        headers:
+          cookie: "_medusa_region=%7B%22regionId%22%3A%22reg_01HWMMNAXD7YHZK69F1MZ873XZ%22%2C%22countryCode%22%3A%22nz%22%7D"
