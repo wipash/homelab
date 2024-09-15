@@ -21,6 +21,7 @@ spec:
     - name: external-secrets-stores
     - name: ghcr-imagepullsecret
     - name: cloudnative-pg-cluster
+    - name: dragonfly-cluster
   postBuild:
     substitute:
       APP: *backend-appname
