@@ -101,7 +101,7 @@ data:
 
   EMAIL_HOST: smtp-relay.default.svc.cluster.local
   EMAIL_PORT: "25"
-  EMAIL_FROM_NAME: "LibreChat"
+  EMAIL_FROM_NAME: "Holmes AI Assistant"
   EMAIL_FROM: "librechat@mail.mcgrath.nz"
   EMAIL_USERNAME: "none"
   EMAIL_PASSWORD: "none"
@@ -110,8 +110,8 @@ data:
   OPENID_CALLBACK_URL: "/oauth/openid/callback"
   OPENID_BUTTON_LABEL: "Sign in with Entra ID"
 
-  DOMAIN_CLIENT: "https://librechat.mcgrath.nz"
-  DOMAIN_SERVER: "https://librechat.mcgrath.nz"
+  DOMAIN_CLIENT: "https://chat.mcgrath.nz"
+  DOMAIN_SERVER: "https://chat.mcgrath.nz"
 
 
   #========================#
@@ -126,6 +126,6 @@ data:
   #                        UI                         #
   #===================================================#
 
-  APP_TITLE: LibreChat
+  APP_TITLE: Holmes AI Assistant
   # CUSTOM_FOOTER: "My custom footer"
   HELP_AND_FAQ_URL: https://librechat.ai
