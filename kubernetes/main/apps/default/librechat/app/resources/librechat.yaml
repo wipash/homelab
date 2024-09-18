@@ -19,8 +19,8 @@ interface:
   #   externalUrl: 'https://librechat.ai/tos'
   #   openNewTab: true
 
-  endpointsMenu: false
-  modelSelect: false
+  endpointsMenu: true
+  modelSelect: true
   parameters: true
   sidePanel: true
   presets: true
@@ -123,7 +123,7 @@ endpoints:
 
 modelSpecs:
   enforce: false
-  prioritize: true
+  prioritize: false
   list:
     - name: "gpt-4o"
       label: "ChatGPT"
