@@ -96,19 +96,19 @@ endpoints:
       models:
         default:
           [
-            "llama-3-sonar-small-32k-chat",
-            "llama-3-sonar-small-32k-online",
-            "llama-3-sonar-large-32k-chat",
-            "llama-3-sonar-large-32k-online",
-            "mixtral-8x7b-instruct",
-            "llama-3-8b-instruct",
-            "llama-3-70b-instruct",
+            "llama-3.1-sonar-small-128k-online",
+            "llama-3.1-sonar-large-128k-online",
+            "llama-3.1-sonar-huge-128k-online",
+            "llama-3.1-sonar-small-128k-chat",
+            "llama-3.1-sonar-large-128k-chat",
+            "llama-3.1-8b-instruct",
+            "llama-3.1-70b-instruct",
           ]
         fetch: false # fetching list of models is not supported
       titleConvo: true
-      titleModel: "llama-3-sonar-small-32k-chat"
+      titleModel: "llama-3.1-sonar-small-128k-chat"
       summarize: false
-      summaryModel: "llama-3-sonar-small-32k-chat"
+      summaryModel: "llama-3.1-sonar-small-128k-chat"
       forcePrompt: false
       dropParams: ["stop", "frequency_penalty"]
       modelDisplayLabel: "Perplexity"
@@ -182,7 +182,7 @@ modelSpecs:
       default: false
       preset:
         endpoint: "perplexity"
-        model: "llama-3-sonar-large-32k-online"
+        model: "llama-3.1-sonar-huge-128k-online"
         maxContextTokens: 127000 # Maximum context tokens
         max_tokens: 4096 # Maximum output tokens
         temperature: 0.7
