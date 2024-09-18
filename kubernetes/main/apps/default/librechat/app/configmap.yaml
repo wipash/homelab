@@ -29,6 +29,8 @@ data:
   RAG_PORT: "8000"
   RAG_API_URL: "http://127.0.0.1:8000"
 
+  RAG_USE_FULL_CONTEXT: "true"
+
 
   LITELLM_MODE: "production"
 
