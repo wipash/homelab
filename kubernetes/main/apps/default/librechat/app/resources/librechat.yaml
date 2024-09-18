@@ -2,7 +2,7 @@
 # https://www.librechat.ai/docs/configuration/librechat_yaml
 
 # Configuration version (required)
-version: 1.1.6
+version: 1.1.7
 
 # Cache settings: Set to true to enable caching
 cache: true
@@ -19,17 +19,18 @@ interface:
   #   externalUrl: 'https://librechat.ai/tos'
   #   openNewTab: true
 
-  endpointsMenu: true
-  modelSelect: true
+  endpointsMenu: false
+  modelSelect: false
   parameters: true
   sidePanel: true
   presets: true
   prompts: true
   bookmarks: true
+  multiConvo: true
 
 # Example Registration Object Structure (optional)
 registration:
-  socialLogins: ['openid']
+  socialLogins: ["openid"]
   # allowedDomains:
   # - "gmail.com"
 
@@ -52,26 +53,25 @@ speech:
       cacheTTS: true
   tts:
     openai:
-      apiKey: '$${SPEECH_API_KEY}'
-      model: 'tts-1'
-      voices: ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer']
+      apiKey: "$${SPEECH_API_KEY}"
+      model: "tts-1"
+      voices: ["alloy", "echo", "fable", "onyx", "nova", "shimmer"]
   stt:
     openai:
-      apiKey: '$${SPEECH_API_KEY}'
-      model: 'whisper-1'
+      apiKey: "$${SPEECH_API_KEY}"
+      model: "whisper-1"
 
 rateLimits:
   fileUploads:
     #ipMax: 100
     #ipWindowInMinutes: 60  # Rate limit window for file uploads per IP
     userMax: 50
-    userWindowInMinutes: 60  # Rate limit window for file uploads per user
+    userWindowInMinutes: 60 # Rate limit window for file uploads per user
   conversationsImport:
     ipMax: 100
-    ipWindowInMinutes: 60  # Rate limit window for conversation imports per IP
+    ipWindowInMinutes: 60 # Rate limit window for conversation imports per IP
     userMax: 50
-    userWindowInMinutes: 60  # Rate limit window for conversation imports per user
-
+    userWindowInMinutes: 60 # Rate limit window for conversation imports per user
 
 endpoints:
   # custom:
@@ -89,14 +89,37 @@ endpoints:
   #     forcePrompt: false
   #     #modelDisplayLabel: "LibreChat"
 
+  custom:
+    - name: "perplexity"
+      apiKey: "${PERPLEXITY_API_KEY}"
+      baseURL: "https://api.perplexity.ai/"
+      models:
+        default:
+          [
+            "llama-3-sonar-small-32k-chat",
+            "llama-3-sonar-small-32k-online",
+            "llama-3-sonar-large-32k-chat",
+            "llama-3-sonar-large-32k-online",
+            "mixtral-8x7b-instruct",
+            "llama-3-8b-instruct",
+            "llama-3-70b-instruct",
+          ]
+        fetch: false # fetching list of models is not supported
+      titleConvo: true
+      titleModel: "llama-3-sonar-small-32k-chat"
+      summarize: false
+      summaryModel: "llama-3-sonar-small-32k-chat"
+      forcePrompt: false
+      dropParams: ["stop", "frequency_penalty"]
+      modelDisplayLabel: "Perplexity"
+
   assistants:
     disableBuilder: false
     pollIntervalMs: 3000
     timeoutMs: 180000
 
   all:
-    streamRate: 35  # Higher number 'buffers' incoming chunks to make the output smoother
-
+    streamRate: 35 # Higher number 'buffers' incoming chunks to make the output smoother
 
 modelSpecs:
   enforce: false
@@ -124,7 +147,6 @@ modelSpecs:
           Image input capabilities: Enabled
           Personality: v2
 
-
     - name: "claude-3-5-sonnet"
       label: "Claude"
       description: "Claude 3.5 Sonnet is the latest and most intelligent model in Anthropic's Claude 3 family, designed for a wide range of tasks."
@@ -150,3 +172,19 @@ modelSpecs:
           Claude responds directly to all human messages without unnecessary affirmations or filler phrases like "Certainly!", "Of course!", "Absolutely!", "Great!", "Sure!", etc. Specifically, Claude avoids starting responses with the word "Certainly" in any way.
 
           Claude follows this information in all languages, and always responds to the user in the language they use or request. The information above is provided to Claude by Anthropic. Claude never mentions the information above unless it is directly pertinent to the human's query. Claude is now being connected with a human.
+
+    - name: "perplexity"
+      label: "Perplexity"
+      description: "Perplexity is an AI-driven search engine."
+      iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/perplexity.png"
+      showIconInMenu: true
+      showIconInHeader: true
+      default: false
+      preset:
+        endpoint: "perplexity"
+        model: "llama-3-sonar-large-32k-online"
+        maxContextTokens: 127000 # Maximum context tokens
+        max_tokens: 4096 # Maximum output tokens
+        temperature: 0.7
+        modelLabel: "Perplexity"
+        greeting: "Hey, what would you like to search the internet for?"
