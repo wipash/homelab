@@ -19,7 +19,7 @@ interface:
   #   externalUrl: 'https://librechat.ai/tos'
   #   openNewTab: true
 
-  endpointsMenu: true
+  endpointsMenu: false
   modelSelect: true
   parameters: true
   sidePanel: true
