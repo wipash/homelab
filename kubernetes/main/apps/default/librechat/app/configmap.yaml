@@ -110,7 +110,8 @@ data:
 
   OPENID_SCOPE: "openid profile email"
   OPENID_CALLBACK_URL: "/oauth/openid/callback"
-  OPENID_BUTTON_LABEL: "Sign in with Entra ID"
+  OPENID_BUTTON_LABEL: "Sign in with your Holmes account"
+  OPENID_IMAGE_URL: "https://holmesazaepubshare.blob.core.windows.net/pub/favicon-32x32.png"
 
   DOMAIN_CLIENT: "https://chat.mcgrath.nz"
   DOMAIN_SERVER: "https://chat.mcgrath.nz"
@@ -129,5 +130,5 @@ data:
   #===================================================#
 
   APP_TITLE: Holmes AI Assistant
-  # CUSTOM_FOOTER: "My custom footer"
-  HELP_AND_FAQ_URL: https://librechat.ai
+  CUSTOM_FOOTER: "Holmes AI Assistant - Experimental Deployment"
+  HELP_AND_FAQ_URL: https://holmesgroup.com/
