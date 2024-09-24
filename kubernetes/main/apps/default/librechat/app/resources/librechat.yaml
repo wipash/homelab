@@ -187,4 +187,4 @@ modelSpecs:
         max_tokens: 4096 # Maximum output tokens
         temperature: 0.7
         modelLabel: "Perplexity"
-        greeting: "Hey, what would you like to search the internet for?"
+        greeting: "Hey, what would you like to search the internet for? Please note that you'll get errors using this model if you have turned on the Artifacts feature."
