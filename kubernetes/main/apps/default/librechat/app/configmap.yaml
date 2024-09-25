@@ -10,6 +10,12 @@ data:
   #==================================================#
   NO_INDEX: "true"
 
+  GOOGLE_MODELS: "gemini-1.5-pro-latest,gemini-1.5-flash-latest"
+  GOOGLE_SAFETY_SEXUALLY_EXPLICIT: BLOCK_ONLY_HIGH
+  GOOGLE_SAFETY_HATE_SPEECH: BLOCK_ONLY_HIGH
+  GOOGLE_SAFETY_HARASSMENT: BLOCK_ONLY_HIGH
+  GOOGLE_SAFETY_DANGEROUS_CONTENT: BLOCK_ONLY_HIGH
+
   #=============#
   # Permissions #
   #=============#
