@@ -134,7 +134,7 @@ modelSpecs:
       default: false
       preset:
         endpoint: "openAI"
-        model: "gpt-4o-2024-08-06"
+        model: "chatgpt-4o-latest"
         maxContextTokens: 128000 # Maximum context tokens
         max_tokens: 16384 # Maximum output tokens
         temperature: 0.7
