@@ -16,11 +16,9 @@ includes:
   kubernetes: .taskfiles/Kubernetes
   rook: .taskfiles/Rook
   talos: .taskfiles/Talos
-  volsync: .taskfiles/VolSync
+  volsync: .taskfiles/volsync
   db: .taskfiles/cnpg
 
 tasks:
 
-  default:
-    silent: true
-    cmd: task -l
+  default: task --list
