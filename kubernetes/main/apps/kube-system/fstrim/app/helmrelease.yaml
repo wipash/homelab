@@ -28,7 +28,7 @@ spec:
         type: cronjob
         cronjob:
           schedule: "@monthly"
-          timeZone: &timeZone Pacicif/Auckland
+          timeZone: &timeZone Pacific/Auckland
           parallelism: 3 # Set to total number of nodes
           successfulJobsHistory: 1
           failedJobsHistory: 1
