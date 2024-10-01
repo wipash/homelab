@@ -41,7 +41,7 @@ spec:
       params:
         - name: apc-ups
           module: ["apcups"]
-          target: 10.0.16.12
+          target: 10.0.16.30
           interval: 60s
           auth: ["public_v1"]
       path: /snmp
