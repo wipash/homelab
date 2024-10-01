@@ -2,25 +2,31 @@
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "packageRules": [
       {
-        "description": "Loose versioning for non-semver packages",
+        "description": ["Loose versioning for non-semver packages"],
         "matchDatasources": ["docker"],
         "versioning": "loose",
         "matchPackagePatterns": ["changedetection", "plex", "qbittorrent"]
       },
       {
-        "description": "Custom versioning for frigate",
+        "description": ["Custom schedule for frequently updated packages"],
+        "matchDataSources": ["docker", "helm"],
+        "matchPackagePatterns": ["librechat", "postgresql", "reloader"],
+        "schedule": ["on the first day of the week"]
+      },
+      {
+        "description": ["Custom versioning for frigate"],
         "matchDatasources": ["docker"],
         "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(-(?<compatibility>beta)(?<build>\\d+))?$",
         "matchPackagePatterns": ["frigate"]
       },
       {
-        "description": "Custom versioning for miniflux",
+        "description": ["Custom versioning for miniflux"],
         "matchDatasources": ["docker"],
         "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>)$",
         "matchPackagePatterns": ["miniflux"]
       },
       {
-        "description": "Wait until Ghost releases are a couple of days old",
+        "description": ["Wait until Ghost releases are a couple of days old"],
         "matchDatasources": ["docker"],
         "matchPackagePatterns": ["ghost"],
         "minimumReleaseAge": "2 days"
