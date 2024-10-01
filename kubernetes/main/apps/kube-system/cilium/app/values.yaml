@@ -17,32 +17,13 @@ cluster:
   name: main
 cni:
   exclusive: false
-containerRuntime:
-  integration: containerd
 enableRuntimeDeviceDetection: true
 endpointRoutes:
   enabled: true
+envoy:
+  enabled: false
 hubble:
-  enabled: true
-  metrics:
-    enabled:
-      - dns:query;ignoreAAAA
-      - drop
-      - tcp
-      - flow
-      - port-distribution
-      - icmp
-      - http
-  relay:
-    enabled: true
-    rollOutPods: true
-  serviceMonitor:
-    enabled: false
-  ui:
-    enabled: true
-    ingress:
-      enabled: false
-    rollOutPods: true
+  enabled: false
 ipam:
   mode: "kubernetes"
 ipv4NativeRoutingCIDR: 10.244.0.0/16
