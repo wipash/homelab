@@ -16,3 +16,4 @@ resources:
   - ./cilium/ks.yaml
   - ./spegel/ks.yaml
   - ./kubelet-csr-approver/ks.yaml
+  - ./fstrim/ks.yaml
