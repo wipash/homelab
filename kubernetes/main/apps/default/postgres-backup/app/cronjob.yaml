@@ -22,7 +22,7 @@ spec:
 
           containers:
             - name: postgres-backup
-              image: docker.io/prodrigestivill/postgres-backup-local:16@sha256:d373b8e2044198448277f9bc6616f981b0a18b1f7a1f767f6e14c9e6cfa42abf
+              image: docker.io/prodrigestivill/postgres-backup-local:16@sha256:73f18e914cb6ffb29840b3fc5be0763f48eb1ca05f093c769ccd13982a634544
               imagePullPolicy: IfNotPresent
               command:
                 - "/backup.sh"
