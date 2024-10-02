@@ -15,6 +15,9 @@ data:
   #                    Models                        #
   #==================================================#
 
+  ENDPOINTS: openAI,google,anthropic,assistants,gptPlugins,agents
+  EXPERIMENTAL_AGENTS: "true"
+
   GOOGLE_MODELS: gemini-1.5-pro-latest,gemini-1.5-flash-latest
   OPENAI_MODELS: chatgpt-4o-latest,gpt-4o,gpt-4o-mini,o1-preview,o1-mini
   ANTHROPIC_MODELS: claude-3-5-sonnet-20240620
