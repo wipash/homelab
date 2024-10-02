@@ -10,8 +10,8 @@
       {
         "description": ["Custom schedule for frequently updated packages"],
         "matchDataSources": ["docker", "helm"],
-        "matchPackagePatterns": ["librechat", "postgresql", "reloader"],
-        "schedule": ["on the first day of the week"]
+        "matchPackagePatterns": ["postgresql", "reloader"],
+        "schedule": ["on the first day of the month"]
       },
       {
         "description": ["Custom versioning for frigate"],
