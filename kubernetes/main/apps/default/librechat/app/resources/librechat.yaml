@@ -90,7 +90,7 @@ endpoints:
   #     #modelDisplayLabel: "LibreChat"
 
   custom:
-    - name: "perplexity"
+    - name: Perplexity
       apiKey: "$${PERPLEXITY_API_KEY}"
       baseURL: "https://api.perplexity.ai/"
       models:
