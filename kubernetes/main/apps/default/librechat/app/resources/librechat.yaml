@@ -74,21 +74,6 @@ rateLimits:
     userWindowInMinutes: 60 # Rate limit window for conversation imports per user
 
 endpoints:
-  # custom:
-  #   - name: "LLM Router"
-  #     apiKey: "sk-from-config-file"
-  #     baseURL: "http://127.0.0.1:4000"
-  #     models:
-  #       default: ["gpt-4o"]
-  #       fetch: true
-  #       userIdQuery: true
-  #     titleConvo: true
-  #     titleModel: "gpt-4o-mini"
-  #     summarize: true
-  #     summaryModel: "gpt-4o-mini"
-  #     forcePrompt: false
-  #     #modelDisplayLabel: "LibreChat"
-
   custom:
     - name: Perplexity
       apiKey: "$${PERPLEXITY_API_KEY}"
@@ -197,7 +182,7 @@ modelSpecs:
       showIconInHeader: true
       default: false
       preset:
-        endpoint: "perplexity"
+        endpoint: "Perplexity"
         model: "llama-3.1-sonar-huge-128k-online"
         maxContextTokens: 127000 # Maximum context tokens
         max_tokens: 4096 # Maximum output tokens
