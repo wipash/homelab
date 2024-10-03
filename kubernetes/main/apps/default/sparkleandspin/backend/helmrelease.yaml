@@ -123,5 +123,6 @@ spec:
                   identifier: app
                   port: http
         tls:
-          - hosts:
+          - secretName: wildcard-tls-sparkle
+            hosts:
               - *host

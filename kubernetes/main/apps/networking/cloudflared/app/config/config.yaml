@@ -43,4 +43,8 @@ ingress:
     service: https://nginx-external-controller.networking.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
+  - hostname: "*.${SECRET_DOMAIN_HGAI}"
+    service: https://nginx-external-controller.networking.svc.cluster.local:443
+    originRequest:
+      noTLSVerify: true
   - service: http_status:404
