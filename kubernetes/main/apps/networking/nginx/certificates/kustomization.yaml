@@ -7,3 +7,4 @@ resources:
   - ./certificate-2.yaml
   - ./certificate-3.yaml
   - ./certificate-sparkle.yaml
+  - ./certificate-hgai.yaml
