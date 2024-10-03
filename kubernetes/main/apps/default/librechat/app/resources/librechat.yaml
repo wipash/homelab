@@ -113,10 +113,10 @@ endpoints:
       dropParams: ["stop", "frequency_penalty"]
       modelDisplayLabel: "Perplexity"
 
-  assistants:
-    disableBuilder: false
-    pollIntervalMs: 3000
-    timeoutMs: 180000
+  # assistants:
+  #   disableBuilder: true
+  #   pollIntervalMs: 3000
+  #   timeoutMs: 180000
 
   all:
     streamRate: 35 # Higher number 'buffers' incoming chunks to make the output smoother
