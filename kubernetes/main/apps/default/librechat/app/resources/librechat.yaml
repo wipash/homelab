@@ -20,7 +20,7 @@ interface:
   #   openNewTab: true
 
   endpointsMenu: false
-  modelSelect: true
+  modelSelect: false
   parameters: true
   sidePanel: true
   presets: true
