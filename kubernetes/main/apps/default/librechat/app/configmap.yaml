@@ -130,8 +130,8 @@ data:
   OPENID_BUTTON_LABEL: "Sign in with your Holmes account"
   OPENID_IMAGE_URL: "https://holmesazaepubshare.blob.core.windows.net/pub/favicon-32x32.png"
 
-  DOMAIN_CLIENT: "https://chat.{SECRET_DOMAIN_HGAI}"
-  DOMAIN_SERVER: "https://chat.{SECRET_DOMAIN_HGAI}"
+  DOMAIN_CLIENT: "https://chat.${SECRET_DOMAIN_HGAI}"
+  DOMAIN_SERVER: "https://chat.${SECRET_DOMAIN_HGAI}"
 
 
   #========================#
