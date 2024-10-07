@@ -46,3 +46,4 @@ resources:
   - ./unpackerr/ks.yaml
   - ./ghost/ks.yaml
   - ./librechat/ks.yaml
+  - ./maintainerr/ks.yaml
