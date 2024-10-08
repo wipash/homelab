@@ -80,7 +80,7 @@ spec:
               IMMICH_PORT: &port 3001
             resources:
               requests:
-                cpu: 100m
+                cpu: 50m
               limits:
                 memory: 1100M
             probes:
