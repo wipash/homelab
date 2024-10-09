@@ -10,3 +10,4 @@ talosconfig
 secret.yaml
 mosquitto_pwd
 .env
+.aider*
