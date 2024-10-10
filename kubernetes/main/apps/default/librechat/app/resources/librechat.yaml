@@ -144,7 +144,7 @@ modelSpecs:
         model: "o1-preview"
         maxContextTokens: 128000 # Maximum context tokens
         max_tokens: 32768 # Maximum output tokens
-        temperature: 0.7
+        temperature: 1
         modelLabel: "ChatGPT-o1"
         greeting: "Ask me something complex!"
 
