@@ -111,8 +111,8 @@ modelSpecs:
   prioritize: false
   list:
     - name: "gpt-4o"
-      label: "ChatGPT"
-      description: "GPT-4o is the latest, most capable model in OpenAI's lineup."
+      label: "ChatGPT-4o"
+      description: "ChatGPT-4o is the latest, most capable model in OpenAI's lineup."
       iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt.png"
       showIconInMenu: true
       showIconInHeader: true
@@ -123,7 +123,7 @@ modelSpecs:
         maxContextTokens: 128000 # Maximum context tokens
         max_tokens: 16384 # Maximum output tokens
         temperature: 0.7
-        modelLabel: "ChatGPT"
+        modelLabel: "ChatGPT-4o"
         greeting: "Hi, I'm ChatGPT! How can I help you today?"
         promptPrefix: |
           You are ChatGPT, a large language model trained by OpenAI, based on the GPT-4 architecture.
@@ -131,6 +131,22 @@ modelSpecs:
           Knowledge cutoff: 2023-10
           Image input capabilities: Enabled
           Personality: v2
+
+    - name: "o1-preview"
+      label: "ChatGPT-o1"
+      description: "o1-preview is a large language model trained to perform complex reasoning. o1 thinks before it answers."
+      iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt.png"
+      showIconInMenu: true
+      showIconInHeader: true
+      default: false
+      preset:
+        endpoint: "openAI"
+        model: "o1-preview"
+        maxContextTokens: 128000 # Maximum context tokens
+        max_tokens: 32768 # Maximum output tokens
+        temperature: 0.7
+        modelLabel: "ChatGPT-o1"
+        greeting: "Ask me something complex!"
 
     - name: "claude-3-5-sonnet"
       label: "Claude"
