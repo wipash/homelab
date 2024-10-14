@@ -125,7 +125,7 @@ data:
   EMAIL_USERNAME: "none"
   EMAIL_PASSWORD: "none"
 
-  OPENID_SCOPE: "openid profile email"
+  OPENID_SCOPE: "openid profile email User.Read"
   OPENID_CALLBACK_URL: "/oauth/openid/callback"
   OPENID_BUTTON_LABEL: "Sign in with your Holmes account"
   OPENID_IMAGE_URL: "https://holmesazaepubshare.blob.core.windows.net/pub/favicon-32x32.png"
