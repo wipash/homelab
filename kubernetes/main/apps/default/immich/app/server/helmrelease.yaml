@@ -77,7 +77,6 @@ spec:
               LOG_LEVEL: log
               # IMMICH_CONFIG_FILE: /config/immich-config.json
               IMMICH_MEDIA_LOCATION: &mediaLocation /usr/src/app/upload
-              IMMICH_PORT: &port 3001
             resources:
               requests:
                 cpu: 50m
@@ -90,7 +89,7 @@ spec:
                 spec:
                   httpGet:
                     path: /api/server-info/ping
-                    port: 3001
+                    port: &port 2283
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
