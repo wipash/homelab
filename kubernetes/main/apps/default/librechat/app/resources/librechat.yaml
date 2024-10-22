@@ -157,7 +157,7 @@ modelSpecs:
       default: true
       preset:
         endpoint: "anthropic"
-        model: "claude-3-5-sonnet-20240620"
+        model: "claude-3-5-sonnet-20241022"
         maxContextTokens: 200000 # Maximum context tokens
         max_tokens: 8192 # Maximum output tokens
         temperature: 0.7
