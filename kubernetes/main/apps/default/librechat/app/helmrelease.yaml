@@ -82,7 +82,7 @@ spec:
           ragapi:
             image:
               repository: ghcr.io/danny-avila/librechat-rag-api-dev-lite
-              tag: latest@sha256:7a71bc3595c3c398f138322eba9accc682b0b15d238692a8d8fbee5f9c2ad38e
+              tag: latest@sha256:218703de52908e4004531c64e1cef4c7ca350eddbed4d36c48670a6623df6bf0
             envFrom: *envFrom
             securityContext: &securityContext
               allowPrivilegeEscalation: false
