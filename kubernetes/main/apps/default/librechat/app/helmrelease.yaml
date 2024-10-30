@@ -93,7 +93,7 @@ spec:
           meilisearch:
             image:
               repository: getmeili/meilisearch
-              tag: v1.10.3
+              tag: v1.11.0
             envFrom: *envFrom
             env:
               MEILI_DB_PATH: "/meili_data"
