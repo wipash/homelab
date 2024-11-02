@@ -165,8 +165,8 @@ cameras:
     live:
       stream_name: sdc_hq
 
-genai:
-  enabled: True
-  provider: openai
-  api_key: "{FRIGATE_OPENAI_API_KEY}"
-  model: gpt-4o
+# genai:
+#   enabled: True
+#   provider: openai
+#   api_key: "{FRIGATE_OPENAI_API_KEY}"
+#   model: gpt-4o
