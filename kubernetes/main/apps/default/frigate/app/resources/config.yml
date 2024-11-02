@@ -30,7 +30,7 @@ ffmpeg:
     - -hide_banner
     - -loglevel
     - warning
-  hwaccel_args: preset-vaapi
+  hwaccel_args: preset-intel-qsv-h264
   output_args:
     record: preset-record-generic-audio-aac
 
@@ -164,3 +164,9 @@ cameras:
           roles: ["detect"]
     live:
       stream_name: sdc_hq
+
+genai:
+  enabled: True
+  provider: openai
+  api_key: "{FRIGATE_OPENAI_API_KEY}"
+  model: gpt-4o
