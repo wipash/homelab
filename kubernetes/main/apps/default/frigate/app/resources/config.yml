@@ -46,12 +46,9 @@ record:
   retain:
     days: 3
     mode: all
-  alerts:
+  events:
     retain:
-      days: 14
-  detections:
-    retain:
-      days: 14
+      default: 14
 snapshots:
   enabled: true
   timestamp: true
