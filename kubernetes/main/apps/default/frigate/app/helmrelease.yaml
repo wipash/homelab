@@ -44,7 +44,7 @@ spec:
           app:
             image:
               repository: ghcr.io/blakeblackshear/frigate
-              tag: 0.14.1
+              tag: 0.15.0-beta1
             env:
               TZ: Pacific/Auckland
               LIBVA_DRIVER_NAME: i965
@@ -134,6 +134,8 @@ spec:
           - path: /config/config.yml
             subPath: config.yml
             readOnly: true
+          - path: /config/.version
+            subPath: version
       cache:
         type: emptyDir
         medium: Memory
