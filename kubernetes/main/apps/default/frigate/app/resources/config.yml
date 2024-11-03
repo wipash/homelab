@@ -169,4 +169,3 @@ cameras:
 #   provider: openai
 #   api_key: "{FRIGATE_OPENAI_API_KEY}"
 #   model: gpt-4o
-version: 0.15-0
