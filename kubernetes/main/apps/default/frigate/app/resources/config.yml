@@ -3,8 +3,8 @@ mqtt:
   host: mosquitto.default.svc.cluster.local
   port: 1883
   topic_prefix: frigate
-  user: "{FRIGATE_MQTT_USERNAME}"
-  password: "{FRIGATE_MQTT_PASSWORD}"
+  user: '{FRIGATE_MQTT_USERNAME}'
+  password: '{FRIGATE_MQTT_PASSWORD}'
 
 database:
   path: /data/frigate.db
@@ -16,7 +16,7 @@ detectors:
 
 # Global objects configuration
 objects:
-  track: ["person"]
+  track: [person]
   filters:
     person:
       min_area: 5000
@@ -42,7 +42,7 @@ detect:
 
 # Global recording configuration
 record:
-  enabled: True
+  enabled: true
   retain:
     days: 3
     mode: all
@@ -54,31 +54,31 @@ record:
 
 # Global snapshots configuration
 snapshots:
-  enabled: True
-  timestamp: True
-  bounding_box: True
+  enabled: true
+  timestamp: true
+  bounding_box: true
   retain:
     default: 14
 
 go2rtc:
   streams:
     fdc_hq:
-      - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.11:554/cam/realmonitor?channel=1&subtype=0"
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.11:554/cam/realmonitor?channel=1&subtype=0
       - ffmpeg:fdc_hq#audio=aac
     fdc_lq:
-      - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.11:554/cam/realmonitor?channel=1&subtype=2"
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.11:554/cam/realmonitor?channel=1&subtype=2
     sdc_hq:
-      - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.12:554/cam/realmonitor?channel=1&subtype=0"
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.12:554/cam/realmonitor?channel=1&subtype=0
       - ffmpeg:sdc_hq#audio=aac
     sdc_lq:
-      - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.12:554/cam/realmonitor?channel=1&subtype=2"
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.12:554/cam/realmonitor?channel=1&subtype=2
     bdc_hq:
-      - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.13:554/cam/realmonitor?channel=1&subtype=0"
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.13:554/cam/realmonitor?channel=1&subtype=0
       - ffmpeg:bdc_hq#audio=aac
     bdc_lq:
-      - "rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.13:554/cam/realmonitor?channel=1&subtype=2"
+      - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.13:554/cam/realmonitor?channel=1&subtype=2
   webrtc:
-    listen: ":8555"
+    listen: :8555
     candidates:
       - 172.16.10.10:8555 # <--- enter frigate host IP here
       - stun:8555
@@ -109,12 +109,12 @@ cameras:
 
     ffmpeg:
       inputs:
-        - path: "rtsp://127.0.0.1:8554/fdc_hq?video=copy&audio=aac"
+        - path: rtsp://127.0.0.1:8554/fdc_hq?video=copy&audio=aac
           input_args: preset-rtsp-restream
-          roles: ["record"]
-        - path: "rtsp://127.0.0.1:8554/fdc_lq?video=copy"
+          roles: [record]
+        - path: rtsp://127.0.0.1:8554/fdc_lq?video=copy
           input_args: preset-rtsp-restream
-          roles: ["detect"]
+          roles: [detect]
     live:
       stream_name: fdc_hq
 
@@ -134,12 +134,12 @@ cameras:
         - 0.579,0.384,0.687,0.518,0.676,0.723,0.604,0.765,0.517,0.59,0.514,0.488
     ffmpeg:
       inputs:
-        - path: "rtsp://127.0.0.1:8554/bdc_hq?video=copy&audio=aac"
+        - path: rtsp://127.0.0.1:8554/bdc_hq?video=copy&audio=aac
           input_args: preset-rtsp-restream
-          roles: ["record"]
-        - path: "rtsp://127.0.0.1:8554/bdc_lq?video=copy"
+          roles: [record]
+        - path: rtsp://127.0.0.1:8554/bdc_lq?video=copy
           input_args: preset-rtsp-restream
-          roles: ["detect"]
+          roles: [detect]
     live:
       stream_name: bdc_hq
 
@@ -156,12 +156,12 @@ cameras:
         - 1280,446,1280,0,844,0
     ffmpeg:
       inputs:
-        - path: "rtsp://127.0.0.1:8554/sdc_hq?video=copy&audio=aac"
+        - path: rtsp://127.0.0.1:8554/sdc_hq?video=copy&audio=aac
           input_args: preset-rtsp-restream
-          roles: ["record"]
-        - path: "rtsp://127.0.0.1:8554/sdc_lq?video=copy"
+          roles: [record]
+        - path: rtsp://127.0.0.1:8554/sdc_lq?video=copy
           input_args: preset-rtsp-restream
-          roles: ["detect"]
+          roles: [detect]
     live:
       stream_name: sdc_hq
 
