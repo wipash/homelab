@@ -134,8 +134,8 @@ spec:
           - path: /config/config.yml
             subPath: config.yml
             readOnly: true
-          - path: /config/.version
-            subPath: version
+          # - path: /config/.version
+          #   subPath: version
       cache:
         type: emptyDir
         medium: Memory
