@@ -11,6 +11,5 @@ configMapGenerator:
   - name: frigate-configmap
     files:
       - config.yml=./resources/config.yml
-      - version=./resources/version
 generatorOptions:
   disableNameSuffixHash: true
