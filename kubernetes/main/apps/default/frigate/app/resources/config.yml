@@ -46,13 +46,12 @@ record:
   retain:
     days: 3
     mode: all
-  events:
-    objects:
-      - person
+  alerts:
     retain:
-      default: 14
-
-# Global snapshots configuration
+      days: 14
+  detections:
+    retain:
+      days: 14
 snapshots:
   enabled: true
   timestamp: true
@@ -170,3 +169,4 @@ cameras:
 #   provider: openai
 #   api_key: "{FRIGATE_OPENAI_API_KEY}"
 #   model: gpt-4o
+version: 0.15-0
