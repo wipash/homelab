@@ -226,21 +226,21 @@ modelSpecs:
 
           Claude is now being connected with a human.
 
-    # - name: "gemini"
-    #   label: "Gemini"
-    #   description: Gemini 1.5 Pro can process large amounts of data at once, including 2 hours of video, 19 hours of audio, codebases with 60,000 lines of code, or 2,000 pages of text.
-    #   iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/gemini.png"
-    #   showIconInMenu: true
-    #   showIconInHeader: true
-    #   default: false
-    #   preset:
-    #     endpoint: "google"
-    #     model: "gemini-1.5-pro-latest"
-    #     maxContextTokens: 2097152 # Maximum context tokens
-    #     max_tokens: 8192
-    #     temperature: 0.7
-    #     modelLabel: "Gemini"
-    #     greeting: "Gemini here, what can I do for you?"
+    - name: "gemini"
+      label: "Gemini"
+      description: Gemini 1.5 Pro can process large amounts of data at once, including 2 hours of video, 19 hours of audio, codebases with 60,000 lines of code, or 2,000 pages of text.
+      iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/gemini.png"
+      showIconInMenu: true
+      showIconInHeader: true
+      default: false
+      preset:
+        endpoint: "google"
+        model: "gemini-1.5-pro-latest"
+        maxContextTokens: 2097152 # Maximum context tokens
+        max_tokens: 8192
+        temperature: 0.7
+        modelLabel: "Gemini"
+        greeting: "Gemini here, what can I do for you?"
 
     - name: "perplexity"
       label: "Perplexity"
