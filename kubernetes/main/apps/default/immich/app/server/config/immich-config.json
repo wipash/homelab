@@ -38,7 +38,7 @@
     "url": "http://immich-machine-learning.default.svc.cluster.local:3003",
     "clip": {
       "enabled": true,
-      "modelName": "ViT-B-32__openai"
+      "modelName": "immich-app/ViT-B-16-SigLIP-384__webli"
     },
     "duplicateDetection": {
       "enabled": true,
@@ -78,7 +78,7 @@
     "storageQuotaClaim": "immich_quota"
   },
   "passwordLogin": {
-    "enabled": true
+    "enabled": false
   },
   "reverseGeocoding": {
     "enabled": true
