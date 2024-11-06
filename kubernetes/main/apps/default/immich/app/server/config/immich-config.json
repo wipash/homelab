@@ -1,4 +1,11 @@
 {
+  "backup": {
+    "database": {
+      "enabled": false,
+      "cronExpression": "0 02 * * *",
+      "keepLastAmount": 14
+    }
+  },
   "ffmpeg": {
     "crf": 23,
     "threads": 0,
@@ -6,52 +13,21 @@
     "targetVideoCodec": "h264",
     "acceptedVideoCodecs": ["h264"],
     "targetAudioCodec": "aac",
-    "acceptedAudioCodecs": ["aac"],
+    "acceptedAudioCodecs": ["aac", "mp3", "libopus", "pcm_s16le"],
+    "acceptedContainers": ["mov", "ogg", "webm"],
     "targetResolution": "720",
     "maxBitrate": "0",
     "bframes": -1,
     "refs": 0,
     "gopSize": 0,
-    "npl": 0,
     "temporalAQ": false,
     "cqMode": "auto",
     "twoPass": false,
     "preferredHwDevice": "auto",
     "transcode": "required",
-    "tonemap": "hable",
-    "accel": "disabled"
-  },
-  "job": {
-    "backgroundTask": {
-      "concurrency": 5
-    },
-    "smartSearch": {
-      "concurrency": 2
-    },
-    "metadataExtraction": {
-      "concurrency": 5
-    },
-    "faceDetection": {
-      "concurrency": 2
-    },
-    "search": {
-      "concurrency": 5
-    },
-    "sidecar": {
-      "concurrency": 5
-    },
-    "library": {
-      "concurrency": 5
-    },
-    "migration": {
-      "concurrency": 5
-    },
-    "thumbnailGeneration": {
-      "concurrency": 5
-    },
-    "videoConversion": {
-      "concurrency": 1
-    }
+    "accel": "disabled",
+    "accelDecode": false,
+    "tonemap": "hable"
   },
   "logging": {
     "enabled": true,
@@ -64,51 +40,107 @@
       "enabled": true,
       "modelName": "ViT-B-32__openai"
     },
+    "duplicateDetection": {
+      "enabled": true,
+      "maxDistance": 0.01
+    },
     "facialRecognition": {
       "enabled": true,
       "modelName": "buffalo_l",
       "minScore": 0.7,
-      "maxDistance": 0.6,
+      "maxDistance": 0.5,
       "minFaces": 3
     }
   },
   "map": {
     "enabled": true,
-    "lightStyle": "",
-    "darkStyle": ""
+    "lightStyle": "https://tiles.immich.cloud/v1/style/light.json",
+    "darkStyle": "https://tiles.immich.cloud/v1/style/dark.json"
+  },
+  "newVersionCheck": {
+    "enabled": true
+  },
+  "oauth": {
+    "autoLaunch": false,
+    "autoRegister": true,
+    "buttonText": "Login with Authelia",
+    "clientId": "immich",
+    "clientSecret": "${IMMICH_OAUTH_CLIENT_SECRET}",
+    "defaultStorageQuota": 0,
+    "enabled": true,
+    "issuerUrl": "https://auth.mcgrath.nz/.well-known/openid-configuration",
+    "mobileOverrideEnabled": false,
+    "mobileRedirectUri": "",
+    "scope": "openid email profile",
+    "signingAlgorithm": "RS256",
+    "profileSigningAlgorithm": "none",
+    "storageLabelClaim": "preferred_username",
+    "storageQuotaClaim": "immich_quota"
+  },
+  "passwordLogin": {
+    "enabled": true
   },
   "reverseGeocoding": {
     "enabled": true
   },
-  "oauth": {
-    "enabled": true,
-    "issuerUrl": "https://auth.mcgrath.nz/.well-known/openid-configuration",
-    "clientId": "immich",
-    "clientSecret": "${IMMICH_OAUTH_CLIENT_SECRET}",
-    "mobileOverrideEnabled": false,
-    "mobileRedirectUri": "",
-    "scope": "openid email profile",
-    "storageLabelClaim": "preferred_username",
-    "buttonText": "Login with Authelia",
-    "autoRegister": true,
-    "autoLaunch": false
-  },
-  "passwordLogin": {
-    "enabled": true
+  "metadata": {
+    "faces": {
+      "import": false
+    }
   },
   "storageTemplate": {
     "enabled": true,
     "hashVerificationEnabled": true,
     "template": "{{y}}/{{y}}-{{MM}}-{{dd}}/{{filename}}"
   },
-  "thumbnail": {
-    "webpSize": 250,
-    "jpegSize": 1440,
-    "quality": 80,
-    "colorspace": "p3"
+  "job": {
+    "thumbnailGeneration": {
+      "concurrency": 3
+    },
+    "metadataExtraction": {
+      "concurrency": 5
+    },
+    "videoConversion": {
+      "concurrency": 1
+    },
+    "smartSearch": {
+      "concurrency": 2
+    },
+    "migration": {
+      "concurrency": 5
+    },
+    "backgroundTask": {
+      "concurrency": 5
+    },
+    "search": {
+      "concurrency": 5
+    },
+    "faceDetection": {
+      "concurrency": 2
+    },
+    "sidecar": {
+      "concurrency": 5
+    },
+    "library": {
+      "concurrency": 5
+    },
+    "notifications": {
+      "concurrency": 5
+    }
   },
-  "newVersionCheck": {
-    "enabled": true
+  "image": {
+    "thumbnail": {
+      "format": "webp",
+      "quality": 80,
+      "size": 250
+    },
+    "preview": {
+      "format": "jpeg",
+      "quality": 80,
+      "size": 1440
+    },
+    "colorspace": "p3",
+    "extractEmbedded": false
   },
   "trash": {
     "enabled": true,
@@ -123,18 +155,28 @@
       "cronExpression": "0 0 * * *"
     },
     "watch": {
+      "enabled": false
+    }
+  },
+  "notifications": {
+    "smtp": {
       "enabled": false,
-      "usePolling": false,
-      "interval": 10000
+      "from": "",
+      "replyTo": "",
+      "transport": {
+        "ignoreCert": false,
+        "host": "",
+        "port": 587,
+        "username": "",
+        "password": ""
+      }
     }
   },
   "server": {
     "externalDomain": "",
     "loginPageMessage": ""
   },
-  "backup": {
-    "database": {
-      "enabled": false
-    }
+  "user": {
+    "deleteDelay": 7
   }
 }
