@@ -4,13 +4,9 @@
     "threads": 0,
     "preset": "ultrafast",
     "targetVideoCodec": "h264",
-    "acceptedVideoCodecs": [
-      "h264"
-    ],
+    "acceptedVideoCodecs": ["h264"],
     "targetAudioCodec": "aac",
-    "acceptedAudioCodecs": [
-      "aac"
-    ],
+    "acceptedAudioCodecs": ["aac"],
     "targetResolution": "720",
     "maxBitrate": "0",
     "bframes": -1,
@@ -135,5 +131,10 @@
   "server": {
     "externalDomain": "",
     "loginPageMessage": ""
+  },
+  "backup": {
+    "database": {
+      "enabled": false
+    }
   }
 }
