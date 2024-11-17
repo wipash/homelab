@@ -1,7 +1,5 @@
 ---
 # Areas
-- name: area/ansible
-  color: "0e8a16"
 - name: area/docs
   color: "0e8a16"
 - name: area/github
@@ -10,14 +8,10 @@
   color: "0e8a16"
 - name: area/taskfile
   color: "0e8a16"
-- name: area/terraform
-  color: "0e8a16"
 # Clusters
 - name: cluster/main
   color: "ffc300"
 # Renovate Types
-- name: renovate/ansible
-  color: "027fa0"
 - name: renovate/container
   color: "027fa0"
 - name: renovate/github-action
@@ -27,8 +21,6 @@
 - name: renovate/github-release
   color: "027fa0"
 - name: renovate/helm
-  color: "027fa0"
-- name: renovate/terraform
   color: "027fa0"
 # Semantic Types
 - name: type/digest
@@ -40,5 +32,7 @@
 - name: type/major
   color: "f6412d"
 # Uncategorized
-- name: hold/upstream
+- name: community
+  color: "370fb2"
+- name: hold
   color: "ee0701"
