@@ -1,31 +1,39 @@
 {
     "yaml.schemaStore.enable": true,
     "yaml.schemas": {
-      "ansible": "ansible/**/*.yml",
       "kubernetes": "kubernetes/**/*.yaml"
     },
     "sops.creationEnabled": true,
     "files.associations": {
         "*.json5": "jsonc",
-        "**/cluster/**/*.sops.toml": "plaintext"
     },
     "files.trimTrailingWhitespace": true,
     "sops.beta": false,
     "sops.defaults.ageKeyFile": "/home/sean/.config/sops/age/keys.txt",
+    "material-icon-theme.files.associations": {
+      // TODO: https://github.com/PKief/vscode-material-icon-theme/issues/330
+      "*.sops.env": "lock",
+      "*.sops.yaml": "lock"
+    },
     "material-icon-theme.folders.associations": {
-        ".taskfiles": "utils",
-        "bootstrap": "import",
-        "charts": "kubernetes",
-        "hack": "scripts",
-        "repositories": "database",
-        "terraforms": "terraform",
-        "vars": "other",
+        // top level
+        ".archive": "archive",
+        // .github
+        ".github/workflows": "robot",
         // namespaces
+        "actions-runner-system": "github",
         "cert-manager": "guard",
-        "external-secrets": "keys",
+        "external-secrets": "secure",
+        "flux-system": "pipe",
         "kube-system": "kubernetes",
         "monitoring": "event",
+        "network": "connection",
         "networking": "connection",
-        "rook-ceph": "dump",
+        "observability": "event",
+        "rook-ceph": "base",
+        "storage": "dump",
+        "system-upgrade": "update",
+        "tools": "tools",
+        "volsync": "aws"
     },
 }
