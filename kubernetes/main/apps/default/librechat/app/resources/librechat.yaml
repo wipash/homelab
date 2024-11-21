@@ -19,8 +19,8 @@ interface:
   #   externalUrl: 'https://librechat.ai/tos'
   #   openNewTab: true
 
-  endpointsMenu: true
-  modelSelect: true
+  endpointsMenu: false
+  modelSelect: false
   parameters: true
   sidePanel: true
   presets: true
@@ -157,7 +157,7 @@ modelSpecs:
       iconURL: https://holmesazaepubshare.blob.core.windows.net/pub/claude.png
       showIconInMenu: true
       showIconInHeader: true
-      default: true
+      default: false
       preset:
         endpoint: anthropic
         model: claude-3-5-sonnet-20241022
