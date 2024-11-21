@@ -157,23 +157,15 @@ spec:
         annotations:
           external-dns.alpha.kubernetes.io/target: "external.mcgrath.nz"
         hosts:
-          - host: &host librechat.mcgrath.nz
-            paths: &paths
+          - host: &host chat.mcgrath.nz
+            paths:
               - path: /
                 service:
                   identifier: app
                   port: http
-          - host: &host2 chat.mcgrath.nz
-            paths: *paths
-          - host: &host3 chat.${SECRET_DOMAIN_HGAI}
-            paths: *paths
         tls:
           - hosts:
               - *host
-              - *host2
-          - secretName: wildcard-tls-hgai
-            hosts:
-              - *host3
 
       mongo-express:
         enabled: true
