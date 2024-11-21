@@ -21,9 +21,9 @@ interface:
 
   endpointsMenu: false
   modelSelect: false
-  parameters: true
+  parameters: false
   sidePanel: true
-  presets: true
+  presets: false
   prompts: true
   bookmarks: true
   multiConvo: true
