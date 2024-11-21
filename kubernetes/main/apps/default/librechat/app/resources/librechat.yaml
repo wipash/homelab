@@ -110,6 +110,30 @@ modelSpecs:
   enforce: false
   prioritize: false
   list:
+    - name: gpt-websearch-assistant
+      label: Web Search
+      description: This model can help you search the internet for information.
+      iconURL: https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt-blue.png
+      showIconInMenu: true
+      showIconInHeader: true
+      default: false
+      preset:
+        endpoint: assistants
+        assistant_id: asst_kqHPerBQICFkmhyiLVsDV9JV
+
+
+    - name: gpt-code-interpreter
+      label: Code Interpreter
+      description: This model can run code to help interpret data you provide.
+      iconURL: https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt-blue.png
+      showIconInMenu: true
+      showIconInHeader: true
+      default: false
+      preset:
+        endpoint: assistants
+        assistant_id: asst_bVWZWx9aJUwEAaLJFS1MLEju
+
+
     - name: claude-3-5-sonnet
       label: Claude
       description: Claude is an equally capable alternative to ChatGPT, with a different personality and approach to conversation
