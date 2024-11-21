@@ -112,26 +112,28 @@ modelSpecs:
   list:
     - name: gpt-websearch-assistant
       label: Web Search
-      description: This model can help you search the internet for information.
-      iconURL: https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt-blue.png
+      description: This model can search the internet for information
+      iconURL: https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt-yellowish.png
       showIconInMenu: true
       showIconInHeader: true
       default: false
       preset:
         endpoint: assistants
         assistant_id: asst_kqHPerBQICFkmhyiLVsDV9JV
+        modelLabel: Web Search
 
 
-    - name: gpt-code-interpreter
-      label: Code Interpreter
-      description: This model can run code to help interpret data you provide.
-      iconURL: https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt-blue.png
+    - name: gpt-file-analyser
+      label: File Analyser
+      description: This model can run code to help interpret data you provide
+      iconURL: https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt-purple.png
       showIconInMenu: true
       showIconInHeader: true
       default: false
       preset:
         endpoint: assistants
         assistant_id: asst_bVWZWx9aJUwEAaLJFS1MLEju
+        modelLabel: File Analyser
 
 
     - name: claude-3-5-sonnet
