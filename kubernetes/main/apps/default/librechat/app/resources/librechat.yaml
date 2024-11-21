@@ -73,6 +73,15 @@ rateLimits:
     userMax: 50
     userWindowInMinutes: 60 # Rate limit window for conversation imports per user
 
+fileConfig:
+  endpoints:
+    assistants:
+      disabled: false
+    default:
+      disabled: true
+  serverFileSizeLimit: 200
+  avatarSizeLimit: 2
+
 endpoints:
   custom:
     - name: Perplexity
