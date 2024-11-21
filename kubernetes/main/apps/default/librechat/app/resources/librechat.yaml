@@ -79,20 +79,12 @@ fileConfig:
       disabled: false
     default:
       disabled: false
-      supportedMimeTypes:
-        - "image/.*"
     openAI:
       disabled: false
-      supportedMimeTypes:
-        - "image/.*"
     google:
       disabled: false
-      supportedMimeTypes:
-        - "image/.*"
     anthropic:
       disabled: false
-      supportedMimeTypes:
-        - "image/.*"
   serverFileSizeLimit: 200
   avatarSizeLimit: 2
 
