@@ -79,6 +79,12 @@ fileConfig:
       disabled: false
     default:
       disabled: true
+    openAI:
+      disabled: true
+    google:
+      disabled: true
+    anthropic:
+      disabled: true
   serverFileSizeLimit: 200
   avatarSizeLimit: 2
 
