@@ -106,22 +106,14 @@ spec:
 
     persistence:
       config:
+        enabled: true
         existingClaim: *app
-        advancedMounts:
-          esphome:
-            app:
-              - path: /config
-            code-server:
-              - path: /config
-      secrets:
-        type: secret
-        name: esphome-secrets
         globalMounts:
-          - path: /config/secrets.yaml
-            subPath: secrets.yaml
-      cache:
+          - path: /config
+      esphome-cache:
+        enabled: true
         type: emptyDir
-        advancedMounts:
-          esphome:
-            app:
-              - path: /cache
+        globalMounts:
+          - path: /config/.esphome
+          - path: /cache
+            subPath: cache
