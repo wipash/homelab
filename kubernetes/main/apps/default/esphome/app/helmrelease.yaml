@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: esphome
+  name: &app esphome
 spec:
   interval: 30m
   chart:
@@ -106,7 +106,7 @@ spec:
 
     persistence:
       config:
-        existingClaim: esphome-config
+        existingClaim: *app
         advancedMounts:
           esphome:
             app:
