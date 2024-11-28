@@ -86,6 +86,7 @@ spec:
               tag: latest
             env:
               MONGODB_URI: *mongo
+              PROMETHEUS_PORT: &exporterport "9123"
 
           ragapi:
             image:
@@ -158,8 +159,7 @@ spec:
           # litellm:
           #   port: 4000
           metrics:
-            port: 9123
-            targetPort: 8000
+            port: *exporterport
 
     ingress:
       app:
