@@ -158,7 +158,8 @@ spec:
           # litellm:
           #   port: 4000
           metrics:
-            port: 8000
+            port: 9123
+            targetPort: 8000
 
     ingress:
       app:
