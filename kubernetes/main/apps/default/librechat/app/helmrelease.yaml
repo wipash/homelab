@@ -49,7 +49,7 @@ spec:
             env:
               PORT: "3080"
               NODE_ENV: "production"
-              MONGO_URI: "mongodb://localhost:27017/LibreChat"
+              MONGO_URI: &mongo "mongodb://localhost:27017/LibreChat"
 
               # Disable these to just use LiteLLM
               # OPENAI_API_KEY: ""
@@ -78,6 +78,14 @@ spec:
                 enabled: true
               startup:
                 enabled: false
+
+          exporter:
+            dependsOn: app
+            image:
+              repository: ghcr.io/wipash/librechatmetrics
+              tag: latest
+            env:
+              MONGODB_URI: *mongo
 
           ragapi:
             image:
@@ -149,6 +157,8 @@ spec:
             port: 8081
           # litellm:
           #   port: 4000
+          metrics:
+            port: 8000
 
     ingress:
       app:
@@ -237,3 +247,13 @@ spec:
             ragapi:
               - subPath: ragapi
                 path: /app/uploads
+
+    serviceMonitor:
+      app:
+        serviceName: librechat
+        endpoints:
+          - port: metrics
+            scheme: http
+            path: /
+            interval: 1m
+            scrapeTimeout: 30s
