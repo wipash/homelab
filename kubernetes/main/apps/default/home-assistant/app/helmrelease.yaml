@@ -68,18 +68,25 @@ spec:
             args:
               - --auth
               - none
+              - --disable-telemetry
               - --user-data-dir
               - "/config/.vscode"
               - --extensions-dir
               - "/config/.vscode"
               - --port
-              - "8080"
+              - "12321"
               - "/config"
             env:
               TZ: Pacific/Auckland
+              HASS_SERVER: http://localhost:8123
             envFrom:
               - secretRef:
                   name: home-assistant-code-secret
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -108,7 +115,7 @@ spec:
           sonos:
             port: 1400
           code-server:
-            port: 8080
+            port: 12321
     ingress:
       app:
         className: external
