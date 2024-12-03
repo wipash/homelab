@@ -46,3 +46,4 @@ resources:
   - ./maintainerr/ks.yaml
   - ./esphome/ks.yaml
   - ./dashbrr/ks.yaml
+  - ./omegabrr/ks.yaml
