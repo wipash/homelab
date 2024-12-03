@@ -45,3 +45,4 @@ resources:
   - ./librechat/ks.yaml
   #- ./maintainerr/ks.yaml
   - ./esphome/ks.yaml
+  - ./dashbrr/ks.yaml

@@ -70,7 +70,15 @@ access_control:
 identity_providers:
   oidc:
     cors:
-      endpoints: ["authorization", "token", "revocation", "introspection", "userinfo", "pushed-authorization-request"]
+      endpoints:
+        [
+          "authorization",
+          "token",
+          "revocation",
+          "introspection",
+          "userinfo",
+          "pushed-authorization-request",
+        ]
       allowed_origins_from_client_redirect_uris: true
     clients:
       - id: grafana
@@ -130,7 +138,7 @@ identity_providers:
         pkce_challenge_method: S256
         grant_types:
           - authorization_code
-        consent_mode: 'implicit'
+        consent_mode: "implicit"
       - id: paperless
         description: PaperlessNGX
         secret: "$${PAPERLESS_OAUTH_CLIENT_SECRET}"
@@ -138,7 +146,10 @@ identity_providers:
         authorization_policy: two_factor
         pre_configured_consent_duration: 1y
         scopes: ["openid", "profile", "groups", "email"]
-        redirect_uris: ["https://paperless.mcgrath.nz/accounts/oidc/authelia/login/callback/"]
+        redirect_uris:
+          [
+            "https://paperless.mcgrath.nz/accounts/oidc/authelia/login/callback/",
+          ]
         userinfo_signed_response_alg: none
       - id: nodered
         description: NodeRED
@@ -168,3 +179,12 @@ identity_providers:
       #   scopes: ["openid", "profile", "groups", "email"]
       #   redirect_uris: ["https://ts.mcgrath.nz/oidc/callback"]
       #   userinfo_signed_response_alg: none
+      - id: dashbrr
+        description: Dashbrr
+        secret: "$${DASHBRR_CLIENT_SECRET}"
+        public: false
+        authorization_policy: two_factor
+        pre_configured_consent_duration: 1y
+        scopes: ["openid", "profile", "groups", "email"]
+        redirect_uris: ["https://dashbrr.mcgrath.nz/api/auth/callback"]
+        userinfo_signed_response_alg: none
