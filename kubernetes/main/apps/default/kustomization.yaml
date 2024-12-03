@@ -43,6 +43,6 @@ resources:
   - ./unpackerr/ks.yaml
   - ./ghost/ks.yaml
   - ./librechat/ks.yaml
-  #- ./maintainerr/ks.yaml
+  - ./maintainerr/ks.yaml
   - ./esphome/ks.yaml
   - ./dashbrr/ks.yaml
