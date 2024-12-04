@@ -287,6 +287,13 @@ modelSpecs:
         modelLabel: "Gemini"
         greeting: "Gemini here, what can I do for you?"
 
+    - name: "search agent"
+      label: "Search Agent"
+      description: "Search agent"
+      preset:
+        endpoint: agents
+        agent_id: agent_sGMmnLSMbLgcbL1CAWU9s
+
     # - name: "perplexity"
     #   label: "Perplexity"
     #   description: "Perplexity is an AI-driven search engine."
