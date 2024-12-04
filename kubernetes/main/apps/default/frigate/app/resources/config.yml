@@ -30,7 +30,7 @@ ffmpeg:
     - -hide_banner
     - -loglevel
     - warning
-  hwaccel_args: preset-vaapi
+  hwaccel_args: preset-intel-qsv-h264
   output_args:
     record: preset-record-generic-audio-aac
 
@@ -46,9 +46,12 @@ record:
   retain:
     days: 3
     mode: all
-  events:
+  alerts:
     retain:
-      default: 14
+      days: 14
+  detections:
+    retain:
+      days: 14
 snapshots:
   enabled: true
   timestamp: true
