@@ -119,6 +119,10 @@ endpoints:
     pollIntervalMs: 3000
     timeoutMs: 180000
 
+  agents:
+    disableBuilder: false
+
+
   all:
     streamRate: 35 # Higher number 'buffers' incoming chunks to make the output smoother
 
