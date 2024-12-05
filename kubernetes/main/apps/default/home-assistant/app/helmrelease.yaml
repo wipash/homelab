@@ -155,5 +155,15 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /config/tts
-      tmp:
+      tmpfs:
         type: emptyDir
+        advancedMounts:
+          home-assistant:
+            app:
+              - path: /tmp
+                subPath: hass-tmp
+            code-server:
+              - path: /tmp
+                subPath: code-server-tmp
+              - path: /nonexistent
+                subPath: nonexistent
