@@ -284,8 +284,8 @@ modelSpecs:
       default: false
       preset:
         endpoint: "google"
-        model: "gemini-1.5-pro-latest"
-        maxContextTokens: 2097152 # Maximum context tokens
+        model: "gemini-2.0-flash-exp"
+        maxContextTokens: 1040000 # Maximum context tokens
         max_tokens: 8192
         temperature: 0.7
         modelLabel: "Gemini"
