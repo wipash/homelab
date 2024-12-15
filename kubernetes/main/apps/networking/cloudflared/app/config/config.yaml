@@ -27,23 +27,11 @@ ingress:
     service: https://nginx-external-controller.networking.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
-  - hostname: "${SECRET_WP_1_DOMAIN}"
-    service: https://nginx-external-controller.networking.svc.cluster.local:443
-    originRequest:
-      noTLSVerify: true
-  - hostname: "www.${SECRET_WP_1_DOMAIN}"
-    service: https://nginx-external-controller.networking.svc.cluster.local:443
-    originRequest:
-      noTLSVerify: true
   - hostname: "${SECRET_DOMAIN_SPARKLE}"
     service: https://nginx-external-controller.networking.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
   - hostname: "*.${SECRET_DOMAIN_SPARKLE}"
-    service: https://nginx-external-controller.networking.svc.cluster.local:443
-    originRequest:
-      noTLSVerify: true
-  - hostname: "*.${SECRET_DOMAIN_HGAI}"
     service: https://nginx-external-controller.networking.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
