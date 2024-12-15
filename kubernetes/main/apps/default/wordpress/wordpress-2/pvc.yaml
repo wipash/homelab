@@ -11,7 +11,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     server: 172.20.0.1
-    path: /volume2/K3S/web/wordpress-2
+    path: /volume1/Data/wordpress/wordpress-2
 
 ---
 apiVersion: v1
