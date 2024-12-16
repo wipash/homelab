@@ -5,9 +5,4 @@ kind: Kustomization
 namespace: rook-ceph
 resources:
   - ./helmrelease.yaml
-  - ./cephobjectstoreuser.yaml
-labels:
-  - pairs:
-      app.kubernetes.io/name: rook-ceph-cluster
-      app.kubernetes.io/instance: rook-ceph-cluster
-      app.kubernetes.io/part-of: rook-ceph
+  - ../../../../templates/gatus/internal
