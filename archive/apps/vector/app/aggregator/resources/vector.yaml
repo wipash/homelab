@@ -19,7 +19,6 @@ sources:
     version: "2"
     address: 0.0.0.0:6010
 
-
 #
 # Transforms
 #
