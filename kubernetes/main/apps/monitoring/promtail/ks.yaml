@@ -3,14 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app loki
+  name: &app promtail
   namespace: flux-system
 spec:
   targetNamespace: monitoring
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/main/apps/monitoring/loki/app
+  path: ./kubernetes/main/apps/monitoring/promtail/app
   prune: true
   sourceRef:
     kind: GitRepository

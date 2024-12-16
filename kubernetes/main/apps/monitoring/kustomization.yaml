@@ -19,3 +19,4 @@ resources:
   - ./snmp-exporter/ks.yaml
   - ./prometheus-operator-crds/ks.yaml
   - ./smokeping/ks.yaml
+  - ./promtail/ks.yaml
