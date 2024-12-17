@@ -1,0 +1,25 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: node-var-browse
+  labels:
+    app: node-access
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: hp1
+  containers:
+    - name: var-browser
+      image: ubuntu:latest # Use any lightweight image with tools like `ls`, `cat`, etc.
+      command: ["/bin/bash", "-c", "--"]
+      args: ["while true; do sleep 30; done;"]
+      volumeMounts:
+        - name: var-volume
+          mountPath: /host/var # Path inside the container where the host's /var will be mounted
+      securityContext:
+        privileged: true
+  volumes:
+    - name: var-volume
+      hostPath:
+        path: /var # Path on the host to be mounted
+        type: Directory
