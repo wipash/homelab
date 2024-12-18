@@ -47,3 +47,4 @@ resources:
   - ./esphome/ks.yaml
   - ./dashbrr/ks.yaml
   - ./omegabrr/ks.yaml
+  - ./cross-seed/ks.yaml
