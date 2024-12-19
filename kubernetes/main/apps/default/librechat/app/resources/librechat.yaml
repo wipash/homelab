@@ -267,9 +267,9 @@ modelSpecs:
       default: false
       preset:
         endpoint: openAI
-        model: o1-2024-12-17
-        maxContextTokens: 200000 # Maximum context tokens
-        max_tokens: 100000 # Maximum output tokens
+        model: o1-preview
+        maxContextTokens: 128000 # Maximum context tokens
+        max_tokens: 32768 # Maximum output tokens
         temperature: 1
         modelLabel: GPT-o1
         greeting: Ask me something complex!
