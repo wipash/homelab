@@ -722,7 +722,7 @@ spec:
           name: clean-cilium-state
           resources:
             requests:
-              cpu: 100m
+              cpu: 10m
               memory: 100Mi
           securityContext:
             privileged: true
