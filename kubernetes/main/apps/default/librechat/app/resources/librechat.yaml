@@ -258,7 +258,7 @@ modelSpecs:
           Personality: v2
 
 
-    - name: o1-preview
+    - name: o1
       label: GPT-o1
       description: GPT-o1 is good at performing complex reasoning. It's slower and more verbose than ChatGPT.
       iconURL: https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt-blue.png
@@ -267,7 +267,7 @@ modelSpecs:
       default: false
       preset:
         endpoint: openAI
-        model: o1-preview
+        model: o1-2024-12-17
         maxContextTokens: 128000 # Maximum context tokens
         max_tokens: 32768 # Maximum output tokens
         temperature: 1
