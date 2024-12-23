@@ -48,7 +48,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/harvco-temps-api
-              tag: latest@sha256:c33807c5aabb9b0045644b44b4351bddeda1191e38da2abbcd31ef85e5bf17db
+              tag: latest@sha256:b35bcf727342efaf2a626a4cdd5dbe3ead89c134c2bfa2311bf6ccf59a427de6
             envFrom: *envFrom
             env:
               LOG_LEVEL: debug
