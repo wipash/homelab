@@ -35,7 +35,7 @@ ingress:
     service: https://nginx-external-controller.networking.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
-  - hostname: "*.${SECRET_DOMAIN_HC}"
+  - hostname: "*.${SECRET_DOMAIN_HARVCO}"
     service: https://nginx-external-controller.networking.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
