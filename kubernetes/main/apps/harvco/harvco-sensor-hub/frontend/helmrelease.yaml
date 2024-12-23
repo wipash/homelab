@@ -38,7 +38,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/harvco-temps-frontend
-              tag: latest@sha256:795e8f1a3aadb022db51a766e63cafbcd27906371dcf8c0a5d5fe6506530f3bb
+              tag: latest@sha256:8716115b5375847f56f3477cbc1f789c1daa61302a9a71b053fce047aa5b02fa
             env:
               NEXT_PUBLIC_API_URL: https://sensorapi.${SECRET_DOMAIN_HARVCO}
             probes:
