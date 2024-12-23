@@ -118,3 +118,4 @@ spec:
         tls:
           - hosts:
               - *host
+            secretName: harvco-sensor-hub-api-tls
