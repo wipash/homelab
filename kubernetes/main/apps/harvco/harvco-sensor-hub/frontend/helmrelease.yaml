@@ -73,6 +73,10 @@ spec:
                 matchLabels:
                   app.kubernetes.io/name: *app
 
+    defaultPodOptions:
+      imagePullSecrets:
+        - name: ghcr-imagepullsecret
+
     service:
       app:
         controller: frontend
