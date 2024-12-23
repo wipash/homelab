@@ -42,15 +42,17 @@ spec:
             env:
               NEXT_PUBLIC_API_URL: https://sensorapi.${SECRET_DOMAIN_HARVCO}
             probes:
-              liveness:
-                enabled: false
-              readiness:
-                enabled: false
-              startup:
-                enabled: false
+              liveness: &probes
+                enabled: true
+                custom: true
                 spec:
-                  failureThreshold: 30
-                  periodSeconds: 5
+                  httpGet:
+                    path: /
+                    port: &port 8000
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
@@ -82,7 +84,7 @@ spec:
         controller: frontend
         ports:
           http:
-            port: 8000
+            port: *port
 
     ingress:
       app:
