@@ -10,3 +10,6 @@ spec:
     - dnsName: mqtt.${SECRET_DOMAIN_HARVCO}
       recordType: CNAME
       targets: ["${SECRET_CLOUDFLARE_DDNS_NAME}"]
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: 'false'
