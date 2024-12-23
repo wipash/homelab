@@ -27,6 +27,7 @@ spec:
   uninstall:
     keepHistory: false
   values:
+
     controllers:
       api:
         replicas: 1
@@ -81,6 +82,10 @@ spec:
               labelSelector:
                 matchLabels:
                   app.kubernetes.io/name: *app
+
+    defaultPodOptions:
+      imagePullSecrets:
+        - name: ghcr-imagepullsecret
 
     service:
       app:
