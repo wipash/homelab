@@ -27,7 +27,7 @@ spec:
       replicaCount: 2
       service:
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: internal.mcgrath.nz
+          external-dns.alpha.kubernetes.io/hostname: &hostname internal.mcgrath.nz
           io.cilium/lb-ipam-ips: ${SVC_INTERNAL_INGRESS_ADDR:=temp}
       ingressClassResource:
         name: internal
@@ -41,6 +41,8 @@ spec:
               values: ["internal"]
       allowSnippetAnnotations: true
       config:
+        allow-snippet-annotations: true
+        annotations-risk-level: Critical
         block-user-agents: "GPTBot,~*GPTBot*,ChatGPT-User,~*ChatGPT-User*,Google-Extended,~*Google-Extended*,CCBot,~*CCBot*,Omgilibot,~*Omgilibot*,FacebookBot,~*FacebookBot*" # taken from https://github.com/superseriousbusiness/gotosocial/blob/main/internal/web/robots.go
         client-body-buffer-size: 100M
         client-body-timeout: 120
@@ -75,6 +77,7 @@ spec:
             any: true
       extraArgs:
         default-ssl-certificate: networking/wildcard-tls
+        publish-status-address: *hostname
       terminationGracePeriodSeconds: 120
       topologySpreadConstraints:
         - maxSkew: 1
