@@ -20,7 +20,7 @@ resources:
   - ./miniflux/ks.yaml
   - ./mosquitto/ks.yaml
   - ./node-red/ks.yaml
-  - ./overseerr/ks.yaml
+  - ./jellyseerr/ks.yaml
   - ./paperless/ks.yaml
   - ./plex/ks.yaml
   - ./postgres-backup/ks.yaml
