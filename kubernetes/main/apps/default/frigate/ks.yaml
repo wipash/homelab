@@ -13,6 +13,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
     - name: node-feature-discovery-rules
+    - name: emqx-cluster
   path: ./kubernetes/main/apps/default/frigate/app
   prune: true
   sourceRef:
