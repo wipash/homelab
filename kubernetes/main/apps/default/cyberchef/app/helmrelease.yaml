@@ -83,13 +83,6 @@ spec:
     ingress:
       app:
         className: external
-        annotations:
-          external-dns.alpha.kubernetes.io/target: "external.mcgrath.nz"
-          hajimari.io/icon: mdi:hammer-wrench
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/name: Cyberchef
-          gethomepage.dev/icon: mdi-hammer-wrench
-          gethomepage.dev/group: Apps
         hosts:
           - host: &host chef.mcgrath.nz
             paths:

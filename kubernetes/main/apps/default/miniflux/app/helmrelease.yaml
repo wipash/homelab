@@ -111,8 +111,6 @@ spec:
     ingress:
       app:
         className: external
-        annotations:
-          external-dns.alpha.kubernetes.io/target: "external.mcgrath.nz"
         hosts:
           - host: &host "{{ .Release.Name }}.mcgrath.nz"
             paths:

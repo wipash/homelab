@@ -88,11 +88,6 @@ spec:
     ingress:
       app:
         className: internal
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/name: Mealie
-          gethomepage.dev/icon: mdi-food-apple-outline
-          gethomepage.dev/group: Apps
         hosts:
           - host: &host "mealie.mcgrath.nz"
             paths:

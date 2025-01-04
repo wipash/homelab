@@ -108,7 +108,6 @@ spec:
         className: external
         annotations:
           cert-manager.io/cluster-issuer: "letsencrypt-production"
-          external-dns.alpha.kubernetes.io/target: "external.mcgrath.nz"
         hosts:
           - host: &host sensorapi.${SECRET_DOMAIN_HARVCO}
             paths:

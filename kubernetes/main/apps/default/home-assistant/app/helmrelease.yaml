@@ -121,7 +121,6 @@ spec:
       app:
         className: external
         annotations:
-          external-dns.alpha.kubernetes.io/target: external.mcgrath.nz
           nginx.org/websocket-services: home-assistant
         hosts:
           - host: &host hass.mcgrath.nz
