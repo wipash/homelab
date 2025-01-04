@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://frigate.mcgrath.nz/api/config/schema.json
 mqtt:
-  host: mosquitto.default.svc.cluster.local
+  host: emqx-listeners.default.svc.cluster.local
   port: 1883
   topic_prefix: frigate
   user: '{FRIGATE_MQTT_USERNAME}'
