@@ -52,8 +52,6 @@ spec:
         rollOutPods: true
         ingress:
           enabled: true
-          annotations:
-            external-dns.alpha.kubernetes.io/target: internal.mcgrath.nz
           className: internal
           hosts: ["hubble.mcgrath.nz"]
     operator:

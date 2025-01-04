@@ -81,8 +81,6 @@ spec:
     ingress:
       app:
         className: external
-        annotations:
-          external-dns.alpha.kubernetes.io/target: external.mcgrath.nz
         hosts:
           - host: &host requests.mcgrath.nz
             paths:

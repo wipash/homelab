@@ -101,8 +101,6 @@ spec:
       app:
         enabled: true
         className: external
-        annotations:
-          external-dns.alpha.kubernetes.io/target: "external.mcgrath.nz"
         hosts:
           - host: &host sh.mcgrath.nz
             paths:

@@ -64,12 +64,6 @@ spec:
       main:
         enabled: true
         className: internal
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/name: Homebox
-          gethomepage.dev/icon: mdi-treasure-chest-outline
-          gethomepage.dev/group: Apps
-
         hosts:
           - host: &host "{{ .Release.Name }}.mcgrath.nz"
             paths:

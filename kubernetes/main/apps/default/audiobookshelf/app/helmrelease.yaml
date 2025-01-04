@@ -65,14 +65,6 @@ spec:
     ingress:
       main:
         className: internal
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: Media
-          gethomepage.dev/name: Audiobookshelf
-          gethomepage.dev/icon: audiobookshelf.svg
-          # gethomepage.dev/widget.type: audiobookshelf
-          # gethomepage.dev/widget.url: http://audiobookshelf.default.svc.cluster.local:8080
-          # gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_AUDIOBOOKSHELF_TOKEN}}"
         hosts:
           - host: &host audiobooks.mcgrath.nz
             paths:
