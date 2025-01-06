@@ -23,7 +23,7 @@ resources:
   - ./jellyseerr/ks.yaml
   - ./paperless/ks.yaml
   - ./plex/ks.yaml
-  - ./postgres-backup/ks.yaml
+  # - ./postgres-backup/ks.yaml
   - ./prowlarr/ks.yaml
   - ./qbittorrent/ks.yaml
   - ./radarr/ks.yaml
