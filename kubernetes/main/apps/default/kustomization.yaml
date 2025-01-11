@@ -49,3 +49,4 @@ resources:
   - ./omegabrr/ks.yaml
   - ./cross-seed/ks.yaml
   - ./wizarr/ks.yaml
+  - ./hoarder/ks.yaml
