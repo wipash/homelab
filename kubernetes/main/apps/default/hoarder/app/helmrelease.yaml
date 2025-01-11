@@ -54,6 +54,11 @@ spec:
                     key: encryption_key
               NEXTAUTH_URL: https://hoarder.mcgrath.nz
               DISABLE_NEW_RELEASE_CHECK: true
+              OPENAI_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hoarder-secret
+                    key: openai_api_key
             probes:
               liveness:
                 enabled: true
