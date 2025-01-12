@@ -30,8 +30,8 @@ interface:
   agents: true
 
 # Example Registration Object Structure (optional)
-registration:
-  socialLogins: ["openid"]
+# registration:
+#   socialLogins: ["openid"]
   # allowedDomains:
   # - "gmail.com"
 
