@@ -58,6 +58,56 @@ title = GitHub Pages
 host = pages.github.com
 
 
++ CDN
+menu = CDN
+title = CDN
+
+++ EdgeCast
+menu = adn.20765.psicdn.net
+title = adn.20765.psicdn.net (EdgeCast)
+host = adn.20765.psicdn.net
+
+++ Google
+menu = ajax.googleapis.com
+title = ajax.googleapis.com (Google)
+host = ajax.googleapis.com
+
+++ Microsoft
+menu = ajax.microsoft.com
+title = ajax.microsoft.com (Microsoft)
+host = ajax.microsoft.com
+
+++ Akamai
+menu = bahamut.akamaized.net
+title = bahamut.akamaized.net (Akamai)
+host = bahamut.akamaized.net
+
+++ CacheFly
+menu = cachefly.cachefly.net
+title = cachefly.cachefly.net (CacheFly)
+host = cachefly.cachefly.net
+
+++ Fastly
+menu = github.global.ssl.fastly.net
+title = github.global.ssl.fastly.net (Fastly)
+host = github.global.ssl.fastly.net
+
+++ NetDNA
+menu = netdna.bootstrapcdn.com
+title = netdna.bootstrapcdn.com (NetDNA)
+host = netdna.bootstrapcdn.com
+
+++ CloudFront
+menu = d1bxh8uas1mnw7.cloudfront.net
+title = d1bxh8uas1mnw7.cloudfront.net (CloudFront)
+host = d1bxh8uas1mnw7.cloudfront.net
+
+++ CloudFlare
+menu = cdnjs.cloudflare.com
+title = cdnjs.cloudflare.com (CloudFlare)
+host = cdnjs.cloudflare.com
+
+
 + DNS
 menu = DNS
 title = DNS
