@@ -57,6 +57,41 @@ menu = GitHub Pages
 title = GitHub Pages
 host = pages.github.com
 
+++ X
+menu = X
+title = X
+host = x.com
+
+++ Twimg
+menu = Twimg
+title = Twimg
+host = pbs.twimg.com
+
+++ GitHub
+menu = GitHub
+title = GitHub
+host = github.com
+
+++ OpenAI
+menu = OpenAI
+title = OpenAI
+host = api.openai.com
+
+++ Anthropic
+menu = Anthropic
+title = Anthropic
+host = api.anthropic.com
+
+++ Reddit
+menu = Reddit
+title = Reddit
+host = reddit.com
+
+++ Instagram
+menu = Instagram
+title = Instagram
+host = instagram.com
+
 
 + CDN
 menu = CDN
@@ -106,6 +141,11 @@ host = d1bxh8uas1mnw7.cloudfront.net
 menu = cdnjs.cloudflare.com
 title = cdnjs.cloudflare.com (CloudFlare)
 host = cdnjs.cloudflare.com
+
+++ Fastly
+menu = dualstack.reddit.map.fastly.net
+title = dualstack.reddit.map.fastly.net (Fastly)
+host = dualstack.reddit.map.fastly.net
 
 
 + DNS
