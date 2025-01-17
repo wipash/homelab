@@ -7,25 +7,9 @@ title = Network Latency Grapher
 remark = Welcome to the SmokePing website of WORKS Company. \
          Here you will learn all about the latency of our network.
 
-+ InternetSites
-
-menu = Internet Sites
-title = Internet Sites
-
-++ Facebook
-menu = Facebook
-title = Facebook
-host = facebook.com
-
-++ Youtube
-menu = YouTube
-title = YouTube
-host = youtube.com
-
-++ GoogleSearch
-menu = Google
-title = google.com
-host = google.com
++ CloudflareTunnel
+menu = Cloudflare Tunnel
+title = Cloudflare Tunnel
 
 ++ CloudflareTunnel1
 menu = Cloudflare Tunnel 1
@@ -61,6 +45,26 @@ host = 104.21.96.1
 menu = Cloudflare Tunnel 3
 title = Cloudflare Tunnel - 104.21.112.1
 host = 104.21.112.1
+
++ InternetSites
+
+menu = Internet Sites
+title = Internet Sites
+
+++ Facebook
+menu = Facebook
+title = Facebook
+host = facebook.com
+
+++ Youtube
+menu = YouTube
+title = YouTube
+host = youtube.com
+
+++ GoogleSearch
+menu = Google
+title = google.com
+host = google.com
 
 ++ CloudflarePages
 menu = Cloudflare Pages
