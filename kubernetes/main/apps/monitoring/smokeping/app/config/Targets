@@ -29,23 +29,38 @@ host = google.com
 
 ++ CloudflareTunnel1
 menu = Cloudflare Tunnel 1
-title = Cloudflare Tunnel - 104.21.64.1
-host = 104.21.64.1
+title = Cloudflare Tunnel - 104.21.16.1
+host = 104.21.16.1
 
 ++ CloudflareTunnel2
 menu = Cloudflare Tunnel 2
-title = Cloudflare Tunnel - 104.21.16.1
-host = 104.21.16.1
+title = Cloudflare Tunnel - 104.21.32.1
+host = 104.21.32.1
 
 ++ CloudflareTunnel3
 menu = Cloudflare Tunnel 3
 title = Cloudflare Tunnel - 104.21.48.1
 host = 104.21.48.1
 
-++ CloudflareTunnelMcGrath
-menu = Cloudflare Tunnel
-title = Cloudflare Tunnel - external.mcgrath.nz
-host = external.mcgrath.nz
+++ CloudflareTunnel4
+menu = Cloudflare Tunnel 3
+title = Cloudflare Tunnel - 104.21.64.1
+host = 104.21.64.1
+
+++ CloudflareTunnel5
+menu = Cloudflare Tunnel 3
+title = Cloudflare Tunnel - 104.21.80.1
+host = 104.21.80.1
+
+++ CloudflareTunnel6
+menu = Cloudflare Tunnel 3
+title = Cloudflare Tunnel - 104.21.96.1
+host = 104.21.96.1
+
+++ CloudflareTunnel7
+menu = Cloudflare Tunnel 3
+title = Cloudflare Tunnel - 104.21.112.1
+host = 104.21.112.1
 
 ++ CloudflarePages
 menu = Cloudflare Pages
