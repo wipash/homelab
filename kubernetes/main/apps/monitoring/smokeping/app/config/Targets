@@ -22,61 +22,41 @@ menu = YouTube
 title = YouTube
 host = youtube.com
 
-++ JupiterBroadcasting
-menu = JupiterBroadcasting
-title = JupiterBroadcasting
-host = jupiterbroadcasting.com
-
 ++ GoogleSearch
 menu = Google
 title = google.com
 host = google.com
 
-++ linuxserverio
-menu = linuxserver.io
-title = linuxserver.io
-host = linuxserver.io
+++ CloudflareTunnel1
+menu = Cloudflare Tunnel 1
+title = Cloudflare Tunnel - 104.21.64.1
+host = 104.21.64.1
 
-+ USA
+++ CloudflareTunnel2
+menu = Cloudflare Tunnel 2
+title = Cloudflare Tunnel - 104.21.16.1
+host = 104.21.16.1
 
-menu = North America
-title = North American Connectivity
+++ CloudflareTunnel3
+menu = Cloudflare Tunnel 3
+title = Cloudflare Tunnel - 104.21.48.1
+host = 104.21.48.1
 
-++ MIT
+++ CloudflareTunnelMcGrath
+menu = Cloudflare Tunnel
+title = Cloudflare Tunnel - external.mcgrath.nz
+host = external.mcgrath.nz
 
-menu = MIT
-title = Massachusetts Institute of Technology Webserver
-host = web.mit.edu
+++ CloudflarePages
+menu = Cloudflare Pages
+title = Cloudflare Pages - creativecollab.co.nz
+host = creativecollab.co.nz
 
-++ IU
+++ GitHubPages
+menu = GitHub Pages
+title = GitHub Pages
+host = pages.github.com
 
-menu = IU
-title = Indiana University
-host = www.indiana.edu
-
-++ UCB
-
-menu = U. C. Berkeley
-title = U. C. Berkeley Webserver
-host = www.berkeley.edu
-
-++ UCSD
-
-menu = U. C. San Diego
-title = U. C. San Diego Webserver
-host = ucsd.edu
-
-++ UMN
-
-menu =  University of Minnesota
-title = University of Minnesota
-host = twin-cities.umn.edu
-
-++ OSUOSL
-
-menu = Oregon State University Open Source Lab
-title = Oregon State University Open Source Lab
-host = osuosl.org
 
 + DNS
 menu = DNS
@@ -278,7 +258,7 @@ host = ec2.eu-west-2.amazonaws.com
 + Azure
 
 menu = Azure Services
-title = Azure Service
+title = Azure Services
 
 ++ AzurePortal
 menu = Azure Portal

@@ -1,7 +1,7 @@
 *** General ***
 
 owner    = Sean McGrath
-contact  = admin@linuxserver.io
+contact  = smokeping@dont.ltd
 mailhost = my.mail.host
 # NOTE: do not put the Image Cache below cgi-bin
 # since all files under cgi-bin will be executed ... this is not
