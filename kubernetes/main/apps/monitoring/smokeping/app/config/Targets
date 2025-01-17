@@ -122,7 +122,7 @@ menu = cachefly.cachefly.net
 title = cachefly.cachefly.net (CacheFly)
 host = cachefly.cachefly.net
 
-++ Fastly
+++ FastlyGithub
 menu = github.global.ssl.fastly.net
 title = github.global.ssl.fastly.net (Fastly)
 host = github.global.ssl.fastly.net
@@ -142,7 +142,7 @@ menu = cdnjs.cloudflare.com
 title = cdnjs.cloudflare.com (CloudFlare)
 host = cdnjs.cloudflare.com
 
-++ Fastly
+++ FastlyReddit
 menu = dualstack.reddit.map.fastly.net
 title = dualstack.reddit.map.fastly.net (Fastly)
 host = dualstack.reddit.map.fastly.net
