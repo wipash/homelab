@@ -86,10 +86,30 @@ menu = Twimg
 title = Twimg
 host = pbs.twimg.com
 
+++ Imgur
+menu = Imgur
+title = Imgur
+host = imgur.com
+
 ++ GitHub
 menu = GitHub
 title = GitHub
 host = github.com
+
+++ GitHubAPI
+menu = GitHub API
+title = GitHub API
+host = api.github.com
+
+++ ChatGPT
+menu = ChatGPT
+title = ChatGPT
+host = chatgpt.com
+
+++ Claude
+menu = Claude
+title = Claude
+host = claude.ai
 
 ++ OpenAI
 menu = OpenAI
