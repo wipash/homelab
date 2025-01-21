@@ -45,7 +45,7 @@ spec:
           app:
             image:
               repository: ghcr.io/onedr0p/home-assistant
-              tag: 2025.1.2
+              tag: 2025.1.3
             env:
               TZ: Pacific/Auckland
             envFrom:
