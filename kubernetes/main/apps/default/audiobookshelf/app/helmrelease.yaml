@@ -64,7 +64,7 @@ spec:
             port: *port
     ingress:
       main:
-        className: internal
+        className: external
         hosts:
           - host: &host audiobooks.mcgrath.nz
             paths:
