@@ -85,3 +85,5 @@ spec:
             subPath: Audiobooks
           - path: /podcasts
             subPath: Podcasts
+          - path: /ebooks
+            subPath: eBooks
