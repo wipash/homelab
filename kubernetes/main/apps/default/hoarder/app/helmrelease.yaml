@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: hoarder
+  name: &app hoarder
 spec:
   interval: 30m
   chart:
@@ -15,7 +15,9 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   values:
     defaultPodOptions:
       securityContext:
@@ -40,7 +42,7 @@ spec:
               CRAWLER_ENABLE_ADBLOCKER: true
               CRAWLER_STORE_SCREENSHOT: true
               DATA_DIR: /data
-              DISABLE_SIGNUPS: false
+              DISABLE_SIGNUPS: true
               MEILI_ADDR: http://hoarder-meilisearch.default.svc.cluster.local:7700
               MEILI_MASTER_KEY:
                 valueFrom:
@@ -67,9 +69,8 @@ spec:
             resources:
               requests:
                 cpu: 10m
-                memory: 512Mi
               limits:
-                memory: 2Gi
+                memory: 512Mi
 
       chrome:
         annotations:
@@ -102,11 +103,22 @@ spec:
       meilisearch:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod:
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: app.kubernetes.io/name
+                        operator: In
+                        values:
+                          - hoarder
+                  topologyKey: kubernetes.io/hostname
         containers:
           app:
             image:
               repository: docker.io/getmeili/meilisearch
-              tag: v1.12.6
+              tag: v1.12.7
             env:
               MEILI_NO_ANALYTICS: true
               MEILI_MASTER_KEY:
@@ -150,7 +162,7 @@ spec:
 
     persistence:
       data:
-        existingClaim: hoarder
+        existingClaim: *app
         advancedMounts:
           hoarder:
             app:
