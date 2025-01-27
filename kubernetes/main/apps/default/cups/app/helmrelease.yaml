@@ -44,6 +44,12 @@ spec:
               CUPS_ENV_DEBUG: "no"
               CUPS_HOSTNAME: printer.mcgrath.nz
 
+              CUPS_LPADMIN_PRINTER1: "lpadmin -p OfficeLaser -D 'Fuji Xerox DocuPrint CP225/228' -m 'foo2zjs:0/ppd/foo2zjs/Fuji_Xerox-DocuPrint_CM215.ppd' -o PageSize=A4 -o ColorMode=Color -v usb://FUJI%20XEROX/DocuPrint%20CP225/228%20w?serial=301943--CD"
+              CUPS_LPADMIN_PRINTER1_ENABLE: cupsenable OfficeLaser
+              CUPS_LPADMIN_PRINTER1_ACCEPT: cupsaccept OfficeLaser
+
+              # Hack to run arbitrary commands
+              # The init script will eval the content of any variable named CUPS_LPADMIN_PRINTER*
               CUPS_LPADMIN_PRINTERCONFIG: cupsctl ServerAlias=cups.mcgrath.nz
 
 
