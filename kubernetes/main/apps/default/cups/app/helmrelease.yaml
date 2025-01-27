@@ -79,7 +79,7 @@ spec:
       app:
         className: internal
         hosts:
-          - host: printer.mcgrath.nz
+          - host: cups.mcgrath.nz
             paths:
               - path: /
                 service:
