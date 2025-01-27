@@ -7,3 +7,4 @@ resources:
   - ./intel-gpu-device.yaml
   - ./sonoff-zigbee-device.yaml
   - ./e1000e-device.yaml
+  - ./printer-device.yaml

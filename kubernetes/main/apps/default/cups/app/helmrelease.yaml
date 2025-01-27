@@ -59,6 +59,7 @@ spec:
         pod:
           nodeSelector:
             kubernetes.io/hostname: hp1
+            # printer.feature.node.kubernetes.io/docuprint: "true"
 
     service:
       app:
