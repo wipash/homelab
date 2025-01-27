@@ -6,7 +6,7 @@ resources:
   - ./helmrelease.yaml
   - ../../../../templates/gatus/internal
 configMapGenerator:
-  - name: cupsd-config
+  - name: cups-config
     files:
       - cupsd.conf=./resources/cupsd.conf
 generatorOptions:
