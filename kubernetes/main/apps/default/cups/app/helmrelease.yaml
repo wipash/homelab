@@ -1,0 +1,100 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app cups
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    controllers:
+      *app :
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: docker.io/olbat/cupsd
+              tag: stable@sha256:9d4d382cb3fffa8fcb2b32e2bdd2af204a0a14fc9cfdce967bfb6439e0a2f97d
+            env:
+              TZ: "${TIMEZONE}"
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: &port 631
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              privileged: true
+            resources:
+              requests:
+                cpu: 10m
+                memory: 50Mi
+              limits:
+                memory: 512Mi
+
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: hp1
+
+    service:
+      app:
+        type: loadBalancer
+        externalTrafficPolicy: Cluster
+        annotations:
+          io.cilium/lb-ipam-ips: "${SVC_CUPS_ADDR}"
+          external-dns.alpha.kubernetes.io/hostname: "printer.mcgrath.nz"
+        controller: *app
+        ports:
+          http:
+            port: *port
+          udp:
+            port: *port
+            protocol: UDP
+
+    ingress:
+      app:
+        className: internal
+        hosts:
+          - host: printer.mcgrath.nz
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+
+    persistence:
+      config:
+        type: configMap
+        name: cups-config
+        globalMounts:
+          - path: /etc/cups/cupsd.conf
+            subPath: cupsd.conf
+      usb:
+        type: hostPath
+        hostPath: /var/run/dbus
+        globalMounts:
+          - path: /var/run/dbus

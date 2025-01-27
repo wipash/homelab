@@ -50,3 +50,4 @@ resources:
   - ./cross-seed/ks.yaml
   - ./wizarr/ks.yaml
   - ./hoarder/ks.yaml
+  - ./cups/ks.yaml
