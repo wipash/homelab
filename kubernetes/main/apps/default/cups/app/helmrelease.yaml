@@ -93,8 +93,13 @@ spec:
         globalMounts:
           - path: /etc/cups/cupsd.conf
             subPath: cupsd.conf
-      usb:
+      dbus:
         type: hostPath
         hostPath: /var/run/dbus
         globalMounts:
           - path: /var/run/dbus
+      usb:
+        type: hostPath
+        hostPath: /dev/bus/usb
+        globalMounts:
+          - path: /dev/bus/usb
