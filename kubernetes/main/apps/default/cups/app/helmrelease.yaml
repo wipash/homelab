@@ -42,6 +42,9 @@ spec:
               CUPS_ACCESS_LOGLEVEL: config
               CUPS_LOGLEVEL: info
               CUPS_ENV_DEBUG: "no"
+              CUPS_HOSTNAME: printer.mcgrath.nz
+
+              CUPS_LPADMIN_PRINTERCONFIG: cupsctl ServerAlias=cups.mcgrath.nz
 
 
             probes:
