@@ -21,4 +21,4 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      GATUS_SUBDOMAIN: printer
+      GATUS_SUBDOMAIN: cups
