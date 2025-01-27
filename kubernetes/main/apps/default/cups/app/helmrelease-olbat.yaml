@@ -30,20 +30,10 @@ spec:
         containers:
           app:
             image:
-              repository: docker.io/drpsychick/airprint-bridge
-              tag: latest@sha256:e1827c377151b7fbe0f7919b79704f4ce6da889728f38a29c0c8cfcb10310d46
+              repository: docker.io/olbat/cupsd
+              tag: stable@sha256:9d4d382cb3fffa8fcb2b32e2bdd2af204a0a14fc9cfdce967bfb6439e0a2f97d
             env:
               TZ: "${TIMEZONE}"
-              CUPS_ADMIN_USER: print
-              CUPS_ADMIN_PASSWORD: print
-              CUPS_WEBINTERFACE: "yes"
-              CUPS_SHARE_PRINTERS: "yes"
-              CUPS_REMOTE_ADMIN: "yes"
-              CUPS_ACCESS_LOGLEVEL: config
-              CUPS_LOGLEVEL: info
-              CUPS_ENV_DEBUG: "no"
-
-
             probes:
               liveness: &probes
                 enabled: true
@@ -98,6 +88,12 @@ spec:
                   port: http
 
     persistence:
+      config:
+        type: configMap
+        name: cups-config
+        globalMounts:
+          - path: /etc/cups/cupsd.conf
+            subPath: cupsd.conf
       dbus:
         type: hostPath
         hostPath: /var/run/dbus
