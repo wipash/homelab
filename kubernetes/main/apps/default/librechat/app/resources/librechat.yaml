@@ -91,28 +91,15 @@ fileConfig:
 
 endpoints:
   custom:
-    - name: Perplexity
-      apiKey: "$${PERPLEXITY_API_KEY}"
-      baseURL: "https://api.perplexity.ai/"
+    - name: LiteLLM
+      apiKey: "$${LITELLM_API_KEY}"
+      baseURL: "https://litellm.hlms.cloud"
       models:
-        default:
-          [
-            "llama-3.1-sonar-small-128k-online",
-            "llama-3.1-sonar-large-128k-online",
-            "llama-3.1-sonar-huge-128k-online",
-            "llama-3.1-sonar-small-128k-chat",
-            "llama-3.1-sonar-large-128k-chat",
-            "llama-3.1-8b-instruct",
-            "llama-3.1-70b-instruct",
-          ]
-        fetch: false # fetching list of models is not supported
+        default: ["gpt-4o"]
+        fetch: true
       titleConvo: true
-      titleModel: "llama-3.1-sonar-small-128k-chat"
-      summarize: false
-      summaryModel: "llama-3.1-sonar-small-128k-chat"
-      forcePrompt: false
-      dropParams: ["stop", "frequency_penalty"]
-      modelDisplayLabel: "Perplexity"
+      titleModel: "gpt-4o-mini"
+      modelDisplayLabel: "LiteLLM"
 
   assistants:
     disableBuilder: false
@@ -243,10 +230,10 @@ modelSpecs:
       showIconInHeader: true
       default: false
       preset:
-        endpoint: openAI
-        model: chatgpt-4o-latest
-        maxContextTokens: 128000 # Maximum context tokens
-        max_tokens: 16384 # Maximum output tokens
+        endpoint: LiteLLM
+        model: gpt-4o
+        #maxContextTokens: 128000 # Maximum context tokens
+        #max_tokens: 16384 # Maximum output tokens
         temperature: 0.7
         modelLabel: ChatGPT
         greeting: Hi, I'm ChatGPT! How can I help you today?
@@ -297,19 +284,3 @@ modelSpecs:
       preset:
         endpoint: agents
         agent_id: agent_sGMmnLSMbLgcbL1CAWU9s
-
-    # - name: "perplexity"
-    #   label: "Perplexity"
-    #   description: "Perplexity is an AI-driven search engine."
-    #   iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/perplexity.png"
-    #   showIconInMenu: true
-    #   showIconInHeader: true
-    #   default: false
-    #   preset:
-    #     endpoint: "Perplexity"
-    #     model: "llama-3.1-sonar-huge-128k-online"
-    #     maxContextTokens: 127000 # Maximum context tokens
-    #     max_tokens: 4096 # Maximum output tokens
-    #     temperature: 0.7
-    #     modelLabel: "Perplexity"
-    #     greeting: "Hey, what would you like to search the internet for? Please note that you'll get errors using this model if you have turned on the Artifacts feature."
