@@ -103,7 +103,8 @@ general_settings:
 
 litellm_settings:
   request_timeout: 600
-  json_logs: true
+  json_logs: false
   # enable_preview_features: true
-  redact_user_api_key_info: true
-  turn_off_message_logging: true
+  redact_user_api_key_info: false
+  turn_off_message_logging: false
+  set_verbose: true
