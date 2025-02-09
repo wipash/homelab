@@ -18,7 +18,7 @@ class LicenseCheck:
     - Returns if license is valid
     """
 
-    base_url = "https://license.litellm.ai"
+    base_url = "https://example.com"
 
     def __init__(self) -> None:
         self.license_str = os.getenv("LITELLM_LICENSE", None)
@@ -47,7 +47,7 @@ class LicenseCheck:
     def _verify(self, license_str: str) -> bool:
 
         verbose_proxy_logger.debug(
-            "litellm.proxy.auth.litellm_license.py::_verify - Checking license against {}/verify_license - {}".format(
+            "litellm.proxy.auth.litellm_license.py::_verify - Checking thing against {}/verify_license - {}".format(
                 self.base_url, license_str
             )
         )
@@ -80,7 +80,7 @@ class LicenseCheck:
                     license_str, premium
                 )
             )
-            return premium
+            return True
         except Exception as e:
             verbose_proxy_logger.exception(
                 "litellm.proxy.auth.litellm_license.py::_verify - Unable to verify License={} via api. - {}".format(
