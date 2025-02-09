@@ -46,7 +46,7 @@ spec:
               tag: main-dev@sha256:b1e28080a066e9227b93037514913f8764fe9eb0720592171a586d329ca4baee
             env:
               TZ: Pacific/Auckland
-              LITELLM_LOG: "INFO"
+              LITELLM_LOG: "DEBUG"
               LITELLM_MODE: "DEV" # This disabled loading .env env vars
               LITELLM_DONT_SHOW_FEEDBACK_BOX: "True"
               LITELLM_LICENSE: "testlicense"
