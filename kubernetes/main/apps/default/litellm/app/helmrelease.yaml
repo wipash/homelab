@@ -131,7 +131,7 @@ spec:
         type: configMap
         name: litellm-check
         globalMounts:
-          - path: /app/litellm/proxy/auth/litellm_license.py
+          - path: /usr/local/lib/python3.13/site-packages/litellm/proxy/auth/litellm_license.py
             subPath: check.py
             readOnly: true
 
