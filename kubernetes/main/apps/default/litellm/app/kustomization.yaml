@@ -9,8 +9,8 @@ configMapGenerator:
   - name: litellm-configmap
     files:
       - config.yaml=./resources/config.yaml
-  - name: litellm-check
+  - name: litellm-key
     files:
-      - check.py=./resources/check.py
+      - public_key.pem=./resources/public_key.pem
 generatorOptions:
   disableNameSuffixHash: true

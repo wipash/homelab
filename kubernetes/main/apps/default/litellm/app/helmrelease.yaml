@@ -127,12 +127,12 @@ spec:
             subPath: config.yaml
             readOnly: true
 
-      check:
+      key:
         type: configMap
-        name: litellm-check
+        name: litellm-key
         globalMounts:
-          - path: /usr/local/lib/python3.13/site-packages/litellm/proxy/auth/litellm_license.py
-            subPath: check.py
+          - path: /usr/local/lib/python3.13/site-packages/litellm/proxy/auth/public_key.pem
+            subPath: public_key.pem
             readOnly: true
 
       cache:
