@@ -49,7 +49,6 @@ spec:
               LITELLM_LOG: "DEBUG"
               LITELLM_MODE: "DEV" # This disabled loading .env env vars
               LITELLM_DONT_SHOW_FEEDBACK_BOX: "True"
-              LITELLM_LICENSE: "testlicense"
 
             envFrom: *envFrom
             args:
