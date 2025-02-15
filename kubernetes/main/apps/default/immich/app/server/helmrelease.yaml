@@ -79,7 +79,7 @@ spec:
               IMMICH_MEDIA_LOCATION: &mediaLocation /usr/src/app/upload
             resources:
               requests:
-                cpu: 50m
+                cpu: 10m
               limits:
                 memory: 1100M
             probes:

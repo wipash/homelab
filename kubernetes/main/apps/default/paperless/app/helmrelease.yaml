@@ -106,7 +106,7 @@ spec:
               supplementalGroups: ["568", "65537"]
             resources:
               requests:
-                cpu: 25m
+                cpu: 10m
                 memory: 512Mi
               limits:
                 memory: 3Gi

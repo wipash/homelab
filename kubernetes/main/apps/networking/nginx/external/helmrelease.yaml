@@ -83,7 +83,7 @@ spec:
         enabled: false
       resources:
         requests:
-          cpu: 50m
+          cpu: 10m
           memory: 256Mi
         limits:
           memory: 500Mi
