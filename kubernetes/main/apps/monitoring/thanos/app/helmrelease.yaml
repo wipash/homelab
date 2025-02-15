@@ -6,7 +6,7 @@ metadata:
   name: thanos
   namespace: monitoring
 spec:
-  interval: 15m
+  interval: 10m
   chart:
     spec:
       chart: thanos
@@ -15,7 +15,7 @@ spec:
         kind: HelmRepository
         name: bitnami
         namespace: flux-system
-      interval: 15m
+      interval: 10m
   maxHistory: 3
   install:
     createNamespace: true
@@ -81,7 +81,7 @@ spec:
       resources:
         requests:
           memory: 128Mi
-          cpu: 15m
+          cpu: 10m
         limits:
           memory: 1Gi
 
@@ -98,7 +98,7 @@ spec:
       resources:
         requests:
           memory: 128Mi
-          cpu: 15m
+          cpu: 10m
         limits:
           memory: 1Gi
       ingress:
@@ -136,7 +136,7 @@ spec:
       resources:
         requests:
           memory: 256Mi
-          cpu: 15m
+          cpu: 10m
         limits:
           memory: 1Gi
       ingress:
@@ -167,7 +167,7 @@ spec:
       resources:
         requests:
           memory: 128Mi
-          cpu: 15m
+          cpu: 10m
         limits:
           memory: 1Gi
 

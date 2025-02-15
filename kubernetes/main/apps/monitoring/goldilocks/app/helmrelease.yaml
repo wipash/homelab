@@ -30,7 +30,7 @@ spec:
     controller:
       resources:
         requests:
-          cpu: 25m
+          cpu: 10m
           memory: 256Mi
         limits:
           memory: 256Mi
@@ -49,7 +49,7 @@ spec:
               - *host
       resources:
         requests:
-          cpu: 25m
+          cpu: 10m
           memory: 256Mi
         limits:
           memory: 256Mi
