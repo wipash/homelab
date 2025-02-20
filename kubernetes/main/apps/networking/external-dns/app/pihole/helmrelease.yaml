@@ -34,7 +34,7 @@ spec:
             key: *name
     extraArgs:
       - --ignore-ingress-tls-spec
-      - --pihole-server=https://10.0.16.4
+      - --pihole-server=https://pi.hole
     triggerLoopOnEvent: true
     policy: upsert-only
     registry: noop
