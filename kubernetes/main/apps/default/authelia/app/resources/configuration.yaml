@@ -33,7 +33,7 @@ session:
     - name: mcgrath_session
       domain: mcgrath.nz
       authelia_url: https://auth.mcgrath.nz
-      default_redirection_url: https://mcgrath.nz
+      default_redirection_url: https://auth.mcgrath.nz
   redis:
     database_index: 4
     host: dragonfly.database.svc.cluster.local
@@ -187,4 +187,13 @@ identity_providers:
         pre_configured_consent_duration: 1y
         scopes: ["openid", "profile", "groups", "email"]
         redirect_uris: ["https://dashbrr.mcgrath.nz/api/auth/callback"]
+        userinfo_signed_response_alg: none
+      - id: hoarder
+        description: Hoarder
+        secret: "$${HOARDER_CLIENT_SECRET}"
+        public: false
+        authorization_policy: two_factor
+        pre_configured_consent_duration: 1y
+        scopes: ["openid", "profile", "groups", "email"]
+        redirect_uris: ["https://hoarder.mcgrath.nz/api/auth/callback/custom"]
         userinfo_signed_response_alg: none
