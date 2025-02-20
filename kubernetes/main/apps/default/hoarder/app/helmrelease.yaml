@@ -43,6 +43,7 @@ spec:
               CRAWLER_STORE_SCREENSHOT: true
               DATA_DIR: /data
               DISABLE_SIGNUPS: true
+              DISABLE_PASSWORD_AUTH: true
               MEILI_ADDR: http://hoarder-meilisearch.default.svc.cluster.local:7700
               MEILI_MASTER_KEY:
                 valueFrom:
@@ -56,6 +57,14 @@ spec:
                     key: encryption_key
               NEXTAUTH_URL: https://hoarder.mcgrath.nz
               DISABLE_NEW_RELEASE_CHECK: true
+              OAUTH_CLIENT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: hoarder-secret
+                    key: oidc_client_secret
+              OAUTH_CLIENT_ID: hoarder
+              OAUTH_PROVIDER_NAME: Authelia
+              OAUTH_ALLOW_DANGEROUS_EMAIL_ACCOUNT_LINKING: true
               OPENAI_API_KEY:
                 valueFrom:
                   secretKeyRef:
