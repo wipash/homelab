@@ -33,7 +33,7 @@ session:
     - name: mcgrath_session
       domain: mcgrath.nz
       authelia_url: https://auth.mcgrath.nz
-      default_redirection_url: https://auth.mcgrath.nz
+      default_redirection_url: https://mcgrath.nz
   redis:
     database_index: 4
     host: dragonfly.database.svc.cluster.local
