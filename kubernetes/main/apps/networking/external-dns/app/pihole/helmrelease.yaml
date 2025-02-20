@@ -33,9 +33,9 @@ spec:
             name: &secret external-dns-pihole-secret
             key: *name
     extraArgs:
-      - --events
       - --ignore-ingress-tls-spec
-      - --pihole-server=http://10.0.16.4
+      - --pihole-server=https://10.0.16.4
+    triggerLoopOnEvent: true
     policy: upsert-only
     registry: noop
     sources: ["service", "ingress"]
