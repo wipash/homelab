@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: rook-ceph-cluster
 spec:
-  interval: 30m
+  interval: 1h
   timeout: 15m
   chart:
     spec:
@@ -36,18 +36,18 @@ spec:
       dashboard:
         ingressClassName: internal
         host:
-          name: &host rook.mcgrath.nz
+          name: rook.mcgrath.nz
           path: /
-        tls:
-          - hosts: [*host]
     toolbox:
       enabled: true
-    configOverride: |
-      [global]
-      bdev_enable_discard = true
-      bdev_async_discard = true
-      osd_class_update_on_start = false
     cephClusterSpec:
+      cephConfig:
+        global:
+          bdev_enable_discard: "true" # quote
+          osd_class_update_on_start: "false" # quote
+          device_failure_prediction_mode: local # requires mgr module
+        mgr:
+          mgr/crash/warn_recent_interval: "7200" # 2h
       cephVersion:
         image: quay.io/ceph/ceph:v19.2.1 # TODO: Remove when Rook is updated >= v19.2.0
       crashCollector:
@@ -62,6 +62,8 @@ spec:
         prometheusEndpoint: http://prometheus-operated.monitoring.svc.cluster.local:9090
       mgr:
         modules:
+          - name: diskprediction_local
+            enabled: true
           - name: insights
             enabled: true
           - name: pg_autoscaler
@@ -83,15 +85,6 @@ spec:
         deviceFilter: nvme0n1
         config:
           osdsPerDevice: "1"
-      placement:
-        mgr: &placement
-          nodeAffinity:
-            requiredDuringSchedulingIgnoredDuringExecution:
-              nodeSelectorTerms:
-                - matchExpressions:
-                    - key: node-role.kubernetes.io/control-plane
-                      operator: Exists
-        mon: *placement
     cephBlockPools:
       - name: ceph-blockpool
         spec:
@@ -105,6 +98,7 @@ spec:
           reclaimPolicy: Delete
           allowVolumeExpansion: true
           volumeBindingMode: Immediate
+          #mountOptions: ["discard"]
           parameters:
             imageFormat: "2"
             imageFeatures: layering
