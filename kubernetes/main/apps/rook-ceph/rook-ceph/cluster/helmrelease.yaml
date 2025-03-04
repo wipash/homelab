@@ -98,7 +98,7 @@ spec:
           reclaimPolicy: Delete
           allowVolumeExpansion: true
           volumeBindingMode: Immediate
-          #mountOptions: ["discard"]
+          mountOptions: ["discard"]
           parameters:
             imageFormat: "2"
             imageFeatures: layering
