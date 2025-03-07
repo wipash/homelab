@@ -79,14 +79,16 @@ spec:
         supplementalGroups: [44, 109, 65537]
         seccompProfile: { type: RuntimeDefault }
       affinity:
-        podAntiAffinity:
+        nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: NotIn
+                    values: ["hp3"]
                   - key: google.feature.node.kubernetes.io/coral
-                    operator: In
+                    operator: NotIn
                     values: ["true"]
-              topologyKey: kubernetes.io/hostname
       nodeSelector:
         intel.feature.node.kubernetes.io/gpu: "true"
     service:
