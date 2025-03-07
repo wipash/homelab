@@ -45,10 +45,10 @@ resources:
   - ./librechat/ks.yaml
   - ./maintainerr/ks.yaml
   - ./esphome/ks.yaml
-  - ./dashbrr/ks.yaml
+  # - ./dashbrr/ks.yaml
   - ./omegabrr/ks.yaml
   - ./cross-seed/ks.yaml
   - ./wizarr/ks.yaml
   - ./hoarder/ks.yaml
   - ./cups/ks.yaml
-  - ./litellm/ks.yaml
+  # - ./litellm/ks.yaml
