@@ -8,6 +8,7 @@ metadata:
 spec:
   dependsOn:
     - name: external-secrets-stores
+      namespace: kube-system
   path: ./kubernetes/main/apps/flux-system/addons/monitoring
   prune: true
   sourceRef:
@@ -27,6 +28,7 @@ metadata:
 spec:
   dependsOn:
     - name: external-secrets-stores
+      namespace: kube-system
   path: ./kubernetes/main/apps/flux-system/addons/webhooks
   prune: true
   sourceRef:

@@ -17,6 +17,7 @@ spec:
   dependsOn:
     - name: dragonfly-cluster
     - name: external-secrets-stores
+      namespace: kube-system
   wait: false
   interval: 30m
   retryInterval: 1m

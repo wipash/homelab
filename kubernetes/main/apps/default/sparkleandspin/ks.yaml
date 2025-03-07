@@ -19,6 +19,7 @@ spec:
   wait: false
   dependsOn:
     - name: external-secrets-stores
+      namespace: kube-system
     - name: ghcr-imagepullsecret
     - name: cloudnative-pg-cluster
     - name: dragonfly-cluster
