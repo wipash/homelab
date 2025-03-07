@@ -19,6 +19,7 @@ spec:
   interval: 10m
   dependsOn:
     - name: external-secrets-stores
+      namespace: kube-system
     - name: volsync
   postBuild:
     substitute:

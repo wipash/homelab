@@ -14,7 +14,7 @@ tasks:
     interactive: true
     cmd: kubectl browse-pvc --context {{.cluster}} --namespace {{.ns}} {{.claim}}
     vars:
-      cluster: '{{.cluster | default "main"}}'
+      cluster: '{{.cluster | default "homelab"}}'
       ns: '{{.ns | default "default"}}'
     requires:
       vars: ["claim"]
@@ -27,7 +27,7 @@ tasks:
         node: Node to drain (required)
     cmd: kubectl --context {{.cluster}} drain {{.node}} --ignore-daemonsets --delete-local-data --force
     vars:
-      cluster: '{{.cluster | default "main"}}'
+      cluster: '{{.cluster | default "homelab"}}'
     requires:
       vars: ["node"]
 
@@ -40,4 +40,4 @@ tasks:
       - for: ["Evicted", "Failed", "Succeeded"]
         cmd: kubectl --context {{.cluster}} delete pods --field-selector status.phase={{.ITEM}} -A --ignore-not-found=true
     vars:
-      cluster: '{{.cluster | default "main"}}'
+      cluster: '{{.cluster | default "homelab"}}'
