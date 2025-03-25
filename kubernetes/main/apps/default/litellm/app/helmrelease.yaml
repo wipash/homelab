@@ -43,7 +43,7 @@ spec:
           app:
             image:
               repository: ghcr.io/berriai/litellm-non_root
-              tag: main-dev@sha256:4a630fb6582466c24ab4e14434829978f52cafa7aeb2c62ef7ba8a33789a35be
+              tag: main-dev@sha256:460b40fbf56909e89b266715bcd1aac5a62234ad3ab748ff527ff445c08e653f
             env:
               TZ: Pacific/Auckland
               LITELLM_LOG: "DEBUG"
