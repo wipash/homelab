@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: cloudflare-ddns
+  name: &app cloudflare-ddns
 spec:
   interval: 30m
   chart:
@@ -25,27 +25,68 @@ spec:
   values:
     controllers:
       cloudflare-ddns:
-        type: cronjob
-        cronjob:
-          schedule: "@hourly"
-          successfulJobsHistory: 0
+        annotations:
+          reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
-              repository: ghcr.io/onedr0p/kubanetics
-              tag: 2025.3.2@sha256:309a7587c2aa7ce6a99812a61c5024240a21b708f94802a09105c61513572164
-            command: ["/app/cloudflare-ddns.sh"]
+              repository: ghcr.io/larivierec/cloudflare-ddns
+              tag: v1.0.8@sha256:50aea3e8bd93148b8c5b945ca670e175bb1d7dc7b820b77aefcc0dd7951254a9
+            args:
+              - --zone-name
+              - dont.ltd
+              - --record-name
+              - plz.dont.ltd
+              - --provider
+              - random
+            envFrom:
+              - secretRef:
+                  name: cloudflare-ddns-secret
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health/alive
+                    port: &healthPort 8080
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health/ready
+                    port: *healthPort
             resources:
               requests:
-                cpu: 5m
+                memory: 64Mi
+                cpu: 10m
               limits:
-                memory: 16Mi
-    persistence:
-      config:
-        type: secret
-        name: cloudflare-ddns-secret
-        defaultMode: 0775
-        globalMounts:
-          - path: /app/cloudflare-ddns.sh
-            subPath: cloudflare-ddns.sh
-            readOnly: true
+                memory: 128Mi
+    service:
+      app:
+        controller: *app
+        ports:
+          http:
+            port: 9000
+          health:
+            port: *healthPort
+    serviceMonitor:
+      app:
+        serviceName: *app
+        endpoints:
+          - port: health
+            scheme: http
+            path: /metrics
+            interval: 30s
+            scrapeTimeout: 30s
+    ingress:
+      app:
+        className: internal
+        hosts:
+          - host: "ddns.mcgrath.nz"
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
