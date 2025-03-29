@@ -9,6 +9,7 @@ spec:
   targetNamespace: harvco
   dependsOn:
     - name: external-secrets-stores
+      namespace: kube-system
   path: ./kubernetes/main/apps/harvco/harvco-sensor-hub/mosquitto
   prune: true
   sourceRef:
