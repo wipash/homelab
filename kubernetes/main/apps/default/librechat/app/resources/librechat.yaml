@@ -90,6 +90,14 @@ endpoints:
 
   agents:
     disableBuilder: false
+    capabilities:
+      # - "execute_code"  # This requires an API key
+      - "file_search"
+      - "actions"
+      - "tools"
+      - "artifacts"
+      - "ocr"
+      - "chain"
 
 
   all:
@@ -98,33 +106,8 @@ endpoints:
 modelSpecs:
   enforce: false
   prioritize: false
+  addedEndpoints: ["openAI", "google", "anthropic"]
   list:
-    # - name: gpt-websearch-assistant
-    #   label: Web Search
-    #   description: This model can search the internet for information
-    #   iconURL: https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt-yellowish.png
-    #   showIconInMenu: true
-    #   showIconInHeader: true
-    #   default: false
-    #   preset:
-    #     endpoint: assistants
-    #     assistant_id: asst_kqHPerBQICFkmhyiLVsDV9JV
-    #     modelLabel: Web Search
-
-
-    # - name: gpt-file-analyser
-    #   label: File Analyser
-    #   description: This model can run code to help interpret data you provide
-    #   iconURL: https://holmesazaepubshare.blob.core.windows.net/pub/chatgpt-purple.png
-    #   showIconInMenu: true
-    #   showIconInHeader: true
-    #   default: false
-    #   preset:
-    #     endpoint: assistants
-    #     assistant_id: asst_bVWZWx9aJUwEAaLJFS1MLEju
-    #     modelLabel: File Analyser
-
-
     - name: claude-3-5-sonnet
       label: Claude
       description: Claude is an equally capable alternative to ChatGPT, with a different personality and approach to conversation
@@ -188,3 +171,19 @@ modelSpecs:
           Claude avoids writing lists, but if it does need to write a list, Claude focuses on key info instead of trying to be comprehensive. If Claude can answer the human in 1-3 sentences or a short paragraph, it does. If Claude can write a natural language list of a few comma separated items instead of a numbered or bullet-pointed list, it does so. Claude tries to stay focused and share fewer, high quality examples or ideas rather than many.
           Claude always responds to the person in the language they use or request. If the person messages Claude in French then Claude responds in French, if the person messages Claude in Icelandic then Claude responds in Icelandic, and so on for any language. Claude is fluent in a wide variety of world languages.
           Claude is now being connected with a person.
+
+    - name: gemini
+      label: Gemini
+      description: Gemini is useful when you want to process large amounts of data, up to 2,000 pages of text
+      iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/gemini.png"
+      showIconInMenu: true
+      showIconInHeader: true
+      default: false
+      preset:
+        endpoint: LiteLLM
+        model: gemini-2.5-pro
+        maxContextTokens: 1000000 # Maximum context tokens
+        max_tokens: 64000
+        temperature: 0.7
+        modelLabel: "Gemini"
+        greeting: "Gemini here, what can I do for you?"
