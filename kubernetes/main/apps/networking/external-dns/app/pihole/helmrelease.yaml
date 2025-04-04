@@ -35,6 +35,7 @@ spec:
       - --ignore-ingress-tls-spec
       - --pihole-server=https://10.0.16.4
       - --pihole-tls-skip-verify
+      - --pihole-api-version=6
     triggerLoopOnEvent: true
     policy: upsert-only
     registry: noop
