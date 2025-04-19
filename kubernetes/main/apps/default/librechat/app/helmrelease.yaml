@@ -58,7 +58,6 @@ spec:
             dependsOn:
               - mongodb
               - meilisearch
-              #- litellm
               - ragapi
 
             envFrom: *envFrom
@@ -243,12 +242,19 @@ spec:
             mongodb:
               - subPath: mongodb
                 path: /data/db
-            meilisearch:
-              - subPath: meilisearch
-                path: /meili_data
             ragapi:
               - subPath: ragapi
                 path: /app/uploads
+
+      meilisearch:
+        type: persistentVolumeClaim
+        storageClass: ceph-block
+        accessMode: ReadWriteOnce
+        size: 1Gi
+        advancedMounts:
+          librechat:
+            meilisearch:
+              - path: /meili_data
 
     serviceMonitor:
       app:
