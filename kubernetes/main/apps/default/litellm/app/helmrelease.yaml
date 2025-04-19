@@ -126,14 +126,6 @@ spec:
             subPath: config.yaml
             readOnly: true
 
-      key:
-        type: configMap
-        name: litellm-key
-        globalMounts:
-          - path: /usr/local/lib/python3.13/site-packages/litellm/proxy/auth/public_key.pem
-            subPath: public_key.pem
-            readOnly: true
-
       cache:
         type: emptyDir
         globalMounts:
