@@ -178,7 +178,12 @@ spec:
             app:
               - path: /data
                 subPath: hoarder
+
+      meilisearch:
+        type: persistentVolumeClaim
+        storageClass: ceph-block
+        size: 1Gi
+        advancedMounts:
           meilisearch:
             app:
               - path: /meili_data
-                subPath: meilisearch
