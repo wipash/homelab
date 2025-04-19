@@ -110,7 +110,7 @@ modelSpecs:
   list:
     - name: claude-3-5-sonnet
       label: Claude
-      description: Claude is an equally capable alternative to ChatGPT, with a different personality and approach to conversation
+      description: Anthropic Claude 3.7 Sonnet
       iconURL: https://holmesazaepubshare.blob.core.windows.net/pub/claude.png
       showIconInMenu: true
       showIconInHeader: true
@@ -174,7 +174,7 @@ modelSpecs:
 
     - name: gemini
       label: Gemini
-      description: Gemini is useful when you want to process large amounts of data, up to 2,000 pages of text
+      description: Google Gemini 2.5 Pro
       iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/gemini.png"
       showIconInMenu: true
       showIconInHeader: true
