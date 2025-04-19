@@ -182,6 +182,7 @@ spec:
       meilisearch:
         type: persistentVolumeClaim
         storageClass: ceph-block
+        accessMode: ReadWriteOnce
         size: 1Gi
         advancedMounts:
           meilisearch:
