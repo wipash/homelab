@@ -181,7 +181,7 @@ modelSpecs:
       default: false
       preset:
         endpoint: LiteLLM
-        model: gemini-2.5-pro
+        model: vertex-gemini-2.5-pro
         maxContextTokens: 1000000 # Maximum context tokens
         max_tokens: 64000
         temperature: 0.7
