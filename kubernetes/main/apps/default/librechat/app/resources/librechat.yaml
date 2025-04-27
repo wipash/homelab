@@ -107,7 +107,7 @@ endpoints:
 modelSpecs:
   enforce: false
   prioritize: false
-  addedEndpoints: ["openAI", "google", "anthropic", "LiteLLM"]
+  addedEndpoints: ["openAI", "google", "anthropic", "LiteLLM", "agents"]
   list:
     - name: claude-3-5-sonnet
       label: Claude
