@@ -20,3 +20,4 @@ resources:
   - ./spegel/ks.yaml
   - ./kubelet-csr-approver/ks.yaml
   - ./fstrim/ks.yaml
+  - ./kube-image-keeper/ks.yaml
