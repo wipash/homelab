@@ -14,7 +14,7 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: akl-flux-cluster
+    name: flux-cluster
     namespace: flux-system
   wait: false
   interval: 30m
