@@ -41,7 +41,7 @@ resources:
   - ./autobrr/ks.yaml
   - ./unpackerr/ks.yaml
   - ./ghost/ks.yaml
-  - ./librechat/ks.yaml
+  # - ./librechat/ks.yaml
   - ./maintainerr/ks.yaml
   - ./esphome/ks.yaml
   # - ./dashbrr/ks.yaml
