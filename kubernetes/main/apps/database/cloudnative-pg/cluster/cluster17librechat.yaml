@@ -59,11 +59,11 @@ spec:
   # Note: previousCluster needs to be set to the name of the previous
   # cluster when recovering from an existing cnpg cluster
   bootstrap:
-    initdb:
-      database: librechat
-      owner: librechat
-      postInitApplicationSQL:
-        - CREATE EXTENSION IF NOT EXISTS vector;
+    # initdb:
+    #   database: librechat
+    #   owner: librechat
+    #   postInitApplicationSQL:
+    #     - CREATE EXTENSION IF NOT EXISTS vector;
     recovery:
       source: &previousCluster postgres16-librechat-v1
   # Note: externalClusters is needed when recovering from an existing cnpg cluster
