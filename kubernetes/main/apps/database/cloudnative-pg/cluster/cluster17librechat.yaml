@@ -3,10 +3,10 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: postgres16-immich
+  name: postgres17-librechat
 spec:
   instances: 2
-  imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.4-v0.3.0
+  imageName: ghcr.io/cloudnative-pg/postgresql:17.4
   primaryUpdateStrategy: unsupervised
   storage:
     size: 20Gi
@@ -16,7 +16,7 @@ spec:
   enableSuperuserAccess: true
   postgresql:
     shared_preload_libraries:
-      - "vectors.so"
+      - "vector.so"
     parameters:
       max_connections: "200"
       shared_buffers: 256MB
@@ -48,7 +48,7 @@ spec:
       endpointURL: https://s3.us-west-001.backblazeb2.com
       # Note: serverName version needs to be incremented
       # when recovering from an existing cnpg cluster
-      serverName: &currentCluster postgres16-immich-v3
+      serverName: &currentCluster postgres17-librechat-v1
       s3Credentials:
         accessKeyId:
           name: cloudnative-pg-secret
@@ -59,16 +59,13 @@ spec:
   # Note: previousCluster needs to be set to the name of the previous
   # cluster when recovering from an existing cnpg cluster
   bootstrap:
-    # initdb:
-    #   database: immich
-    #   owner: immich
-    #   postInitApplicationSQL:
-    #     - CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-    #     - CREATE EXTENSION IF NOT EXISTS cube;
-    #     - CREATE EXTENSION IF NOT EXISTS earthdistance;
-    #     - CREATE EXTENSION IF NOT EXISTS vectors;
+    initdb:
+      database: librechat
+      owner: librechat
+      postInitApplicationSQL:
+        - CREATE EXTENSION IF NOT EXISTS vector;
     recovery:
-      source: &previousCluster postgres16-immich-v2
+      source: &previousCluster postgres16-librechat-v1
   # Note: externalClusters is needed when recovering from an existing cnpg cluster
   externalClusters:
     - name: *previousCluster
