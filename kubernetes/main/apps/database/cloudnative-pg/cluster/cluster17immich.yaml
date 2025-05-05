@@ -5,7 +5,7 @@ kind: Cluster
 metadata:
   name: postgres17-immich
 spec:
-  instances: 1
+  instances: 2
   imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:17.4
   primaryUpdateStrategy: unsupervised
   storage:
