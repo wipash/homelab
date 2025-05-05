@@ -3,7 +3,7 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Backup
 metadata:
   name: backup-manual-${cluster}
-  namespace: default
+  namespace: database
 spec:
   cluster:
     name: ${cluster}
