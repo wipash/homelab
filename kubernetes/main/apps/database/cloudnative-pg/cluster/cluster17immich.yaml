@@ -5,7 +5,7 @@ kind: Cluster
 metadata:
   name: postgres17-immich
 spec:
-  instances: 2
+  instances: 1
   imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:17.4
   primaryUpdateStrategy: unsupervised
   storage:
@@ -67,11 +67,29 @@ spec:
     #     - CREATE EXTENSION IF NOT EXISTS cube;
     #     - CREATE EXTENSION IF NOT EXISTS earthdistance;
     #     - CREATE EXTENSION IF NOT EXISTS vectors;
-    recovery:
-      source: &previousCluster postgres16-immich-v3
+    # recovery:
+    #   source: &previousCluster postgres16-immich-v3
+    initdb:
+      import:
+        type: monolith
+        databases:
+          - "*"
+        roles:
+          - "*"
+        source:
+          externalCluster: &previousCluster postgres16-immich
   # Note: externalClusters is needed when recovering from an existing cnpg cluster
   externalClusters:
+    # - name: *previousCluster
+    #   barmanObjectStore:
+    #     <<: *barmanObjectStore
+    #     serverName: *previousCluster
     - name: *previousCluster
-      barmanObjectStore:
-        <<: *barmanObjectStore
-        serverName: *previousCluster
+      connectionParameters:
+        host: postgres16-immich-rw.default.svc.cluster.local
+        user: postgres
+        dbname: postgres
+        sslmode: require
+      password:
+        name: cloudnative-pg-secret
+        key: password
