@@ -13,17 +13,16 @@ resources:
   - ./frigate/ks.yaml
   - ./ghcr-imagepullsecret/ks.yaml
   - ./home-assistant/ks.yaml
-  - ./homebox/ks.yaml
+  # - ./homebox/ks.yaml
   - ./immich/ks.yaml
   - ./lldap/ks.yaml
   - ./mealie/ks.yaml
-  - ./miniflux/ks.yaml
+  # - ./miniflux/ks.yaml
   - ./emqx/ks.yaml
   - ./node-red/ks.yaml
   - ./jellyseerr/ks.yaml
   - ./paperless/ks.yaml
   - ./plex/ks.yaml
-  # - ./postgres-backup/ks.yaml
   - ./prowlarr/ks.yaml
   - ./qbittorrent/ks.yaml
   - ./radarr/ks.yaml
@@ -48,7 +47,6 @@ resources:
   # - ./dashbrr/ks.yaml
   - ./omegabrr/ks.yaml
   #- ./cross-seed/ks.yaml
-  - ./wizarr/ks.yaml
   - ./hoarder/ks.yaml
   - ./cups/ks.yaml
   # - ./litellm/ks.yaml
