@@ -71,7 +71,7 @@ spec:
     #     serverName: *previousCluster
     - name: *previousCluster
       connectionParameters:
-        host: postgres16-rw.default.svc.cluster.local
+        host: postgres16-rw.database.svc.cluster.local
         user: postgres
         dbname: postgres
         sslmode: require
