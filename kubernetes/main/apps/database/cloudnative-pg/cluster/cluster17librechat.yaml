@@ -5,7 +5,7 @@ kind: Cluster
 metadata:
   name: postgres17-librechat
 spec:
-  instances: 2
+  instances: 1
   imageName: ghcr.io/cloudnative-pg/postgresql:17.4
   primaryUpdateStrategy: unsupervised
   storage:
@@ -64,11 +64,29 @@ spec:
     #   owner: librechat
     #   postInitApplicationSQL:
     #     - CREATE EXTENSION IF NOT EXISTS vector;
-    recovery:
-      source: &previousCluster postgres16-librechat-v1
+    # recovery:
+    #   source: &previousCluster postgres16-librechat-v1
+    initdb:
+      import:
+        type: monolith
+        databases:
+          - "*"
+        roles:
+          - "*"
+        source:
+          externalCluster: &previousCluster postgres16-librechat
   # Note: externalClusters is needed when recovering from an existing cnpg cluster
   externalClusters:
+    # - name: *previousCluster
+    #   barmanObjectStore:
+    #     <<: *barmanObjectStore
+    #     serverName: *previousCluster
     - name: *previousCluster
-      barmanObjectStore:
-        <<: *barmanObjectStore
-        serverName: *previousCluster
+      connectionParameters:
+        host: postgres16-librechat-rw.default.svc.cluster.local
+        user: postgres
+        dbname: postgres
+        sslmode: require
+      password:
+        name: cloudnative-pg-secret
+        key: password

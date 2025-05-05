@@ -6,6 +6,7 @@ resources:
   - ./cluster16.yaml
   - ./cluster16immich.yaml
   - ./cluster16librechat.yaml
+  - ./cluster17librechat.yaml
   - ./scheduledbackup.yaml
   - ./prometheusrule.yaml
   - ./service.yaml
