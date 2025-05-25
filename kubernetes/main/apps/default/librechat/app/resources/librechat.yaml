@@ -51,7 +51,9 @@ speech:
 webSearch:
   serperApiKey: "$${SERPER_API_KEY}"
   searchProvider: "serper"
-  scraperType: "serper"
+
+  firecrawlApiKey: "$${FIRECRAWL_API_KEY}"
+  scraperType: "firecrawl"
 
   cohereApiKey: "$${COHERE_API_KEY}"
   rerankerType: "cohere"
