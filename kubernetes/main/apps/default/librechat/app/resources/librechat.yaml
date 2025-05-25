@@ -2,7 +2,7 @@
 # https://www.librechat.ai/docs/configuration/librechat_yaml
 
 # Configuration version (required)
-version: 1.2.1
+version: 1.2.6
 
 # Cache settings: Set to true to enable caching
 cache: true
@@ -19,6 +19,7 @@ interface:
   multiConvo: true
   agents: true
   runCode: false
+  webSearch: true
 
 speech:
   speechTab:
@@ -40,12 +41,23 @@ speech:
   tts:
     openai:
       apiKey: "$${SPEECH_API_KEY}"
-      model: "tts-1"
+      model: "gpt-4o-mini-tts"
       voices: ["alloy", "echo", "fable", "onyx", "nova", "shimmer"]
   stt:
     openai:
       apiKey: "$${SPEECH_API_KEY}"
-      model: "whisper-1"
+      model: "gpt-4o-transcribe"
+
+webSearch:
+  serperApiKey: "$${SERPER_API_KEY}"
+  searchProvider: "serper"
+  scraperType: "serper"
+
+  cohereApiKey: "$${COHERE_API_KEY}"
+  rerankerType: "cohere"
+
+  scraperTimeout: 7500
+  safeSearch: 1
 
 rateLimits:
   fileUploads:
@@ -85,9 +97,7 @@ endpoints:
       modelDisplayLabel: "LiteLLM"
 
   assistants:
-    disableBuilder: false
-    pollIntervalMs: 3000
-    timeoutMs: 180000
+    disableBuilder: true
 
   agents:
     disableBuilder: false
@@ -99,6 +109,7 @@ endpoints:
       - "artifacts"
       - "ocr"
       - "chain"
+      - "web_search"
 
 
   all:

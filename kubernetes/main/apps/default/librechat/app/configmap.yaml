@@ -95,13 +95,6 @@ data:
 
   ILLEGAL_MODEL_REQ_SCORE: "5"
 
-
-  #========================#
-  # Balance                #
-  #========================#
-
-  CHECK_BALANCE: "false"
-
   #========================#
   # Registration and Login #
   #========================#
