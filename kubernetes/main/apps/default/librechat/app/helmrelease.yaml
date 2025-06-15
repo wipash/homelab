@@ -105,6 +105,9 @@ spec:
             image:
               repository: getmeili/meilisearch
               tag: v1.15.2
+            args:
+              - /bin/meilisearch
+              - --experimental-dumpless-upgrade
             envFrom: *envFrom
             env:
               MEILI_DB_PATH: "/meili_data"
