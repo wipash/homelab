@@ -35,7 +35,7 @@ spec:
           app:
             image:
               repository: ghcr.io/hoarder-app/hoarder
-              tag: latest@sha256:c30777ae3529a2d4d9a4c135df6ef12988ffc454ae65d8e9dad646abe2a64df3
+              tag: latest@sha256:2f0bbf734a874a42b316a2b6bf2f0be83bbdd47445cf8168aa3213e32487cdf4
             env:
               BROWSER_WEB_URL: http://hoarder-chrome.default.svc.cluster.local:9222
               CRAWLER_DOWNLOAD_BANNER_IMAGE: true
