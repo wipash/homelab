@@ -92,8 +92,10 @@ spec:
         globalMounts:
           - path: /tmp
             subPath: tmp
-          - path: /var/lib/nginx
-            subPath: nginx
+          - path: /var/lib/nginx/tmp
+            subPath: nginx-tmp
+          - path: /var/lib/nginx/logs
+            subPath: nginx-logs
           - path: /.cache/yarn
             subPath: yarn-cache
           - path: /.yarn
