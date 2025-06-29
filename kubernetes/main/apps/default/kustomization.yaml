@@ -50,3 +50,4 @@ resources:
   - ./hoarder/ks.yaml
   - ./cups/ks.yaml
   # - ./litellm/ks.yaml
+  - ./hi-events/ks.yaml
