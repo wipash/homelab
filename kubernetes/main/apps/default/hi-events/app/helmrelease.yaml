@@ -65,7 +65,7 @@ spec:
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 82
+        runAsUser: 82 # www-data, required for serversideup/php base image
         runAsGroup: 82
         fsGroup: 82
         fsGroupChangePolicy: OnRootMismatch
