@@ -89,4 +89,12 @@ spec:
     persistence:
       tmp:
         type: emptyDir
-        sizeLimit: 1Gi
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
+          - path: /var/lib/nginx/tmp
+            subPath: nginx-tmp
+          - path: /.cache/yarn
+            subPath: yarn-cache
+          - path: /.yarn
+            subPath: yarn
