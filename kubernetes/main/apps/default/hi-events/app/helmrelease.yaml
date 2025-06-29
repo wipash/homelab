@@ -39,7 +39,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/hi-events
-              tag: 1.0.0-beta.6@sha256:b12037b28fe4267d86bd867cfb165259f2e86964f0ba05b3fa719001b04dff1d
+              tag: 1.0.0-beta.6@sha256:9d2b95122f147d89f242e176ff10a917441e0317dfbb0680dd79e320d0b7d5ef
             env:
               TZ: ${TIMEZONE}
             envFrom: *envFrom
@@ -92,10 +92,8 @@ spec:
         globalMounts:
           - path: /tmp
             subPath: tmp
-          - path: /var/lib/nginx/tmp/client_body
-            subPath: nginx-tmp
-          - path: /var/lib/nginx/logs
-            subPath: nginx-logs
+          - path: /var/lib/nginx
+            subPath: nginx
           - path: /.cache/yarn
             subPath: yarn-cache
           - path: /.yarn
@@ -104,5 +102,9 @@ spec:
             subPath: htmlpurifier-serializer
           - path: /app/backend/storage
             subPath: storage
-          - path: /var/run/nginx
-            subPath: nginx-run
+          - path: /app/backend/bootstrap/cache
+            subPath: bootstrap-cache
+          - path: /var/run
+            subPath: run
+          - path: /home/www-data
+            subPath: www-data
