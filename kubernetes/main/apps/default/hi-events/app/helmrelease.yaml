@@ -78,7 +78,7 @@ spec:
                 service:
                   identifier: app
                   port: http
-    # persistence:
-    #   cache:
-    #     type: emptyDir
-    #     sizeLimit: 1Gi
+    persistence:
+      tmp:
+        type: emptyDir
+        sizeLimit: 1Gi
