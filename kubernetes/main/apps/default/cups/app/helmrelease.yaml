@@ -31,7 +31,7 @@ spec:
           app:
             image:
               repository: docker.io/drpsychick/airprint-bridge
-              tag: latest@sha256:34af49eaecaeb0105b05e5d262b554be06136552802b0befc17199bbd44431f3
+              tag: latest@sha256:106652b954d9dbc21e85bc72446e7966dec01b4ded09f12460a66373643ab077
             env:
               TZ: "${TIMEZONE}"
               CUPS_ADMIN_USER: print
