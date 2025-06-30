@@ -39,7 +39,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/hi-events
-              tag: 1.0.0-beta.6@sha256:4b980a787e24010225a0155b53f4502ca0e28c9187e4bfe54965a714234e495a
+              tag: 1.0.0-beta.6@sha256:92c834bb18d18affbda55660f156ac827f9ffce082f57f8c78e95efbad3c9adc
             env:
               TZ: ${TIMEZONE}
             envFrom: *envFrom
