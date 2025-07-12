@@ -124,21 +124,19 @@ identity_providers:
         userinfo_signed_response_alg: none
       - id: mealie
         description: Mealie
-        public: true
+        secret: "$${MEALIE_CLIENT_SECRET}"
+        public: false
         authorization_policy: two_factor
         pre_configured_consent_duration: 1y
         scopes: ["openid", "profile", "email", "groups"]
         redirect_uris:
           [
             "https://mealie.mcgrath.nz/login",
-            "https://mealie.mcgrath.nz/login?direct=1",
           ]
         userinfo_signed_response_alg: none
-        token_endpoint_auth_method: none
-        pkce_challenge_method: S256
-        grant_types:
-          - authorization_code
-        consent_mode: "implicit"
+        # pkce_challenge_method: S256
+        # grant_types:
+        #   - authorization_code
       - id: paperless
         description: PaperlessNGX
         secret: "$${PAPERLESS_OAUTH_CLIENT_SECRET}"
