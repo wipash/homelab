@@ -71,7 +71,7 @@ spec:
               OIDC_PROVIDER_NAME: "Authelia"
               OIDC_AUTO_REDIRECT: "true"
               ALLOW_PASSWORD_LOGIN: "false"
-              #OIDC_ADMIN_GROUP: admin_of_the_lab
+              OIDC_ADMIN_GROUP: admin_of_the_lab
 
             envFrom: *envFrom
             resources:
