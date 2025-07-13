@@ -4,7 +4,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: harvco-sensor-hub-mosquitto
 spec:
-  accessModes: ["ReadWriteMany"]
+  accessModes: ["ReadWriteOnce"]
   resources:
     requests:
       storage: 1Gi
