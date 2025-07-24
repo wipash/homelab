@@ -40,7 +40,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/northgrove-timelapse
-              tag: main@sha256:74735ffd017bf30e54280881aa7cff35a54ee1977c5c22aaac97dfcaeacbc4d0
+              tag: main@sha256:a6994f1f7c637978eeab4cfa87f1410eaa0436e996fb6621ba498baf5083e01a
             env:
               TZ: *timeZone
             envFrom:
