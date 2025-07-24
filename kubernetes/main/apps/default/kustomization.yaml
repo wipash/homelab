@@ -51,3 +51,4 @@ resources:
   - ./cups/ks.yaml
   # - ./litellm/ks.yaml
   - ./hi-events/ks.yaml
+  - ./timelapse-processor/ks.yaml
