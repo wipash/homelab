@@ -68,3 +68,9 @@ spec:
         existingClaim: timelapse-processor-cache
         globalMounts:
           - path: /app/videos
+      tmp:
+        type: emptyDir
+      uv-cache:
+        type: emptyDir
+        globalMounts:
+          - path: /.cache
