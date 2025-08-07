@@ -4,8 +4,7 @@ probe = FPing
 
 menu = Top
 title = Network Latency Grapher
-remark = Welcome to the SmokePing website of WORKS Company. \
-         Here you will learn all about the latency of our network.
+remark = Welcome to SmokePing
 
 + CloudflareTunnel
 menu = Cloudflare Tunnel
@@ -296,7 +295,7 @@ menu = Local Router
 title = Local Router
 host = 10.0.16.1
 
-++ v4.cpcak4-bng1.tranzpeer.net
+++ cpcak4-bng1-tranzpeer
 menu = cpcak4-bng1.tranzpeer.net
 title = cpcak4-bng1.tranzpeer.net
 host = 101.98.0.100
