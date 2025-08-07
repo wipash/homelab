@@ -291,6 +291,16 @@ host = 9.9.9.9
 menu = Local Internet
 title = Local Internet Connectivity
 
+++ LocalRouter
+menu = Local Router
+title = Local Router
+host = 10.0.16.1
+
+++ v4.cpcak4-bng1.tranzpeer.net
+menu = cpcak4-bng1.tranzpeer.net
+title = cpcak4-bng1.tranzpeer.net
+host = 101.98.0.100
+
 ++ SlingshotDNS1
 menu = Slingshot DNS 1
 title = Slingshot DNS 202.180.64.10
