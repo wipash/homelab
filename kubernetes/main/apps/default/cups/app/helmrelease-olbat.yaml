@@ -31,7 +31,7 @@ spec:
           app:
             image:
               repository: docker.io/olbat/cupsd
-              tag: stable@sha256:aef3b70f176773c64f68741be064f9de58fabd9ed0df41556bd64095ef55be7b
+              tag: stable@sha256:9ff34a14b7550854ba7d6fbefa9d9cce0bdeac0c432f7b7b7aacde700fd3898c
             env:
               TZ: "${TIMEZONE}"
             probes:
