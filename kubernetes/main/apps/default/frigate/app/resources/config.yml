@@ -36,6 +36,7 @@ ffmpeg:
 
 # Global detection configuration
 detect:
+  enabled: true
   width: 1280
   height: 720
   fps: 5
@@ -115,7 +116,9 @@ cameras:
           input_args: preset-rtsp-restream
           roles: [detect]
     live:
-      stream_name: fdc_hq
+      streams:
+        Main Stream: fdc_hq
+        Sub Stream: fdc_lq
 
 
   BDC:
@@ -140,7 +143,9 @@ cameras:
           input_args: preset-rtsp-restream
           roles: [detect]
     live:
-      stream_name: bdc_hq
+      streams:
+        Main Stream: bdc_hq
+        Sub Stream: bdc_lq
 
 
   SDC:
@@ -162,7 +167,9 @@ cameras:
           input_args: preset-rtsp-restream
           roles: [detect]
     live:
-      stream_name: sdc_hq
+      streams:
+        Main Stream: sdc_hq
+        Sub Stream: sdc_lq
 
 # genai:
 #   enabled: True
