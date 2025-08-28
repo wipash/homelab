@@ -42,6 +42,7 @@ spec:
               tag: 1.1.0-beta.2@sha256:609fbe19d8b25073dbee4f7f40f99b04874b978c7af1e6601834eefec56ce47d
             env:
               TZ: ${TIMEZONE}
+              LOG_CHANNEL: stderr
             envFrom: *envFrom
             probes:
               liveness:
