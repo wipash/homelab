@@ -26,13 +26,9 @@ objects:
 
 # Global ffmpeg configuration
 ffmpeg:
-  global_args:
-    - -hide_banner
-    - -loglevel
-    - warning
   hwaccel_args: preset-vaapi
   output_args:
-    record: preset-record-generic-audio-aac
+    record: preset-record-generic-audio-copy
 
 # Global detection configuration
 detect:
@@ -64,17 +60,17 @@ go2rtc:
   streams:
     fdc_hq:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.11:554/cam/realmonitor?channel=1&subtype=0
-      - ffmpeg:fdc_hq#audio=aac
+      - ffmpeg:fdc_hq#audio=opus
     fdc_lq:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.11:554/cam/realmonitor?channel=1&subtype=2
     sdc_hq:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.12:554/cam/realmonitor?channel=1&subtype=0
-      - ffmpeg:sdc_hq#audio=aac
+      - ffmpeg:sdc_hq#audio=opus
     sdc_lq:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.12:554/cam/realmonitor?channel=1&subtype=2
     bdc_hq:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.13:554/cam/realmonitor?channel=1&subtype=0
-      - ffmpeg:bdc_hq#audio=aac
+      - ffmpeg:bdc_hq#audio=opus
     bdc_lq:
       - rtsp://admin:{FRIGATE_CAMERA_PASSWORD}@10.0.11.13:554/cam/realmonitor?channel=1&subtype=2
   webrtc:
