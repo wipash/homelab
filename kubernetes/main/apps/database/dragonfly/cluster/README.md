@@ -7,3 +7,4 @@
 6. sparkle
 7. librechat
 8. hi-events
+9. hi-events-cigana
