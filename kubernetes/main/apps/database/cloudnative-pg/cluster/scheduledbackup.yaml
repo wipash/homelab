@@ -22,7 +22,7 @@ spec:
   immediate: true
   backupOwnerReference: self
   cluster:
-    name: postgres17-immich
+    name: postgres16-immich
 
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/postgresql.cnpg.io/scheduledbackup_v1.json
