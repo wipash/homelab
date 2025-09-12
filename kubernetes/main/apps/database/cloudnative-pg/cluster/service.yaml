@@ -33,7 +33,7 @@ spec:
       protocol: TCP
       targetPort: 5432
   selector:
-    cnpg.io/cluster: postgres17-immich
+    cnpg.io/cluster: postgres16-immich
     role: primary
 
 ---
