@@ -55,9 +55,3 @@ spec:
   wait: false
   interval: 30m
   timeout: 5m
-  components:
-    - ../../../../components/gatus/internal
-    - ../../../../components/volsync
-  postBuild:
-    substitute:
-      APP: qbittorrent-tools

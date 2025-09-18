@@ -20,9 +20,3 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 5m
-  components:
-    - ../../../../components/gatus/external
-    - ../../../../components/volsync
-  postBuild:
-    substitute:
-      APP: wordpress-wordpress-0

@@ -26,4 +26,3 @@ spec:
       GATUS_SUBDOMAIN: chef
   components:
     - ../../../../components/gatus/external
-    - ../../../../components/volsync

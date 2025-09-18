@@ -26,4 +26,3 @@ spec:
       GATUS_SUBDOMAIN: draw
   components:
     - ../../../../components/gatus/external
-    - ../../../../components/volsync

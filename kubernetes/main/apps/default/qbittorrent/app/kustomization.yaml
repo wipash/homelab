@@ -5,8 +5,6 @@ kind: Kustomization
 namespace: default
 resources:
   - ./helmrelease.yaml
-  - ../../../../templates/volsync
-  - ../../../../templates/gatus/internal
 configMapGenerator:
   - name: qbittorrent-loki-rules
     files:

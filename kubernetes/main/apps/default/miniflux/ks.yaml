@@ -31,4 +31,3 @@ spec:
       GATUS_PATH: /healthcheck
   components:
     - ../../../../components/gatus/external
-    - ../../../../components/volsync
