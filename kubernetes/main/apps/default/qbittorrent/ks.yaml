@@ -4,7 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app qbittorrent
-  namespace: flux-system
+  namespace: default
 spec:
   targetNamespace: default
   commonMetadata:
@@ -12,11 +12,13 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: volsync
+      namespace: flux-system
   path: ./kubernetes/main/apps/default/qbittorrent/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-cluster
+    namespace: flux-system
   wait: false
   interval: 30m
   retryInterval: 1m
@@ -26,13 +28,16 @@ spec:
       APP: *app
       GATUS_SUBDOMAIN: qb
       VOLSYNC_CAPACITY: 2Gi
+  components:
+    - ../../../../components/gatus/internal
+    - ../../../../components/volsync
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app qbittorrent-tools
-  namespace: flux-system
+  namespace: default
 spec:
   targetNamespace: default
   commonMetadata:
@@ -46,6 +51,13 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-cluster
+    namespace: flux-system
   wait: false
   interval: 30m
   timeout: 5m
+  components:
+    - ../../../../components/gatus/internal
+    - ../../../../components/volsync
+  postBuild:
+    substitute:
+      APP: qbittorrent-tools

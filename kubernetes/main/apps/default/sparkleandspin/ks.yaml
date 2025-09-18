@@ -4,7 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &backend-appname sparkleandspin-backend
-  namespace: flux-system
+  namespace: default
 spec:
   targetNamespace: default
   commonMetadata:
@@ -16,27 +16,33 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-cluster
+    namespace: flux-system
   wait: false
   dependsOn:
     - name: external-secrets-stores
       namespace: kube-system
     - name: ghcr-imagepullsecret
+      namespace: default
     - name: cloudnative-pg-cluster
+      namespace: flux-system
     - name: dragonfly-cluster
+      namespace: flux-system
   postBuild:
     substitute:
       APP: *backend-appname
       GATUS_SUBDOMAIN: api
       GATUS_DOMAIN: ${SECRET_DOMAIN_SPARKLE}
       GATUS_PATH: /health
-
+  components:
+    - ../../../../components/gatus/external
+    - ../../../../components/volsync
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &frontend-appname sparkleandspin-frontend
-  namespace: flux-system
+  namespace: default
 spec:
   targetNamespace: default
   commonMetadata:
@@ -48,12 +54,18 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-cluster
+    namespace: flux-system
   wait: false
   dependsOn:
     - name: sparkleandspin-backend
+      namespace: default
     - name: ghcr-imagepullsecret
+      namespace: default
   postBuild:
     substitute:
       APP: *frontend-appname
       GATUS_SUBDOMAIN: www
       GATUS_DOMAIN: ${SECRET_DOMAIN_SPARKLE}
+  components:
+    - ../../../../components/gatus/external
+    - ../../../../components/volsync

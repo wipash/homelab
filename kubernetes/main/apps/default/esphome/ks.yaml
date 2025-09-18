@@ -4,7 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname esphome
-  namespace: flux-system
+  namespace: default
 spec:
   targetNamespace: default
   commonMetadata:
@@ -17,12 +17,18 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-cluster
+    namespace: flux-system
   wait: false
   dependsOn:
     - name: rook-ceph-cluster
+      namespace: flux-system
     - name: volsync
+      namespace: flux-system
     - name: external-secrets-stores
       namespace: kube-system
   postBuild:
     substitute:
       APP: *appname
+  components:
+    - ../../../../components/gatus/internal
+    - ../../../../components/volsync

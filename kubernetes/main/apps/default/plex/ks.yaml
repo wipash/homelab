@@ -4,7 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app plex
-  namespace: flux-system
+  namespace: default
 spec:
   targetNamespace: default
   commonMetadata:
@@ -14,11 +14,13 @@ spec:
     - name: external-secrets-stores
       namespace: kube-system
     - name: volsync
+      namespace: flux-system
   path: ./kubernetes/main/apps/default/plex/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-cluster
+    namespace: flux-system
   wait: false
   interval: 30m
   retryInterval: 1m
@@ -29,14 +31,16 @@ spec:
       GATUS_PATH: /web/index.html
       VOLSYNC_CAPACITY: 100Gi
       VOLSYNC_CACHE_CAPACITY: 20Gi
-
+  components:
+    - ../../../../components/gatus/external
+    - ../../../../components/volsync
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app plex-image-cleanup
-  namespace: flux-system
+  namespace: default
 spec:
   targetNamespace: default
   commonMetadata:
@@ -50,6 +54,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-cluster
+    namespace: flux-system
   wait: false
   interval: 30m
   retryInterval: 1m
@@ -57,3 +62,6 @@ spec:
   postBuild:
     substitute:
       APP: *app
+  components:
+    - ../../../../components/gatus/internal
+    - ../../../../components/volsync
