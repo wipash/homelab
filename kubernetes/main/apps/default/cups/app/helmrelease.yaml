@@ -85,7 +85,7 @@ spec:
         type: LoadBalancer
         externalTrafficPolicy: Cluster
         annotations:
-          io.cilium/lb-ipam-ips: "${SVC_CUPS_ADDR:=temp}" # Default value to make flux-local work
+          io.cilium/lb-ipam-ips: "172.16.10.14"
           external-dns.alpha.kubernetes.io/hostname: "printer.mcgrath.nz"
         controller: *app
         ports:
