@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: "external"
   rules:
-    - host: &host "flux-webhook.${SECRET_DOMAIN}"
+    - host: &host "flux-webhook.mcgrath.nz"
       http:
         paths:
           - path: /hook/

@@ -85,7 +85,7 @@ spec:
       app:
         className: internal
         hosts:
-          - host: "{{ .Release.Name }}.${SECRET_DOMAIN}"
+          - host: "{{ .Release.Name }}.mcgrath.nz"
             paths:
               - path: /
                 service:
