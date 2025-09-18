@@ -48,6 +48,6 @@ spec:
   listenersServiceTemplate:
     metadata:
       annotations:
-        lbipam.cilium.io/ips: ${SVC_MOSQUITTO_ADDR:=temp}
+        lbipam.cilium.io/ips: "172.16.10.2"
     spec:
       type: LoadBalancer
