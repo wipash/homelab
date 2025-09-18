@@ -11,7 +11,7 @@ spec:
     - name: external-secrets-stores
       namespace: kube-system
     - name: node-feature-discovery-rules
-      namespace: flux-system
+      namespace: kube-system
   path: ./kubernetes/main/apps/default/zigbee2mqtt/app
   prune: true
   sourceRef:
