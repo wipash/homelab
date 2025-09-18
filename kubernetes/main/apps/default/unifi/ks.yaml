@@ -4,7 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app unifi
-  namespace: flux-system
+  namespace: default
 spec:
   targetNamespace: default
   commonMetadata:
@@ -12,12 +12,15 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: rook-ceph-cluster
+      namespace: flux-system
     - name: volsync
+      namespace: flux-system
   path: ./kubernetes/main/apps/default/unifi/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-cluster
+    namespace: flux-system
   interval: 30m
   retryInterval: 1m
   timeout: 5m
@@ -26,3 +29,6 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 10Gi
+  components:
+    - ../../../../components/gatus/internal
+    - ../../../../components/volsync
