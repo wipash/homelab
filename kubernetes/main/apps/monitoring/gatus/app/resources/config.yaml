@@ -1,29 +1,32 @@
 ---
-# Note: Gatus vars should be escaped with $${VAR_NAME} to avoid interpolation by Flux
-web:
-  port: $${CUSTOM_WEB_PORT}
 storage:
   type: postgres
-  path: postgres://$${INIT_POSTGRES_USER}:$${INIT_POSTGRES_PASS}@$${INIT_POSTGRES_HOST}:5432/$${INIT_POSTGRES_DBNAME}?sslmode=disable
+  path: postgres://${INIT_POSTGRES_USER}:${INIT_POSTGRES_PASS}@${INIT_POSTGRES_HOST}:5432/${INIT_POSTGRES_DBNAME}?sslmode=disable
   caching: true
+
 metrics: true
+
 debug: false
+
 ui:
   title: Status | Gatus
   header: Status
+
 alerting:
   pushover:
-    application-token: $${CUSTOM_PUSHOVER_APP_TOKEN}
-    user-key: $${CUSTOM_PUSHOVER_USER_KEY}
+    application-token: ${CUSTOM_PUSHOVER_APP_TOKEN}
+    user-key: ${CUSTOM_PUSHOVER_USER_KEY}
     default-alert:
       description: health-check failed
       send-on-resolved: true
       failure-threshold: 5
       success-threshold: 2
+
 connectivity:
   checker:
     target: 1.1.1.1:53
     interval: 1m
+
 endpoints:
   - name: status
     group: external
@@ -48,3 +51,6 @@ endpoints:
       - "[STATUS] == 404"
     alerts:
       - type: pushover
+
+web:
+  port: ${GATUS_WEB_PORT}

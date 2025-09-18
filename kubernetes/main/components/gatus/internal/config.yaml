@@ -1,10 +1,11 @@
+---
 endpoints:
   - name: "${APP}"
     group: internal
-    url: "https://${GATUS_SUBDOMAIN:-${APP}}.${GATUS_DOMAIN:-mcgrath.nz}${GATUS_PATH:-/}"
+    url: "https://${GATUS_SUBDOMAIN:=${APP}}.${GATUS_DOMAIN:=mcgrath.nz}${GATUS_PATH:=/}"
     interval: 1m
     ui:
       hide-hostname: true
       hide-url: true
     conditions:
-      - "[STATUS] == ${GATUS_STATUS:-200}"
+      - "[STATUS] == ${GATUS_STATUS:=200}"

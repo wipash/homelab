@@ -1,3 +1,4 @@
+---
 endpoints:
   - name: "${APP}"
     group: external
@@ -5,5 +6,9 @@ endpoints:
     interval: 1m
     client:
       dns-resolver: tcp://202.180.64.10:53
+      timeout: 30s
+    ui:
+      hide-hostname: true
+      hide-url: true
     conditions:
       - "[STATUS] == ${GATUS_STATUS:=200}"
