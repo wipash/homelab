@@ -26,6 +26,3 @@ spec:
   postBuild:
     substitute:
       APP: *app
-  components:
-    - ../../../../components/gatus/internal
-    - ../../../../components/volsync

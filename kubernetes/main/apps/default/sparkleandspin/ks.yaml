@@ -35,7 +35,6 @@ spec:
       GATUS_PATH: /health
   components:
     - ../../../../components/gatus/external
-    - ../../../../components/volsync
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -66,6 +65,3 @@ spec:
       APP: *frontend-appname
       GATUS_SUBDOMAIN: www
       GATUS_DOMAIN: ${SECRET_DOMAIN_SPARKLE}
-  components:
-    - ../../../../components/gatus/external
-    - ../../../../components/volsync

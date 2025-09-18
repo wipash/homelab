@@ -29,3 +29,5 @@ spec:
     substitute:
       APP: *app
       GATUS_SUBDOMAIN: photos
+  components:
+    - ../../../../components/gatus/external

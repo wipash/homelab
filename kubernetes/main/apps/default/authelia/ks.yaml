@@ -33,4 +33,3 @@ spec:
       GATUS_SUBDOMAIN: auth
   components:
     - ../../../../components/gatus/external
-    - ../../../../components/volsync

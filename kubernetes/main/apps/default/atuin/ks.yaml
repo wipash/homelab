@@ -31,4 +31,3 @@ spec:
       GATUS_SUBDOMAIN: sh
   components:
     - ../../../../components/gatus/external
-    - ../../../../components/volsync

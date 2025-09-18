@@ -22,9 +22,7 @@ spec:
   wait: true
   interval: 30m
   timeout: 5m
-  components:
-    - ../../../../components/gatus/internal
-    - ../../../../components/volsync
+
   postBuild:
     substitute:
       APP: emqx

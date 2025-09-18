@@ -25,4 +25,3 @@ spec:
       GATUS_SUBDOMAIN: cups
   components:
     - ../../../../components/gatus/internal
-    - ../../../../components/volsync
