@@ -47,12 +47,9 @@ resources:
   - ./librechat/ks.yaml
   - ./maintainerr/ks.yaml
   - ./esphome/ks.yaml
-  # - ./dashbrr/ks.yaml
-  - ./omegabrr/ks.yaml
-  # - ./cross-seed/ks.yaml
+  - ./cross-seed/ks.yaml
   - ./hoarder/ks.yaml
   - ./cups/ks.yaml
-  # - ./litellm/ks.yaml
   - ./hi-events/ks.yaml
   - ./timelapse-processor/ks.yaml
   - ./n8n/ks.yaml
