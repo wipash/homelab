@@ -35,10 +35,12 @@ spec:
             image:
               repository: ghcr.io/cross-seed/cross-seed
               tag: 6.13.3@sha256:81afafdd96a5dd2c8e485a03e9d61ec07ceb051c4c950071497c44f8ceb5169f
+            args:
+              - daemon
+              - -v
             env:
               CROSS_SEED_PORT: &port 80
               TZ: Pacific/Auckland
-            args: ["daemon"]
             probes:
               liveness: &probes
                 enabled: true
@@ -52,16 +54,15 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 128Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-            resources:
-              requests:
-                cpu: 10m
-                memory: 50Mi
-              limits:
-                memory: 512Mi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -70,29 +71,15 @@ spec:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
         supplementalGroups: [65537]
-        seccompProfile: { type: RuntimeDefault }
-    service:
-      app:
-        controller: cross-seed
-        ports:
-          http:
-            port: *port
     persistence:
       config:
-        type: emptyDir
+        existingClaim: "{{ .Release.Name }}"
       secret-file:
         type: secret
-        name: cross-seed-secret
+        name: "{{ .Release.Name }}-secret"
         globalMounts:
           - path: /config/config.js
             subPath: config.js
-            readOnly: true
-      qbittorrent:
-        existingClaim: qbittorrent
-        globalMounts:
-          - path: /qbittorrent/qBittorrent/BT_backup
-            subPath: qBittorrent/BT_backup
-            readOnly: true
       media:
         type: nfs
         server: 172.20.0.1
