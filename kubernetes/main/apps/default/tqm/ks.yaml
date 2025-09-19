@@ -10,7 +10,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   interval: 1h
-  path: ./kubernetes/apps/default/tqm/app
+  path: ./kubernetes/main/apps/default/tqm/app
   prune: true
   retryInterval: 2m
   sourceRef:
