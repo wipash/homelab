@@ -73,7 +73,7 @@ spec:
         supplementalGroups: [65537]
     persistence:
       config:
-        existingClaim: "{{ .Release.Name }}"
+        existingClaim: cross-seed
       secret-file:
         type: secret
         name: "{{ .Release.Name }}-secret"
