@@ -57,3 +57,4 @@ resources:
   - ./timelapse-processor/ks.yaml
   - ./n8n/ks.yaml
   - ./qui/ks.yaml
+  - ./tqm/ks.yaml
