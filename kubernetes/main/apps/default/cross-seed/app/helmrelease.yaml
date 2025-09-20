@@ -71,6 +71,12 @@ spec:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
         supplementalGroups: [65537]
+    service:
+      app:
+        controller: cross-seed
+        ports:
+          http:
+            port: *port
     persistence:
       config:
         existingClaim: cross-seed
