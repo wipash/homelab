@@ -68,12 +68,15 @@ spec:
       app:
         className: external
         hosts:
-          - host: "cc.events.mcgrath.nz"
+          - host: &host cc.events.mcgrath.nz
             paths:
               - path: /
                 service:
                   identifier: app
                   port: http
+        tls:
+          - hosts:
+              - *host
 
     service:
       app:
