@@ -67,8 +67,6 @@ spec:
     ingress:
       app:
         className: external
-        annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-production
         hosts:
           - host: cc.mcgrath.nz
             paths:
