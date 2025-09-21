@@ -70,16 +70,13 @@ spec:
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-production
         hosts:
-          - host: &host cc.events.mcgrath.nz
+          - host: cc.mcgrath.nz
             paths:
               - path: /
                 service:
                   identifier: app
                   port: http
-        tls:
-          - hosts:
-              - *host
-            secretName: "ccattendance-tls"
+
 
     service:
       app:
