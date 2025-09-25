@@ -39,7 +39,7 @@ spec:
           app:
             image:
               repository: ghcr.io/n8n-io/n8n
-              tag: 1.112.3@sha256:c5fe3ff0b79f7831dc21f9c709bdb7eee4fff4453a28ce84c8e9fa5b9f562686
+              tag: 1.113.2@sha256:4c1ba1a29b773752cb92b3ac89249a69cb95c6cb591cb7e0587cd8a78cc5fde4
             env:
               TZ: Pacific/Auckland
               GENERIC_TIMEZONE: Pacific/Auckland
