@@ -54,6 +54,9 @@ spec:
               IMMICH_PORT: &port 3003
               MACHINE_LEARNING_CACHE_FOLDER: /cache
               TRANSFORMERS_CACHE: /cache
+              MPLCONFIGDIR: /cache/matplotlib
+              REDIS_HOSTNAME: dragonfly.database.svc.cluster.local
+              REDIS_DBINDEX: "3"
             resources:
               requests:
                 cpu: 10m
@@ -106,11 +109,14 @@ spec:
         existingClaim: immich-machine-learning-cache
         globalMounts:
           - path: /cache
-      # geocoding-dump:
-      #   type: emptyDir
-      #   globalMounts:
-      #     - path: /usr/src/app/.reverse-geocoding-dump
-      # transformers-cache:
-      #   type: emptyDir
-      #   globalMounts:
-      #     - path: /usr/src/app/.transformers_cache
+            subPath: cache
+          - path: /.cache
+            subPath: dotCache
+      geocoding-dump:
+        type: emptyDir
+        globalMounts:
+          - path: /usr/src/app/.reverse-geocoding-dump
+      transformers-cache:
+        type: emptyDir
+        globalMounts:
+          - path: /usr/src/app/.transformers_cache
