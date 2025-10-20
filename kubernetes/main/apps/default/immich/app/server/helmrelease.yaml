@@ -77,6 +77,8 @@ spec:
               LOG_LEVEL: log
               # IMMICH_CONFIG_FILE: /config/immich-config.json
               IMMICH_MEDIA_LOCATION: &mediaLocation /usr/src/app/upload
+              REDIS_HOSTNAME: dragonfly.database.svc.cluster.local
+              REDIS_DBINDEX: "3"
             resources:
               requests:
                 cpu: 10m
