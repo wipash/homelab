@@ -108,6 +108,7 @@ spec:
         globalMounts:
           - path: /etc/cups/cupsd.conf
             subPath: cupsd.conf
+            readOnly: false
       dbus:
         type: hostPath
         hostPath: /var/run/dbus
