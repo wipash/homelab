@@ -50,7 +50,7 @@ spec:
 
               # Hack to run arbitrary commands
               # The init script will eval the content of any variable named CUPS_LPADMIN_PRINTER*
-              CUPS_LPADMIN_PRINTERCONFIG1: cupsctl ServerAlias=*
+              CUPS_LPADMIN_PRINTERCONFIG1: cupsctl ServerAlias=\*
               CUPS_LPADMIN_PRINTERCONFIG2: cupsctl DefaultEncryption=Never
 
 
