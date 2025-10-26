@@ -36,17 +36,23 @@ spec:
               TZ: "${TIMEZONE}"
               CUPS_ADMIN_USER: print
               CUPS_ADMIN_PASSWORD: print
-              # CUPS_WEBINTERFACE: "yes"
-              # CUPS_SHARE_PRINTERS: "yes"
-              # CUPS_REMOTE_ADMIN: "yes"
-              # CUPS_ACCESS_LOGLEVEL: config
-              # CUPS_LOGLEVEL: info
-              # CUPS_ENV_DEBUG: "no"
-              # CUPS_HOSTNAME: printer.mcgrath.nz
+              CUPS_WEBINTERFACE: "yes"
+              CUPS_SHARE_PRINTERS: "yes"
+              CUPS_REMOTE_ADMIN: "yes"
+              CUPS_ACCESS_LOGLEVEL: config
+              CUPS_LOGLEVEL: info
+              CUPS_ENV_DEBUG: "no"
+              CUPS_HOSTNAME: printer.mcgrath.nz
 
               CUPS_LPADMIN_PRINTER1: "lpadmin -p OfficeLaser -D 'Fuji Xerox DocuPrint CP225/228' -m 'foo2zjs:0/ppd/foo2zjs/Fuji_Xerox-DocuPrint_CM215.ppd' -o PageSize=A4 -o ColorMode=Color -v usb://FUJI%20XEROX/DocuPrint%20CP225/228%20w?serial=301943--CD"
               CUPS_LPADMIN_PRINTER1_ENABLE: cupsenable OfficeLaser
               CUPS_LPADMIN_PRINTER1_ACCEPT: cupsaccept OfficeLaser
+
+              # Hack to run arbitrary commands
+              # The init script will eval the content of any variable named CUPS_LPADMIN_PRINTER*
+              CUPS_LPADMIN_PRINTERCONFIG1: cupsctl ServerAlias=*
+              CUPS_LPADMIN_PRINTERCONFIG2: cupsctl DefaultEncryption=Never
+
 
             probes:
               liveness: &probes
@@ -102,13 +108,6 @@ spec:
                   port: http
 
     persistence:
-      config:
-        type: configMap
-        name: cups-config
-        globalMounts:
-          - path: /etc/cups/cupsd.conf
-            subPath: cupsd.conf
-            readOnly: false
       dbus:
         type: hostPath
         hostPath: /var/run/dbus
