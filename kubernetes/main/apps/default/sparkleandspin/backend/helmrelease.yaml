@@ -113,6 +113,9 @@ spec:
     ingress:
       app:
         className: external
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            conditions: ["[STATUS] == 404"]
         hosts:
           - host: &host "api.${SECRET_DOMAIN_SPARKLE}"
             paths:
