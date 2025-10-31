@@ -108,6 +108,8 @@ spec:
         className: external
         annotations:
           cert-manager.io/cluster-issuer: "letsencrypt-production"
+          gatus.home-operations.com/endpoint: |-
+            conditions: ["[STATUS] == 404"]
         hosts:
           - host: &host sensorapi.${SECRET_DOMAIN_HARVCO}
             paths:
