@@ -30,7 +30,5 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      GATUS_SUBDOMAIN: nodered
   components:
-    - ../../../../components/gatus/internal
     - ../../../../components/volsync

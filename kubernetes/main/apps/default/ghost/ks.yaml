@@ -59,5 +59,4 @@ spec:
       APP: *app
       VOLSYNC_CAPACITY: 5Gi
   components:
-    - ../../../../components/gatus/external
     - ../../../../components/volsync
