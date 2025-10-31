@@ -22,6 +22,4 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      GATUS_SUBDOMAIN: cups
   components:
-    - ../../../../components/gatus/internal

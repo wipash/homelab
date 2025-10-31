@@ -30,11 +30,7 @@ spec:
   postBuild:
     substitute:
       APP: *backend-appname
-      GATUS_SUBDOMAIN: api
-      GATUS_DOMAIN: ${SECRET_DOMAIN_SPARKLE}
-      GATUS_PATH: /health
   components:
-    - ../../../../components/gatus/external
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -63,5 +59,3 @@ spec:
   postBuild:
     substitute:
       APP: *frontend-appname
-      GATUS_SUBDOMAIN: www
-      GATUS_DOMAIN: ${SECRET_DOMAIN_SPARKLE}

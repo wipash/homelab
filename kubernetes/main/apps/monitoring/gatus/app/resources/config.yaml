@@ -1,12 +1,10 @@
 ---
 storage:
-  type: postgres
-  path: postgres://${INIT_POSTGRES_USER}:${INIT_POSTGRES_PASS}@${INIT_POSTGRES_HOST}:5432/${INIT_POSTGRES_DBNAME}?sslmode=disable
+  type: sqlite
   caching: true
+  path: ${GATUS_CONFIG_PATH}/gatus.db
 
 metrics: true
-
-debug: false
 
 ui:
   title: Status | Gatus
@@ -20,7 +18,9 @@ alerting:
       description: health-check failed
       send-on-resolved: true
       failure-threshold: 5
+      minimum-reminder-interval: 1h
       success-threshold: 2
+    title: Gatus
 
 connectivity:
   checker:
@@ -38,6 +38,7 @@ endpoints:
       - "[STATUS] == 200"
     alerts:
       - type: pushover
+
   - name: flux-webhook
     group: external
     url: https://flux-webhook.mcgrath.nz
@@ -51,6 +52,27 @@ endpoints:
       - "[STATUS] == 404"
     alerts:
       - type: pushover
+
+  - name: Cloudflare
+    group: connectivity
+    url: icmp://1.1.1.1
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: Google
+    group: connectivity
+    url: icmp://8.8.8.8
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: Lumen
+    group: connectivity
+    url: icmp://4.2.2.1
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
 
 web:
   port: ${GATUS_WEB_PORT}

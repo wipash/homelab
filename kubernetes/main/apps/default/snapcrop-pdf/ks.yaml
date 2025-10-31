@@ -23,6 +23,4 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      GATUS_SUBDOMAIN: chef
   components:
-    - ../../../../components/gatus/external

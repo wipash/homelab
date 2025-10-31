@@ -29,5 +29,4 @@ spec:
       APP: *app
       VOLSYNC_CAPACITY: 15Gi
   components:
-    - ../../../../components/gatus/internal
     - ../../../../components/volsync

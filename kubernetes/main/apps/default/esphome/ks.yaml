@@ -30,5 +30,4 @@ spec:
     substitute:
       APP: *appname
   components:
-    - ../../../../components/gatus/internal
     - ../../../../components/volsync
