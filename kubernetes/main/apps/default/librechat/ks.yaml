@@ -26,7 +26,5 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      GATUS_SUBDOMAIN: chat
   components:
-    - ../../../../components/gatus/external
     - ../../../../components/volsync
