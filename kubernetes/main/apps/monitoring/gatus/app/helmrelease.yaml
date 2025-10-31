@@ -3,67 +3,49 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: gatus
+  name: &app gatus
 spec:
-  interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 3.7.3
+      version: 4.4.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
+  interval: 1h
   values:
     controllers:
       gatus:
         annotations:
           reloader.stakater.com/auto: "true"
         initContainers:
-          init-db:
+          gatus-sidecar:
             image:
-              repository: ghcr.io/home-operations/postgres-init
-              tag: 17
-            envFrom: &envFrom
-              - secretRef:
-                  name: gatus-secret
-          init-config:
-            dependsOn: init-db
-            image:
-              repository: ghcr.io/kiwigrid/k8s-sidecar
-              tag: 2.0.3@sha256:0927d32e384d2ee38d861ea9de23acb3db8a6ac89ad1334d7cd4aacd2b3bf5ab
-            env:
-              FOLDER: /config
-              LABEL: gatus.io/enabled
-              NAMESPACE: ALL
-              RESOURCE: both
-              UNIQUE_FILENAMES: true
-              METHOD: WATCH
-            restartPolicy: Always
-            resources: &resources
+              repository: ghcr.io/home-operations/gatus-sidecar
+              tag: 0.0.9@sha256:31a52dd0e579c1f865b2580a4bb715d2a893deb1351fedeaba73598e9a578cbe
+            args:
+              - --auto-ingress
+              - --enable-ingress
+              - --enable-service
+            resources:
               requests:
                 cpu: 10m
               limits:
-                memory: 256Mi
+                memory: 32Mi
+            restartPolicy: Always
         containers:
           app:
             image:
               repository: ghcr.io/twin/gatus
               tag: v5.30.0@sha256:bab5a31cb3cfde7fd9913a5ff97652883e4db08f3b429a62a7a188c746df4219
             env:
-              TZ: Pacific/Auckland
-              GATUS_CONFIG_PATH: /config
-              GATUS_DELAY_START_SECONDS: 5
               GATUS_WEB_PORT: &port 80
-            envFrom: *envFrom
+              GATUS_CONFIG_PATH: /config
+              TZ: Pacific/Auckland
+            envFrom:
+              - secretRef:
+                  name: "{{ .Release.Name }}-secret"
             probes:
               liveness: &probes
                 enabled: true
@@ -77,58 +59,50 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 256Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
-            resources: *resources
-        pod:
-          dnsConfig:
-            options:
-              - { name: ndots, value: "1" }
-          securityContext:
-            runAsUser: 568
-            runAsGroup: 568
-            runAsNonRoot: true
-            fsGroup: 568
-            fsGroupChangePolicy: OnRootMismatch
-    service:
-      app:
-        controller: gatus
-        ports:
-          http:
-            port: *port
-    serviceMonitor:
-      app:
-        serviceName: gatus
-        endpoints:
-          - port: http
-            scheme: http
-            path: /metrics
-            interval: 1m
-            scrapeTimeout: 10s
-    ingress:
-      app:
-        className: external
-        hosts:
-          - host: &host status.mcgrath.nz
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts: [*host]
-    serviceAccount:
-      create: true
-      name: gatus
+              capabilities: { add: ["NET_RAW"], drop: ["ALL"] }
+        serviceAccount:
+          name: *app
+
+    defaultPodOptions:
+      hostUsers: false
+
     persistence:
       config:
         type: emptyDir
       config-file:
         type: configMap
-        name: gatus-configmap
+        name: "{{ .Release.Name }}-configmap"
         globalMounts:
           - path: /config/config.yaml
             subPath: config.yaml
             readOnly: true
+
+    ingress:
+      app:
+        className: external
+        hosts:
+          - host: status.mcgrath.nz
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+
+    service:
+      app:
+        ports:
+          http:
+            port: *port
+
+    serviceMonitor:
+      app:
+        endpoints:
+          - port: http

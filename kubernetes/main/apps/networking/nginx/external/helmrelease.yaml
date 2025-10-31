@@ -34,6 +34,14 @@ spec:
         name: external
         default: false
         controllerValue: k8s.io/external
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            ui:
+              hide-hostname: true
+              hide-url: true
+            conditions:
+              - "[STATUS] == any(200, 401)"
+
       admissionWebhooks:
         objectSelector:
           matchExpressions:
