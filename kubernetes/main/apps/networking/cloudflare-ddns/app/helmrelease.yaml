@@ -80,13 +80,3 @@ spec:
             path: /metrics
             interval: 30s
             scrapeTimeout: 30s
-    ingress:
-      app:
-        className: internal
-        hosts:
-          - host: "ddns.mcgrath.nz"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http

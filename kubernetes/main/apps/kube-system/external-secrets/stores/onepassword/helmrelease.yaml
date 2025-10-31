@@ -122,6 +122,9 @@ spec:
     ingress:
       app:
         className: internal
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            conditions: ["[STATUS] == 404"]
         hosts:
           - host: &host "{{ .Release.Name }}.mcgrath.nz"
             paths:
