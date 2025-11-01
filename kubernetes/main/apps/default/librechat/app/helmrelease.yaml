@@ -127,7 +127,7 @@ spec:
           mongodb:
             image:
               repository: mongo
-              tag: 8.0.8
+              tag: 8.2.1
             command: ["mongod", "--noauth"]
             securityContext: *securityContext
             probes: *probes
