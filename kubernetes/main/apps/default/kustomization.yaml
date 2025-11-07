@@ -22,7 +22,6 @@ resources:
   - ./mealie/ks.yaml
   # - ./miniflux/ks.yaml
   - ./emqx/ks.yaml
-  - ./node-red/ks.yaml
   - ./jellyseerr/ks.yaml
   - ./paperless/ks.yaml
   - ./plex/ks.yaml
