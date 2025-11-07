@@ -34,11 +34,20 @@ spec:
             envFrom: &envFrom
               - secretRef:
                   name: "{{ .Release.Name }}-secret"
+          copy-tzdata:
+            image:
+              repository: &repo pentacent/keila
+              tag: &tag "0.17"
+            command:
+              - /bin/sh
+              - -c
+              - |
+                cp -r /opt/app/lib/tzdata-1.1.3/priv/* /tmp/tzdata/
         containers:
           app:
             image:
-              repository: pentacent/keila
-              tag: "0.17"
+              repository: *repo
+              tag: *tag
             env:
               URL_HOST: keila.mcgrath.nz
               URL_SCHEMA: https
@@ -110,5 +119,9 @@ spec:
         existingClaim: "{{ .Release.Name }}"
       tzdata:
         type: emptyDir
-        globalMounts:
-          - path: /opt/app/lib/tzdata-1.1.3/priv
+        advancedMounts:
+          keila:
+            copy-tzdata:
+              - path: /tmp/tzdata
+            app:
+              - path: /opt/app/lib/tzdata-1.1.3/priv
