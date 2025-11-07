@@ -56,6 +56,7 @@ spec:
               PORT: &port 4000
               DISABLE_PRECEDENCE_HEADER: "true"
               USER_CONTENT_DIR: /data
+              DISABLE_REGISTRATION: "true"
               #
               MAILER_SMTP_FROM_EMAIL: "keila@mail.mcgrath.nz"
               MAILER_SMTP_HOST: smtp-relay.default.svc.cluster.local
