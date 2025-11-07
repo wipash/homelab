@@ -64,6 +64,8 @@ spec:
               MAILER_SMTP_PASSWORD: ""
               #
               TZ: Pacific/Auckland
+              #
+              LOG_LEVEL: debug
             envFrom: *envFrom
             probes:
               liveness: &probes
