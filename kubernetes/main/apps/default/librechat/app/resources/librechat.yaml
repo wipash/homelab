@@ -137,12 +137,11 @@ modelSpecs:
       iconURL: https://holmesazaepubshare.blob.core.windows.net/pub/claude.png
       showIconInMenu: true
       showIconInHeader: true
-      web_search: true
       default: false
       preset:
         endpoint: anthropic
         model: claude-sonnet-4-5
-        temperature: 1.0
+        web_search: true
         modelLabel: Claude
         greeting: How can Claude help you today?
         promptPrefix: |
@@ -194,6 +193,7 @@ modelSpecs:
         endpoint: openAI
         model: gpt-5.1
         useResponsesApi: true
+        web_search: true
         verbosity: medium
         reasoning_effort: medium
         reasoning_summary: detailed
@@ -222,13 +222,10 @@ modelSpecs:
       iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/gemini.png"
       showIconInMenu: true
       showIconInHeader: true
-      web_search: true
       default: false
       preset:
         endpoint: google
         model: gemini-2.5-pro
-        maxContextTokens: 1000000 # Maximum context tokens
-        max_tokens: 64000
-        temperature: 0.7
+        web_search: true
         modelLabel: "Gemini"
         greeting: "Gemini here, what can I do for you?"
