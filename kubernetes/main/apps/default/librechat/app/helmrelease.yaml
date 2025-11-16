@@ -206,15 +206,6 @@ spec:
               - subPath: librechat.yaml
                 path: /app/librechat.yaml
 
-      # litellmconfig:
-      #   enabled: true
-      #   type: configMap
-      #   name: litellm-config
-      #   advancedMounts:
-      #     librechat:
-      #       litellm:
-      #         - path: /app
-
       app-data:
         enabled: true
         type: emptyDir
