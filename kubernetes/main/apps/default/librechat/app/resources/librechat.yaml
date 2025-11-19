@@ -218,14 +218,14 @@ modelSpecs:
 
     - name: gemini
       label: Gemini
-      description: Google Gemini 2.5 Pro
+      description: Google Gemini 3 Pro
       iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/gemini.png"
       showIconInMenu: true
       showIconInHeader: true
       default: false
       preset:
         endpoint: google
-        model: gemini-2.5-pro
+        model: gemini-3-pro-preview
         web_search: true
         modelLabel: "Gemini"
         greeting: "Gemini here, what can I do for you?"
