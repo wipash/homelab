@@ -32,7 +32,7 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
         cronjob:
-          schedule: "0 7-19 * * *"
+          schedule: "0 7-19 * * *"  # At minute 0 past every hour from 07:00 through 19:00
           timeZone: &timeZone Pacific/Auckland
           successfulJobsHistory: 1
           failedJobsHistory: 1
@@ -40,7 +40,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/northgrove-timelapse
-              tag: main@sha256:a6994f1f7c637978eeab4cfa87f1410eaa0436e996fb6621ba498baf5083e01a
+              tag: main@sha256:e2eb1445dca7b47b5c056fda7acac25ef0667d1f20fb2884617477998a2390d3
             env:
               TZ: *timeZone
             envFrom:
@@ -55,6 +55,36 @@ spec:
                 cpu: 100m
               limits:
                 memory: 2Gi
+      timelapse-full:
+        type: cronjob
+        annotations:
+          reloader.stakater.com/auto: "true"
+        cronjob:
+          schedule: "0 2 * * 1"  # At 02:00 on Monday
+          timeZone: *timeZone
+          successfulJobsHistory: 1
+          failedJobsHistory: 1
+        containers:
+          app:
+            image:
+              repository: ghcr.io/wipash/northgrove-timelapse
+              tag: main@sha256:e2eb1445dca7b47b5c056fda7acac25ef0667d1f20fb2884617477998a2390d3
+            args:
+              - full
+            env:
+              TZ: *timeZone
+            envFrom:
+              - secretRef:
+                  name: timelapse-processor-secret
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 2000m
+              limits:
+                memory: 4Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
