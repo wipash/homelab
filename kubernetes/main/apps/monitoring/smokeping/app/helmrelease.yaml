@@ -70,6 +70,9 @@ spec:
 
     ingress:
       app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            url: https://ping.mcgrath.nz/smokeping
         className: external
         hosts:
           - host: "ping.mcgrath.nz"
