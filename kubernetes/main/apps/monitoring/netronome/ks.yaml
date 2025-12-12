@@ -14,7 +14,7 @@ spec:
       namespace: kube-system
   components:
     - ../../../../components/volsync
-  path: ./kubernetes/apps/monitoring/netronome/app
+  path: ./kubernetes/main/apps/monitoring/netronome/app
   prune: true
   sourceRef:
     kind: GitRepository
