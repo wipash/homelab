@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: jellyseerr
+  name: seerr
 spec:
   interval: 30m
   chart:
@@ -27,21 +27,21 @@ spec:
       namespace: rook-ceph
   values:
     controllers:
-      jellyseerr:
+      seerr:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
-              repository: docker.io/fallenbagel/jellyseerr
-              tag: 2.7.3@sha256:4538137bc5af902dece165f2bf73776d9cf4eafb6dd714670724af8f3eb77764
+              repository: ghcr.io/seerr-team/seerr
+              tag: develop@sha256:cebdcb3d23986bef88221717ed3352a595a05d4168409d69efa10f5fc5be19ff
             env:
               TZ: Pacific/Auckland
               LOG_LEVEL: "info"
               PORT: &port 80
             envFrom:
               - secretRef:
-                  name: jellyseerr-secret
+                  name: seerr-secret
             probes:
               liveness: &probes
                 enabled: true
@@ -74,7 +74,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       app:
-        controller: jellyseerr
+        controller: seerr
         ports:
           http:
             port: *port
@@ -92,16 +92,19 @@ spec:
           - hosts: [*host]
     persistence:
       config:
-        existingClaim: jellyseerr
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /app/config
       cache:
-        existingClaim: jellyseerr-cache
+        existingClaim: seerr-cache
         globalMounts:
           - path: /app/config/cache
       logs:
         type: emptyDir
         globalMounts:
           - path: /app/config/logs
+            subPath: logs
+          - path: /tmp
+            subPath: tmp
       tmp:
         type: emptyDir
