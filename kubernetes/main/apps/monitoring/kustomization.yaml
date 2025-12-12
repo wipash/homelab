@@ -20,3 +20,4 @@ resources:
   - ./prometheus-operator-crds/ks.yaml
   - ./smokeping/ks.yaml
   - ./promtail/ks.yaml
+  - ./netronome/ks.yaml
