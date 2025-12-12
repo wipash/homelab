@@ -30,6 +30,7 @@ spec:
             env:
               TZ: Pacific/Auckland
               NETRONOME__DB_TYPE: postgres
+              NETRONOME__HOST: 0.0.0.0
               NETRONOME__PORT: &port 7575
             envFrom: *envFrom
             securityContext:
