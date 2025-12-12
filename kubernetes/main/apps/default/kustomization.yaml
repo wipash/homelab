@@ -55,4 +55,3 @@ resources:
   - ./qui/ks.yaml
   - ./tqm/ks.yaml
   - ./ccattendance/ks.yaml
-  - ./keila/ks.yaml
