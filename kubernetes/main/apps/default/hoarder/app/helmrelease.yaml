@@ -3,18 +3,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app hoarder
+  name: hoarder
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      interval: 30m
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
+  chartRef:
+    kind: OCIRepository
+    name: hoarder
+  interval: 1h
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
@@ -37,6 +31,7 @@ spec:
               repository: ghcr.io/karakeep-app/karakeep
               tag: latest@sha256:2bd46449181b02e28568f4822c57d8fa14ddb08dfb516366f43e06ef22f25dcf
             env:
+              TZ: Pacific/Auckland
               BROWSER_WEB_URL: http://hoarder-chrome.default.svc.cluster.local:9222
               CRAWLER_DOWNLOAD_BANNER_IMAGE: true
               CRAWLER_ENABLE_ADBLOCKER: true
@@ -78,6 +73,10 @@ spec:
                 enabled: true
               readiness:
                 enabled: true
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
@@ -93,6 +92,8 @@ spec:
             image:
               repository: gcr.io/zenika-hub/alpine-chrome
               tag: 124
+            env:
+              TZ: Pacific/Auckland
             command:
               - chromium-browser
             args:
@@ -104,9 +105,9 @@ spec:
               - --remote-debugging-port=9222
               - --hide-scrollbars
             securityContext:
-              capabilities:
-                drop:
-                  - ALL
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
@@ -136,12 +137,17 @@ spec:
               - /bin/meilisearch
               - --experimental-dumpless-upgrade
             env:
+              TZ: Pacific/Auckland
               MEILI_NO_ANALYTICS: true
               MEILI_MASTER_KEY:
                 valueFrom:
                   secretKeyRef:
                     name: hoarder-secret
                     key: meilisearch_master_key
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
@@ -150,17 +156,14 @@ spec:
 
     service:
       app:
-        controller: hoarder
         ports:
           http:
             port: 3000
       chrome:
-        controller: chrome
         ports:
           http:
             port: 9222
       meilisearch:
-        controller: meilisearch
         ports:
           http:
             port: 7700
@@ -178,7 +181,7 @@ spec:
 
     persistence:
       data:
-        existingClaim: *app
+        existingClaim: "{{ .Release.Name }}"
         advancedMounts:
           hoarder:
             app:
@@ -194,3 +197,16 @@ spec:
           meilisearch:
             app:
               - path: /meili_data
+
+      tmp:
+        type: emptyDir
+        advancedMounts:
+          hoarder:
+            app:
+              - path: /tmp
+          chrome:
+            app:
+              - path: /tmp
+          meilisearch:
+            app:
+              - path: /tmp

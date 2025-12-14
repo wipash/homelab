@@ -3,25 +3,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app maintainerr
+  name: maintainerr
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
+  chartRef:
+    kind: OCIRepository
+    name: maintainerr
+  interval: 1h
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
@@ -38,7 +25,7 @@ spec:
               repository: ghcr.io/jorenn92/maintainerr
               tag: 2.19.0@sha256:bee84707edaf589cda3d18b6813cbfe3a137b52786210c3a28190e10910c1240
             env:
-              TZ: ${TIMEZONE}
+              TZ: Pacific/Auckland
             probes:
               liveness:
                 enabled: true
@@ -49,6 +36,10 @@ spec:
                 spec:
                   failureThreshold: 30
                   periodSeconds: 5
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 5m
@@ -65,7 +56,6 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       app:
-        controller: *app
         ports:
           http:
             port: 6246
@@ -81,6 +71,8 @@ spec:
                   port: http
     persistence:
       data:
-        existingClaim: *app
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /opt/data
+      tmp:
+        type: emptyDir

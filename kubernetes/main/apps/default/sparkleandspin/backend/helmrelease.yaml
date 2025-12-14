@@ -5,30 +5,20 @@ kind: HelmRelease
 metadata:
   name: sparkleandspin-backend
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      interval: 30m
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
-
+  chartRef:
+    kind: OCIRepository
+    name: sparkleandspin-backend
+  interval: 1h
   values:
     defaultPodOptions:
       imagePullSecrets:
         - name: ghcr-imagepullsecret
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
 
     controllers:
       sparkleandspin-backend:
@@ -50,6 +40,7 @@ spec:
               pullPolicy: Always
             envFrom: *envFrom
             env:
+              TZ: Pacific/Auckland
               DATABASE_TYPE: postgres
               STORE_CORS: http://localhost:8000,http://localhost:7001,https://${SECRET_DOMAIN_SPARKLE}
               ADMIN_CORS: /mcgrath\.nz$/
@@ -74,16 +65,9 @@ spec:
                 memory: 512M
         pod:
           enableServiceLinks: false
-          securityContext:
-            runAsUser: 568
-            runAsGroup: 568
-            runAsNonRoot: true
-            fsGroup: 568
-            fsGroupChangePolicy: "OnRootMismatch"
 
     service:
       app:
-        controller: sparkleandspin-backend
         ports:
           http:
             port: 9000
@@ -91,22 +75,18 @@ spec:
     persistence:
       config:
         type: emptyDir
-        enabled: true
         globalMounts:
           - path: /.config/medusa
       cache:
         type: emptyDir
-        enabled: true
         globalMounts:
           - path: /app/medusa/.cache
       uploads:
         type: emptyDir
-        enabled: true
         globalMounts:
           - path: /app/medusa/uploads
       tmp:
         type: emptyDir
-        enabled: true
         globalMounts:
           - path: /tmp
 

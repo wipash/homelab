@@ -5,23 +5,10 @@ kind: HelmRelease
 metadata:
   name: ghost
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
+  chartRef:
+    kind: OCIRepository
+    name: ghost
+  interval: 1h
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
@@ -32,13 +19,15 @@ spec:
   values:
     controllers:
       ghost:
+        annotations:
+          reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
               repository: ghost
               tag: 6.10.2
             env:
-              TZ: "Pacific/Auckland"
+              TZ: Pacific/Auckland
               url: "https://${SECRET_GHOST_DOMAIN}"
               database__client: mysql
               database__connection__host: ghost-mariadb.default.svc.cluster.local
@@ -47,16 +36,25 @@ spec:
               NODE_ENV: production
             envFrom:
               - secretRef:
-                  name: ghost-secret
+                  name: "{{ .Release.Name }}-secret"
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
     service:
       app:
-        controller: ghost
         ports:
           http:
             port: 2368
     ingress:
       app:
-        enabled: true
         className: external
         hosts:
           - host: &host ${SECRET_GHOST_DOMAIN}
@@ -67,10 +65,11 @@ spec:
                   port: http
         tls:
           - hosts: [*host]
-            secretName: "ghost-tls"
+            secretName: ghost-tls
     persistence:
       content:
-        enabled: true
         globalMounts:
           - path: /var/lib/ghost/content
-        existingClaim: ghost
+        existingClaim: "{{ .Release.Name }}"
+      tmp:
+        type: emptyDir
