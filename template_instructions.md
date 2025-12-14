@@ -626,6 +626,7 @@ For each app:
 - [ ] Remove `serviceName` from serviceMonitor
 
 ### Verification
+- [ ] Verify `defaultPodOptions.securityContext` exists (if original had `pod.securityContext`)
 - [ ] Verify the app name in metadata.name matches across all files
 - [ ] Verify controller name matches the app name
 
