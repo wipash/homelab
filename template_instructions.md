@@ -124,6 +124,77 @@ service:
         port: *port
 ```
 
+### Move Pod Security Context to defaultPodOptions
+
+Some HelmReleases have pod-level security context under `controllers.<name>.pod.securityContext`. This should be moved to `defaultPodOptions.securityContext`.
+
+**Before (wrong location):**
+```yaml
+controllers:
+  prowlarr:
+    pod:
+      securityContext:
+        runAsUser: 568
+        runAsGroup: 568
+        runAsNonRoot: true
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+    containers:
+      app:
+        # ...
+```
+
+**After (correct location):**
+```yaml
+controllers:
+  prowlarr:
+    containers:
+      app:
+        # ...
+defaultPodOptions:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 568
+    runAsGroup: 568
+    fsGroup: 568
+    fsGroupChangePolicy: OnRootMismatch
+```
+
+**Note:** The `controllers.<name>.pod` section can still be used for controller-specific settings like `restartPolicy: Never` (for CronJobs), `hostNetwork`, `hostPID`, `nodeSelector`, `tolerations`, `affinity`, and `topologySpreadConstraints`. Only move `securityContext` to `defaultPodOptions`.
+
+### Add Container Security Context (if missing)
+
+Each container should have a security context for best practices:
+
+```yaml
+containers:
+  app:
+    securityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities: {drop: ["ALL"]}
+```
+
+### Standardize Ingress Naming
+
+Use `app` as the ingress identifier instead of `main` for consistency:
+
+**Before:**
+```yaml
+ingress:
+  main:
+    className: internal
+    # ...
+```
+
+**After:**
+```yaml
+ingress:
+  app:
+    className: internal
+    # ...
+```
+
 ### Keep Everything Else
 
 The following sections remain compatible and should be preserved as-is:
@@ -419,6 +490,7 @@ spec:
 
 For each app:
 
+### Required Changes
 - [ ] Create `ocirepository.yaml` with correct app name
 - [ ] Remove `chart.spec` section from helmrelease.yaml
 - [ ] Add `chartRef` section pointing to OCIRepository
@@ -428,7 +500,15 @@ For each app:
 - [ ] Remove `maxHistory`, `uninstall` sections if present
 - [ ] Remove `controller: <name>` from service definitions
 - [ ] Update `kustomization.yaml` to include ocirepository.yaml
+
+### Cleanup/Standardization
+- [ ] Move `controllers.<name>.pod.securityContext` to `defaultPodOptions.securityContext`
+- [ ] Add container-level `securityContext` if missing (allowPrivilegeEscalation, readOnlyRootFilesystem, capabilities)
+- [ ] Rename `ingress.main` to `ingress.app` for consistency
+
+### Verification
 - [ ] Verify the app name in metadata.name matches across all files
+- [ ] Verify controller name matches the app name
 
 ---
 
