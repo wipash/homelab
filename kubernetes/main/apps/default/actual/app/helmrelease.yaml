@@ -3,19 +3,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app actual
+  name: actual
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      interval: 30m
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-
+  chartRef:
+    kind: OCIRepository
+    name: actual
+  interval: 1h
   values:
     controllers:
       actual:
@@ -24,17 +17,18 @@ spec:
 
         pod:
           enableServiceLinks: false
-          securityContext:
-            runAsUser: 568
-            runAsGroup: 568
-            fsGroup: 568
-            fsGroupChangePolicy: "OnRootMismatch"
 
         containers:
           app:
             image:
               repository: ghcr.io/actualbudget/actual-server
               tag: 25.12.0
+            env:
+              TZ: Pacific/Auckland
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
             probes:
               liveness:
                 enabled: true
@@ -51,9 +45,15 @@ spec:
               limits:
                 memory: 100Mi
 
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+
     service:
       app:
-        controller: actual
         ports:
           http:
             port: 5006
@@ -71,8 +71,10 @@ spec:
 
     persistence:
       data:
-        existingClaim: *app
+        existingClaim: "{{ .Release.Name }}"
         advancedMounts:
           actual:
             app:
               - path: /data
+      tmp:
+        type: emptyDir
