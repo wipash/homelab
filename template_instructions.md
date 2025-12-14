@@ -195,6 +195,55 @@ ingress:
     # ...
 ```
 
+### Use Templated Names
+
+Use Helm templating for names that match the release name. This makes manifests more portable.
+
+**Before:**
+```yaml
+persistence:
+  config:
+    existingClaim: radarr
+# ...
+envFrom:
+  - secretRef:
+      name: radarr-secret
+```
+
+**After:**
+```yaml
+persistence:
+  config:
+    existingClaim: "{{ .Release.Name }}"
+# ...
+envFrom:
+  - secretRef:
+      name: "{{ .Release.Name }}-secret"
+```
+
+Also for ingress hostnames when they match the app name:
+
+**Before:**
+```yaml
+ingress:
+  app:
+    hosts:
+      - host: radarr.mcgrath.nz
+```
+
+**After:**
+```yaml
+ingress:
+  app:
+    hosts:
+      - host: "{{ .Release.Name }}.mcgrath.nz"
+```
+
+**Note:** Only apply templating when the name matches the release name. Keep explicit names for:
+- Claims like `radarr-cache` or `plex-cache`
+- Secrets with different naming patterns
+- Hostnames like `sab.mcgrath.nz` (for sabnzbd) or `zigbee.mcgrath.nz` (for zigbee2mqtt)
+
 ### Keep Everything Else
 
 The following sections remain compatible and should be preserved as-is:
@@ -505,6 +554,10 @@ For each app:
 - [ ] Move `controllers.<name>.pod.securityContext` to `defaultPodOptions.securityContext`
 - [ ] Add container-level `securityContext` if missing (allowPrivilegeEscalation, readOnlyRootFilesystem, capabilities)
 - [ ] Rename `ingress.main` to `ingress.app` for consistency
+- [ ] Add `tmp: type: emptyDir` persistence if container has `readOnlyRootFilesystem: true` and lacks a writable /tmp
+- [ ] Use `"{{ .Release.Name }}"` for existingClaim when claim name matches app name
+- [ ] Use `"{{ .Release.Name }}-secret"` for secretRef when secret follows this naming pattern
+- [ ] Use `"{{ .Release.Name }}.mcgrath.nz"` for ingress hosts when hostname matches app name
 
 ### Verification
 - [ ] Verify the app name in metadata.name matches across all files
