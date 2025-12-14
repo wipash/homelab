@@ -5,24 +5,10 @@ kind: HelmRelease
 metadata:
   name: atuin
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
+  chartRef:
+    kind: OCIRepository
+    name: atuin
+  interval: 1h
   values:
     controllers:
       atuin:
@@ -37,13 +23,14 @@ spec:
               tag: 18
             envFrom: &envFrom
               - secretRef:
-                  name: atuin-secret
+                  name: "{{ .Release.Name }}-secret"
         containers:
           app:
             image:
               repository: ghcr.io/atuinsh/atuin
               tag: v18.10.0@sha256:4a29feda6f352581ece849807445fe1f50f2074b4643b7bfe62b27e23705b068
             env:
+              TZ: Pacific/Auckland
               ATUIN_HOST: 0.0.0.0
               ATUIN_PORT: &port 80
               ATUIN_OPEN_REGISTRATION: "false"
@@ -72,16 +59,16 @@ spec:
                 spec:
                   failureThreshold: 30
                   periodSeconds: 5
-        pod:
-          securityContext:
-            runAsUser: 568
-            runAsGroup: 568
-            runAsNonRoot: true
-            fsGroup: 568
-            fsGroupChangePolicy: OnRootMismatch
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+
     service:
       app:
-        controller: atuin
         ports:
           http:
             port: *port
@@ -89,8 +76,6 @@ spec:
             port: *metricsPort
     serviceMonitor:
       app:
-        serviceName: app
-        enabled: true
         endpoints:
           - port: metrics
             scheme: http
@@ -99,7 +84,6 @@ spec:
             scrapeTimeout: 10s
     ingress:
       app:
-        enabled: true
         className: external
         hosts:
           - host: &host sh.mcgrath.nz
@@ -113,5 +97,4 @@ spec:
               - *host
     persistence:
       config:
-        enabled: true
         type: emptyDir
