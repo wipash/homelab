@@ -134,10 +134,10 @@ controllers:
   prowlarr:
     pod:
       securityContext:
-        runAsUser: 568
-        runAsGroup: 568
+        runAsUser: 1000
+        runAsGroup: 1000
         runAsNonRoot: true
-        fsGroup: 568
+        fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
     containers:
       app:
@@ -154,9 +154,9 @@ controllers:
 defaultPodOptions:
   securityContext:
     runAsNonRoot: true
-    runAsUser: 568
-    runAsGroup: 568
-    fsGroup: 568
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
     fsGroupChangePolicy: OnRootMismatch
 ```
 
@@ -344,9 +344,9 @@ spec:
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
@@ -427,9 +427,9 @@ spec:
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
@@ -516,9 +516,9 @@ spec:
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
     persistence:
       config:
@@ -583,5 +583,5 @@ For each app:
 - Keep your existing `persistence` configuration
 - Keep your existing `serviceMonitor` configuration
 - Keep your existing `dependsOn` dependencies
-- Keep your existing user/group IDs (568, etc.)
+- Keep your existing user/group IDs (1000 is the standard)
 - Keep your existing security contexts
