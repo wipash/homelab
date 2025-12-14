@@ -305,12 +305,12 @@ process_batch() {
     log_info "=========================================="
 }
 
-# Delete workload only (for manual migration workflow)
+# Delete workload and trigger recreation (for already-migrated apps)
 delete_workload_only() {
     local app="$1"
     local namespace="${2:-$DEFAULT_NAMESPACE}"
 
-    log_info "Deleting workload for: $app (namespace: $namespace)"
+    log_info "Recreating workload for: $app (namespace: $namespace)"
 
     local workload_info
     workload_info=$(get_workload_info "$app" "$namespace")
@@ -323,9 +323,19 @@ delete_workload_only() {
         return 1
     fi
 
+    # Suspend HelmRelease first
+    log_info "Suspending HelmRelease..."
+    flux suspend helmrelease -n "$namespace" "$app" || true
+
+    # Delete the workload
     log_info "Deleting $workload_type/$workload_name..."
     kubectl delete "$workload_type" -n "$namespace" "$workload_name" --ignore-not-found
     log_success "Deleted $workload_type/$workload_name"
+
+    # Resume HelmRelease to trigger recreation
+    log_info "Resuming HelmRelease..."
+    flux resume helmrelease -n "$namespace" "$app"
+    log_success "HelmRelease resumed - workload will be recreated"
 }
 
 # Show usage
@@ -340,7 +350,7 @@ Options:
     -h, --help          Show this help message
     -l, --list-pending  List all app-template HelmReleases and their migration status
     -b, --batch FILE    Process multiple apps from a file (one per line: "app namespace")
-    -d, --delete-only   Only delete the workload (don't suspend/resume HelmRelease)
+    -d, --delete-only   Recreate workload via suspend/delete/resume (for already-migrated apps)
 
 Examples:
     # Migrate a single app
