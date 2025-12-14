@@ -3,30 +3,17 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app audiobookshelf
+  name: audiobookshelf
 spec:
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: audiobookshelf
+  interval: 1h
   values:
     controllers:
       audiobookshelf:
         annotations:
-          secret.reloader.stakater.com/reload: &secret audiobookshelf-secret
-        pod:
-          securityContext:
-            runAsUser: 568
-            runAsGroup: 568
-            runAsNonRoot: true
-            fsGroup: 568
-            fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups: [65537]
+          reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
@@ -34,7 +21,7 @@ spec:
               tag: 2.31.0
             envFrom:
               - secretRef:
-                  name: *secret
+                  name: "{{ .Release.Name }}-secret"
             env:
               TZ: Pacific/Auckland
               PORT: &port 8080
@@ -51,6 +38,10 @@ spec:
                     path: /healthcheck
                     port: *port
               readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
@@ -58,12 +49,11 @@ spec:
                 memory: 512Mi
     service:
       app:
-        controller: audiobookshelf
         ports:
           http:
             port: *port
     ingress:
-      main:
+      app:
         className: external
         hosts:
           - host: &host audiobooks.mcgrath.nz
@@ -75,7 +65,7 @@ spec:
         tls: [hosts: [*host]]
     persistence:
       config:
-        existingClaim: *app
+        existingClaim: "{{ .Release.Name }}"
       media:
         type: nfs
         server: 172.20.0.1
@@ -87,3 +77,5 @@ spec:
             subPath: Podcasts
           - path: /ebooks
             subPath: eBooks
+      tmp:
+        type: emptyDir
