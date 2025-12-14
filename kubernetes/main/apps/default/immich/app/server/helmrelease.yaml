@@ -51,7 +51,7 @@ spec:
               - configMapRef:
                   name: immich-configmap
               - secretRef:
-                  name: "{{ .Release.Name }}-secret"
+                  name: immich-secret
         containers:
           app:
             image:
