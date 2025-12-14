@@ -3,37 +3,24 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app esphome
+  name: esphome
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      interval: 30m
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-
+  chartRef:
+    kind: OCIRepository
+    name: esphome
+  interval: 1h
   values:
     controllers:
       esphome:
         annotations:
-          secret.reloader.stakater.com/reload: esphome-secrets
-        pod:
-          securityContext:
-            runAsUser: 2000
-            runAsGroup: 2000
-            fsGroup: 2000
-            fsGroupChangePolicy: OnRootMismatch
-
+          reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
               repository: ghcr.io/esphome/esphome
               tag: 2025.11.5
             env:
+              TZ: Pacific/Auckland
               PLATFORMIO_CORE_DIR: /cache/platformio
               PLATFORMIO_GLOBALLIB_DIR: /cache/platformio/lib
               PLATFORMIO_SETTING_ENABLE_TELEMETRY: No
@@ -60,6 +47,8 @@ spec:
             image:
               repository: ghcr.io/coder/code-server
               tag: 4.106.3@sha256:1a0e813039c8f01404a89654278779ac77492b833bc2d126431268b9b1f1e40a
+            env:
+              TZ: Pacific/Auckland
             args:
               - --auth
               - none
@@ -80,7 +69,6 @@ spec:
 
     service:
       app:
-        controller: esphome
         ports:
           http:
             port: 6052
@@ -104,14 +92,19 @@ spec:
                   identifier: app
                   port: code-server
 
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 2000
+        runAsGroup: 2000
+        fsGroup: 2000
+        fsGroupChangePolicy: OnRootMismatch
     persistence:
       config:
-        enabled: true
-        existingClaim: *app
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /config
       esphome-cache:
-        enabled: true
         type: emptyDir
         globalMounts:
           - path: /config/.esphome

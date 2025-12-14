@@ -3,29 +3,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app paperless
+  name: paperless
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  maxHistory: 2
-  install:
-    createNamespace: true
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
-  uninstall:
-    keepHistory: false
+  chartRef:
+    kind: OCIRepository
+    name: paperless
+  interval: 1h
   values:
     controllers:
       paperless:
@@ -103,7 +86,9 @@ spec:
 
             envFrom: *envFrom
             securityContext:
-              supplementalGroups: ["568", "65537"]
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 10m
@@ -116,15 +101,34 @@ spec:
               repository: docker.io/thecodingmachine/gotenberg
               tag: 8.25.1
             env:
-              - {name: DISABLE_GOOGLE_CHROME, value: "1"}
+              TZ: Pacific/Auckland
+              DISABLE_GOOGLE_CHROME: "1"
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
 
           tika:
             image:
               repository: docker.io/apache/tika
               tag: 3.2.3.0-full
+            env:
+              TZ: Pacific/Auckland
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups: [65537]
+        seccompProfile: { type: RuntimeDefault }
     service:
       app:
-        controller: *app
         ports:
           http:
             port: 8000
@@ -143,7 +147,7 @@ spec:
               - *host
     persistence:
       data:
-        existingClaim: *app
+        existingClaim: "{{ .Release.Name }}"
         advancedMounts:
           paperless:
             app:
@@ -154,3 +158,5 @@ spec:
         path: /volume1/Data/Docs/paperless/
         globalMounts:
           - path: /data/nas
+      tmp:
+        type: emptyDir

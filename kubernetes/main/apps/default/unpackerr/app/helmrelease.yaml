@@ -5,23 +5,10 @@ kind: HelmRelease
 metadata:
   name: unpackerr
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
+  chartRef:
+    kind: OCIRepository
+    name: unpackerr
+  interval: 1h
   values:
     controllers:
       unpackerr:
@@ -43,7 +30,7 @@ spec:
               UN_RADARR_0_PATHS_0: /media/Downloads/qbittorrent/complete/radarr
             envFrom:
               - secretRef:
-                  name: unpackerr-secret
+                  name: "{{ .Release.Name }}-secret"
             probes:
               liveness:
                 enabled: true
@@ -70,13 +57,11 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       app:
-        controller: unpackerr
         ports:
           http:
             port: 5656
     serviceMonitor:
       app:
-        serviceName: unpackerr
         endpoints:
           - port: http
             scheme: http

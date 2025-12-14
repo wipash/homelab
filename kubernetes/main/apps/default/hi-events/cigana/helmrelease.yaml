@@ -3,25 +3,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app hi-events-cigana
+  name: hi-events-cigana
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
+  chartRef:
+    kind: OCIRepository
+    name: hi-events-cigana
+  interval: 1h
   values:
     controllers:
       hi-events-cigana:
@@ -41,7 +28,7 @@ spec:
               repository: ghcr.io/wipash/hi-events
               tag: 1.1.0-beta.2@sha256:609fbe19d8b25073dbee4f7f40f99b04874b978c7af1e6601834eefec56ce47d
             env:
-              TZ: ${TIMEZONE}
+              TZ: Pacific/Auckland
             envFrom: *envFrom
             probes:
               liveness:
@@ -72,7 +59,6 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       app:
-        controller: *app
         ports:
           http:
             port: 8080
@@ -88,7 +74,7 @@ spec:
                   port: http
     persistence:
       storage:
-        existingClaim: *app
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /app/backend/storage
 

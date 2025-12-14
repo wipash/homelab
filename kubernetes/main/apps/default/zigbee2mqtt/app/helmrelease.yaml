@@ -5,24 +5,10 @@ kind: HelmRelease
 metadata:
   name: zigbee2mqtt
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
-
+  chartRef:
+    kind: OCIRepository
+    name: zigbee2mqtt
+  interval: 1h
   values:
     controllers:
       zigbee2mqtt:
@@ -85,14 +71,14 @@ spec:
               limits:
                 memory: 150M
         pod:
-          securityContext:
-            supplementalGroups:
-              - 20
           nodeSelector:
             sonoff.feature.node.kubernetes.io/zigbee: "true"
+    defaultPodOptions:
+      securityContext:
+        supplementalGroups:
+          - 20
     service:
       app:
-        controller: zigbee2mqtt
         ports:
           http:
             port: *port

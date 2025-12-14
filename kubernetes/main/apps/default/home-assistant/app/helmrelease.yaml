@@ -5,23 +5,10 @@ kind: HelmRelease
 metadata:
   name: home-assistant
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
+  chartRef:
+    kind: OCIRepository
+    name: home-assistant
+  interval: 1h
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
@@ -39,7 +26,7 @@ spec:
               tag: 18
             envFrom:
               - secretRef:
-                  name: home-assistant-secret
+                  name: "{{ .Release.Name }}-secret"
         containers:
           app:
             image:
@@ -49,7 +36,7 @@ spec:
               TZ: Pacific/Auckland
             envFrom:
               - secretRef:
-                  name: home-assistant-secret
+                  name: "{{ .Release.Name }}-secret"
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -81,7 +68,11 @@ spec:
               HASS_SERVER: http://localhost:8123
             envFrom:
               - secretRef:
-                  name: home-assistant-code-secret
+                  name: "{{ .Release.Name }}-code-secret"
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 10m
@@ -107,7 +98,6 @@ spec:
 
     service:
       app:
-        controller: home-assistant
         type: LoadBalancer
         annotations:
           io.cilium/lb-ipam-ips: "172.16.10.11"
@@ -130,7 +120,7 @@ spec:
       app:
         className: external
         annotations:
-          nginx.org/websocket-services: home-assistant
+          nginx.org/websocket-services: "{{ .Release.Name }}"
         hosts:
           - host: &host hass.mcgrath.nz
             paths:
@@ -141,7 +131,6 @@ spec:
         tls:
           - hosts: [*host]
       code-server:
-        enabled: true
         className: internal
         hosts:
           - host: "ha-code.mcgrath.nz"
@@ -152,7 +141,7 @@ spec:
                   port: code-server
     persistence:
       config:
-        existingClaim: home-assistant
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /config
 

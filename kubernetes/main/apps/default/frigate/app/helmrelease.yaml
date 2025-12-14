@@ -6,26 +6,10 @@ metadata:
   name: frigate
   namespace: default
 spec:
-  interval: 15m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  maxHistory: 3
-  install:
-    createNamespace: true
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
+  chartRef:
+    kind: OCIRepository
+    name: frigate
+  interval: 1h
   dependsOn:
     - name: intel-device-plugin-gpu
       namespace: kube-system
@@ -71,13 +55,13 @@ spec:
               limits:
                 memory: 3000M
                 gpu.intel.com/i915: "1"
-        pod:
-          nodeSelector:
-            google.feature.node.kubernetes.io/coral: "true"
+
+    defaultPodOptions:
+      nodeSelector:
+        google.feature.node.kubernetes.io/coral: "true"
 
     service:
       app:
-        controller: frigate
         ports:
           http:
             port: *port
