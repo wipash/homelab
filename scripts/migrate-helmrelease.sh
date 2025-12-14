@@ -363,7 +363,7 @@ migrate_failing() {
             log_info "Skipping $name - already has new labels"
         fi
 
-    done < <(flux get helmrelease -A 2>/dev/null | grep -E "(upgrade retries exhausted|install retries exhausted|HelmChart .* is not ready)" | awk '{print $1, $2}')
+    done < <(flux get helmrelease -A 2>/dev/null | grep -E "(upgrade retries exhausted|install retries exhausted|HelmChart .* is not ready|field is immutable|Helm rollback)" | awk '{print $1, $2}')
 
     if [[ ${#apps_to_migrate[@]} -eq 0 ]]; then
         log_info "No failing HelmReleases found that need migration"

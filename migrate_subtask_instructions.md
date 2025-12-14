@@ -1,23 +1,42 @@
-You need to migrate three HelmReleases from app-template 3.x to 4.5.0 following the instructions in /home/sean/homelab/template_instructions.md
+# Migration Subtask Instructions
 
-Migrate these apps:
-1. ...
-2. ...
+Migrate the HelmRelease for **{APP_NAME}** from app-template 3.x to 4.5.0 following /home/sean/homelab/template_instructions.md
 
-For each app, you need to:
-1. Read the current helmrelease.yaml
-2. Read the kustomization.yaml
-3. Create a new ocirepository.yaml file
-4. Modify the helmrelease.yaml according to the template instructions
-5. Update the kustomization.yaml to include ocirepository.yaml
+Location: /home/sean/homelab/kubernetes/main/apps/{NAMESPACE}/{APP_NAME}/app/
 
-DO NOT:
+## Tasks
+
+1. Read the current helmrelease.yaml and kustomization.yaml
+2. Create ocirepository.yaml with correct format (see template_instructions.md)
+3. Modify helmrelease.yaml according to the template instructions
+4. Update kustomization.yaml to include ocirepository.yaml
+
+## DO NOT
+
 - Commit any changes
 - Run the migration script
 - Push anything
 
-Follow ALL the instructions in template_instructions.md including:
-- Required changes (chartRef, remove install/upgrade sections, remove service controller field, etc.)
-- Cleanup/Standardization (securityContext location, ingress naming, templated names using {{ .Release.Name }}, tmp emptyDir, reloader annotations, TZ env var, removing enabled: true from persistence/ingress/serviceMonitor, removing serviceName from serviceMonitor, etc.)
+## Required Changes (from template_instructions.md)
 
-The apps are located in /home/sean/homelab/kubernetes/main/apps/default/
+- Replace `chart.spec` with `chartRef` pointing to OCIRepository
+- Change `interval` from `30m` to `1h`
+- Remove `install` section (handled by Flux defaults)
+- Remove `upgrade` section (handled by Flux defaults)
+- Remove `maxHistory`, `uninstall` sections if present
+- Remove `controller: <name>` from service definitions ONLY for single-controller apps
+- KEEP `controller: <name>` on services when the app has multiple controllers (the chart cannot auto-detect which controller a service belongs to)
+- Update kustomization.yaml to include ocirepository.yaml
+
+## Cleanup/Standardization
+
+- Move `controllers.<name>.pod.securityContext` to `defaultPodOptions.securityContext`
+- Add container-level `securityContext` if missing (allowPrivilegeEscalation, readOnlyRootFilesystem, capabilities)
+- Rename `ingress.main` to `ingress.app` for consistency
+- Add `tmp: type: emptyDir` persistence if container has `readOnlyRootFilesystem: true`
+- Replace YAML anchors (`*app`) with `"{{ .Release.Name }}"` for existingClaim, secretRef, ingress hosts
+- Use `reloader.stakater.com/auto: "true"` annotation for apps with secrets/configmaps
+- Remove specific reloader annotations (`secret.reloader.stakater.com/reload`, etc.)
+- Add `TZ: Pacific/Auckland` env var to all containers
+- Remove `enabled: true` from persistence, ingress, serviceMonitor, service, route
+- Remove `serviceName` from serviceMonitor

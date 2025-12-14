@@ -156,14 +156,17 @@ spec:
 
     service:
       app:
+        controller: hoarder
         ports:
           http:
             port: 3000
       chrome:
+        controller: chrome
         ports:
           http:
             port: 9222
       meilisearch:
+        controller: meilisearch
         ports:
           http:
             port: 7700
