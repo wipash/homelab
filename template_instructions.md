@@ -244,6 +244,41 @@ ingress:
 - Secrets with different naming patterns
 - Hostnames like `sab.mcgrath.nz` (for sabnzbd) or `zigbee.mcgrath.nz` (for zigbee2mqtt)
 
+### Standardize Reloader Annotations
+
+Apps that use secrets or configmaps should use the generic auto-reload annotation. Remove specific reload annotations.
+
+**Before:**
+```yaml
+controllers:
+  audiobookshelf:
+    annotations:
+      secret.reloader.stakater.com/reload: &secret audiobookshelf-secret
+```
+
+**After:**
+```yaml
+controllers:
+  audiobookshelf:
+    annotations:
+      reloader.stakater.com/auto: "true"
+```
+
+Remove any of these specific annotations:
+- `secret.reloader.stakater.com/reload`
+- `configmap.reloader.stakater.com/reload`
+
+Replace with `reloader.stakater.com/auto: "true"` if the app uses secrets or configmaps.
+
+### Standardize Timezone
+
+All apps should use `Pacific/Auckland` for the timezone:
+
+```yaml
+env:
+  TZ: Pacific/Auckland
+```
+
 ### Keep Everything Else
 
 The following sections remain compatible and should be preserved as-is:
@@ -558,6 +593,9 @@ For each app:
 - [ ] Use `"{{ .Release.Name }}"` for existingClaim when claim name matches app name
 - [ ] Use `"{{ .Release.Name }}-secret"` for secretRef when secret follows this naming pattern
 - [ ] Use `"{{ .Release.Name }}.mcgrath.nz"` for ingress hosts when hostname matches app name
+- [ ] Use `reloader.stakater.com/auto: "true"` annotation for apps with secrets/configmaps
+- [ ] Remove specific reloader annotations (`secret.reloader.stakater.com/reload`, etc.)
+- [ ] Ensure TZ env var is set to `Pacific/Auckland`
 
 ### Verification
 - [ ] Verify the app name in metadata.name matches across all files
