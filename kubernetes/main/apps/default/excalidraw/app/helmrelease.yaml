@@ -66,3 +66,7 @@ spec:
     persistence:
       tmp:
         type: emptyDir
+      assets:
+        type: emptyDir
+        globalMounts:
+          - path: /usr/share/nginx/html/assets
