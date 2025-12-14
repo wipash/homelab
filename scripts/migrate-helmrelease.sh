@@ -221,7 +221,7 @@ migrate_app() {
         log_info "Step 2: No workload to delete, skipping..."
     fi
 
-    # Step 3: Resume HelmRelease
+    # Step 3: Resume HelmRelease (this triggers reconciliation)
     log_info "Step 3: Resuming HelmRelease..."
     if ! flux resume helmrelease -n "$namespace" "$app"; then
         log_error "Failed to resume HelmRelease"
@@ -229,13 +229,8 @@ migrate_app() {
     fi
     log_success "HelmRelease resumed"
 
-    # Step 4: Trigger reconciliation
-    log_info "Step 4: Triggering reconciliation..."
-    flux reconcile helmrelease -n "$namespace" "$app" --with-source &>/dev/null || true
-    log_success "Reconciliation triggered"
-
     echo ""
-    log_success "Migration steps complete for '$app'"
+    log_success "Migration complete for '$app'"
     log_info "Monitor with: flux get helmrelease -n $namespace $app"
     log_info "Or watch: kubectl get pods -n $namespace -l app.kubernetes.io/name=$app -w"
 
@@ -334,6 +329,85 @@ process_batch() {
     log_info "=========================================="
 }
 
+# Migrate all failing HelmReleases (auto-detect) - batched for speed
+migrate_failing() {
+    log_info "Scanning for failing HelmReleases that need migration..."
+    echo ""
+
+    declare -a apps_to_migrate=()
+    declare -a workloads_to_delete=()
+
+    # Find HelmReleases that are failing with upgrade retries exhausted
+    while IFS= read -r line; do
+        [[ -z "$line" ]] && continue
+
+        local namespace name
+        namespace=$(echo "$line" | awk '{print $1}')
+        name=$(echo "$line" | awk '{print $2}')
+
+        # Check if this app needs migration (has old label)
+        if workload_needs_migration "$name" "$namespace"; then
+            apps_to_migrate+=("$namespace:$name")
+
+            # Get workload info
+            local workload_info
+            workload_info=$(get_workload_info "$name" "$namespace")
+            local workload_type workload_name
+            workload_type=$(echo "$workload_info" | cut -d' ' -f1)
+            workload_name=$(echo "$workload_info" | cut -d' ' -f2)
+
+            if [[ "$workload_type" != "unknown" ]]; then
+                workloads_to_delete+=("$namespace:$workload_type:$workload_name")
+            fi
+        else
+            log_info "Skipping $name - already has new labels"
+        fi
+
+    done < <(flux get helmrelease -A 2>/dev/null | grep -E "(upgrade retries exhausted|install retries exhausted|HelmChart .* is not ready)" | awk '{print $1, $2}')
+
+    if [[ ${#apps_to_migrate[@]} -eq 0 ]]; then
+        log_info "No failing HelmReleases found that need migration"
+        return 0
+    fi
+
+    log_info "Found ${#apps_to_migrate[@]} apps to migrate"
+    echo ""
+
+    # Step 1: Suspend all HelmReleases
+    log_info "Step 1: Suspending all HelmReleases..."
+    for app_ref in "${apps_to_migrate[@]}"; do
+        IFS=':' read -r namespace name <<< "$app_ref"
+        flux suspend helmrelease -n "$namespace" "$name" &
+    done
+    wait
+    log_success "All HelmReleases suspended"
+
+    # Step 2: Delete all workloads
+    log_info "Step 2: Deleting all workloads..."
+    for workload_ref in "${workloads_to_delete[@]}"; do
+        IFS=':' read -r namespace workload_type workload_name <<< "$workload_ref"
+        kubectl delete "$workload_type" -n "$namespace" "$workload_name" --ignore-not-found &
+    done
+    wait
+    log_success "All workloads deleted"
+
+    # Step 3: Resume all HelmReleases (this triggers reconciliation)
+    log_info "Step 3: Resuming all HelmReleases..."
+    for app_ref in "${apps_to_migrate[@]}"; do
+        IFS=':' read -r namespace name <<< "$app_ref"
+        flux resume helmrelease -n "$namespace" "$name" &
+    done
+    wait
+    log_success "All HelmReleases resumed"
+
+    echo ""
+    log_info "=========================================="
+    log_info "Migration complete!"
+    log_info "  Migrated: ${#apps_to_migrate[@]} apps"
+    log_info "=========================================="
+    log_info "Monitor with: flux get helmrelease -A"
+}
+
 # Delete workload and trigger recreation (for already-migrated apps)
 delete_workload_only() {
     local app="$1"
@@ -378,6 +452,7 @@ label change (app.kubernetes.io/component -> app.kubernetes.io/controller).
 Options:
     -h, --help          Show this help message
     -l, --list-pending  List all app-template HelmReleases and their migration status
+    -f, --failing       Auto-detect and migrate all failing HelmReleases
     -b, --batch FILE    Process multiple apps from a file (one per line: "app namespace")
     -d, --delete-only   Recreate workload via suspend/delete/resume (for already-migrated apps)
 
@@ -386,13 +461,16 @@ Examples:
     $(basename "$0") radarr
     $(basename "$0") radarr default
 
+    # Auto-migrate all failing HelmReleases
+    $(basename "$0") --failing
+
     # List pending migrations
     $(basename "$0") --list-pending
 
     # Batch migrate from file
     $(basename "$0") --batch apps.txt
 
-    # Just delete workload (for manual workflow)
+    # Recreate workload (for already-migrated apps)
     $(basename "$0") --delete-only radarr
 
 Batch file format (apps.txt):
@@ -425,6 +503,10 @@ main() {
             ;;
         -l|--list-pending)
             list_pending
+            exit 0
+            ;;
+        -f|--failing)
+            migrate_failing
             exit 0
             ;;
         -b|--batch)
