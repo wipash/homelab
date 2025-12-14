@@ -275,6 +275,37 @@ env:
   TZ: Pacific/Auckland
 ```
 
+### Remove Unnecessary Fields
+
+In app-template 4.x, several fields are no longer needed:
+
+**Remove `enabled: true`** from these sections (they're enabled by being defined):
+- `persistence`
+- `ingress`
+- `serviceMonitor`
+- `service`
+- `route`
+
+**Remove `serviceName`** from `serviceMonitor` (auto-detected):
+
+**Before:**
+```yaml
+serviceMonitor:
+  app:
+    enabled: true
+    serviceName: radarr
+    endpoints:
+      - port: http
+```
+
+**After:**
+```yaml
+serviceMonitor:
+  app:
+    endpoints:
+      - port: http
+```
+
 ### Keep Everything Else
 
 The following sections remain compatible and should be preserved as-is:
@@ -591,6 +622,8 @@ For each app:
 - [ ] Use `reloader.stakater.com/auto: "true"` annotation for apps with secrets/configmaps
 - [ ] Remove specific reloader annotations (`secret.reloader.stakater.com/reload`, etc.)
 - [ ] Add `TZ: Pacific/Auckland` env var to all containers
+- [ ] Remove `enabled: true` from persistence, ingress, serviceMonitor, service, route
+- [ ] Remove `serviceName` from serviceMonitor
 
 ### Verification
 - [ ] Verify the app name in metadata.name matches across all files
