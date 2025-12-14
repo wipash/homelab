@@ -99,13 +99,42 @@ helmrelease_exists() {
     kubectl get helmrelease -n "$namespace" "$app" &>/dev/null
 }
 
-# Check if HelmRelease is using OCIRepository (already migrated)
-is_migrated() {
+# Check if workload already has the new label (already migrated)
+workload_needs_migration() {
     local app="$1"
     local namespace="$2"
-    local chart_kind
-    chart_kind=$(kubectl get helmrelease -n "$namespace" "$app" -o jsonpath='{.spec.chartRef.kind}' 2>/dev/null || echo "")
-    [[ "$chart_kind" == "OCIRepository" ]]
+
+    local workload_info
+    workload_info=$(get_workload_info "$app" "$namespace")
+    local workload_type workload_name
+    workload_type=$(echo "$workload_info" | cut -d' ' -f1)
+    workload_name=$(echo "$workload_info" | cut -d' ' -f2)
+
+    if [[ "$workload_type" == "unknown" ]]; then
+        # No workload found - needs migration (will be created fresh)
+        return 0
+    fi
+
+    # Check if workload has the OLD label (app.kubernetes.io/component)
+    local old_label
+    old_label=$(kubectl get "$workload_type" -n "$namespace" "$workload_name" -o jsonpath='{.metadata.labels.app\.kubernetes\.io/component}' 2>/dev/null || echo "")
+
+    if [[ -n "$old_label" ]]; then
+        # Has old label - needs migration
+        return 0
+    fi
+
+    # Check if workload has the NEW label (app.kubernetes.io/controller)
+    local new_label
+    new_label=$(kubectl get "$workload_type" -n "$namespace" "$workload_name" -o jsonpath='{.metadata.labels.app\.kubernetes\.io/controller}' 2>/dev/null || echo "")
+
+    if [[ -n "$new_label" ]]; then
+        # Has new label - already migrated
+        return 1
+    fi
+
+    # Neither label found - assume needs migration
+    return 0
 }
 
 # Get current chart version
@@ -146,9 +175,9 @@ migrate_app() {
         return 1
     fi
 
-    # Check if already migrated
-    if is_migrated "$app" "$namespace"; then
-        log_warn "HelmRelease '$app' is already using OCIRepository - skipping"
+    # Check if workload needs migration
+    if ! workload_needs_migration "$app" "$namespace"; then
+        log_warn "Workload '$app' already has new labels - skipping"
         return 0
     fi
 
@@ -248,10 +277,10 @@ list_pending() {
         local version status
         version=$(get_chart_version "$name" "$namespace")
 
-        if is_migrated "$name" "$namespace"; then
-            status="migrated"
-        else
+        if workload_needs_migration "$name" "$namespace"; then
             status="PENDING"
+        else
+            status="migrated"
         fi
 
         printf "%-30s %-15s %-20s %s\n" "$name" "$namespace" "$version" "$status"
