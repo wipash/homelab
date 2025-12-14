@@ -197,49 +197,45 @@ ingress:
 
 ### Use Templated Names
 
-Use Helm templating for names that match the release name. This makes manifests more portable.
+Use Helm templating `{{ .Release.Name }}` for names that match the release name. This is preferred over YAML anchors (`*app`) for these values as it's more portable.
 
-**Before:**
+**Before (either of these):**
 ```yaml
+metadata:
+  name: &app radarr
+# ...
 persistence:
   config:
-    existingClaim: radarr
-# ...
-envFrom:
-  - secretRef:
-      name: radarr-secret
+    existingClaim: *app  # YAML anchor
+    # or
+    existingClaim: radarr  # hardcoded
 ```
 
 **After:**
 ```yaml
+metadata:
+  name: radarr  # no anchor needed for this purpose
+# ...
 persistence:
   config:
     existingClaim: "{{ .Release.Name }}"
-# ...
+```
+
+Same for secrets and ingress hostnames:
+```yaml
 envFrom:
   - secretRef:
       name: "{{ .Release.Name }}-secret"
-```
-
-Also for ingress hostnames when they match the app name:
-
-**Before:**
-```yaml
-ingress:
-  app:
-    hosts:
-      - host: radarr.mcgrath.nz
-```
-
-**After:**
-```yaml
+# ...
 ingress:
   app:
     hosts:
       - host: "{{ .Release.Name }}.mcgrath.nz"
 ```
 
-**Note:** Only apply templating when the name matches the release name. Keep explicit names for:
+**Note:** YAML anchors are still useful for local reuse within the file (e.g., `&port 80` referenced by probes and service). Only replace anchors used for the app name pattern.
+
+**Keep explicit names for:**
 - Claims like `radarr-cache` or `plex-cache`
 - Secrets with different naming patterns
 - Hostnames like `sab.mcgrath.nz` (for sabnzbd) or `zigbee.mcgrath.nz` (for zigbee2mqtt)
@@ -272,7 +268,7 @@ Replace with `reloader.stakater.com/auto: "true"` if the app uses secrets or con
 
 ### Standardize Timezone
 
-All apps should use `Pacific/Auckland` for the timezone:
+All apps should have a TZ environment variable set to `Pacific/Auckland`. Add it if not present:
 
 ```yaml
 env:
@@ -590,12 +586,11 @@ For each app:
 - [ ] Add container-level `securityContext` if missing (allowPrivilegeEscalation, readOnlyRootFilesystem, capabilities)
 - [ ] Rename `ingress.main` to `ingress.app` for consistency
 - [ ] Add `tmp: type: emptyDir` persistence if container has `readOnlyRootFilesystem: true` and lacks a writable /tmp
-- [ ] Use `"{{ .Release.Name }}"` for existingClaim when claim name matches app name
-- [ ] Use `"{{ .Release.Name }}-secret"` for secretRef when secret follows this naming pattern
-- [ ] Use `"{{ .Release.Name }}.mcgrath.nz"` for ingress hosts when hostname matches app name
+- [ ] Replace YAML anchors (`*app`) with `"{{ .Release.Name }}"` for existingClaim, secretRef, ingress hosts
+- [ ] Remove unused `&app` anchors from metadata.name (keep if used elsewhere in file)
 - [ ] Use `reloader.stakater.com/auto: "true"` annotation for apps with secrets/configmaps
 - [ ] Remove specific reloader annotations (`secret.reloader.stakater.com/reload`, etc.)
-- [ ] Ensure TZ env var is set to `Pacific/Auckland`
+- [ ] Add `TZ: Pacific/Auckland` env var to all containers
 
 ### Verification
 - [ ] Verify the app name in metadata.name matches across all files
