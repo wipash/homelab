@@ -5,23 +5,10 @@ kind: HelmRelease
 metadata:
   name: autobrr
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
+  chartRef:
+    kind: OCIRepository
+    name: autobrr
+  interval: 1h
   values:
     controllers:
       autobrr:
@@ -34,13 +21,14 @@ spec:
               tag: 18
             envFrom: &envFrom
               - secretRef:
-                  name: autobrr-secret
+                  name: "{{ .Release.Name }}-secret"
         containers:
           app:
             image:
               repository: ghcr.io/autobrr/autobrr
               tag: v1.71.0@sha256:db9794958a0f9db93059c1e9f06193a063ce3846d346d7a7c9eca607c6617c51
             env:
+              TZ: Pacific/Auckland
               AUTOBRR__CHECK_FOR_UPDATES: "false"
               AUTOBRR__HOST: 0.0.0.0
               AUTOBRR__PORT: &port 80
@@ -76,7 +64,6 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       app:
-        controller: autobrr
         ports:
           http:
             port: *port
