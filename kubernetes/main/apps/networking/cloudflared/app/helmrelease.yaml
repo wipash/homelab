@@ -2,25 +2,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app cloudflared
+  name: cloudflared
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
+  chartRef:
+    kind: OCIRepository
+    name: cloudflared
+  interval: 1h
   dependsOn:
     - name: nginx-external
       namespace: networking
@@ -37,6 +24,7 @@ spec:
               repository: docker.io/cloudflare/cloudflared
               tag: 2025.11.1@sha256:89ee50efb1e9cb2ae30281a8a404fed95eb8f02f0a972617526f8c5b417acae2
             env:
+              TZ: Pacific/Auckland
               NO_AUTOUPDATE: true
               TUNNEL_CRED_FILE: /etc/cloudflared/creds/credentials.json
               TUNNEL_METRICS: 0.0.0.0:8080
@@ -74,26 +62,25 @@ spec:
               limits:
                 memory: 256Mi
         pod:
-          securityContext:
-            runAsUser: 568
-            runAsGroup: 568
-            runAsNonRoot: true
           topologySpreadConstraints:
             - maxSkew: 1
               topologyKey: kubernetes.io/hostname
               whenUnsatisfiable: DoNotSchedule
               labelSelector:
                 matchLabels:
-                  app.kubernetes.io/name: *app
+                  app.kubernetes.io/name: "{{ .Release.Name }}"
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
     service:
       app:
-        controller: cloudflared
         ports:
           http:
             port: *port
     serviceMonitor:
       app:
-        serviceName: cloudflared
         endpoints:
           - port: http
     persistence:
@@ -111,3 +98,5 @@ spec:
           - path: /etc/cloudflared/creds/credentials.json
             subPath: credentials.json
             readOnly: true
+      tmp:
+        type: emptyDir

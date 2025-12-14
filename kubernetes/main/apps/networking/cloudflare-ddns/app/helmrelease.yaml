@@ -3,25 +3,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app cloudflare-ddns
+  name: cloudflare-ddns
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
+  chartRef:
+    kind: OCIRepository
+    name: cloudflare-ddns
+  interval: 1h
   values:
     controllers:
       cloudflare-ddns:
@@ -39,9 +26,11 @@ spec:
               - plz.dont.ltd
               - --provider
               - random
+            env:
+              TZ: Pacific/Auckland
             envFrom:
               - secretRef:
-                  name: cloudflare-ddns-secret
+                  name: "{{ .Release.Name }}-secret"
             probes:
               liveness:
                 enabled: true
@@ -57,15 +46,25 @@ spec:
                   httpGet:
                     path: /health/ready
                     port: *healthPort
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 memory: 64Mi
                 cpu: 10m
               limits:
                 memory: 128Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
     service:
       app:
-        controller: *app
         ports:
           http:
             port: 9000
@@ -73,10 +72,12 @@ spec:
             port: *healthPort
     serviceMonitor:
       app:
-        serviceName: *app
         endpoints:
           - port: health
             scheme: http
             path: /metrics
             interval: 30s
             scrapeTimeout: 30s
+    persistence:
+      tmp:
+        type: emptyDir
