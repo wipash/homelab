@@ -89,7 +89,7 @@ spec:
           meilisearch:
             image:
               repository: getmeili/meilisearch
-              tag: v1.29.0
+              tag: v1.30.0
             args:
               - /bin/meilisearch
               - --experimental-dumpless-upgrade
