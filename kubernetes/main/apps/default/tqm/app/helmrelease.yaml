@@ -5,25 +5,15 @@ kind: HelmRelease
 metadata:
   name: tqm
 spec:
+  chartRef:
+    kind: OCIRepository
+    name: tqm
   interval: 1h
-  chart:
-    spec:
-      chart: app-template
-      version: 4.3.0
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
   values:
     controllers:
       tqm:
+        annotations:
+          reloader.stakater.com/auto: "true"
         type: cronjob
         cronjob:
           schedule: "@hourly"
@@ -36,6 +26,8 @@ spec:
             image:
               repository: ghcr.io/home-operations/tqm
               tag: 1.18.0@sha256:454864e1f56a86550c54776c3ba5f3439133b4fc4e66ef69ff90a6ee65db6cc5
+            env:
+              TZ: Pacific/Auckland
             args:
               - retag
               - qb

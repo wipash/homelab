@@ -5,22 +5,10 @@ kind: HelmRelease
 metadata:
   name: qui
 spec:
+  chartRef:
+    kind: OCIRepository
+    name: qui
   interval: 1h
-  chart:
-    spec:
-      chart: app-template
-      version: 4.3.0
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
   values:
     controllers:
       qui:
@@ -72,6 +60,8 @@ spec:
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
+      tmp:
+        type: emptyDir
     ingress:
       app:
         className: internal
