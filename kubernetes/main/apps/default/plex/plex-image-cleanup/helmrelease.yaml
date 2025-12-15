@@ -5,15 +5,10 @@ kind: HelmRelease
 metadata:
   name: plex-image-cleanup
 spec:
-  chart:
-    spec:
-      chart: app-template
-      version: 4.2.0
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: plex-image-cleanup
+  interval: 1h
   dependsOn:
     - name: plex
       namespace: default
@@ -30,6 +25,7 @@ spec:
           successfulJobsHistory: 0
 
         pod:
+          restartPolicy: Never
           affinity:
             podAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
@@ -40,10 +36,6 @@ spec:
                         values:
                           - plex
                   topologyKey: kubernetes.io/hostname
-          securityContext:
-            runAsUser: 568
-            runAsGroup: 568
-            runAsNonRoot: true
 
         containers:
           app:
@@ -51,6 +43,7 @@ spec:
               repository: docker.io/meisnate12/plex-image-cleanup
               tag: v1.0.2
             env:
+              TZ: Pacific/Auckland
               PLEX_URL: http://plex.default.svc.cluster.local:32400
               PLEX_TOKEN:
                 valueFrom:
@@ -80,6 +73,12 @@ spec:
                 drop:
                   - ALL
 
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+
     persistence:
       config:
         type: emptyDir
@@ -87,6 +86,8 @@ spec:
           plex-image-cleanup:
             app:
               - path: /config
+      tmp:
+        type: emptyDir
       plex-config:
         existingClaim: plex
         advancedMounts:
