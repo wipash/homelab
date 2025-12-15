@@ -13,14 +13,6 @@ spec:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   values:
-    defaultPodOptions:
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        runAsNonRoot: true
-        fsGroup: 1000
-        fsGroupChangePolicy: "OnRootMismatch"
-
     controllers:
       hoarder:
         annotations:
@@ -73,10 +65,6 @@ spec:
                 enabled: true
               readiness:
                 enabled: true
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
