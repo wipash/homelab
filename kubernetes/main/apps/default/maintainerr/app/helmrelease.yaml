@@ -22,8 +22,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/jorenn92/maintainerr
-              tag: 2.19.0@sha256:bee84707edaf589cda3d18b6813cbfe3a137b52786210c3a28190e10910c1240
+              repository: ghcr.io/maintainerr/maintainerr
+              tag: 2.25.0@sha256:7c2899994a471df176b685c751b48f8881abe0fd8f2f14c8301532b3d963cb6d
             env:
               TZ: Pacific/Auckland
             probes:
