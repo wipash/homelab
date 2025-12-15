@@ -640,6 +640,76 @@ For each app:
 
 3. **Resource Naming**: The naming scheme changed. Resources may get new names, potentially removing old ones. Ensure PVCs use `existingClaim` to prevent data loss.
 
+4. **PVC Naming Convention Changed**: In 4.x, PVCs created with `type: persistentVolumeClaim` are named after the release name only (e.g., `hoarder`), not `{release}-{persistence-key}` (e.g., `hoarder-meilisearch`). For apps with multiple PVCs, add `suffix: <key>` to maintain unique names:
+
+   ```yaml
+   persistence:
+     data:
+       existingClaim: "{{ .Release.Name }}"  # Uses existing PVC
+     meilisearch:
+       type: persistentVolumeClaim
+       suffix: meilisearch  # Creates "hoarder-meilisearch" instead of "hoarder"
+       storageClass: ceph-block
+       accessMode: ReadWriteOnce
+       size: 1Gi
+   ```
+
+---
+
+## Security Context Exceptions
+
+Not all apps can use strict security contexts. Remove or relax security settings for these cases:
+
+### s6-overlay Images (e.g., linuxserver.io, paperless, karakeep/hoarder)
+
+Apps using s6-overlay init system need root at startup to configure `/run`. For these apps:
+
+- **Remove** `runAsUser`, `runAsGroup`, `runAsNonRoot` from `defaultPodOptions.securityContext`
+- **Remove** container-level `securityContext` entirely
+- **Keep** `fsGroup` only if needed for sidecar containers
+
+**Example for s6-overlay app:**
+```yaml
+controllers:
+  hoarder:
+    containers:
+      app:
+        image:
+          repository: ghcr.io/karakeep-app/karakeep
+          tag: latest
+        # NO securityContext here for s6-overlay apps
+        resources:
+          # ...
+
+  meilisearch:  # Sidecar without s6-overlay
+    pod:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+    containers:
+      app:
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities: {drop: ["ALL"]}
+```
+
+### Images with Startup Scripts That Modify Files
+
+Some images (e.g., excalidraw) use startup scripts that `sed` or modify files. For these:
+
+- Set `readOnlyRootFilesystem: false` or remove it
+- **Don't** mount emptyDir over paths containing files from the image
+- May need to remove `runAsUser` if the default user lacks write permissions
+
+**Common indicators:**
+- Errors like `sed: can't create temp file`
+- Errors like `Permission denied` on image paths
+- LinuxServer.io images
+- Images with `/docker-entrypoint.sh` or similar
+
 ---
 
 ## What NOT to Change

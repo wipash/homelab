@@ -40,3 +40,12 @@ Location: /home/sean/homelab/kubernetes/main/apps/{NAMESPACE}/{APP_NAME}/app/
 - Add `TZ: Pacific/Auckland` env var to all containers
 - Remove `enabled: true` from persistence, ingress, serviceMonitor, service, route
 - Remove `serviceName` from serviceMonitor
+- For multi-PVC apps, add `suffix: <key>` to `type: persistentVolumeClaim` entries (4.x names PVCs as release name only by default)
+
+## Security Context Exceptions
+
+**DO NOT add strict security contexts to these apps:**
+
+- **s6-overlay images** (linuxserver.io, paperless, karakeep/hoarder): Remove `runAsUser`, `runAsGroup`, `runAsNonRoot`, and container securityContext
+- **Images with startup scripts that modify files** (excalidraw, etc.): Remove `readOnlyRootFilesystem` and potentially `runAsUser`
+- **Don't mount emptyDir over paths containing files from the image** (this hides the original files)

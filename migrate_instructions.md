@@ -24,51 +24,12 @@ Select a range of apps to migrate (e.g., all apps starting with a specific lette
 
 For each app that needs migration, launch a parallel subtask using the instructions in `/home/sean/homelab/migrate_subtask_instructions.md`.
 
-Example prompt for each subtask:
-```
-Migrate the HelmRelease for **{APP_NAME}** from app-template 3.x to 4.5.0 following /home/sean/homelab/template_instructions.md
-
-Location: /home/sean/homelab/kubernetes/main/apps/{NAMESPACE}/{APP_NAME}/app/
-
-Tasks:
-1. Read the current helmrelease.yaml and kustomization.yaml
-2. Create ocirepository.yaml
-3. Modify helmrelease.yaml per the template instructions
-4. Update kustomization.yaml to include ocirepository.yaml
-
-DO NOT commit. Follow ALL instructions including: chartRef, remove install/upgrade sections, remove service controller field, securityContext placement, templated names {{ .Release.Name }}, reloader annotations, TZ env var, remove enabled:true from persistence/ingress/serviceMonitor, tmp emptyDir, etc.
-```
-
 Launch these subtasks in parallel for faster processing.
 
 ## Step 3: Review Changes (Subtask)
 
 After all migration subtasks complete, launch a review subtask using the instructions in `/home/sean/homelab/review_subtask_instructions.md`.
 
-Example prompt for review subtask:
-```
-Review the app-template 4.5.0 migrations for these apps and verify they follow /home/sean/homelab/template_instructions.md:
-
-1. /home/sean/homelab/kubernetes/main/apps/{NAMESPACE}/{APP1}/app/
-2. /home/sean/homelab/kubernetes/main/apps/{NAMESPACE}/{APP2}/app/
-... (list all migrated apps)
-
-For each app, verify:
-1. ocirepository.yaml exists with correct format
-2. helmrelease.yaml has chartRef (not chart.spec)
-3. No install/upgrade sections remain
-4. No controller field in service
-5. defaultPodOptions.securityContext exists (if original had pod.securityContext)
-6. Container securityContext present
-7. TZ: Pacific/Auckland present
-8. tmp emptyDir present (if readOnlyRootFilesystem: true)
-9. Templated names used ({{ .Release.Name }})
-10. No enabled: true in persistence/ingress/serviceMonitor
-11. No serviceName in serviceMonitor
-12. kustomization.yaml includes ocirepository.yaml
-
-Report any issues found.
-```
 
 ## Step 4: Commit Changes
 
@@ -90,6 +51,44 @@ This will:
 2. Suspend them all in parallel
 3. Delete their workloads in parallel
 4. Resume them all in parallel (triggering recreation with new labels)
+
+## Troubleshooting Common Post-Migration Issues
+
+### PVC Name Conflicts (rollback fails with "storage: Forbidden: field can not be less than")
+
+**Cause:** In 4.x, PVCs are named after the release name only (e.g., `hoarder`), not `{release}-{persistence-key}` (e.g., `hoarder-meilisearch`). This causes conflicts when an app has multiple PVCs.
+
+**Fix:** Add `suffix: <key>` to persistence entries that use `type: persistentVolumeClaim`:
+```yaml
+persistence:
+  meilisearch:
+    type: persistentVolumeClaim
+    suffix: meilisearch  # Creates "hoarder-meilisearch"
+```
+
+### s6-overlay Permission Denied ("/run belongs to uid 0")
+
+**Cause:** Apps using s6-overlay (linuxserver.io, paperless, karakeep/hoarder) need root at startup to configure `/run`.
+
+**Fix:** Remove security context restrictions for the main container:
+- Remove `runAsUser`, `runAsGroup`, `runAsNonRoot` from `defaultPodOptions.securityContext`
+- Remove container-level `securityContext` entirely
+- Keep `fsGroup` only for sidecar containers that need it (apply via `controllers.<name>.pod.securityContext`)
+
+### Startup Script Permission Denied ("sed: can't create temp file")
+
+**Cause:** Container has `readOnlyRootFilesystem: true` but startup script needs to modify files, OR container runs as non-root user but files are root-owned.
+
+**Fix:**
+- Remove `readOnlyRootFilesystem: true` from container securityContext
+- Remove `runAsUser`/`runAsNonRoot` to let container run as its default user
+- Don't mount emptyDir over paths that contain files from the image
+
+### Immutable Selector Labels (handled by migrate script)
+
+**Cause:** Label changed from `app.kubernetes.io/component` to `app.kubernetes.io/controller`.
+
+**Fix:** Already handled by Step 5 - the migrate script deletes and recreates workloads.
 
 ## Reference Files
 
