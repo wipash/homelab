@@ -3,15 +3,15 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name home-ops-runner
+  name: &name homelab-runner
 spec:
   chartRef:
     kind: OCIRepository
     name: gha-runner-scale-set
   interval: 1h
   values:
-    githubConfigUrl: https://github.com/onedr0p/home-ops
-    githubConfigSecret: home-ops-runner-secret
+    githubConfigUrl: https://github.com/wipash/homelab
+    githubConfigSecret: homelab-runner-secret
     minRunners: 1
     maxRunners: 3
     containerMode:
