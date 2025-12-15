@@ -1,12 +1,12 @@
 Review the app-template 4.5.0 migrations for these 7 apps and verify they follow /home/sean/homelab/template_instructions.md:
 
-1. /home/sean/homelab/kubernetes/main/apps/default/authelia/app/
-2. /home/sean/homelab/kubernetes/main/apps/default/autobrr/app/
-3. /home/sean/homelab/kubernetes/main/apps/default/cross-seed/app/
-4. /home/sean/homelab/kubernetes/main/apps/default/cups/app/
-5. /home/sean/homelab/kubernetes/main/apps/default/cyberchef/app/
-6. /home/sean/homelab/kubernetes/main/apps/networking/cloudflare-ddns/app/
-7. /home/sean/homelab/kubernetes/main/apps/networking/cloudflared/app/
+1. /home/sean/homelab/kubernetes/apps/default/authelia/app/
+2. /home/sean/homelab/kubernetes/apps/default/autobrr/app/
+3. /home/sean/homelab/kubernetes/apps/default/cross-seed/app/
+4. /home/sean/homelab/kubernetes/apps/default/cups/app/
+5. /home/sean/homelab/kubernetes/apps/default/cyberchef/app/
+6. /home/sean/homelab/kubernetes/apps/networking/cloudflare-ddns/app/
+7. /home/sean/homelab/kubernetes/apps/networking/cloudflared/app/
 
 For each app, verify:
 1. ocirepository.yaml exists with correct format

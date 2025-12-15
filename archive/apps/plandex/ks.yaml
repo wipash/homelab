@@ -6,7 +6,7 @@ metadata:
   name: &app plandex
   namespace: flux-system
 spec:
-  path: ./kubernetes/main/apps/default/plandex/app
+  path: ./kubernetes/apps/default/plandex/app
   targetNamespace: default
   sourceRef:
     kind: GitRepository

@@ -6,7 +6,7 @@ metadata:
   name: &app headscale
   namespace: flux-system
 spec:
-  path: ./kubernetes/main/apps/networking/headscale/app
+  path: ./kubernetes/apps/networking/headscale/app
   targetNamespace: networking
   sourceRef:
     kind: GitRepository

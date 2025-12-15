@@ -17,7 +17,7 @@ spec:
       namespace: flux-system
     - name: rook-ceph-cluster
       namespace: flux-system
-  path: ./kubernetes/main/apps/default/node-red/app
+  path: ./kubernetes/apps/default/node-red/app
   prune: true
   sourceRef:
     kind: GitRepository
