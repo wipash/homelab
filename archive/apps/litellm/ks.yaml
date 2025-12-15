@@ -15,7 +15,7 @@ spec:
       namespace: flux-system
     - name: external-secrets-stores
       namespace: kube-system
-  path: ./kubernetes/main/apps/default/litellm/app
+  path: ./kubernetes/apps/default/litellm/app
   prune: true
   sourceRef:
     kind: GitRepository

@@ -63,7 +63,7 @@ spec:
 
 ### Remove install/upgrade/rollback sections (now handled by Flux defaults)
 
-The following sections are now applied automatically via the patch in `kubernetes/main/flux/apps.yaml`:
+The following sections are now applied automatically via the patch in `kubernetes/flux/apps.yaml`:
 
 **REMOVE these sections if present:**
 ```yaml

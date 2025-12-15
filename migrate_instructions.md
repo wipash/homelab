@@ -35,7 +35,7 @@ After all migration subtasks complete, launch a review subtask using the instruc
 
 After review passes, commit all the migrated apps:
 ```bash
-git add kubernetes/main/apps/... && git commit -m "feat: migrate {APP_NAMES} to app-template 4.5.0"
+git add kubernetes/apps/... && git commit -m "feat: migrate {APP_NAMES} to app-template 4.5.0"
 ```
 
 ## Step 5: Trigger Workload Recreation

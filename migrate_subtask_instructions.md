@@ -2,7 +2,7 @@
 
 Migrate the HelmRelease for **{APP_NAME}** from app-template 3.x to 4.5.0 following /home/sean/homelab/template_instructions.md
 
-Location: /home/sean/homelab/kubernetes/main/apps/{NAMESPACE}/{APP_NAME}/app/
+Location: /home/sean/homelab/kubernetes/apps/{NAMESPACE}/{APP_NAME}/app/
 
 ## Tasks
 
