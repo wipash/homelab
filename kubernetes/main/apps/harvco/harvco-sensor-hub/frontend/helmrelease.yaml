@@ -3,29 +3,13 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app harvco-sensor-hub-frontend
+  name: harvco-sensor-hub-frontend
   namespace: default
 spec:
-  interval: 15m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  maxHistory: 3
-  install:
-    createNamespace: true
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
+  chartRef:
+    kind: OCIRepository
+    name: harvco-sensor-hub-frontend
+  interval: 1h
   values:
     controllers:
       frontend:
@@ -40,6 +24,7 @@ spec:
               repository: ghcr.io/wipash/harvco-temps-frontend
               tag: latest@sha256:ee27346d01216af7db3e3b7b7c2f811c3bd5e097f74e2a9470cf1c29059f3837
             env:
+              TZ: Pacific/Auckland
               NEXT_PUBLIC_API_URL: https://sensorapi.${SECRET_DOMAIN_HARVCO}
             probes:
               liveness: &probes
@@ -55,6 +40,7 @@ spec:
                   failureThreshold: 3
             securityContext:
               allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
             resources:
               requests:
@@ -63,25 +49,24 @@ spec:
                 memory: 100Mi
 
         pod:
-          securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-            runAsNonRoot: true
           topologySpreadConstraints:
             - maxSkew: 1
               topologyKey: kubernetes.io/hostname
               whenUnsatisfiable: DoNotSchedule
               labelSelector:
                 matchLabels:
-                  app.kubernetes.io/name: *app
+                  app.kubernetes.io/name: "{{ .Release.Name }}"
 
     defaultPodOptions:
       imagePullSecrets:
         - name: ghcr-imagepullsecret
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
 
     service:
       app:
-        controller: frontend
         ports:
           http:
             port: *port
@@ -102,3 +87,7 @@ spec:
           - hosts:
               - *host
             secretName: harvco-sensor-hub-frontend-tls
+
+    persistence:
+      tmp:
+        type: emptyDir

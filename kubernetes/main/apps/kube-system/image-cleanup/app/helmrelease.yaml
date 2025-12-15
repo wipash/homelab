@@ -3,32 +3,19 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app image-cleanup
+  name: image-cleanup
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
+  chartRef:
+    kind: OCIRepository
+    name: image-cleanup
+  interval: 1h
   values:
     controllers:
       image-cleanup:
         type: cronjob
         cronjob:
           schedule: "@weekly"
-          timeZone: &timeZone Pacific/Auckland
+          timeZone: Pacific/Auckland
           parallelism: 3 # Set to total number of nodes
           successfulJobsHistory: 1
           failedJobsHistory: 1
@@ -38,7 +25,7 @@ spec:
               repository: alpine
               tag: latest
             env:
-              TZ: *timeZone
+              TZ: Pacific/Auckland
             command:
               - /bin/sh
               - -c
@@ -70,7 +57,7 @@ spec:
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
             matchLabels:
-              app.kubernetes.io/name: *app
+              app.kubernetes.io/name: "{{ .Release.Name }}"
     persistence:
       var-lib-containerd:
         type: hostPath

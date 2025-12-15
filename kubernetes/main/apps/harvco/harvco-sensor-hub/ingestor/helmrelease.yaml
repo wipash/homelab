@@ -3,29 +3,13 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app harvco-sensor-hub-ingestor
+  name: harvco-sensor-hub-ingestor
   namespace: default
 spec:
-  interval: 15m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  maxHistory: 3
-  install:
-    createNamespace: true
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
+  chartRef:
+    kind: OCIRepository
+    name: harvco-sensor-hub-ingestor
+  interval: 1h
   values:
 
     controllers:
@@ -49,6 +33,7 @@ spec:
               tag: latest@sha256:18b1a2337d574590d3b3e8091ce4a43efd791e33b2b768ad9fecb0f57eb0e22d
             envFrom: *envFrom
             env:
+              TZ: Pacific/Auckland
               LOG_LEVEL: debug
             probes:
               liveness: &probes
@@ -61,6 +46,7 @@ spec:
                   periodSeconds: 5
             securityContext:
               allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
             resources:
               requests:
@@ -69,18 +55,22 @@ spec:
                 memory: 100Mi
 
         pod:
-          securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-            runAsNonRoot: true
           topologySpreadConstraints:
             - maxSkew: 1
               topologyKey: kubernetes.io/hostname
               whenUnsatisfiable: DoNotSchedule
               labelSelector:
                 matchLabels:
-                  app.kubernetes.io/name: *app
+                  app.kubernetes.io/name: "{{ .Release.Name }}"
 
     defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
       imagePullSecrets:
         - name: ghcr-imagepullsecret
+
+    persistence:
+      tmp:
+        type: emptyDir
