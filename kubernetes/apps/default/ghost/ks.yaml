@@ -1,0 +1,62 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &appdb ghost-mariadb
+  namespace: default
+  labels:
+    substitution.flux.home.arpa/enabled: "true"
+spec:
+  targetNamespace: default
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *appdb
+  dependsOn:
+    - name: external-secrets-stores
+      namespace: kube-system
+  path: ./kubernetes/apps/default/ghost/mariadb
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-cluster
+    namespace: flux-system
+  wait: false
+  interval: 30m
+  retryInterval: 1m
+  timeout: 3m
+  postBuild:
+    substitute:
+      APP: *appdb
+  components:
+    - ../../../../components/volsync
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app ghost
+  namespace: default
+  labels:
+    substitution.flux.home.arpa/enabled: "true"
+spec:
+  targetNamespace: default
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./kubernetes/apps/default/ghost/app
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-cluster
+    namespace: flux-system
+  wait: false
+  interval: 30m
+  retryInterval: 1m
+  timeout: 3m
+  postBuild:
+    substitute:
+      APP: *app
+      VOLSYNC_CAPACITY: 5Gi
+  components:
+    - ../../../../components/volsync
