@@ -6,9 +6,6 @@ namespace: default
 components:
   - ../../components/common
 resources:
-  # Pre Flux-Kustomizations
-  #- ./namespace.yaml
-  # Flux-Kustomizations
   - ./actual/ks.yaml
   - ./atuin/ks.yaml
   - ./authelia/ks.yaml
@@ -16,11 +13,9 @@ resources:
   - ./frigate/ks.yaml
   - ./ghcr-imagepullsecret/ks.yaml
   - ./home-assistant/ks.yaml
-  # - ./homebox/ks.yaml
   - ./immich/ks.yaml
   - ./lldap/ks.yaml
   - ./mealie/ks.yaml
-  # - ./miniflux/ks.yaml
   - ./emqx/ks.yaml
   - ./seerr/ks.yaml
   - ./paperless/ks.yaml
