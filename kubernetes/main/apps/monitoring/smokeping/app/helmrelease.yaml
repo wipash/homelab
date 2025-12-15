@@ -3,26 +3,13 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app smokeping
+  name: smokeping
   namespace: default
 spec:
-  interval: 15m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
+  chartRef:
+    kind: OCIRepository
+    name: smokeping
+  interval: 1h
   values:
     controllers:
       smokeping:
@@ -41,7 +28,7 @@ spec:
               repository: ghcr.io/linuxserver/smokeping
               tag: 2.9.0
             env:
-              TZ: ${TIMEZONE}
+              TZ: Pacific/Auckland
               PUID: "1000"
               PGID: "1000"
             probes:
@@ -63,7 +50,6 @@ spec:
 
     service:
       app:
-        controller: smokeping
         ports:
           http:
             port: 80
@@ -85,7 +71,7 @@ spec:
       config:
         type: emptyDir
       data:
-        existingClaim: *app
+        existingClaim: "{{ .Release.Name }}"
       configmap:
         type: configMap
         name: smokeping-configmap
