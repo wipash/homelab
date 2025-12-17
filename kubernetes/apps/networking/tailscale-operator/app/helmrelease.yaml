@@ -20,7 +20,7 @@ spec:
       hostname: tailscale-operator
       image:
         repository: ghcr.io/tailscale/k8s-operator
-        tag: v1.90.9@sha256:af6d1206e61b4edca752329efca36d7867efc1e6529207b5217980786403d753
+        tag: v1.92.3@sha256:aadcfa559912721fda402f73527328b6e0f0e7cfaac864a679c8c500375543df
     proxyConfig:
       image:
         repository: ghcr.io/tailscale/tailscale
