@@ -26,7 +26,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/hi-events
-              tag: 1.1.0-beta.2@sha256:609fbe19d8b25073dbee4f7f40f99b04874b978c7af1e6601834eefec56ce47d
+              tag: 1.4.0-beta.1
             env:
               TZ: Pacific/Auckland
               LOG_CHANNEL: stderr
