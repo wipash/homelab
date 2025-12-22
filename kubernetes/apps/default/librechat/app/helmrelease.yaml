@@ -113,7 +113,7 @@ spec:
           mongodb:
             image:
               repository: mongo
-              tag: 8.2.3
+              tag: 8.0.8
             command: ["mongod", "--noauth"]
             env:
               TZ: Pacific/Auckland
