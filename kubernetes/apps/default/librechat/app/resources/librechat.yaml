@@ -183,15 +183,15 @@ modelSpecs:
           Claude is now being connected with {{current_user}}.
 
     - name: gpt
-      label: GPT-5.1
-      description: GPT-5.1
+      label: GPT-5.2
+      description: GPT-5.2
       iconURL: https://holmesazaepubshare.blob.core.windows.net/logosandicons/sherlock/chatgpt-blue.png
       showIconInMenu: true
       showIconInHeader: true
       default: false
       preset:
         endpoint: openAI
-        model: gpt-5.1
+        model: gpt-5.2
         useResponsesApi: true
         web_search: true
         verbosity: medium
@@ -200,7 +200,7 @@ modelSpecs:
         modelLabel: GPT-5
         greeting: Ask me something complex!
         promptPrefix: |
-          You are GPT-5.1, a large language model trained by OpenAI, based on the GPT-5 architecture.
+          You are GPT-5.2, a large language model trained by OpenAI, based on the GPT-5 architecture.
 
           <output_formatting>
           - Use Markdown **only where semantically correct** (e.g., `inline code`, ```code fences```, lists, tables, headings).
@@ -218,14 +218,14 @@ modelSpecs:
 
     - name: gemini
       label: Gemini
-      description: Google Gemini 3 Pro
+      description: Google Gemini 3 Flash
       iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/gemini.png"
       showIconInMenu: true
       showIconInHeader: true
       default: false
       preset:
         endpoint: google
-        model: gemini-3-pro-preview
+        model: gemini-3-flash-preview
         web_search: true
         modelLabel: "Gemini"
         greeting: "Gemini here, what can I do for you?"
