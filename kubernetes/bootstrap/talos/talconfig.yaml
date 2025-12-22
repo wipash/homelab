@@ -33,7 +33,6 @@ nodes:
       customization:
         extraKernelArgs:
           - mitigations=off
-          - module_blacklist=e1000e
         systemExtensions:
           officialExtensions:
             - siderolabs/i915-ucode
@@ -262,3 +261,4 @@ controlPlane:
               - os:admin
             allowedKubernetesNamespaces:
               - system-upgrade
+              - actions-runner-system
