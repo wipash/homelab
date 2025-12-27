@@ -8,42 +8,42 @@ components:
 resources:
   - ./actual/ks.yaml
   - ./atuin/ks.yaml
+  - ./audiobookshelf/ks.yaml
   - ./authelia/ks.yaml
+  - ./autobrr/ks.yaml
+  - ./ccattendance/ks.yaml
+  - ./cross-seed/ks.yaml
+  - ./cups/ks.yaml
   - ./cyberchef/ks.yaml
+  - ./emqx/ks.yaml
+  - ./esphome/ks.yaml
   - ./frigate/ks.yaml
   - ./ghcr-imagepullsecret/ks.yaml
+  - ./ghost/ks.yaml
+  - ./hi-events/ks.yaml
+  - ./hoarder/ks.yaml
   - ./home-assistant/ks.yaml
   - ./immich/ks.yaml
+  - ./librechat/ks.yaml
   - ./lldap/ks.yaml
+  - ./maintainerr/ks.yaml
   - ./mealie/ks.yaml
-  - ./emqx/ks.yaml
-  - ./seerr/ks.yaml
   - ./paperless/ks.yaml
   - ./plex/ks.yaml
   - ./prowlarr/ks.yaml
   - ./qbittorrent/ks.yaml
+  - ./qui/ks.yaml
   - ./radarr/ks.yaml
   - ./recyclarr/ks.yaml
   - ./sabnzbd/ks.yaml
+  - ./seerr/ks.yaml
   - ./smtp-relay/ks.yaml
+  - ./snapcrop-pdf/ks.yaml
   - ./sonarr/ks.yaml
   - ./sparkleandspin/ks.yaml
   - ./tautulli/ks.yaml
+  - ./timelapse-processor/ks.yaml
+  - ./tqm/ks.yaml
   - ./unifi/ks.yaml
   - ./wordpress/ks.yaml
   - ./zigbee2mqtt/ks.yaml
-  - ./audiobookshelf/ks.yaml
-  - ./snapcrop-pdf/ks.yaml
-  - ./autobrr/ks.yaml
-  - ./ghost/ks.yaml
-  - ./librechat/ks.yaml
-  - ./maintainerr/ks.yaml
-  - ./esphome/ks.yaml
-  - ./cross-seed/ks.yaml
-  - ./hoarder/ks.yaml
-  - ./cups/ks.yaml
-  - ./hi-events/ks.yaml
-  - ./timelapse-processor/ks.yaml
-  - ./qui/ks.yaml
-  - ./tqm/ks.yaml
-  - ./ccattendance/ks.yaml
