@@ -44,7 +44,6 @@ resources:
   - ./cups/ks.yaml
   - ./hi-events/ks.yaml
   - ./timelapse-processor/ks.yaml
-  - ./n8n/ks.yaml
   - ./qui/ks.yaml
   - ./tqm/ks.yaml
   - ./ccattendance/ks.yaml
