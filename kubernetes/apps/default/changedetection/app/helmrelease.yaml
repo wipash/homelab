@@ -75,8 +75,16 @@ spec:
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
-        globalMounts:
-          - path: /datastore
+        advancedMounts:
+          changedetection:
+            app:
+              - path: /datastore
+                subPath: changedetection
+            browser:
+              - path: /downloads
+                subPath: downloads
+              - path: /profile
+                subPath: profile
 
       tmp:
         type: emptyDir
