@@ -1,0 +1,82 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: changedetection
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: changedetection
+  interval: 1h
+  values:
+    controllers:
+      changedetection:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/dgtlmoon/changedetection.io
+              tag: 0.51.4@sha256:99cf11f04b5d1f1300b5b68f17dc22e76bdb5d6695d7e6590d2df92eca8fb339
+            env:
+              TZ: Pacific/Auckland
+              PORT: &port 5000
+              USE_X_SETTINGS: 1
+              PLAYWRIGHT_DRIVER_URL: ws://localhost:3000/?stealth=1&--disable-web-security=true&--user-data-dir=~/browserless-cache-123
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
+          browser:
+            image:
+              repository: mirror.gcr.io/browserless/chrome
+              # renovate: datasource=docker depName=docker.io/browserless/chrome
+              tag: latest@sha256:57d19e414d9fe4ae9d2ab12ba768c97f38d51246c5b31af55a009205c136012f
+              pullPolicy: IfNotPresent
+            env:
+              - {name: SCREEN_WIDTH, value: "1920"}
+              - {name: SCREEN_HEIGHT, value: "1024"}
+              - {name: SCREEN_DEPTH, value: "16"}
+              - {name: ENABLE_DEBUGGER, value: "false"}
+              - {name: PREBOOT_CHROME, value: "true"}
+              - {name: CONNECTION_TIMEOUT, value: "300000"}
+              - {name: MAX_CONCURRENT_SESSIONS, value: "10"}
+              - {name: CHROME_REFRESH_TIME, value: "600000"}
+              - {name: DEFAULT_BLOCK_ADS, value: "true"}
+              - {name: DEFAULT_STEALTH, value: "true"}
+            securityContext:
+              allowPrivilegeEscalation: false
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+
+    service:
+      app:
+        controller: changedetection
+        ports:
+          http:
+            port: *port
+
+    ingress:
+      app:
+        className: internal
+        hosts:
+          - host: "{{ .Release.Name }}.mcgrath.nz"
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+
+    persistence:
+      config:
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /datastore
+
+      tmp:
+        type: emptyDir

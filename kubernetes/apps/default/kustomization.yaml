@@ -47,3 +47,4 @@ resources:
   - ./unifi/ks.yaml
   - ./wordpress/ks.yaml
   - ./zigbee2mqtt/ks.yaml
+  - ./changedetection/ks.yaml
