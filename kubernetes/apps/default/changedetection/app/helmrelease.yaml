@@ -22,10 +22,11 @@ spec:
               PORT: &port 5000
               USE_X_SETTINGS: 1
               PLAYWRIGHT_DRIVER_URL: ws://localhost:3000/?stealth=1&--disable-web-security=true&--user-data-dir=~/browserless-cache-123
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: true
+            # securityContext:
+            #   allowPrivilegeEscalation: false
+            #   capabilities: { drop: ["ALL"] }
+            #   readOnlyRootFilesystem: true
+
           browser:
             image:
               repository: mirror.gcr.io/browserless/chrome
@@ -46,16 +47,16 @@ spec:
               DOWNLOAD_DIR: /downloads
               DATA_DIR: /profile
 
-            securityContext:
-              allowPrivilegeEscalation: false
+            # securityContext:
+            #   allowPrivilegeEscalation: false
 
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
+    # defaultPodOptions:
+    #   securityContext:
+    #     runAsNonRoot: true
+    #     runAsUser: 1000
+    #     runAsGroup: 1000
+    #     fsGroup: 1000
+    #     fsGroupChangePolicy: OnRootMismatch
 
     service:
       app:
