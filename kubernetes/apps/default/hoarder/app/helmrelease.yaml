@@ -21,7 +21,7 @@ spec:
           app:
             image:
               repository: ghcr.io/karakeep-app/karakeep
-              tag: latest@sha256:4ae3e70cca5bc5369ec877b12be32537cdcc51c341ffd2f177f576f5d68e9644
+              tag: latest@sha256:21bfde6acc39f57aa421d072d30f2e94009433960a996606981d168deb8db90b
             env:
               TZ: Pacific/Auckland
               BROWSER_WEB_URL: http://hoarder-chrome.default.svc.cluster.local:9222
