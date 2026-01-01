@@ -8,3 +8,4 @@
 7. librechat
 8. hi-events
 9. hi-events-cigana
+10. hi-events-dev
