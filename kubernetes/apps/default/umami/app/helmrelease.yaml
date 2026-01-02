@@ -73,8 +73,8 @@ spec:
     ingress:
       app:
         annotations:
-          nginx.ingress.kubernetes.io/server-snippet: |
-            real_ip_header CF-Connecting-IP;
+          # nginx.ingress.kubernetes.io/server-snippet: |
+          #   real_ip_header CF-Connecting-IP;
         className: external
         hosts:
           - host: "{{ .Release.Name }}.mcgrath.nz"
