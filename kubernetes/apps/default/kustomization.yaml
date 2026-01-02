@@ -12,6 +12,7 @@ resources:
   - ./authelia/ks.yaml
   - ./autobrr/ks.yaml
   - ./ccattendance/ks.yaml
+  - ./changedetection/ks.yaml
   - ./cross-seed/ks.yaml
   - ./cups/ks.yaml
   - ./cyberchef/ks.yaml
@@ -44,7 +45,7 @@ resources:
   - ./tautulli/ks.yaml
   - ./timelapse-processor/ks.yaml
   - ./tqm/ks.yaml
+  - ./umami/ks.yaml
   - ./unifi/ks.yaml
   - ./wordpress/ks.yaml
   - ./zigbee2mqtt/ks.yaml
-  - ./changedetection/ks.yaml
