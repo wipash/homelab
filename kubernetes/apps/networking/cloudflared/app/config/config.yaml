@@ -1,6 +1,7 @@
 ---
 originRequest:
   http2Origin: true
+  proxyProtocol: v2
 
 ingress:
   - hostname: "*.mcgrath.nz"
