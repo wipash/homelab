@@ -1,0 +1,95 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: k8sinterpreter
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: helm-deployments/librecodeinterpreter
+      sourceRef:
+        kind: GitRepository
+        name: k8sinterpreter
+        namespace: flux-system
+  values:
+    replicaCount: 1
+
+    image:
+      repository: aronmuon/librecodeinterpreter-api
+      tag: "1.1.1"
+      pullPolicy: IfNotPresent
+
+    service:
+      type: ClusterIP
+      port: 8000
+
+    ingress:
+      enabled: true
+      className: internal
+      hosts:
+        - host: librecodeinterpreter.mcgrath.nz
+          paths:
+            - path: /
+              pathType: Prefix
+
+    # External Redis
+    redis:
+      url: "redis://redis.database.svc.cluster.local:6379/0"
+      # Or use a secret reference via envFrom
+
+    # MinIO/S3 configuration
+    minio:
+      endpoint: "minio.storage.svc.cluster.local:9000"
+      accessKey: ""  # Use secret
+      secretKey: ""  # Use secret
+      bucket: "code-interpreter-files"
+      secure: false
+
+    api:
+      apiKey: ""  # Will be auto-generated or use secret
+      debug: false
+      logLevel: "INFO"
+
+    # Execution pool configuration
+    execution:
+      imageRegistry: "aronmuon/librecodeinterpreter"
+      imageTag: "1.1.1"
+      imagePullPolicy: IfNotPresent
+      languages:
+        python:
+          poolSize: 3
+        javascript:
+          poolSize: 2
+        typescript:
+          poolSize: 0
+
+      resources:
+        limits:
+          cpu: "1"
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+
+      networkPolicy:
+        enabled: true
+        denyEgress: true
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 1000m
+        memory: 512Mi
+
+    podSecurityContext:
+      fsGroup: 1000
+
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      capabilities:
+        drop: ["ALL"]
