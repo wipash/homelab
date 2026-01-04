@@ -26,6 +26,8 @@ data:
   GOOGLE_SAFETY_HARASSMENT: BLOCK_ONLY_HIGH
   GOOGLE_SAFETY_DANGEROUS_CONTENT: BLOCK_ONLY_HIGH
 
+  GEMINI_IMAGE_MODEL: gemini-3-pro-image-preview
+
   #=============#
   # Permissions #
   #=============#
