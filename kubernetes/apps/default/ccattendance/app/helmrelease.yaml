@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/creativecollabreports
-              tag: main@sha256:bb9211f47897fc67c72f80f9b208903bcfafcd365268826e6d62a985b03cca64
+              tag: main@sha256:8b2fadc0632a2633bd60eda4bbde044a078f12e352591fdcdad4ef57c07feab2
             env:
               TZ: Pacific/Auckland
               NODE_ENV: production
