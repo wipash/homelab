@@ -6,18 +6,14 @@ metadata:
   name: k8sinterpreter
 spec:
   interval: 1h
-  chart:
-    spec:
-      chart: helm-deployments/librecodeinterpreter
-      sourceRef:
-        kind: GitRepository
-        name: k8sinterpreter
-        namespace: flux-system
+  chartRef:
+    kind: OCIRepository
+    name: k8sinterpreter
   values:
     replicaCount: 1
 
     image:
-      repository: aronmuon/librecodeinterpreter-api
+      repository: wipash/librecodeinterpreter-api
       tag: "1.1.1"
       pullPolicy: IfNotPresent
 
@@ -54,7 +50,7 @@ spec:
 
     # Execution pool configuration
     execution:
-      imageRegistry: "aronmuon/librecodeinterpreter"
+      imageRegistry: "wipash/librecodeinterpreter"
       imageTag: "1.1.1"
       imagePullPolicy: IfNotPresent
       languages:
