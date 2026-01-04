@@ -32,13 +32,13 @@ spec:
 
     # External Redis
     redis:
-      url: "redis://redis.database.svc.cluster.local:6379/0"
+      url: "redis://dragonfly.database.svc.cluster.local:6379/11"
       # Or use a secret reference via envFrom
 
     # MinIO/S3 configuration
     minio:
       endpoint: "minio.storage.svc.cluster.local:9000"
-      accessKey: ""  # Use secret
+      accessKey: ""
       secretKey: ""  # Use secret
       bucket: "code-interpreter-files"
       secure: false
