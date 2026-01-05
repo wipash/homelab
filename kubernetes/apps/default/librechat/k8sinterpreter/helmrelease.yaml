@@ -12,11 +12,6 @@ spec:
   values:
     replicaCount: 1
 
-    image:
-      repository: ghcr.io/wipash/k8sinterpreter-api
-      tag: "1.2.0"
-      pullPolicy: IfNotPresent
-
     service:
       type: ClusterIP
       port: 8000
@@ -48,9 +43,6 @@ spec:
 
     # Execution pool configuration
     execution:
-      imageRegistry: ghcr.io/wipash/k8sinterpreter
-      imageTag: "1.2.0"
-      imagePullPolicy: IfNotPresent
       languages:
         python:
           poolSize: 3
