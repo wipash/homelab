@@ -38,7 +38,7 @@ spec:
     # MinIO/S3 configuration
     minio:
       existingSecret: k8sinterpreter-secret
-      endpoint: "minio.storage.svc.cluster.local:9000"
+      endpoint: "10.0.16.16:9000"
       bucket: "code-interpreter-files"
 
     api:
