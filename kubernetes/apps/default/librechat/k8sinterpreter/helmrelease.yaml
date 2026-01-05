@@ -37,14 +37,12 @@ spec:
 
     # MinIO/S3 configuration
     minio:
+      existingSecret: k8sinterpreter-secret
       endpoint: "minio.storage.svc.cluster.local:9000"
-      accessKey: ""
-      secretKey: ""  # Use secret
       bucket: "code-interpreter-files"
-      secure: false
 
     api:
-      apiKey: ""  # Will be auto-generated or use secret
+      existingSecret: k8sinterpreter-secret
       debug: false
       logLevel: "INFO"
 
