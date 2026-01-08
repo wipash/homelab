@@ -3,14 +3,18 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: k8sinterpreter
+  name: kubecoderun
 spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: k8sinterpreter
+    name: kubecoderun
   values:
     replicaCount: 1
+
+    # Override image registry to use wipash GHCR
+    image:
+      repository: ghcr.io/wipash/kubecoderun-api
 
     service:
       type: ClusterIP
@@ -20,7 +24,7 @@ spec:
       enabled: true
       className: internal
       hosts:
-        - host: k8sinterpreter.mcgrath.nz
+        - host: kubecoderun.mcgrath.nz
           paths:
             - path: /
               pathType: Prefix
@@ -32,17 +36,20 @@ spec:
 
     # MinIO/S3 configuration
     minio:
-      existingSecret: k8sinterpreter-secret
+      existingSecret: kubecoderun-secret
       endpoint: "10.0.16.16:9000"
       bucket: "code-interpreter-files"
 
     api:
-      existingSecret: k8sinterpreter-secret
+      existingSecret: kubecoderun-secret
       debug: false
       logLevel: "INFO"
 
     # Execution pool configuration
     execution:
+      imageRegistry: ghcr.io/wipash/kubecoderun
+      sidecar:
+        repository: ghcr.io/wipash/kubecoderun-sidecar
       languages:
         python:
           poolSize: 3
