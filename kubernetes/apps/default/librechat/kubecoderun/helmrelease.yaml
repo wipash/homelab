@@ -52,8 +52,9 @@ spec:
       imageRegistry: ghcr.io/aron-muon/kubecoderun
       imageTag: "1.1.0"
       sidecar:
-        repository: ghcr.io/wipash/kubecoderun-sidecar
-        tag: "dev-b93b101"
+        #repository: ghcr.io/wipash/kubecoderun-sidecar
+        repository: ghcr.io/aron-muon/kubecoderun-sidecar
+        tag: "1.1.0"
       languages:
         python:
           poolSize: 3
