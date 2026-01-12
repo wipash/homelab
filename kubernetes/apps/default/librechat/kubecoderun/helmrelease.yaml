@@ -16,7 +16,7 @@ spec:
     image:
       #repository: ghcr.io/wipash/kubecoderun-api
       repository: ghcr.io/aron-muon/kubecoderun-api
-      tag: "1.1.0"
+      tag: "1.2.3"
 
     service:
       type: ClusterIP
