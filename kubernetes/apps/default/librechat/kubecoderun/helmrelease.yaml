@@ -14,9 +14,9 @@ spec:
 
     # Override image registry to use wipash GHCR
     image:
-      #repository: ghcr.io/wipash/kubecoderun-api
-      repository: ghcr.io/aron-muon/kubecoderun-api
-      tag: "1.2.3"
+      repository: ghcr.io/wipash/kubecoderun-api
+      #repository: ghcr.io/aron-muon/kubecoderun-api
+      tag: dev-c0d18ea
 
     service:
       type: ClusterIP
@@ -50,11 +50,11 @@ spec:
     # Execution pool configuration
     execution:
       imageRegistry: ghcr.io/aron-muon/kubecoderun
-      imageTag: "1.1.0"
+      imageTag: 1.2.3
       sidecar:
         repository: ghcr.io/wipash/kubecoderun-sidecar
         #repository: ghcr.io/aron-muon/kubecoderun-sidecar
-        tag: dev-52a13e8
+        tag: dev-5cb22b1
       languages:
         python:
           poolSize: 3
