@@ -16,7 +16,7 @@ spec:
     image:
       repository: ghcr.io/wipash/kubecoderun-api
       #repository: ghcr.io/aron-muon/kubecoderun-api
-      tag: dev-7b7b329
+      tag: dev-f630f9a
 
     service:
       type: ClusterIP
@@ -51,11 +51,11 @@ spec:
     execution:
       #imageRegistry: ghcr.io/aron-muon/kubecoderun
       imageRegistry: ghcr.io/wipash/kubecoderun
-      imageTag: dev-7b7b329
+      imageTag: dev-f630f9a
       sidecar:
         repository: ghcr.io/wipash/kubecoderun-sidecar
         #repository: ghcr.io/aron-muon/kubecoderun-sidecar
-        tag: dev-7b7b329
+        tag: dev-f630f9a
       languages:
         python:
           poolSize: 3
