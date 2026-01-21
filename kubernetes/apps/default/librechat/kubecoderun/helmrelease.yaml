@@ -16,7 +16,7 @@ spec:
     image:
       repository: ghcr.io/wipash/kubecoderun-api
       #repository: ghcr.io/aron-muon/kubecoderun-api
-      tag: dev-c0d18ea
+      tag: 1.3.0
 
     service:
       type: ClusterIP
@@ -49,12 +49,13 @@ spec:
 
     # Execution pool configuration
     execution:
-      imageRegistry: ghcr.io/aron-muon/kubecoderun
-      imageTag: 1.2.3
+      #imageRegistry: ghcr.io/aron-muon/kubecoderun
+      imageRegistry: ghcr.io/wipash/kubecoderun
+      imageTag: 1.3.0
       sidecar:
         repository: ghcr.io/wipash/kubecoderun-sidecar
         #repository: ghcr.io/aron-muon/kubecoderun-sidecar
-        tag: dev-5cb22b1
+        tag: 1.3.0
       languages:
         python:
           poolSize: 3
