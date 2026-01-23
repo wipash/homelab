@@ -13,10 +13,10 @@ spec:
     replicaCount: 1
 
     # Override image registry to use wipash GHCR
-    image:
-      repository: ghcr.io/wipash/kubecoderun-api
-      #repository: ghcr.io/aron-muon/kubecoderun-api
-      tag: dev-f630f9a
+    # image:
+    #   repository: ghcr.io/wipash/kubecoderun-api
+    #   #repository: ghcr.io/aron-muon/kubecoderun-api
+    #   tag: dev-f630f9a
 
     service:
       type: ClusterIP
@@ -50,15 +50,15 @@ spec:
     # Execution pool configuration
     execution:
       #imageRegistry: ghcr.io/aron-muon/kubecoderun
-      imageRegistry: ghcr.io/wipash/kubecoderun
-      imageTag: dev-f630f9a
+      # imageRegistry: ghcr.io/wipash/kubecoderun
+      # imageTag: dev-f630f9a
       sidecar:
         repository: ghcr.io/wipash/kubecoderun-sidecar
         #repository: ghcr.io/aron-muon/kubecoderun-sidecar
-        tag: dev-f630f9a
+        tag: dev-c64f397
       languages:
         python:
-          poolSize: 3
+          poolSize: 2
         javascript:
           poolSize: 2
         typescript:
