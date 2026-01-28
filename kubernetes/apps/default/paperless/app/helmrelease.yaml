@@ -95,7 +95,7 @@ spec:
           gotenburg:
             image:
               repository: docker.io/thecodingmachine/gotenberg
-              tag: 8.25.1
+              tag: 8.26.0
             env:
               TZ: Pacific/Auckland
               DISABLE_GOOGLE_CHROME: "1"
