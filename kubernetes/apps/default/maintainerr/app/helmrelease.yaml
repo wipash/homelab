@@ -23,7 +23,7 @@ spec:
           app:
             image:
               repository: ghcr.io/maintainerr/maintainerr
-              tag: 2.26.1@sha256:8332446ca6f7512bb561d6db2edaef5df1d22cf47432513f35a68e4462347fdc
+              tag: 2.26.1@sha256:fb33a82d738bd556cfdbb3b88d64d9933641627d8c85687cb774377adb95337f
             env:
               TZ: Pacific/Auckland
             probes:
