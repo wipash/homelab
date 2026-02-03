@@ -168,7 +168,6 @@ modelSpecs:
       preset:
         endpoint: agents
         agent_id: agent_6SgjYIhwhpWodbr3XeYGn
-        modelLabel: Claude model label
 
     - name: gpt
       label: GPT-5.2
@@ -178,31 +177,8 @@ modelSpecs:
       showIconInHeader: true
       default: false
       preset:
-        endpoint: openAI
-        model: gpt-5.2
-        useResponsesApi: true
-        web_search: true
-        verbosity: medium
-        reasoning_effort: medium
-        reasoning_summary: detailed
-        modelLabel: GPT-5
-        greeting: Ask me something complex!
-        promptPrefix: |
-          You are GPT-5.2, a large language model trained by OpenAI, based on the GPT-5 architecture.
-
-          <output_formatting>
-          - Use Markdown **only where semantically correct** (e.g., `inline code`, ```code fences```, lists, tables, headings).
-          - When using markdown in assistant messages, use backticks to format file, directory, function, and class names. Use \( and \) for inline math, \[ and \] for block math.
-          - Do not use em-dashes, use hyphens instead.
-          - Prefer commas over semicolons, and straight quotes over curly quotes.
-          - Respond using NZ English spelling and terminology.
-          </output_formatting>
-
-          <context_information>
-          - Your knowledge cutoff: September 2024
-          - Current date: `{{current_date}}`
-          - User: `{{current_user}}`
-          </context_information>
+        endpoint: agents
+        agent_id: agent_K7CjEugZnIVs-9Kxycxpn
 
     - name: gemini
       label: Gemini
@@ -212,8 +188,5 @@ modelSpecs:
       showIconInHeader: true
       default: false
       preset:
-        endpoint: google
-        model: gemini-3-flash-preview
-        web_search: true
-        modelLabel: "Gemini"
-        greeting: "Gemini here, what can I do for you?"
+        endpoint: agents
+        agent_id: agent_-AFN7SdqfbUc-aoC8Yix4
