@@ -159,6 +159,8 @@ modelSpecs:
   addedEndpoints: ["openAI", "google", "anthropic", "LiteLLM", "agents"]
   list:
     - name: claude
+      label: Claude
+      description: Claude
       iconURL: https://holmesazaepubshare.blob.core.windows.net/logosandicons/sherlock/claude.png
       showIconInMenu: true
       showIconInHeader: true
