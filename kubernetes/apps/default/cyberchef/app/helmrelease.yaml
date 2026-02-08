@@ -22,7 +22,7 @@ spec:
           app:
             image:
               repository: docker.io/mpepping/cyberchef
-              tag: v10.20.0
+              tag: v10.21.0
             env:
               TZ: Pacific/Auckland
             probes:
