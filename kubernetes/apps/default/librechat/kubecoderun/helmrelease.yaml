@@ -52,17 +52,9 @@ spec:
       #imageRegistry: ghcr.io/aron-muon/kubecoderun
       # imageRegistry: ghcr.io/wipash/kubecoderun
       # imageTag: dev-f630f9a
-      sidecar:
-        repository: ghcr.io/wipash/kubecoderun-sidecar
-        #repository: ghcr.io/aron-muon/kubecoderun-sidecar
-        tag: dev-c64f397
       languages:
         python:
           poolSize: 2
-        javascript:
-          poolSize: 2
-        typescript:
-          poolSize: 0
 
       resources:
         limits:
