@@ -15,8 +15,7 @@ spec:
     # Override image registry to use wipash GHCR
     image:
       repository: ghcr.io/wipash/kubecoderun-api
-    #   #repository: ghcr.io/aron-muon/kubecoderun-api
-      tag: dev-55bc877
+      tag: d2.1.2-dev1
 
     service:
       type: ClusterIP
