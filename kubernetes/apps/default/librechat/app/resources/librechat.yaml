@@ -100,16 +100,15 @@ rateLimits:
 
 fileConfig:
   endpoints:
-    assistants:
-      disabled: false
-    default:
-      disabled: false
-    openAI:
-      disabled: false
-    google:
-      disabled: false
-    anthropic:
-      disabled: false
+    agents:
+      supportedMimeTypes:
+        - "^application/pdf$"
+        - "^application/vnd\\.openxmlformats-officedocument\\.(wordprocessingml\\.document|presentationml\\.presentation|spreadsheetml\\.sheet)$"
+        - "^application/vnd\\.ms-(word|powerpoint|excel)$"
+        - "^application/vnd\\.ms-(excel|powerpoint|word)\\..+\\.macro[eE]nabled\\.12$"
+        - "^application/epub\\+zip$"
+        - "text/.*"
+        - "image/.*"
   serverFileSizeLimit: 200
   avatarSizeLimit: 2
   imageGeneration:
