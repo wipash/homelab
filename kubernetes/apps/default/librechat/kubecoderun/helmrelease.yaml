@@ -13,10 +13,10 @@ spec:
     replicaCount: 1
 
     # Override image registry to use wipash GHCR
-    # image:
-    #   repository: ghcr.io/wipash/kubecoderun-api
+    image:
+      repository: ghcr.io/wipash/kubecoderun-api
     #   #repository: ghcr.io/aron-muon/kubecoderun-api
-    #   tag: dev-f630f9a
+      tag: dev-55bc877
 
     service:
       type: ClusterIP
