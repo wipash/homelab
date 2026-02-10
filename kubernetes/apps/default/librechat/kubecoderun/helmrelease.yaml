@@ -79,7 +79,7 @@ spec:
       fsGroup: 1000
 
     resourceLimits:
-      maxFileSizeMb: 200
+      maxFileSizeMb: 250
       maxTotalFileSizeMb: 500
       maxFilesPerSession: 100
       maxOutputFiles: 10
