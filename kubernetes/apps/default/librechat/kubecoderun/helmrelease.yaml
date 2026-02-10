@@ -15,7 +15,7 @@ spec:
     # Override image registry to use wipash GHCR
     image:
       repository: ghcr.io/wipash/kubecoderun-api
-      tag: 2.1.3-dev1
+      tag: &tag 2.1.3-dev2
 
     service:
       type: ClusterIP
@@ -43,8 +43,8 @@ spec:
 
     api:
       existingSecret: kubecoderun-secret
-      debug: true
-      logLevel: "DEBUG"
+      debug: false
+      logLevel: "INFO"
 
     # Execution pool configuration
     execution:
@@ -53,7 +53,7 @@ spec:
       # imageTag: dev-f630f9a
       sidecar:
         repository: ghcr.io/wipash/kubecoderun-sidecar
-        tag: 2.1.3-dev1
+        tag: *tag
 
       languages:
         python:
