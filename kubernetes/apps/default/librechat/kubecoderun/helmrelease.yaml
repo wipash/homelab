@@ -43,8 +43,8 @@ spec:
 
     api:
       existingSecret: kubecoderun-secret
-      debug: false
-      logLevel: "INFO"
+      debug: true
+      logLevel: "DEBUG"
 
     # Execution pool configuration
     execution:
@@ -70,13 +70,20 @@ spec:
     resources:
       requests:
         cpu: 100m
-        memory: 256Mi
+        memory: 128Mi
       limits:
         cpu: 1000m
         memory: 512Mi
 
     podSecurityContext:
       fsGroup: 1000
+
+    resourceLimits:
+      maxFileSizeMb: 200
+      maxTotalFileSizeMb: 500
+      maxFilesPerSession: 100
+      maxOutputFiles: 10
+
 
     securityContext:
       runAsNonRoot: true
