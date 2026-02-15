@@ -1,0 +1,20 @@
+---
+machine:
+  network:
+    hostname: hp2.k8s.mcgrath.nz
+    interfaces:
+      - deviceSelector:
+          hardwareAddr: "e4:1d:a*"
+        addresses:
+          - 10.0.16.135/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.16.1
+        mtu: 1500
+        dhcp: false
+        vip:
+          ip: 10.0.16.132
+      - interface: eth1
+        dhcp: false
+        addresses:
+          - 172.20.0.3/24
