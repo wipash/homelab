@@ -1,12 +1,12 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
-clusterName: main
+clusterName: homelab
 endpoint: https://10.0.16.132:6443
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
-talosVersion: v1.7.5
+talosVersion: v1.9.6
 # renovate: depName=kubernetes/kubernetes datasource=github-releases
-kubernetesVersion: v1.30.2
+kubernetesVersion: v1.32.12
 
 # Disable built-in Flannel to use Cilium
 cniConfig:
@@ -19,7 +19,7 @@ clusterSvcNets:
   - 10.96.0.0/12
 
 additionalApiServerCertSans: &san
-  - main.k8s.mcgrath.nz
+  - homelab.k8s.mcgrath.nz
   - &kubeApiIP 10.0.16.132
   - "127.0.0.1" # KubePrism
 additionalMachineCertSans: *san
@@ -35,8 +35,10 @@ nodes:
           - mitigations=off
         systemExtensions:
           officialExtensions:
-            - siderolabs/i915-ucode
+            - siderolabs/i915
             - siderolabs/intel-ucode
+            - siderolabs/mdadm
+            - siderolabs/util-linux-tools
     networkInterfaces:
       - deviceSelector: &deviceSelector
           hardwareAddr: e4:1d:a*
@@ -49,6 +51,10 @@ nodes:
         mtu: &mtu 1500
         vip: &vip
           ip: *kubeApiIP
+      - interface: eth1
+        dhcp: false
+        addresses:
+          - 172.20.0.2/24
 
   - hostname: hp2.k8s.mcgrath.nz
     ipAddress: 10.0.16.135
@@ -63,6 +69,10 @@ nodes:
         routes: *routes
         mtu: *mtu
         vip: *vip
+      - interface: eth1
+        dhcp: false
+        addresses:
+          - 172.20.0.3/24
 
   - hostname: hp3.k8s.mcgrath.nz
     ipAddress: 10.0.16.136
@@ -77,6 +87,10 @@ nodes:
         routes: *routes
         mtu: *mtu
         vip: *vip
+      - interface: eth1
+        dhcp: false
+        addresses:
+          - 172.20.0.4/24
 
 
 patches:
@@ -202,7 +216,15 @@ patches:
         extraHostEntries:
           - ip: 10.0.16.132
             aliases:
-              - main.k8s.mcgrath.nz
+              - homelab.k8s.mcgrath.nz
+
+  # Configure logging
+  - |-
+    machine:
+      logging:
+        destinations:
+          - endpoint: udp://172.16.10.5:6051/
+            format: json_lines
 
   # Various udev rules
   - |-
