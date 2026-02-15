@@ -25,7 +25,7 @@ spec:
           app:
             image:
               repository: ghost
-              tag: 6.18.0
+              tag: 6.18.2
             env:
               TZ: Pacific/Auckland
               url: "https://${SECRET_GHOST_DOMAIN}"
