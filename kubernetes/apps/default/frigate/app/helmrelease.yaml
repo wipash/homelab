@@ -11,7 +11,7 @@ spec:
     name: frigate
   interval: 1h
   dependsOn:
-    - name: intel-device-plugin-gpu
+    - name: intel-gpu-resource-driver
       namespace: kube-system
     - name: rook-ceph-cluster
       namespace: rook-ceph
