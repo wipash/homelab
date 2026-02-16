@@ -10,7 +10,7 @@ default:
 
 [doc('Apply Talos config to a node')]
 apply-node node *args:
-    just talos render-config "{{ node }}" | talosctl -n "{{ node }}" apply-config -f /dev/stdin {{ args }}
+    just talos render-config "{{ node }}" | talosctl -n "$(just talos node-ip "{{ node }}")" apply-config -f /dev/stdin {{ args }}
 
 [doc('Download Talos machine image')]
 download-image version schematic:
@@ -31,7 +31,7 @@ gen-schematic-id:
 [doc('Reboot a node')]
 reboot-node node:
     gum confirm "Reboot node {{ node }}?" --default="No" && \
-        talosctl -n {{ node }} reboot -m powercycle || exit 0
+        talosctl -n "$(just talos node-ip "{{ node }}")" reboot -m powercycle || exit 0
 
 [doc('Render Talos config for a node')]
 render-config node:
@@ -41,12 +41,12 @@ render-config node:
 [doc('Reset a node')]
 reset-node node *args:
     gum confirm "Reset node {{ node }}?" --default="No" && \
-        talosctl -n "{{ node }}" reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false {{ args }} || exit 0
+        talosctl -n "$(just talos node-ip "{{ node }}")" reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false {{ args }} || exit 0
 
 [doc('Shutdown a node')]
 shutdown-node node *args:
     gum confirm "Shutdown node {{ node }}?" --default="No" && \
-        talosctl -n "{{ node }}" shutdown --force {{ args }} || exit 0
+        talosctl -n "$(just talos node-ip "{{ node }}")" shutdown --force {{ args }} || exit 0
 
 [doc('Upgrade Kubernetes version on the cluster')]
 upgrade-k8s version:
@@ -54,7 +54,11 @@ upgrade-k8s version:
 
 [doc('Upgrade Talos version on a node')]
 upgrade-node node *args:
-    talosctl -n "{{ node }}" upgrade -i "$(just talos machine-image)" -m powercycle --timeout=10m {{ args }}
+    talosctl -n "$(just talos node-ip "{{ node }}")" upgrade -i "$(just talos machine-image)" -m powercycle --timeout=10m {{ args }}
+
+[private]
+node-ip node:
+    yq '.machine.network.interfaces[0].addresses[0] | sub("/.*", "")' "{{ talos_dir }}/nodes/{{ node }}.yaml.j2"
 
 [private]
 machine-image:
