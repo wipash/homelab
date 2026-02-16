@@ -3,13 +3,9 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app smartctl-exporter
-  namespace: flux-system
+  name: smartctl-exporter
 spec:
   targetNamespace: monitoring
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/monitoring/smartctl-exporter/app
   prune: true
   sourceRef:
