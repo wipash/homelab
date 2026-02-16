@@ -51,12 +51,13 @@ spec:
             resources:
               requests:
                 cpu: 890m
-                gpu.intel.com/i915: "1"
               limits:
                 memory: 3000M
-                gpu.intel.com/i915: "1"
 
     defaultPodOptions:
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: frigate
       nodeSelector:
         google.feature.node.kubernetes.io/coral: "true"
 
