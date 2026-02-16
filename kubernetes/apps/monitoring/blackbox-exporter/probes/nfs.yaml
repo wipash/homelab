@@ -11,3 +11,7 @@ spec:
     staticConfig:
       static:
         - brian.sk.mcgrath.nz:2049
+  metricRelabelings:
+    - targetLabel: service
+      replacement: blackbox-exporter
+      action: replace
