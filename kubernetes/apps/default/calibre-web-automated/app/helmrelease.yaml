@@ -22,9 +22,6 @@ spec:
       securityContext:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        runAsGroup: 1000
-        runAsNonRoot: true
-        runAsUser: 1000
         supplementalGroups: [65537]
     controllers:
       calibre-web-automated:
@@ -34,8 +31,9 @@ spec:
               repository: ghcr.io/crocodilestick/calibre-web-automated
               tag: v4.0.6@sha256:c31a738b6d5ec6982c050063dd3f063b6943eb1051fc81144789f840d9093a8d
             env:
+              PUID: "1000"
+              PGID: "1000"
               CACHE_DIR: /cache
-              # Skips/soft fail on privileged actions that shouldn't exist anyways
               NETWORK_SHARE_MODE: true
               S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
               S6_READ_ONLY_ROOT: 1
