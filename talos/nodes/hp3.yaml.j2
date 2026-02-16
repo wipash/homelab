@@ -4,7 +4,7 @@ machine:
     hostname: hp3.k8s.mcgrath.nz
     interfaces:
       - deviceSelector:
-          hardwareAddr: "e4:1d:a*"
+          hardwareAddr: "a0:d3:c1*"
         addresses:
           - 10.0.16.136/24
         routes:
@@ -14,7 +14,8 @@ machine:
         dhcp: false
         vip:
           ip: 10.0.16.132
-      - interface: eth1
+      - deviceSelector:
+          hardwareAddr: "e4:1d:a*"
         dhcp: false
         addresses:
           - 172.20.0.4/24
