@@ -97,7 +97,7 @@ spec:
         path: /volume1/Media
         advancedMounts:
           calibre-web-automated:
-            calibre-web-automated:
+            app:
               - path: /cwa-book-ingest
                 subPath: Books/incoming
               - path: /calibre-library
