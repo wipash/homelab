@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: monitoring
 
 components:
+  - ../../components/sops
   - ../../components/alerts
 
 resources:
