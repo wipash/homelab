@@ -94,11 +94,6 @@ spec:
                   port: http
 
     persistence:
-      dbus:
-        type: hostPath
-        hostPath: /var/run/dbus
-        globalMounts:
-          - path: /var/run/dbus
       usb:
         type: hostPath
         hostPath: /dev/bus/usb
