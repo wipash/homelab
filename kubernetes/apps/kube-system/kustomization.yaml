@@ -10,7 +10,7 @@ resources:
   #- ./namespace.yaml
   # Flux-Kustomizations
   - ./external-secrets/ks.yaml
-  - ./intel-device-plugin/ks.yaml
+  - ./intel-gpu-resource-driver/ks.yaml
   # - ./kube-image-keeper/ks.yaml
   - ./metrics-server/ks.yaml
   - ./node-feature-discovery/ks.yaml
