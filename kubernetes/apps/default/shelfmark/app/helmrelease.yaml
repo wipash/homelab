@@ -102,7 +102,7 @@ spec:
 
     ingress:
       app:
-        className: ingress
+        className: internal
         hosts:
           - host: shelfmark.mcgrath.nz
             paths:
