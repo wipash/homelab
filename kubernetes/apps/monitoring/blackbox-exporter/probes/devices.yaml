@@ -12,3 +12,7 @@ spec:
       static:
         - brian.sk.mcgrath.nz
         - ups.sk.mcgrath.nz
+  metricRelabelings:
+    - targetLabel: service
+      replacement: blackbox-exporter
+      action: replace
