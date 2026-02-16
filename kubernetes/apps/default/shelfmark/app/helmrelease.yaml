@@ -85,7 +85,7 @@ spec:
               - path: /audiobooks
                 subPath: Audiobooks
               - path: /ebooks
-                subPath: eBooks
+                subPath: Books/library
       tmpfs:
         type: emptyDir
         sizeLimit: 1Gi
