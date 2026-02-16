@@ -2,18 +2,19 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: monitoring
+
+components:
+  - ../../components/alerts
+
 resources:
-  # Pre Flux-Kustomizations
   - ./namespace.yaml
-  # Flux-Kustomizations
   - ./grafana/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
   - ./loki/ks.yaml
   - ./smartctl-exporter/ks.yaml
   - ./goldilocks/ks.yaml
   - ./vpa/ks.yaml
-  #- ./node-exporter/ks.yaml
-  #- ./kube-state-metrics/ks.yaml
   - ./gatus/ks.yaml
   - ./speedtest-exporter/ks.yaml
   - ./snmp-exporter/ks.yaml

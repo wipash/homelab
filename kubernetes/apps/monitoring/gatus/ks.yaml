@@ -3,13 +3,9 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app gatus
-  namespace: flux-system
+  name: gatus
 spec:
   targetNamespace: monitoring
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   dependsOn:
     - name: cloudnative-pg-cluster
     - name: external-secrets-stores
@@ -21,5 +17,3 @@ spec:
     name: flux-cluster
   wait: false
   interval: 30m
-  retryInterval: 1m
-  timeout: 5m
