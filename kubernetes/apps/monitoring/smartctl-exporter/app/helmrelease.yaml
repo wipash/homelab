@@ -33,5 +33,10 @@ spec:
         - /dev/nvme0n1
     serviceMonitor:
       enabled: true
+      attachMetadata:
+        node: true
+      relabelings:
+        - sourceLabels: [__meta_kubernetes_pod_node_name]
+          targetLabel: node
     prometheusRules:
       enabled: false
