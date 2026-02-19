@@ -9,7 +9,7 @@
     },
     "files.trimTrailingWhitespace": true,
     "sops.beta": false,
-    "sops.defaults.ageKeyFile": "/home/sean/.config/sops/age/keys.txt",
+    "sops.defaults.ageKeyFile": "/home/seanmcgrath/.config/sops/age/keys.txt",
     "material-icon-theme.files.associations": {
       // TODO: https://github.com/PKief/vscode-material-icon-theme/issues/330
       "*.sops.env": "lock",
