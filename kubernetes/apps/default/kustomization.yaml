@@ -14,7 +14,6 @@ resources:
   - ./calibre-web-automated/ks.yaml
   - ./ccattendance/ks.yaml
   - ./changedetection/ks.yaml
-  - ./cross-seed/ks.yaml
   - ./cups/ks.yaml
   - ./cyberchef/ks.yaml
   - ./emqx/ks.yaml
