@@ -56,12 +56,20 @@ spec:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
+        supplementalGroups: [65537]
         fsGroupChangePolicy: OnRootMismatch
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
       tmp:
         type: emptyDir
+      media:
+        type: nfs
+        server: 172.20.0.1
+        path: /volume1/Media
+        globalMounts:
+          - path: /media/Downloads/qbittorrent
+            subPath: Downloads/qbittorrent
     ingress:
       app:
         className: internal
