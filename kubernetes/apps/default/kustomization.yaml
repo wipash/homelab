@@ -45,7 +45,6 @@ resources:
   - ./sparkleandspin/ks.yaml
   - ./tautulli/ks.yaml
   - ./timelapse-processor/ks.yaml
-  - ./tqm/ks.yaml
   - ./umami/ks.yaml
   - ./unifi/ks.yaml
   - ./wordpress/ks.yaml
