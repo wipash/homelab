@@ -24,7 +24,7 @@ spec:
           app:
             image:
               repository: ghcr.io/nicolaka/netshoot
-              tag: v0.15@sha256:47b907d662d139d1e2f22bfe14f4efca1e3f1feed283572f47c970c780c03b61
+              tag: v0.15
             env:
               TZ: Pacific/Auckland
             command: ["/bin/bash", "-c"]
