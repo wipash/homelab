@@ -54,7 +54,7 @@ spec:
           mailpit:
             image:
               repository: ghcr.io/axllent/mailpit
-              tag: v1.29.1@sha256:7c38788069433ba9d2d9131abac8d17da0fb18f09b689207ec7a773dcb8d6eee
+              tag: v1.29.2@sha256:030f06031ce5c60913ac9363da1ab0d4be6fd2a78147dd0e1ca0fcac665d6b34
             env:
               TZ: Pacific/Auckland
 
