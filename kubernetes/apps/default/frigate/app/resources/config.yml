@@ -38,15 +38,18 @@ detect:
 # Global recording configuration
 record:
   enabled: true
-  retain:
-    days: 5
-    mode: all
+  continuous:
+    days: 4
+  motion:
+    days: 7
   alerts:
     retain:
-      days: 14
+      days: 30
+      mode: all
   detections:
     retain:
-      days: 14
+      days: 30
+      mode: all
 snapshots:
   enabled: true
   timestamp: true
