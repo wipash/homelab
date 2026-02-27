@@ -16,7 +16,6 @@ resources:
   - ./changedetection/ks.yaml
   - ./cups/ks.yaml
   - ./cyberchef/ks.yaml
-  - ./emqx/ks.yaml
   - ./esphome/ks.yaml
   - ./frigate/ks.yaml
   - ./ghcr-imagepullsecret/ks.yaml
@@ -29,6 +28,7 @@ resources:
   - ./lldap/ks.yaml
   - ./maintainerr/ks.yaml
   - ./mealie/ks.yaml
+  - ./mosquitto/ks.yaml
   - ./paperless/ks.yaml
   - ./plex/ks.yaml
   - ./prowlarr/ks.yaml
