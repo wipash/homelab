@@ -42,4 +42,3 @@ resources:
   - ./postfinance.yaml
   - ./tailscale.yaml
   - ./external-dns.yaml
-  - ./emqx.yaml
