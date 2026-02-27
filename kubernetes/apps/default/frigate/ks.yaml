@@ -15,8 +15,6 @@ spec:
       namespace: kube-system
     - name: node-feature-discovery-rules
       namespace: kube-system
-    - name: emqx-cluster
-      namespace: default
   path: ./kubernetes/apps/default/frigate/app
   prune: true
   sourceRef:
