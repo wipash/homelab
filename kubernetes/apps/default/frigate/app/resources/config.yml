@@ -168,8 +168,7 @@ cameras:
         Main Stream: sdc_hq
         Sub Stream: sdc_lq
 
-# genai:
-#   enabled: True
-#   provider: openai
-#   api_key: "{FRIGATE_OPENAI_API_KEY}"
-#   model: gpt-4o
+genai:
+  provider: openai
+  api_key: "{FRIGATE_OPENAI_API_KEY}"
+  model: gpt-5-mini
