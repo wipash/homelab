@@ -283,9 +283,9 @@ spec:
         path: /volume1/Data/claw
         globalMounts:
           - path: /data
-      openclaw-config:
-        type: secret
-        name: "{{ .Release.Name }}-config"
-        globalMounts:
-          - path: /home/node/.openclaw/openclaw.json
-            subPath: openclaw.json
+      # openclaw-config:
+      #   type: secret
+      #   name: "{{ .Release.Name }}-config"
+      #   globalMounts:
+      #     - path: /home/node/.openclaw/openclaw.json
+      #       subPath: openclaw.json
