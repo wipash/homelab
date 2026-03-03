@@ -92,10 +92,13 @@ spec:
                 # Set up openclawbot CLI symlink
                 ln -sf /app/openclawbot.mjs /home/node/.local/bin/openclawbot
                 # Start gateway in a restart loop so config-reload exits
-                # don't cause container-level CrashLoopBackOff
+                # don't cause container-level CrashLoopBackOff.
+                # The gateway's "full process restart" spawns a replacement
+                # child before exiting — kill it to avoid port conflicts.
                 while true; do
                   node dist/index.js gateway --bind lan
-                  echo "Process exited ($?), restarting in 2s..."
+                  echo "Process exited ($?), cleaning up..."
+                  pkill -f 'node dist/index.js gateway' 2>/dev/null || true
                   sleep 2
                 done
             env:
