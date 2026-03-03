@@ -91,8 +91,13 @@ spec:
               - |
                 # Set up openclawbot CLI symlink
                 ln -sf /app/openclawbot.mjs /home/node/.local/bin/openclawbot
-                # Start gateway
-                exec node dist/index.js gateway --bind lan
+                # Start gateway in a restart loop so config-reload exits
+                # don't cause container-level CrashLoopBackOff
+                while true; do
+                  node dist/index.js gateway --bind lan
+                  echo "Process exited ($?), restarting in 2s..."
+                  sleep 2
+                done
             env:
               BROWSER_WS_ENDPOINT: "ws://localhost:9222"
               GOPATH: /home/node/go
