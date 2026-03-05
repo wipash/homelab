@@ -147,6 +147,8 @@ spec:
               limits:
                 cpu: 1000m
                 memory: 1Gi
+      codeserver:
+        containers:
           codeserver:
             image:
               repository: ghcr.io/coder/code-server
@@ -179,10 +181,14 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
+        controller: openclaw
         ports:
           http:
             port: *port
-          codeserver:
+      codeserver:
+        controller: codeserver
+        ports:
+          http:
             port: 12321
 
     ingress:
@@ -205,8 +211,8 @@ spec:
             paths:
               - path: /
                 service:
-                  identifier: app
-                  port: codeserver
+                  identifier: codeserver
+                  port: http
         tls:
           - hosts:
               - *codehost
