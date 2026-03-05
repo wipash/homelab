@@ -96,6 +96,8 @@ spec:
                 # The gateway's "full process restart" spawns a replacement
                 # child before exiting — kill it to avoid port conflicts.
                 while true; do
+                  # Auto-fix invalid config before starting
+                  { echo "--- $(date -Iseconds) ---"; node dist/index.js doctor --fix 2>&1 || true; echo; } >> /home/node/.openclaw/doctor-startup.log
                   node dist/index.js gateway --bind lan
                   echo "Process exited ($?), cleaning up..."
                   pkill -f 'node dist/index.js gateway' 2>/dev/null || true
