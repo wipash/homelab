@@ -256,6 +256,12 @@ spec:
             - apiGroups: ["external-secrets.io"]
               resources: ["externalsecrets"]
               verbs: ["get", "list", "watch"]
+            - apiGroups: ["volsync.backube"]
+              resources: ["replicationsources", "replicationdestinations"]
+              verbs: ["get", "list", "watch"]
+            - apiGroups: ["postgresql.cnpg.io"]
+              resources: ["clusters", "backups", "scheduledbackups"]
+              verbs: ["get", "list", "watch"]
         openclaw-cluster-ops:
           type: ClusterRole
           rules:
