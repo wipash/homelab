@@ -256,6 +256,15 @@ spec:
             - apiGroups: ["external-secrets.io"]
               resources: ["externalsecrets"]
               verbs: ["get", "list", "watch"]
+        openclaw-cluster-ops:
+          type: ClusterRole
+          rules:
+            - apiGroups: ["helm.toolkit.fluxcd.io"]
+              resources: ["helmreleases"]
+              verbs: ["patch", "update"]
+            - apiGroups: [""]
+              resources: ["persistentvolumes"]
+              verbs: ["delete", "patch"]
         openclaw-write-restricted:
           type: Role
           rules:
@@ -276,6 +285,13 @@ spec:
           type: ClusterRoleBinding
           roleRef:
             identifier: openclaw-read-all
+          subjects:
+            - identifier: openclaw
+              serviceAccount: openclaw
+        openclaw-cluster-ops:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: openclaw-cluster-ops
           subjects:
             - identifier: openclaw
               serviceAccount: openclaw
