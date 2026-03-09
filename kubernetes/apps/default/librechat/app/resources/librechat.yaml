@@ -155,7 +155,8 @@ endpoints:
 modelSpecs:
   enforce: false
   prioritize: false
-  addedEndpoints: ["openAI", "google", "anthropic", "LiteLLM", "agents"]
+  # addedEndpoints: ["openAI", "google", "anthropic", "LiteLLM", "agents"]
+  addedEndpoints: ["agents"]
   list:
     - name: claude
       label: Claude
