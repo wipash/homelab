@@ -29,7 +29,7 @@ spec:
           app:
             image:
               repository: ghcr.io/danny-avila/librechat-dev
-              tag: latest@sha256:089b880e27c61164f5221a3196cb9d7dfb0bcb0a5eba4dd1127a01b4e607bf2a
+              tag: latest@sha256:b2f64ac0c0d357ad72a33bc7fe44c82937c6afeb4ed84d9887083bd731e798aa
             env:
               TZ: Pacific/Auckland
               PORT: "3080"
