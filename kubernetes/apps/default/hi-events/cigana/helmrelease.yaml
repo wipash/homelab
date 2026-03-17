@@ -26,7 +26,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/hi.events
-              tag: v1.7.100
+              tag: v1.7.101
             env:
               TZ: Pacific/Auckland
             envFrom: *envFrom
