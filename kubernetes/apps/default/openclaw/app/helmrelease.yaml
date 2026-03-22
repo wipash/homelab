@@ -262,6 +262,9 @@ spec:
             - apiGroups: ["postgresql.cnpg.io"]
               resources: ["clusters", "backups", "scheduledbackups"]
               verbs: ["get", "list", "watch"]
+            - apiGroups: ["autoscaling.k8s.io"]
+              resources: ["verticalpodautoscalers"]
+              verbs: ["get", "list", "watch"]
         openclaw-cluster-ops:
           type: ClusterRole
           rules:
