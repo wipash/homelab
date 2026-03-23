@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: docker.io/drpsychick/airprint-bridge
-              tag: latest@sha256:01904b68cf9457cc0df60dd0dd571b2910583afe9da8f9d17ad4b261fcf3c7bd
+              tag: latest@sha256:6d020ab46711eddcd23cb6002f0572b4a73d747007cd94941ac65eb99a15697b
             env:
               TZ: Pacific/Auckland
               CUPS_ADMIN_USER: print
