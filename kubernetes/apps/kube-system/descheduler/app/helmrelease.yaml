@@ -28,7 +28,7 @@ spec:
     resources:
       requests:
         cpu: 10m
-        memory: 256Mi
+        memory: 64Mi
       limits:
         memory: 256Mi
     deschedulerPolicyAPIVersion: descheduler/v1alpha2

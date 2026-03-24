@@ -31,7 +31,7 @@ spec:
       resources:
         requests:
           cpu: 10m
-          memory: 256Mi
+          memory: 128Mi
         limits:
           memory: 256Mi
     dashboard:
@@ -50,6 +50,6 @@ spec:
       resources:
         requests:
           cpu: 10m
-          memory: 256Mi
+          memory: 64Mi
         limits:
           memory: 256Mi
