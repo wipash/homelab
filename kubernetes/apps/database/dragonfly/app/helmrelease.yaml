@@ -68,6 +68,8 @@ spec:
                 matchLabels:
                   app.kubernetes.io/name: "{{ .Release.Name }}"
     defaultPodOptions:
+      labels:
+        control-plane: controller-manager
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
