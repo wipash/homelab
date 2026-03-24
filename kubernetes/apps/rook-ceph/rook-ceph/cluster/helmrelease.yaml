@@ -106,10 +106,10 @@ spec:
             memory: 1Gi
           requests:
             cpu: 10m
-            memory: 100Mi
+            memory: 32Mi
         mgr:
           limits:
-            memory: 1Gi
+            memory: 2Gi
           requests:
             cpu: 100m
             memory: 512Mi
@@ -121,7 +121,7 @@ spec:
             memory: 40Mi
         mon:
           limits:
-            memory: 2Gi
+            memory: 3Gi
           requests:
             cpu: 100m
             memory: 1Gi
@@ -130,7 +130,7 @@ spec:
             memory: 4Gi
           requests:
             cpu: 100m
-            memory: 4Gi
+            memory: 3Gi
         prepareosd:
           requests:
             cpu: 100m
