@@ -2,16 +2,16 @@
 # https://www.librechat.ai/docs/configuration/librechat_yaml
 
 # Configuration version (required)
-version: 1.3.3
+version: 1.3.6
 
 # Cache settings: Set to true to enable caching
 cache: true
 
 # Custom interface configuration
 interface:
-  endpointsMenu: true
+  endpointsMenu: false
   modelSelect: true
-  parameters: true
+  parameters: false
   sidePanel: true
   presets: false
   bookmarks: true
@@ -27,10 +27,12 @@ interface:
   fileCitations: true
   prompts:
     use: true
+    create: true
     share: true
     public: true
   agents:
     use: true
+    create: true
     share: true
     public: true
   mcpServers:
@@ -42,6 +44,11 @@ interface:
       label: I understand and I want to continue
       subLabel: Malicious MCP servers may attempt to steal your data or trick the model into taking unintended actions, including destroying data.
 
+balance:
+  enabled: false
+
+transactions:
+  enabled: false
 
 speech:
   speechTab:
@@ -101,6 +108,7 @@ rateLimits:
 fileConfig:
   endpoints:
     agents:
+      fileLimit: 100
       supportedMimeTypes:
         - "^application/pdf$"
         - "^application/vnd\\.openxmlformats-officedocument\\.(wordprocessingml\\.document|presentationml\\.presentation|spreadsheetml\\.sheet)$"
@@ -112,8 +120,7 @@ fileConfig:
   serverFileSizeLimit: 200
   avatarSizeLimit: 2
   imageGeneration:
-    percentage: 100
-    px: 1024
+    px: 1600
   clientImageResize:
     enabled: true
     maxWidth: 1900
@@ -124,7 +131,7 @@ endpoints:
   custom:
     - name: LiteLLM
       apiKey: "$${LITELLM_API_KEY}"
-      baseURL: "https://litellm2.hlms.cloud"
+      baseURL: "https://litellm.hlms.cloud"
       models:
         default: ["azure/gpt-5"]
         fetch: true
@@ -136,9 +143,13 @@ endpoints:
     disableBuilder: true
 
   agents:
+    recursionLimit: 50
     disableBuilder: false
+    titleConvo: true
+    titleModel: azure/gpt-5-nano
+    titleEndpoint: LiteLLM
     capabilities:
-      - "execute_code"  # This requires an API key
+      - "execute_code"
       - "file_search"
       - "actions"
       - "tools"
@@ -147,6 +158,10 @@ endpoints:
       - "chain"
       - "web_search"
       - "context"
+      - deferred_tools
+      - programmatic_tools
+    allowedProviders:
+      - "LiteLLM"
 
 
   all:
@@ -154,13 +169,13 @@ endpoints:
 
 modelSpecs:
   enforce: false
-  prioritize: false
+  prioritize: true
   # addedEndpoints: ["openAI", "google", "anthropic", "LiteLLM", "agents"]
   addedEndpoints: ["agents"]
   list:
     - name: claude
       label: Claude
-      description: Claude
+      description: Anthropic Claude
       iconURL: https://holmesazaepubshare.blob.core.windows.net/logosandicons/sherlock/claude.png
       showIconInMenu: true
       showIconInHeader: true
@@ -168,10 +183,11 @@ modelSpecs:
       preset:
         endpoint: agents
         agent_id: agent_6SgjYIhwhpWodbr3XeYGn
+        modelLabel: Claude
 
     - name: gpt
-      label: GPT-5.2
-      description: GPT-5.2
+      label: GPT
+      description: OpenAI GPT
       iconURL: https://holmesazaepubshare.blob.core.windows.net/logosandicons/sherlock/chatgpt-blue.png
       showIconInMenu: true
       showIconInHeader: true
@@ -179,10 +195,11 @@ modelSpecs:
       preset:
         endpoint: agents
         agent_id: agent_K7CjEugZnIVs-9Kxycxpn
+        modelLabel: GPT
 
     - name: gemini
       label: Gemini
-      description: Google Gemini 3 Flash
+      description: Google Gemini
       iconURL: "https://holmesazaepubshare.blob.core.windows.net/pub/gemini.png"
       showIconInMenu: true
       showIconInHeader: true
@@ -190,3 +207,4 @@ modelSpecs:
       preset:
         endpoint: agents
         agent_id: agent_-AFN7SdqfbUc-aoC8Yix4
+        modelLabel: Gemini
