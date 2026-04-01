@@ -48,13 +48,13 @@ speech:
     conversationMode: false
     advancedMode: false
     speechToText:
-      engineSTT: "external"
+      engineSTT: "openai"
       languageSTT: "English (New Zealand)"
       autoTranscribeAudio: true
       decibelValue: -45
       autoSendText: 0
     textToSpeech:
-      engineTTS: "external"
+      engineTTS: "openai"
       voice: "alloy"
       languageTTS: "en"
       automaticPlayback: false
