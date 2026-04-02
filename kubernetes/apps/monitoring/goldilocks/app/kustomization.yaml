@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: monitoring
 resources:
   - ./helmrelease.yaml
+  - ./httproute.yaml
 labels:
   - pairs:
       app.kubernetes.io/name: goldilocks
