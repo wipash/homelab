@@ -1,0 +1,13 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wordpress-0-tls
+spec:
+  secretName: wordpress-0-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  dnsNames:
+    - "${SECRET_WP_0_DOMAIN}"
+    - "www.${SECRET_WP_0_DOMAIN}"

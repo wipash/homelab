@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+  - ./backendtrafficpolicy.yaml
 configMapGenerator:
   - name: immich-server-config
     files:
