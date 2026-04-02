@@ -4,6 +4,8 @@ kind: HTTPRoute
 metadata:
   name: kubecoderun
   namespace: default
+  annotations:
+    gatus.home-operations.com/enabled: "false"
 spec:
   parentRefs:
     - name: envoy-internal
