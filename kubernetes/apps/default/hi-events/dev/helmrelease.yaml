@@ -84,6 +84,10 @@ spec:
             sectionName: https
         hostnames:
           - events-dev.mcgrath.nz
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: http
       mailpit:
         parentRefs:
           - name: envoy-internal
@@ -91,6 +95,10 @@ spec:
             sectionName: https
         hostnames:
           - events-dev-mailpit.mcgrath.nz
+        rules:
+          - backendRefs:
+              - identifier: mailpit
+                port: http
     persistence:
       storage:
         existingClaim: "{{ .Release.Name }}"
