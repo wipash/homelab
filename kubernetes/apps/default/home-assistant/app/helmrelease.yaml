@@ -121,6 +121,10 @@ spec:
             sectionName: https
         hostnames:
           - hass.mcgrath.nz
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: http
       code-server:
         parentRefs:
           - name: envoy-internal
@@ -128,6 +132,10 @@ spec:
             sectionName: https
         hostnames:
           - ha-code.mcgrath.nz
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: code-server
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
