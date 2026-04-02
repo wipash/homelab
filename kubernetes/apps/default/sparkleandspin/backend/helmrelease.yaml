@@ -90,20 +90,14 @@ spec:
         globalMounts:
           - path: /tmp
 
-    ingress:
+    route:
       app:
-        className: external
         annotations:
           gatus.home-operations.com/endpoint: |-
             conditions: ["[STATUS] == 404"]
-        hosts:
-          - host: &host "api.${SECRET_DOMAIN_SPARKLE}"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - secretName: wildcard-tls-sparkle
-            hosts:
-              - *host
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - "api.${SECRET_DOMAIN_SPARKLE}"

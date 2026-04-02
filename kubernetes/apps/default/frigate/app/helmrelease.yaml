@@ -75,19 +75,14 @@ spec:
             port: 8555
             protocol: UDP
 
-    ingress:
+    route:
       app:
-        className: internal
-        hosts:
-          - host: &host "{{ .Release.Name }}.mcgrath.nz"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts:
-              - *host
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - "{{ .Release.Name }}.mcgrath.nz"
 
     persistence:
       config:

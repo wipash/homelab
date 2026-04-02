@@ -32,14 +32,13 @@ spec:
             name: &secret external-dns-pihole-secret
             key: *name
     extraArgs:
-      - --ignore-ingress-tls-spec
       - --pihole-server=https://10.0.16.4
       - --pihole-tls-skip-verify
       - --pihole-api-version=6
     triggerLoopOnEvent: true
     policy: upsert-only
     registry: noop
-    sources: ["service", "ingress"]
+    sources: ["service", "gateway-httproute"]
     domainFilters: ["mcgrath.nz"]
     serviceMonitor:
       enabled: true

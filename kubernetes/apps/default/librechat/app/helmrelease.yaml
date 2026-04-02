@@ -154,32 +154,21 @@ spec:
           metrics:
             port: *exporterport
 
-    ingress:
+    route:
       app:
-        className: external
-        hosts:
-          - host: &host chat.mcgrath.nz
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts:
-              - *host
-
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - chat.mcgrath.nz
       mongo-express:
-        className: internal
-        hosts:
-          - host: mongolibre.mcgrath.nz
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: mongo-express
-        tls:
-          - hosts:
-              - *host
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - mongolibre.mcgrath.nz
 
     persistence:
       config:

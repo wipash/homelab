@@ -68,21 +68,19 @@ spec:
           discovery:
             port: 10001
             protocol: UDP
-    ingress:
+    route:
       app:
-        className: internal
-        annotations:
-          nginx.ingress.kubernetes.io/backend-protocol: HTTPS
-        hosts:
-          - host: &host "{{ .Release.Name }}.mcgrath.nz"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts:
-              - *host
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - "{{ .Release.Name }}.mcgrath.nz"
+        rules:
+          - backendRefs:
+              - group: gateway.envoyproxy.io
+                kind: Backend
+                name: unifi-https
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"

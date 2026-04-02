@@ -22,13 +22,7 @@ spec:
       port: 8000
 
     ingress:
-      enabled: true
-      className: internal
-      hosts:
-        - host: kubecoderun.mcgrath.nz
-          paths:
-            - path: /
-              pathType: Prefix
+      enabled: false
 
     # External Redis
     redis:

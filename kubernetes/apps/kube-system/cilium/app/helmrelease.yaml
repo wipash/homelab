@@ -51,9 +51,7 @@ spec:
         enabled: true
         rollOutPods: true
         ingress:
-          enabled: true
-          className: internal
-          hosts: ["hubble.mcgrath.nz"]
+          enabled: false
     operator:
       prometheus:
         enabled: true

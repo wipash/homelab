@@ -55,32 +55,19 @@ spec:
         ports:
           http:
             port: 3000
-    ingress:
+    route:
       app:
-        className: external
         annotations:
           gatus.home-operations.com/endpoint: |-
             headers:
               cookie: "_medusa_region=%7B%22regionId%22%3A%22reg_01HWMMNAXD7YHZK69F1MZ873XZ%22%2C%22countryCode%22%3A%22nz%22%7D"
-
-        hosts:
-          - host: &host1 "${SECRET_DOMAIN_SPARKLE:=temp}" # Default value to make flux-local work
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-          - host: &host2 "www.${SECRET_DOMAIN_SPARKLE}"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - secretName: wildcard-tls-sparkle
-            hosts:
-              - *host1
-              - *host2
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - "${SECRET_DOMAIN_SPARKLE:=temp}" # Default value to make flux-local work
+          - "www.${SECRET_DOMAIN_SPARKLE}"
     persistence:
       cache:
         type: emptyDir

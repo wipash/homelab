@@ -37,16 +37,7 @@ spec:
     dashboard:
       replicaCount: 1
       ingress:
-        enabled: true
-        ingressClassName: internal
-        hosts:
-          - host: &host goldilocks.mcgrath.nz
-            paths:
-              - path: /
-                type: Prefix
-        tls:
-          - hosts:
-              - *host
+        enabled: false
       resources:
         requests:
           cpu: 10m

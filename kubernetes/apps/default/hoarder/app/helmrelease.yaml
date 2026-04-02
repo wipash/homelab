@@ -155,16 +155,14 @@ spec:
           http:
             port: 7700
 
-    ingress:
+    route:
       app:
-        className: external
-        hosts:
-          - host: hoarder.mcgrath.nz
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - hoarder.mcgrath.nz
 
     persistence:
       data:

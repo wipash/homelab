@@ -71,22 +71,14 @@ spec:
           http:
             port: *port
 
-    ingress:
+    route:
       app:
-        className: external
-        annotations:
-          cert-manager.io/cluster-issuer: "letsencrypt-production"
-        hosts:
-          - host: &host sensors.${SECRET_DOMAIN_HARVCO}
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts:
-              - *host
-            secretName: harvco-sensor-hub-frontend-tls
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - sensors.${SECRET_DOMAIN_HARVCO}
 
     persistence:
       tmp:

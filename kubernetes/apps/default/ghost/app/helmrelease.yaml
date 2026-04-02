@@ -53,19 +53,14 @@ spec:
         ports:
           http:
             port: 2368
-    ingress:
+    route:
       app:
-        className: external
-        hosts:
-          - host: &host ${SECRET_GHOST_DOMAIN}
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts: [*host]
-            secretName: ghost-tls
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - ${SECRET_GHOST_DOMAIN}
     persistence:
       content:
         globalMounts:

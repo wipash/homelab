@@ -62,16 +62,14 @@ spec:
         ports:
           http:
             port: 8080
-    ingress:
+    route:
       app:
-        className: external
-        hosts:
-          - host: "cigana.mcgrath.nz"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - cigana.mcgrath.nz
     persistence:
       storage:
         existingClaim: "{{ .Release.Name }}"

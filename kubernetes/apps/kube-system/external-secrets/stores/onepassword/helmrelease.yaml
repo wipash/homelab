@@ -103,21 +103,17 @@ spec:
         ports:
           http:
             port: *apiPort
-    ingress:
+    route:
       app:
-        className: internal
         annotations:
           gatus.home-operations.com/endpoint: |-
             conditions: ["[STATUS] == 404"]
-        hosts:
-          - host: &host "{{ .Release.Name }}.mcgrath.nz"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts: [*host]
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - "{{ .Release.Name }}.mcgrath.nz"
     persistence:
       config:
         type: emptyDir
