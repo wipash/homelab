@@ -163,6 +163,10 @@ spec:
             sectionName: https
         hostnames:
           - hoarder.mcgrath.nz
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: http
 
     persistence:
       data:

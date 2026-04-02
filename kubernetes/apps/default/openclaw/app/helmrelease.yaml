@@ -201,6 +201,10 @@ spec:
             sectionName: https
         hostnames:
           - claw.mcgrath.nz
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: http
       codeserver:
         parentRefs:
           - name: envoy-internal
@@ -208,6 +212,10 @@ spec:
             sectionName: https
         hostnames:
           - claw-code.mcgrath.nz
+        rules:
+          - backendRefs:
+              - identifier: codeserver
+                port: http
     rbac:
       roles:
         openclaw-read-all:
