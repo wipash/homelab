@@ -102,13 +102,11 @@ spec:
           http:
             port: *port
 
-    ingress:
+    route:
       app:
-        className: internal
-        hosts:
-          - host: shelfmark.mcgrath.nz
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - shelfmark.mcgrath.nz

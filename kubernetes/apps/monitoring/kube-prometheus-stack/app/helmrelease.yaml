@@ -38,10 +38,7 @@ spec:
     cleanPrometheusOperatorObjectNames: true
     alertmanager:
       ingress:
-        enabled: true
-        ingressClassName: internal
-        hosts: ["alertmanager.mcgrath.nz"]
-        pathType: Prefix
+        enabled: false
       alertmanagerSpec:
         alertmanagerConfiguration:
           name: alertmanager
@@ -73,10 +70,7 @@ spec:
       enabled: false
     prometheus:
       ingress:
-        enabled: true
-        ingressClassName: internal
-        hosts: ["prometheus.mcgrath.nz"]
-        pathType: Prefix
+        enabled: false
       prometheusSpec:
         scrapeInterval: 1m # Must match interval in Grafana Helm chart
         podMonitorSelectorNilUsesHelmValues: false

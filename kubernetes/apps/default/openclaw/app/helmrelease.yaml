@@ -193,31 +193,21 @@ spec:
           http:
             port: 12321
 
-    ingress:
+    route:
       app:
-        className: internal
-        hosts:
-          - host: &host claw.mcgrath.nz
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts:
-              - *host
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - claw.mcgrath.nz
       codeserver:
-        className: internal
-        hosts:
-          - host: &codehost claw-code.mcgrath.nz
-            paths:
-              - path: /
-                service:
-                  identifier: codeserver
-                  port: http
-        tls:
-          - hosts:
-              - *codehost
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - claw-code.mcgrath.nz
     rbac:
       roles:
         openclaw-read-all:

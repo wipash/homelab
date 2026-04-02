@@ -52,17 +52,14 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-    ingress:
+    route:
       app:
-        className: external
-        hosts:
-          - host: cc.mcgrath.nz
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - cc.mcgrath.nz
 
     service:
       app:

@@ -113,29 +113,21 @@ spec:
             port: 1400
           code-server:
             port: 12321
-    ingress:
+    route:
       app:
-        className: external
-        annotations:
-          nginx.org/websocket-services: "{{ .Release.Name }}"
-        hosts:
-          - host: &host hass.mcgrath.nz
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts: [*host]
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - hass.mcgrath.nz
       code-server:
-        className: internal
-        hosts:
-          - host: "ha-code.mcgrath.nz"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: code-server
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - ha-code.mcgrath.nz
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"

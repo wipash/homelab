@@ -82,16 +82,14 @@ spec:
             port: *port
             protocol: UDP
 
-    ingress:
+    route:
       app:
-        className: internal
-        hosts:
-          - host: cups.mcgrath.nz
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - cups.mcgrath.nz
 
     persistence:
       usb:

@@ -34,24 +34,7 @@ spec:
       user: ${SECRET_WP_0_MARIADB_USER}
       password: ${SECRET_WP_0_MARIADB_PASS}
     ingress:
-      enabled: true
-      className: external
-      annotations:
-        cert-manager.io/cluster-issuer: "letsencrypt-production"
-      hosts:
-        - host: "${SECRET_WP_0_DOMAIN}"
-          paths:
-            - path: /
-              pathType: Prefix
-        - host: "www.${SECRET_WP_0_DOMAIN}"
-          paths:
-            - path: /
-              pathType: Prefix
-      tls:
-        - hosts:
-            - "${SECRET_WP_0_DOMAIN}"
-            - "www.${SECRET_WP_0_DOMAIN}"
-          secretName: "wordpress-0-tls"
+      enabled: false
     storage:
       persistentVolumeClaimName: wordpress-0-nfs
     mariadb:

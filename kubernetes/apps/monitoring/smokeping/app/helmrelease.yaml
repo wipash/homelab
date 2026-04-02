@@ -54,19 +54,17 @@ spec:
           http:
             port: 80
 
-    ingress:
+    route:
       app:
         annotations:
           gatus.home-operations.com/endpoint: |-
             url: https://ping.mcgrath.nz/smokeping/
-        className: external
-        hosts:
-          - host: "ping.mcgrath.nz"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - ping.mcgrath.nz
     persistence:
       config:
         type: emptyDir

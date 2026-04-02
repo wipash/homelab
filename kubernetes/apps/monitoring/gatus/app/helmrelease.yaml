@@ -86,16 +86,14 @@ spec:
             subPath: config.yaml
             readOnly: true
 
-    ingress:
+    route:
       app:
-        className: external
-        hosts:
-          - host: status.mcgrath.nz
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - status.mcgrath.nz
 
     service:
       app:
