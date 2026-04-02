@@ -76,25 +76,21 @@ spec:
         ports:
           http:
             port: 8025
-    ingress:
+    route:
       app:
-        className: external
-        hosts:
-          - host: "events-dev.mcgrath.nz"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - events-dev.mcgrath.nz
       mailpit:
-        className: internal
-        hosts:
-          - host: "events-dev-mailpit.mcgrath.nz"
-            paths:
-              - path: /
-                service:
-                  identifier: mailpit
-                  port: http
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - events-dev-mailpit.mcgrath.nz
     persistence:
       storage:
         existingClaim: "{{ .Release.Name }}"

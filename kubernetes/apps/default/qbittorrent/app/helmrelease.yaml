@@ -96,16 +96,14 @@ spec:
           bittorrent:
             port: *torrentPort
             protocol: TCP
-    ingress:
+    route:
       app:
-        className: internal
-        hosts:
-          - host: qb.mcgrath.nz
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - qb.mcgrath.nz
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"

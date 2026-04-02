@@ -58,16 +58,14 @@ spec:
           http:
             port: 5006
 
-    ingress:
+    route:
       app:
-        className: internal
-        hosts:
-          - host: actual.mcgrath.nz
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - actual.mcgrath.nz
 
     persistence:
       data:

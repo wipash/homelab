@@ -34,10 +34,7 @@ spec:
       createPrometheusRules: true
     ingress:
       dashboard:
-        ingressClassName: internal
-        host:
-          name: rook.mcgrath.nz
-          path: /
+        enabled: false
     toolbox:
       enabled: true
     cephClusterSpec:

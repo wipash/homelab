@@ -66,19 +66,14 @@ spec:
           http:
             port: 8000
 
-    ingress:
+    route:
       app:
-        className: external
-        hosts:
-          - host: &host chef.mcgrath.nz
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts:
-              - *host
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - chef.mcgrath.nz
 
     persistence:
       tmp:

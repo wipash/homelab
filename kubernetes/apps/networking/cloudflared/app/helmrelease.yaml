@@ -9,7 +9,7 @@ spec:
     name: cloudflared
   interval: 1h
   dependsOn:
-    - name: nginx-external
+    - name: envoy-gateway
       namespace: networking
   values:
     controllers:

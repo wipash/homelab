@@ -63,16 +63,14 @@ spec:
         ports:
           http:
             port: 8080
-    ingress:
+    route:
       app:
-        className: external
-        hosts:
-          - host: "events.mcgrath.nz"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - events.mcgrath.nz
     persistence:
       storage:
         existingClaim: "{{ .Release.Name }}"

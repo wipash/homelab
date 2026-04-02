@@ -334,13 +334,7 @@ spec:
     serviceMonitor:
       enabled: true
     ingress:
-      enabled: true
-      ingressClassName: internal
-      hosts:
-        - &host grafana.mcgrath.nz
-      tls:
-        - hosts:
-            - *host
+      enabled: false
     imageRenderer:
       enabled: true
       replicas: 2

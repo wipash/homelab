@@ -60,17 +60,14 @@ spec:
         ports:
           http:
             port: *port
-    ingress:
+    route:
       app:
-        className: external
-        hosts:
-          - host: &host audiobooks.mcgrath.nz
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-        tls: [hosts: [*host]]
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - audiobooks.mcgrath.nz
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
