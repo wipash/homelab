@@ -104,6 +104,10 @@ spec:
             sectionName: https
         hostnames:
           - qb.mcgrath.nz
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: http
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
