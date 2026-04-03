@@ -30,7 +30,7 @@ resources:
   - ./maintainerr/ks.yaml
   - ./mealie/ks.yaml
   - ./mosquitto/ks.yaml
-  - ./openclaw/ks.yaml
+  # - ./openclaw/ks.yaml
   - ./paperless/ks.yaml
   - ./plex/ks.yaml
   - ./prowlarr/ks.yaml
