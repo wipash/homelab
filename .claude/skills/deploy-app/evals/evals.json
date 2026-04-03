@@ -1,0 +1,23 @@
+{
+  "skill_name": "deploy-app",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "deploy nousresearch/hermes-agent:latest with 2gb ram, 1cpu, 5gb persistence on /opt/data. docker command is 'gateway run'. internal only, port 8080. no secrets needed.",
+      "expected_output": "Complete app directory structure with ks.yaml (volsync component, 5Gi capacity), ocirepository.yaml, kustomization.yaml, helmrelease.yaml with custom command, persistence on /opt/data, internal route, no externalsecret. App registered in namespace kustomization.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I want to add Linkding (a bookmark manager) to the cluster. Image is sissbruecker/linkding:latest. It needs a postgres database, some secrets from 1password (just the standard db creds, item name 'linkding'), runs on port 9090, needs 2Gi storage mounted at /etc/linkding/data. 256Mi memory, 100m cpu. It should be externally accessible. Health check is at /health.",
+      "expected_output": "Complete app directory with ks.yaml (volsync + postgres + external-secrets dependsOn), helmrelease with init-db container, custom /health probe with anchors, external route, externalsecret.yaml with postgres pattern pulling from linkding and cloudnative-pg items.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "set up a simple nginx static site. image nginx:alpine, port 80, no persistence, no secrets. external route at static.mcgrath.nz. 64Mi memory, 10m cpu.",
+      "expected_output": "Minimal app directory: ks.yaml without volsync/secrets, helmrelease with just emptyDir tmp, external route with custom hostname static.mcgrath.nz, no externalsecret.yaml, no pvc.yaml.",
+      "files": []
+    }
+  ]
+}
