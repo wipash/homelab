@@ -23,6 +23,7 @@ spec:
               - gateway
               - run
             env:
+              HOME: /opt/data
               TZ: &tz Pacific/Auckland
             envFrom:
               - secretRef:
