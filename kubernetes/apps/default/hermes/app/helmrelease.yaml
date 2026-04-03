@@ -1,0 +1,107 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hermes
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: hermes
+  interval: 1h
+  values:
+    controllers:
+      hermes:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: nousresearch/hermes-agent
+              tag: latest@sha256:c44189a91fb1023f85798e5f676c431b862c8bcf1a11f9489c67208f9a76e33f
+            command:
+              - gateway
+              - run
+            env:
+              TZ: &tz Pacific/Auckland
+            envFrom:
+              - secretRef:
+                  name: hermes-secret
+            probes:
+              liveness:
+                enabled: false
+              readiness:
+                enabled: false
+              startup:
+                enabled: false
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+                memory: 1Gi
+              limits:
+                memory: 3Gi
+      codeserver:
+        containers:
+          codeserver:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.112.0@sha256:ddd9b0b854fec5a3c65ec0095b5c59fb8505ad44d8a18d00d6fcf6a3179692dd
+            env:
+              TZ: *tz
+            args:
+              [
+                "--auth",
+                "none",
+                "--user-data-dir",
+                "/opt/data/.vscode",
+                "--extensions-dir",
+                "/opt/data/.vscode",
+                "--port",
+                "12321",
+                "/opt/data",
+              ]
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 1Gi
+
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+
+    service:
+      codeserver:
+        controller: codeserver
+        ports:
+          http:
+            port: 12321
+
+    route:
+      codeserver:
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - hermes.mcgrath.nz
+        rules:
+          - backendRefs:
+              - identifier: codeserver
+                port: http
+
+    persistence:
+      data:
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /opt/data
+      tmp:
+        type: emptyDir
