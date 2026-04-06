@@ -12,6 +12,7 @@ spec:
   values:
     controllers:
       hermes:
+        strategy: Recreate
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -46,6 +47,7 @@ spec:
               limits:
                 memory: 3Gi
       codeserver:
+        strategy: Recreate
         containers:
           codeserver:
             image:
