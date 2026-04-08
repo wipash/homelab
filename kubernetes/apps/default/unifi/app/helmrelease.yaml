@@ -19,7 +19,7 @@ spec:
           app:
             image:
               repository: ghcr.io/goofball222/unifi
-              tag: 10.1.89
+              tag: 10.2.105
               pullPolicy: IfNotPresent
             env:
               TZ: Pacific/Auckland
