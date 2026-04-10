@@ -19,6 +19,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_LOCAL_SCHEDULE: "38 * * * *"
   prune: true
   retryInterval: 2m
   sourceRef:

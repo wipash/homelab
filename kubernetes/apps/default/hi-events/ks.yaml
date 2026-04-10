@@ -28,6 +28,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_LOCAL_SCHEDULE: "42 * * * *"
   components:
     - ../../../../components/volsync
 # ---
@@ -60,6 +61,7 @@ spec:
 #   postBuild:
 #     substitute:
 #       APP: *app
+      VOLSYNC_LOCAL_SCHEDULE: "44 * * * *"
 #   components:
 #     - ../../../../components/volsync
 ---
@@ -92,5 +94,6 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_LOCAL_SCHEDULE: "46 * * * *"
   components:
     - ../../../../components/volsync

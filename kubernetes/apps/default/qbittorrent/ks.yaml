@@ -27,5 +27,6 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 2Gi
+      VOLSYNC_LOCAL_SCHEDULE: "13 * * * *"
   components:
     - ../../../../components/volsync
