@@ -21,6 +21,7 @@ spec:
       username: ghost
       database: ghost
     primary:
+      extraFlags: "--character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci"
       persistence:
         existingClaim: ghost-mariadb
     resources:
