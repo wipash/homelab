@@ -1,135 +1,129 @@
 # Home Assistant Unresponsiveness Investigation
 
-**Date:** 2026-04-10
-**Status:** In progress — awaiting confirmation after config fix
+**Date:** 2026-04-10 (started), updated 2026-04-11
+**Status:** Awaiting debug logging data from next morning spike
 
 ## Symptom
 
-Home Assistant becomes unresponsive every morning for approximately 1 hour. Response times spike to 5000ms+ and health checks fail. Occurs daily around 06:30 NZST (18:30 UTC), visible in Gatus response time graphs going back multiple days.
+Home Assistant becomes unresponsive every morning for approximately 60-90 minutes. Response times spike to 5000ms+ and health checks fail. Occurs daily around 06:00 NZST (18:00 UTC), visible in Gatus response time graphs going back multiple days. Other services on the same node (Plex, zigbee2mqtt) also experience outages due to compounding I/O storms.
 
-## Investigation Findings
+## Outage History (from Gatus)
 
-### Database State
+| Date | HA Outage Window (NZST) | Duration | Other Services Affected |
+|------|------------------------|----------|------------------------|
+| Apr 8 | 03:35-07:10 | ~3.5 hours | — |
+| Apr 9 | 06:25-07:25 | ~55 min | — |
+| Apr 10 | 06:00-07:05 | ~65 min | Plex (2x), zigbee2mqtt |
+| Apr 11 | ~06:00 (expected) | — | zigbee2mqtt (33 restarts in 9d), Plex (13 restarts in 47h) |
 
-- **Database:** `home_assistant` on CNPG cluster `postgres17` (PostgreSQL 17.4)
-- **Total DB size:** 1,372 MB
-- **`states` table:** 853 MB / 3.1M rows (plus ~445 MB in indexes)
-- **`statistics_short_term` table:** 242 MB / 1.4M rows
-- **`statistics` table:** 200 MB
-- **Dead tuple levels:** Normal (autovacuum working correctly)
-- **Rollback rate:** 77,207 rollbacks vs 337,653 commits (19% — very high)
+## Root Cause Analysis
 
-### Top entities by row count in `states`
+### Two separate issues compounding
 
-Many of the heaviest hitters are entities the user has already added to the recorder exclude list, but the exclusion had not yet taken effect:
+#### 1. Daily HA CPU Spike (~06:00 NZST) — UNDER INVESTIGATION
 
-| Entity | Rows |
-|--------|------|
-| sensor.energy_usage_without_heatpump | 371,690 |
-| sensor.shellyproem50_*_power | 300,051 |
-| sensor.shellyproem50_*_apparent_power | 300,029 |
-| sensor.ups_power | 213,565 |
-| sensor.system_power_vdc | 162,034 |
-| sensor.system_power_battery | 132,593 |
-| sensor.shellyproem50_*_power_factor | 112,368 |
-
-These ~2M rows from excluded entities are now being purged.
-
-### Daily CPU Spike Pattern (Apr 9 data)
+HA's CPU ramps from ~20m to ~950m over 45 minutes, then stays pegged for 60-90 minutes. Fine-grained (1-minute) CPU data shows this is NOT a sudden spike at 06:00 but a **gradual ramp starting at ~05:15 NZST** with a clear 5-minute oscillation pattern:
 
 ```
-18:30 UTC (06:30 NZST):  0.894 cores  — ramp up
-18:35 UTC:                1.503 cores
-18:40-19:25 UTC:          ~1.95 cores  — pegged at container limit for 45 min
-19:30 UTC:                0.037 cores  — drops instantly
+04:12 NZST: purge fires (nightly task)
+04:30 NZST:  31m  (tiny bump, purge finishes quickly)
+04:35-05:10: 10-15m  (completely idle — purge is done)
+05:15 NZST:  26m  ← first bump
+05:27 NZST:  59m  ← growing
+05:39 NZST:  49m  ← growing
+05:48 NZST:  92m  ← accelerating
+05:54 NZST: 207m  ← steep ramp
+05:59 NZST: 450m
+06:00 NZST: 920m  ← pegged for ~90 min
+07:25 NZST:  21m  ← drops back to normal
 ```
 
-HA hits nearly 2 full CPU cores for 45 minutes, then abruptly finishes. During this period, the frontend is unresponsive (5000ms+ response times, health check failures).
+**Key findings:**
+- The 5-minute oscillation matches the `StatisticsTask` that fires every 5 minutes in HA's recorder
+- **Not the auto_purge**: The nightly purge at 04:12 finishes quickly (visible as a tiny bump at 04:30) with 1+ hour of idle CPU before the ramp starts
+- **Not database I/O**: PostgreSQL backend metrics are flat during the spike. This is CPU-bound Python work inside HA
+- **No scheduled task at 06:00**: HA source code confirms the only daily task is the purge at 04:12. No task runs at 06:00
+- **Duration correlates with DB size**: Apr 8 (DB was 1.4GB): 3.5 hours. Apr 10 (after cleanup): 65 min
+- **Logs show no trigger**: Nothing logged at INFO level when the ramp starts. The recorder thread doesn't log at INFO level during statistics compilation
 
-### Rollback Rate Spike Correlates
+**What it's NOT:**
+- Not the `auto_purge` (that fires at 04:12 and finishes by 04:30)
+- Not a database-heavy operation (PG metrics flat)
+- Not a CronJob or Kubernetes scheduled task
+- Not a specific HA automation (checked logs — only a manual button press at 05:57)
+- Not any obvious integration based on log analysis
+- Not Ceph scrubbing (Ceph health OK, scrub schedule doesn't align)
 
+**Current theory:** The 5-minute `StatisticsTask` is getting progressively more expensive during the early morning hours. Possibly related to `CompileMissingStatisticsTask` (runs at startup and re-queues itself until complete), or an interaction between the purge and subsequent statistics compilation passes.
+
+**Next step:** Debug logging enabled on `homeassistant.components.recorder.statistics` and `homeassistant.components.recorder.core`. Check Loki after the next morning spike (2026-04-12 ~06:30 NZST) with:
 ```
-18:00 UTC (06:00 NZST): 0.46 rollbacks/sec
-19:00 UTC (07:00 NZST): 2.59 rollbacks/sec  ← peak
-20:00 UTC (08:00 NZST): 1.75 rollbacks/sec
+{app="home-assistant"} |~ "recorder|statistics|purge"
 ```
 
-### Timing Discrepancy
+#### 2. Hourly Volsync I/O Storms on hp1 — FIXED
 
-The recorder `auto_purge` runs at **04:12 local time** (16:12 UTC), but the CPU spike occurs at **06:30 NZST** (18:30 UTC) — a 2+ hour gap. This suggests the spike may be caused by HA's **statistics compilation** (which runs on a separate internal schedule) rather than the purge itself, or a combination of both.
+All 28 Volsync backup jobs were scheduled at `0 * * * *` (top of every hour, simultaneously). This caused:
+- **650% iowait** on hp1 (load average spiking to 30 on an 8-core machine)
+- All I/O on hp1 stalled for 10-25 minutes every hour
+- Services on hp1 (zigbee2mqtt, Plex, prowlarr) repeatedly killed by liveness probes
+- NodeSystemSaturation alerts firing hourly
 
-### Aggravating Factor: hp1 I/O Storms
+When the hourly I/O storm overlapped with the daily HA CPU spike, the combined load caused the worst outages (health check failures, MQTT timeouts, websocket backlogs).
 
-HA runs on **hp1**, which experiences hourly I/O storms from Volsync backups (see separate investigation). At 18:05 UTC, the hourly Volsync backup causes 350-450% iowait on hp1. If the HA internal maintenance task coincides with this, the combined load could cause the severe unresponsiveness. This overlap has not been confirmed.
+**Fix:** Staggered all backup schedules across the hour (2-3 min apart). Large volumes (Plex 100Gi, Frigate, Audiobookshelf) moved to every 6 hours. At most 1-2 backups overlap at any time now.
 
-### Config Issue Found
+**Note:** The stagger commit (`d9975fff3`) was initially blocked from deploying by a YAML syntax error in `hi-events/ks.yaml` (an uncommented line in a commented-out YAML document). This was fixed on 2026-04-11 and confirmed deployed. The last unstaggered run was at 09:00 NZST Apr 11.
 
-The user's `configuration.yaml` contained `auto_purge_time: "02:00:00"` which is **not a valid recorder option**. This caused the recorder integration to fail entirely on startup, cascading to break `history`, `logbook`, `energy`, and `usage_prediction` — resulting in the frontend stuck on "Loading Data."
+### Contributing Factors
 
-## Actions Taken
+#### hp1 Overload
 
-1. **Removed `auto_purge_time`** from recorder config (invalid option)
-2. **Restarted Home Assistant** — recorder now loading correctly
-3. **Triggered manual purge** via `recorder.purge` service
-4. **Entity exclusions now active** — the noisy sensors listed above will no longer be recorded
+hp1 was running an outsized share of workloads including HA, Plex, Mosquitto, zigbee2mqtt, the CNPG operator, and ~28 Volsync backup pods simultaneously. Combined with PCIe bus errors on hp1's NVMe drive, this made hp1 the most failure-prone node.
 
-## Manual Purge Results
+**Fixes applied:**
+- Volsync backups staggered (see above)
+- CNPG postgres17 instances pinned to hp2/hp3 (done Apr 10)
+- hi-events pinned to hp2/hp3 (done Apr 10)
+- HA node affinity restriction removed — no longer excluded from hp3 (done Apr 11, now running on hp2)
+- Plex hp3 exclusion removed (done Apr 11, Coral/Frigate anti-affinity remains)
 
-The manual purge with `purge_keep_days: 30` ran at ~200m CPU — significantly less than the 1,950m seen in the daily spikes. This does **not** reproduce the original issue, possibly because:
-- No concurrent Volsync I/O storm during the manual purge
-- The manual purge service may batch differently than the internal auto process
-- The daily spike may be statistics compilation, not the purge itself
+#### CNPG Replica Instability on hp1
 
-## Related Fixes (potential contributing factors)
+The postgres17 replica (postgres17-3) on hp1 suffered constant connectivity failures: 150+ timeout errors over 3 days, WAL receiver timeouts, and a failover on Apr 7. The high rollback rate on the HA database (19%) was likely caused by transactions timing out during I/O stalls.
 
-Multiple infrastructure issues were discovered during this investigation that could be contributing to or compounding the daily HA unresponsiveness. All have been fixed as of 2026-04-11.
+**Fix:** postgres17 instances pinned to hp2/hp3 with pod anti-affinity. Replica migrated to hp3.
 
-### 1. Volsync I/O Storms on hp1
+#### hp1 PCIe Bus Errors
 
-All 29 Volsync backup jobs were scheduled at `0 * * * *` (top of every hour, simultaneously). This caused:
-- **600%+ iowait** on hp1 (where HA runs)
-- **Load average spikes to 18-19** on an 8-core machine
-- All I/O on hp1 would stall for 5-40 minutes depending on the hour
+hp1's NVMe drive (WD PC SN810) generates recurring PCIe correctable errors (Data Link Layer Timeouts, Physical Layer RxErr) every 30-90 minutes. SMART data shows the drive is healthy. May resolve now that I/O storms are eliminated.
 
-The 18:05 UTC hourly backup directly overlapped with the HA daily spike window (18:30 UTC). The combined I/O contention could explain why HA's internal maintenance pegged at 2 cores — not because the task itself needed 2 cores, but because every DB operation was blocked on I/O.
+**Status:** Monitoring. Physical inspection (reseat NVMe) recommended if errors persist.
 
-**Fix:** Staggered all backup schedules across the hour (2-3 min apart). Large volumes (plex 100Gi, frigate, audiobookshelf) moved to every 6 hours. At most 1-2 backups overlap at any time now.
+#### Recorder Configuration Issues (Fixed)
 
-### 2. CNPG Replica Instability on hp1
+- `auto_purge_time: "02:00:00"` was not a valid recorder option, causing the recorder integration to fail entirely on startup. **Removed.**
+- `purge_keep_days` reduced from 30 to 10 — daily purge processes much less data
+- Entity exclusions active — ~2M rows from noisy sensors purged, won't be re-added
 
-The postgres17 replica (postgres17-3) was on hp1 and suffered constant connectivity failures:
-- **150+ timeout errors** over 3 days between primary (hp2) and replica (hp1)
-- WAL receiver timeouts causing replication drops
-- A full **failover on Apr 7** (timeline jumped to 15)
-- The CNPG operator (also on hp1) had **5 restarts in 4.5 days**
+## Current Node Placement
 
-When the replica fell behind or reconnected, WAL replay would generate additional I/O on hp1, compounding the Volsync storms. The high rollback rate on the home_assistant database (19%) may have been caused by transactions timing out during these I/O stalls.
-
-**Fix:** Added node affinity to pin postgres17 instances to hp2/hp3 only, with required pod anti-affinity. Replica migrated to hp3 successfully.
-
-### 3. hp1 PCIe Bus Errors
-
-hp1's NVMe drive (WD PC SN810) was generating recurring PCIe correctable errors:
-- **Data Link Layer Timeouts** on PCIe port
-- **Physical Layer RxErr** on the NVMe device
-- Occurring every 30-90 minutes, unique to hp1 (hp2 and hp3 have zero)
-
-SMART data shows the drive is healthy (0 media errors, 33% used, 100% spare), so these may be a loose connection or thermal issue rather than drive failure. However, during heavy I/O (Volsync storms), these errors could cause brief I/O stalls that inflate load averages and cause health check timeouts.
-
-**Status:** Monitoring. May resolve now that I/O storms are staggered. Physical inspection (reseat NVMe) recommended if errors persist.
-
-### 4. Recorder Configuration
-
-- `purge_keep_days` reduced from 30 to 10 — daily purge now processes ~1/3 the data
-- Entity exclusions active — ~2M rows from noisy sensors being purged, won't be re-added
-- `auto_purge_time` config error fixed (was preventing recorder from loading entirely)
+| Service | Node | Constraint |
+|---------|------|-----------|
+| CUPS | hp1 | Pinned (printer hardware) |
+| Frigate | hp3 | Requires Coral TPU |
+| Plex | hp1/hp2 | Excluded from hp3 (Coral anti-affinity with Frigate) |
+| Home Assistant | any (currently hp2) | No constraint |
+| postgres17 | hp2 (primary), hp3 (replica) | Pinned to hp2/hp3 |
+| hi-events | hp2/hp3 | Pinned away from hp1 |
 
 ## Remaining Actions
 
-- [ ] **Monitor auto_purge at 04:12 NZST on 2026-04-11** to see if the daily spike pattern is resolved
-- [ ] **Check hp1 load after Volsync stagger takes effect** — verify I/O storms are eliminated
+- [ ] **Analyze debug logging after 2026-04-12 morning spike** — determine what recorder task causes the gradual CPU ramp from 05:15 NZST
+- [ ] **Monitor first staggered Volsync run** — verify hp1 load stays under 5 at the top of the next hour
 - [ ] **Monitor hp1 PCIe errors** — if they persist after I/O reduction, physically reseat the NVMe
-- [ ] **Consider adding more noisy entities to the exclude list** — run this query periodically:
+- [ ] **Consider staggering r2 (daily remote) backups** — all 27 still fire simultaneously at `30 0 * * *` (12:30 NZST)
+- [ ] **Consider adding more noisy entities to the exclude list** — run periodically:
   ```sql
   SELECT sm.entity_id, count(s.*) as state_count
   FROM states_meta sm
@@ -137,4 +131,3 @@ SMART data shows the drive is healthy (0 media errors, 33% used, 100% spare), so
   GROUP BY sm.entity_id
   ORDER BY state_count DESC LIMIT 25;
   ```
-- [ ] **Consider moving HA off hp1** — may no longer be necessary if Volsync stagger resolves the I/O contention, but hp1 remains the busiest node
