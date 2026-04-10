@@ -51,6 +51,16 @@ spec:
               limits:
                 memory: 1Gi
     defaultPodOptions:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - hp2
+                      - hp3
       securityContext:
         runAsNonRoot: true
         runAsUser: 82 # www-data, required for serversideup/php base image
