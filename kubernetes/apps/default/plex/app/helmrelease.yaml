@@ -66,9 +66,6 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
               - matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: NotIn
-                    values: ["hp3"]
                   - key: google.feature.node.kubernetes.io/coral
                     operator: NotIn
                     values: ["true"]
