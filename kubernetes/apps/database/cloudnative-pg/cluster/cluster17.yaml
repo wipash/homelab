@@ -8,6 +8,19 @@ spec:
   instances: 2
   imageName: ghcr.io/cloudnative-pg/postgresql:17.4
   primaryUpdateStrategy: unsupervised
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: required
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                  - hp2
+                  - hp3
   storage:
     size: 20Gi
     storageClass: openebs-hostpath
