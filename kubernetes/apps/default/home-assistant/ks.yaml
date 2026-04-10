@@ -30,5 +30,6 @@ spec:
       APP: *app
       VOLSYNC_CAPACITY: 5Gi
       VOLSYNC_CACHE_CAPACITY: 4Gi
+      VOLSYNC_LOCAL_SCHEDULE: "28 * * * *"
   components:
     - ../../../../components/volsync

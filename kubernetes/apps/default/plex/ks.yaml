@@ -30,7 +30,7 @@ spec:
       APP: *app
       VOLSYNC_CAPACITY: 100Gi
       VOLSYNC_CACHE_CAPACITY: 20Gi
-      VOLSYNC_LOCAL_SCHEDULE: "0 */6 * * *"
+      VOLSYNC_LOCAL_SCHEDULE: "45 */6 * * *"
   components:
     - ../../../../components/volsync
 ---
