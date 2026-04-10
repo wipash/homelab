@@ -80,11 +80,56 @@ The manual purge with `purge_keep_days: 30` ran at ~200m CPU — significantly l
 - The manual purge service may batch differently than the internal auto process
 - The daily spike may be statistics compilation, not the purge itself
 
+## Related Fixes (potential contributing factors)
+
+Multiple infrastructure issues were discovered during this investigation that could be contributing to or compounding the daily HA unresponsiveness. All have been fixed as of 2026-04-11.
+
+### 1. Volsync I/O Storms on hp1
+
+All 29 Volsync backup jobs were scheduled at `0 * * * *` (top of every hour, simultaneously). This caused:
+- **600%+ iowait** on hp1 (where HA runs)
+- **Load average spikes to 18-19** on an 8-core machine
+- All I/O on hp1 would stall for 5-40 minutes depending on the hour
+
+The 18:05 UTC hourly backup directly overlapped with the HA daily spike window (18:30 UTC). The combined I/O contention could explain why HA's internal maintenance pegged at 2 cores — not because the task itself needed 2 cores, but because every DB operation was blocked on I/O.
+
+**Fix:** Staggered all backup schedules across the hour (2-3 min apart). Large volumes (plex 100Gi, frigate, audiobookshelf) moved to every 6 hours. At most 1-2 backups overlap at any time now.
+
+### 2. CNPG Replica Instability on hp1
+
+The postgres17 replica (postgres17-3) was on hp1 and suffered constant connectivity failures:
+- **150+ timeout errors** over 3 days between primary (hp2) and replica (hp1)
+- WAL receiver timeouts causing replication drops
+- A full **failover on Apr 7** (timeline jumped to 15)
+- The CNPG operator (also on hp1) had **5 restarts in 4.5 days**
+
+When the replica fell behind or reconnected, WAL replay would generate additional I/O on hp1, compounding the Volsync storms. The high rollback rate on the home_assistant database (19%) may have been caused by transactions timing out during these I/O stalls.
+
+**Fix:** Added node affinity to pin postgres17 instances to hp2/hp3 only, with required pod anti-affinity. Replica migrated to hp3 successfully.
+
+### 3. hp1 PCIe Bus Errors
+
+hp1's NVMe drive (WD PC SN810) was generating recurring PCIe correctable errors:
+- **Data Link Layer Timeouts** on PCIe port
+- **Physical Layer RxErr** on the NVMe device
+- Occurring every 30-90 minutes, unique to hp1 (hp2 and hp3 have zero)
+
+SMART data shows the drive is healthy (0 media errors, 33% used, 100% spare), so these may be a loose connection or thermal issue rather than drive failure. However, during heavy I/O (Volsync storms), these errors could cause brief I/O stalls that inflate load averages and cause health check timeouts.
+
+**Status:** Monitoring. May resolve now that I/O storms are staggered. Physical inspection (reseat NVMe) recommended if errors persist.
+
+### 4. Recorder Configuration
+
+- `purge_keep_days` reduced from 30 to 10 — daily purge now processes ~1/3 the data
+- Entity exclusions active — ~2M rows from noisy sensors being purged, won't be re-added
+- `auto_purge_time` config error fixed (was preventing recorder from loading entirely)
+
 ## Remaining Actions
 
-- [ ] **Monitor tomorrow's auto_purge at 04:12 NZST** to see if the daily spike pattern has changed
-- [ ] **Consider reducing `purge_keep_days` from 30 to 10** — this would reduce the daily purge workload by ~2/3. The `statistics` table retains long-term trends regardless of this setting
-- [ ] **Consider adding more noisy entities to the exclude list** — run this query periodically to find new offenders:
+- [ ] **Monitor auto_purge at 04:12 NZST on 2026-04-11** to see if the daily spike pattern is resolved
+- [ ] **Check hp1 load after Volsync stagger takes effect** — verify I/O storms are eliminated
+- [ ] **Monitor hp1 PCIe errors** — if they persist after I/O reduction, physically reseat the NVMe
+- [ ] **Consider adding more noisy entities to the exclude list** — run this query periodically:
   ```sql
   SELECT sm.entity_id, count(s.*) as state_count
   FROM states_meta sm
@@ -92,5 +137,4 @@ The manual purge with `purge_keep_days: 30` ran at ~200m CPU — significantly l
   GROUP BY sm.entity_id
   ORDER BY state_count DESC LIMIT 25;
   ```
-- [ ] **Investigate Volsync I/O overlap** — stagger or reduce frequency of backups on hp1 to eliminate the aggravating factor (see hp1 investigation)
-- [ ] **Consider moving HA off hp1** — hp1 has the most I/O contention due to Volsync, Ceph OSD, Plex, and two Postgres replicas
+- [ ] **Consider moving HA off hp1** — may no longer be necessary if Volsync stagger resolves the I/O contention, but hp1 remains the busiest node
