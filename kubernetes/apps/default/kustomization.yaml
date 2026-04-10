@@ -20,7 +20,7 @@ resources:
   - ./frigate/ks.yaml
   - ./ghcr-imagepullsecret/ks.yaml
   - ./ghost/ks.yaml
-  - ./hermes/ks.yaml
+  # - ./hermes/ks.yaml
   - ./hi-events/ks.yaml
   - ./hoarder/ks.yaml
   - ./home-assistant/ks.yaml
