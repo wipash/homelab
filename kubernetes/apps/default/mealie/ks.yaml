@@ -30,5 +30,6 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_LOCAL_SCHEDULE: "33 * * * *"
   components:
     - ../../../../components/volsync

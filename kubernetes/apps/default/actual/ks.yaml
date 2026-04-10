@@ -30,3 +30,4 @@ spec:
   postBuild:
     substitute:
       APP: *appname
+      VOLSYNC_LOCAL_SCHEDULE: "45 * * * *"
