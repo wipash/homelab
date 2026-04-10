@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(kubectl get:*)",
+      "Bash(kubectl -n monitoring exec -it prometheus-kube-prometheus-stack-prometheus-0 -- wget -qO- 'http://localhost:9090/api/v1/query?query=ALERTS')",
+      "Bash(python3 -m json.tool)",
+      "Bash(kubectl -n monitoring exec prometheus-kube-prometheus-stack-0 -c prometheus -- wget -qO- 'http://localhost:9090/api/v1/query?query=ALERTS')"
+    ]
+  }
+}
