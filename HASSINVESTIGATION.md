@@ -1,7 +1,7 @@
 # Home Assistant Unresponsiveness Investigation
 
-**Date:** 2026-04-10 (started), updated 2026-04-11
-**Status:** Awaiting debug logging data from next morning spike
+**Date:** 2026-04-10 (started), updated 2026-04-13
+**Status:** Debug logging captured; Apr 13 data points to a fridge dashboard / websocket storm as the immediate trigger, with recorder still under investigation as a possible contributor
 
 ## Symptom
 
@@ -15,6 +15,7 @@ Home Assistant becomes unresponsive every morning for approximately 60-90 minute
 | Apr 9 | 06:25-07:25 | ~55 min | — |
 | Apr 10 | 06:00-07:05 | ~65 min | Plex (2x), zigbee2mqtt |
 | Apr 11 | ~06:00 (expected) | — | zigbee2mqtt (33 restarts in 9d), Plex (13 restarts in 47h) |
+| Apr 13 | 05:54-06:19 | ~25 min | MQTT ACK delays, Fully Kiosk timeouts, websocket backlog errors |
 
 ## Root Cause Analysis
 
@@ -60,6 +61,51 @@ HA's CPU ramps from ~20m to ~950m over 45 minutes, then stays pegged for 60-90 m
 ```
 {app="home-assistant"} |~ "recorder|statistics|purge"
 ```
+
+#### Apr 13 debug logging findings
+
+Debug logging was captured during the Apr 13 incident window. It changed the working theory:
+
+- **CPU spike started at 05:54:30 NZST, before the next recorder statistics run.**
+  - Prometheus `container_cpu_usage_seconds_total` (30s rate) jumps from ~0.01 core at 05:53 to ~0.94 core by 05:54:30
+  - CPU then stays near 0.9-1.0 core until ~06:19:30, when it drops abruptly back to idle
+- **Recorder did not show a backlog during the outage.**
+  - `Recorder queue size is: 0` at 05:54:25, 05:59:25, 06:04:32, 06:15:00
+  - Recorder keepalives continued throughout the incident
+  - Statistics tasks still ran every 5 minutes, but slightly late:
+    - 05:55:19 for 17:50-17:55 UTC
+    - 06:00:24 for 17:55-18:00 UTC
+    - 06:05:24 for 18:00-18:05 UTC
+- **The immediate trigger on Apr 13 lined up with the fridge dashboard client, not recorder.**
+  - 05:54:00: `automation.house_alert_state` runs and changes `input_select.house_alert_state`; splashback light turns on
+  - 05:54:25: Pixel Tablet / Fully Kiosk entities on `10.0.16.7` come alive (`sensor.pixel_tablet_foreground_app=de.ozerov.fully`, `switch.pixel_tablet_screen=on`)
+  - 05:54:02-06:18: repeated websocket backlog errors for client `fridge from 10.0.16.7`
+  - Total `Client unable to keep up with pending messages` errors from that client: **93**
+  - The last queued payloads are large dashboard events, especially grocery list item arrays and daily forecast payloads
+- **Fully Kiosk settings make this look like a wake/resume issue, not a forced page reload.**
+  - Fully enters screensaver after `300` seconds of idle time
+  - Motion detection is enabled and configured to stop the screensaver / wake the display
+  - Web Auto Reload on screen-on and on screensaver-stop are both disabled
+  - Start URL remains `https://hass.mcgrath.nz`, but the current page is `https://hass.mcgrath.nz/dashboard-tablet/0`
+  - That means the most faithful reproduction path is "tablet already sitting on the dashboard, enters screensaver, then resumes on motion", not "Fully cold-loads the start URL"
+- **Main thread symptoms matched the websocket storm.**
+  - Repeated `No ACK from MQTT server in 10 seconds`
+  - Repeated `Updating samsungtv_smart media_player took longer than the scheduled update interval`
+  - Repeated `homeassistant.components.fully_kiosk` timeouts fetching `10.0.16.7`
+- **The fridge tablet flapped during the incident and the CPU drop followed shortly after it went unavailable.**
+  - 06:18:31: Pixel Tablet entities flip to `unavailable`
+  - 06:19:30: HA CPU drops from ~1 core to ~0.03 core
+
+**Revised theory for Apr 13:** recorder statistics are active and still worth checking, but today's outage appears to have been triggered or amplified by the fridge Pixel Tablet / Fully Kiosk client waking, reconnecting, and failing to keep up with dashboard websocket traffic on the main thread. The backlog errors included shopping list payloads, daily weather payloads, and ordinary websocket results, which suggests a broader client hydration / render problem rather than one obviously oversized card. The very chatty recorder debug logging likely added overhead on top of that.
+
+**Most likely next checks:**
+- Disable recorder debug logging after we've captured enough evidence; the current settings are extremely noisy
+- Temporarily take the fridge tablet dashboard offline for one morning to test whether the 05:54 spike disappears
+- Check what wakes the fridge tablet / dashboard around 05:54 NZST and whether that is intentional
+- Test lighter variants of the fridge dashboard during the wake/reconnect window
+- Weather and shopping cards are still suspects because they showed up in backlog payloads, but neither has been proven to be the sole cause
+- Camera cards remain worth testing as a separate variable even though the logs did not point to them as clearly as shopping/weather
+- Try a controlled Fully Kiosk repro that starts screensaver, then wakes on motion without reloading the page
 
 #### 2. Hourly Volsync I/O Storms on hp1 — FIXED
 
@@ -119,7 +165,10 @@ hp1's NVMe drive (WD PC SN810) generates recurring PCIe correctable errors (Data
 
 ## Remaining Actions
 
-- [ ] **Analyze debug logging after 2026-04-12 morning spike** — determine what recorder task causes the gradual CPU ramp from 05:15 NZST
+- [x] **Analyze debug logging after 2026-04-12 morning spike** — Apr 13 data captured; recorder queue stayed at 0, while the fridge Pixel Tablet websocket client looked like the immediate trigger
+- [ ] **Run a controlled test without the fridge dashboard / Fully Kiosk client around 05:54 NZST** — confirm whether the morning spike disappears
+- [ ] **Reproduce the fridge tablet wake/resume path on demand** — use Fully screensaver start/stop or screen off/on while the dashboard stays loaded, then watch HA CPU and websocket backlog logs
+- [ ] **Disable or reduce recorder debug logging** — current settings are noisy enough to materially affect the system during an incident
 - [ ] **Monitor first staggered Volsync run** — verify hp1 load stays under 5 at the top of the next hour
 - [ ] **Monitor hp1 PCIe errors** — if they persist after I/O reduction, physically reseat the NVMe
 - [ ] **Consider staggering r2 (daily remote) backups** — all 27 still fire simultaneously at `30 0 * * *` (12:30 NZST)
