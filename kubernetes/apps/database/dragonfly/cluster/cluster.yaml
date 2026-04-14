@@ -6,7 +6,7 @@ metadata:
   name: dragonfly
 spec:
   networkPolicyEnabled: false  # Otherwise podmonitor can't connect
-  image: ghcr.io/dragonflydb/dragonfly:v1.37.2
+  image: ghcr.io/dragonflydb/dragonfly:v1.38.0
   replicas: 3 # set to the number of nodes in the cluster
   env:
     - name: MAX_MEMORY
