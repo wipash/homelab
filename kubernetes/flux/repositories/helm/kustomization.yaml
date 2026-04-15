@@ -8,7 +8,6 @@ resources:
   - ./emberstack.yaml
   - ./groundhog2k.yaml
   - ./jetstack.yaml
-  - ./k8sathome.yaml
   - ./nfs-subdir-external-provisioner.yaml
   - ./runix.yaml
   - ./kubito.yaml
