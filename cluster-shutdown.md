@@ -33,7 +33,7 @@ Expect `HEALTH_WARN` — that's the flags, not a real problem.
 Only needed if you want the cluster to come back in exactly the same state without Flux racing to reconcile during boot:
 
 ```sh
-flux suspend kustomization --all -A
+flux -n flux-system suspend kustomization --all
 ```
 
 ## 3. Shut down the nodes
@@ -78,5 +78,5 @@ Wait for `HEALTH_OK`.
 ## 6. Resume Flux (if suspended)
 
 ```sh
-flux resume kustomization --all -A
+flux -n flux-system resume kustomization --all
 ```
