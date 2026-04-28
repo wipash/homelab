@@ -33,6 +33,7 @@ spec:
               database__connection__host: ghost-mariadb.default.svc.cluster.local
               database__connection__user: ghost
               database__connection__database: ghost
+              database__connection__charset: utf8mb4
               NODE_ENV: production
             envFrom:
               - secretRef:
