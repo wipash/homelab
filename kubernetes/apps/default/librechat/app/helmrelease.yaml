@@ -169,6 +169,10 @@ spec:
             sectionName: https
         hostnames:
           - mongolibre.mcgrath.nz
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: mongo-express
 
     persistence:
       config:
