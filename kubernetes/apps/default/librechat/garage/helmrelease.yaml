@@ -45,8 +45,8 @@ spec:
               - server
               - --single-node
               - --default-bucket
-              - -c
-              - /config/garage.toml
+            env:
+              GARAGE_CONFIG_FILE: /config/garage.toml
             envFrom:
               - secretRef:
                   name: *secret
