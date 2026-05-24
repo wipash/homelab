@@ -74,6 +74,7 @@ spec:
                 memory: 1Gi
 
     defaultPodOptions:
+      automountServiceAccountToken: true
       securityContext:
         runAsUser: 1001
         runAsGroup: 1001
