@@ -30,6 +30,7 @@ spec:
               repository: dxflrs/garage
               tag: v2.3.0
             args:
+              - /garage
               - server
               - --single-node
               - --default-bucket
