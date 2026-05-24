@@ -175,6 +175,7 @@ spec:
               limits:
                 memory: 1Gi
     defaultPodOptions:
+      automountServiceAccountToken: true
       shareProcessNamespace: true
       securityContext:
         runAsUser: 1000
