@@ -1,0 +1,142 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app code-interpreter
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: code-interpreter
+  interval: 1h
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      api:
+        strategy: Recreate
+        annotations:
+          reloader.stakater.com/auto: "true"
+          secret.reloader.stakater.com/reload: &secret code-interpreter-secret
+        initContainers:
+          set-userns-limit:
+            image:
+              repository: docker.io/library/busybox
+              tag: "1.37.0"
+            command:
+              - sh
+              - -c
+              - |
+                current=$(cat /proc/sys/user/max_user_namespaces)
+                if [ "$current" -lt 15000 ]; then
+                  echo "raising user.max_user_namespaces from $current to 15000"
+                  echo 15000 > /proc/sys/user/max_user_namespaces
+                else
+                  echo "user.max_user_namespaces=$current, leaving alone"
+                fi
+            securityContext:
+              privileged: true
+        containers:
+          app:
+            image:
+              repository: ghcr.io/usnavy13/librecodeinterpreter
+              tag: latest@sha256:670f50425a66ed9b410f5ae1209b526f6254abe269ff2b1c479485923bb5e064
+            env:
+              PORT: &port "8000"
+              AUTH_ENABLED: "false"
+              REDIS_HOST: dragonfly.database.svc.cluster.local
+              REDIS_PORT: "6379"
+              S3_ENDPOINT: garage.default.svc.cluster.local:3900
+              S3_SECURE: "false"
+              S3_BUCKET: code-interpreter-files
+              S3_REGION: garage
+            envFrom:
+              - secretRef:
+                  name: *secret
+            securityContext:
+              privileged: true
+              allowPrivilegeEscalation: true
+              readOnlyRootFilesystem: false
+            resources:
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                memory: 2Gi
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8000
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+                  timeoutSeconds: 15
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8000
+                  initialDelaySeconds: 15
+                  periodSeconds: 15
+                  timeoutSeconds: 10
+              startup:
+                enabled: false
+
+    defaultPodOptions:
+      securityContext:
+        seccompProfile: { type: RuntimeDefault }
+
+    service:
+      app:
+        controller: api
+        ports:
+          http:
+            port: *port
+
+    persistence:
+      sandbox-data:
+        type: persistentVolumeClaim
+        storageClass: ceph-block
+        accessMode: ReadWriteOnce
+        size: 10Gi
+        globalMounts:
+          - path: /var/lib/code-interpreter/sandboxes
+
+      skill-deps:
+        type: persistentVolumeClaim
+        storageClass: ceph-block
+        accessMode: ReadWriteOnce
+        size: 10Gi
+        globalMounts:
+          - path: /opt/skill-deps
+
+      tmp:
+        type: emptyDir
+        medium: Memory
+        sizeLimit: 512Mi
+        globalMounts:
+          - path: /tmp
+
+      app-data:
+        type: emptyDir
+        sizeLimit: 100Mi
+        globalMounts:
+          - path: /app/data
+
+      ssl:
+        type: emptyDir
+        globalMounts:
+          - path: /app/ssl
