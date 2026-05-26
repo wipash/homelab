@@ -1,8 +1,6 @@
-# For more information, see the Configuration Guide:
-# https://www.librechat.ai/docs/configuration/librechat_yaml
-
+---
 # Configuration version (required)
-version: 1.3.6
+version: 1.3.9
 
 # Cache settings: Set to true to enable caching
 cache: true
@@ -35,6 +33,14 @@ interface:
     create: true
     share: true
     public: true
+  skills:
+    use: true
+    create: true
+    share: true
+    public: true
+  remoteAgents:
+    use: true
+    create: true
   mcpServers:
     use: true
     create: true
@@ -55,14 +61,13 @@ speech:
     conversationMode: false
     advancedMode: false
     speechToText:
-      engineSTT: "openai"
+      engineSTT: openai
       languageSTT: "English (New Zealand)"
       autoTranscribeAudio: true
-      decibelValue: -45
       autoSendText: 0
     textToSpeech:
-      engineTTS: "openai"
-      voice: "alloy"
+      engineTTS: openai
+      voice: alloy
       languageTTS: "en"
       automaticPlayback: false
       playbackRate: 1.0
@@ -70,40 +75,24 @@ speech:
   tts:
     openai:
       apiKey: "$${SPEECH_API_KEY}"
-      model: "gpt-4o-mini-tts"
+      model: "tts-1"
       voices: ["alloy", "echo", "fable", "onyx", "nova", "shimmer"]
   stt:
     openai:
       apiKey: "$${SPEECH_API_KEY}"
-      model: "gpt-4o-transcribe"
-
-ocr:
-  mistralModel: mistral-ocr-latest
-  apiKey: "$${MISTRAL_API_KEY}"
-  strategy: mistral_ocr
-
-webSearch:
-  serperApiKey: "$${SERPER_API_KEY}"
-  searchProvider: "serper"
-
-  firecrawlApiKey: "$${FIRECRAWL_API_KEY}"
-  scraperType: "firecrawl"
-
-  cohereApiKey: "$${COHERE_API_KEY}"
-  rerankerType: "cohere"
-
-  scraperTimeout: 7500
-  safeSearch: 1
+      model: whisper-1
 
 rateLimits:
   fileUploads:
-    userMax: 50
-    userWindowInMinutes: 60 # Rate limit window for file uploads per user
-  conversationsImport:
-    ipMax: 100
-    ipWindowInMinutes: 60 # Rate limit window for conversation imports per IP
-    userMax: 50
-    userWindowInMinutes: 60 # Rate limit window for conversation imports per user
+    #ipMax: 100
+    #ipWindowInMinutes: 60  # Rate limit window for file uploads per IP
+    userMax: 100
+    userWindowInMinutes: 30 # Rate limit window for file uploads per user
+  # conversationsImport:
+  #   ipMax: 100
+  #   ipWindowInMinutes: 60 # Rate limit window for conversation imports per IP
+  #   userMax: 50
+  #   userWindowInMinutes: 60 # Rate limit window for conversation imports per user
 
 fileConfig:
   endpoints:
@@ -127,51 +116,82 @@ fileConfig:
     maxHeight: 1900
     quality: 0.92
 
+ocr:
+  mistralModel: mistral-ocr-latest
+  apiKey: "$${MISTRAL_API_KEY}"
+  strategy: mistral_ocr
+
+webSearch:
+  serperApiKey: "$${SERPER_API_KEY}"
+  searchProvider: "serper"
+
+  scraperProvider: "firecrawl"
+  firecrawlApiKey: "$${FIRECRAWL_API_KEY}"
+  firecrawlOptions:
+    formats: ["markdown", "summary"]
+    excludeTags: ["nav", "footer", ".ads"]
+    waitFor: 2000
+    timeout: 10000
+    mobile: false
+    blockAds: true
+    onlyMainContent: true
+    removeBase64Images: true
+    maxAge: 172800000 # 48 hours in milliseconds
+
+  cohereApiKey: "$${COHERE_API_KEY}"
+  rerankerType: "cohere"
+
+  scraperTimeout: 20000
+  safeSearch: 1
+
 endpoints:
   custom:
     - name: LiteLLM
       apiKey: "$${LITELLM_API_KEY}"
       baseURL: "https://litellm.hlms.cloud"
       models:
-        default: ["azure/gpt-5"]
+        default: ["gpt-5.4-nano"]
         fetch: true
       titleConvo: true
-      titleModel: "azure/gpt-5-nano"
-      modelDisplayLabel: "LiteLLM"
-
-  assistants:
-    disableBuilder: true
+      titleModel: gpt-5.4-nano
+      modelDisplayLabel: LiteLLM
 
   agents:
     recursionLimit: 50
     disableBuilder: false
     titleConvo: true
-    titleModel: azure/gpt-5-nano
+    titleModel: gpt-5.4-nano
     titleEndpoint: LiteLLM
     capabilities:
-      - "execute_code"
-      - "file_search"
-      - "actions"
-      - "tools"
-      - "artifacts"
-      - "ocr"
-      - "chain"
-      - "web_search"
-      - "context"
+      - execute_code
+      - file_search
+      - actions
+      - tools
+      - artifacts
+      - ocr
+      - chain
+      - web_search
+      - context
       - deferred_tools
       - programmatic_tools
+      - subagents
+      - skills
     allowedProviders:
-      - "LiteLLM"
+      - LiteLLM
 
+  assistants:
+    disableBuilder: true
 
   all:
-    streamRate: 10 # Higher number 'buffers' incoming chunks to make the output smoother
+    streamRate: 10 # Higher number slows down incoming tokens so that we don't overwhelm the cpu
+    titleConvo: true
+    titleModel: gpt-5.4-nano
+    titleEndpoint: LiteLLM
 
 modelSpecs:
   enforce: false
   prioritize: true
-  # addedEndpoints: ["openAI", "google", "anthropic", "LiteLLM", "agents"]
-  addedEndpoints: ["agents"]
+  addedEndpoints: ["agents", "LiteLLM"]
   list:
     - name: claude
       label: Claude
