@@ -108,6 +108,9 @@ spec:
             port: 12321
     route:
       app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            path: /
         parentRefs:
           - name: envoy-external
             namespace: networking
