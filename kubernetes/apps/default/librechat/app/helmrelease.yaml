@@ -163,6 +163,9 @@ spec:
         hostnames:
           - chat.mcgrath.nz
       mongo-express:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            conditions: ["[STATUS] == 401"]
         parentRefs:
           - name: envoy-internal
             namespace: networking
