@@ -32,6 +32,7 @@ resources:
   - ./mealie/ks.yaml
   - ./mosquitto/ks.yaml
   # - ./openclaw/ks.yaml
+  - ./opengist/ks.yaml
   - ./paperless/ks.yaml
   - ./plex/ks.yaml
   - ./prowlarr/ks.yaml
