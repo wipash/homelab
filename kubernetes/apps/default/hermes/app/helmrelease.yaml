@@ -23,6 +23,7 @@ spec:
             args:
               - gateway
               - run
+              - --replace
             env:
               TZ: &tz Pacific/Auckland
               HOME: /opt/data
