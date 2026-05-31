@@ -19,13 +19,19 @@ spec:
           app:
             image:
               repository: nousresearch/hermes-agent
-              tag: latest@sha256:570195f673499f515a66996bb1cc67d297698d9291b09df1615635fc39b5fb8f
+              tag: v2026.5.29@sha256:192a40783e9227b5f162b76af4d133050557adebd46e1c9cb40cb79a1317a9f7
             args:
               - gateway
               - run
             env:
-              HOME: /opt/data
               TZ: &tz Pacific/Auckland
+              HOME: /opt/data
+              HERMES_HOME: /opt/data
+              HERMES_DASHBOARD: true
+              HERMES_DASHBOARD_HOST: 0.0.0.0
+              HERMES_DASHBOARD_PORT: &port 9119
+              HERMES_DASHBOARD_INSECURE: "1"
+              HERMES_DASHBOARD_TUI: "1"
             envFrom:
               - secretRef:
                   name: hermes-secret
@@ -83,6 +89,11 @@ spec:
         seccompProfile: { type: RuntimeDefault }
 
     service:
+      hermes:
+        controller: hermes
+        ports:
+          dashboard:
+            port: *port
       codeserver:
         controller: codeserver
         ports:
@@ -90,13 +101,24 @@ spec:
             port: 12321
 
     route:
-      codeserver:
+      hermes:
         parentRefs:
           - name: envoy-internal
             namespace: networking
             sectionName: https
         hostnames:
           - hermes.mcgrath.nz
+        rules:
+          - backendRefs:
+              - identifier: hermes
+                port: dashboard
+      codeserver:
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - hermesconf.mcgrath.nz
         rules:
           - backendRefs:
               - identifier: codeserver
