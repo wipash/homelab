@@ -138,7 +138,17 @@ spec:
         hostnames:
           - hermes.mcgrath.nz
         rules:
-          - backendRefs:
+          # The dashboard hardcodes its CORS/origin allow-list to localhost only, so
+          # the WebSocket handshake (Origin: https://hermes.mcgrath.nz) is rejected
+          # with 403. Rewrite Origin to an allowed value; the browser doesn't enforce
+          # CORS on the WS upgrade, so this only satisfies the server-side check.
+          - filters:
+              - type: RequestHeaderModifier
+                requestHeaderModifier:
+                  set:
+                    - name: Origin
+                      value: http://localhost:9119
+            backendRefs:
               - identifier: hermes
                 port: dashboard
       codeserver:
