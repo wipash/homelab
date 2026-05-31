@@ -81,6 +81,14 @@ spec:
                 memory: 512Mi
       codeserver:
         strategy: Recreate
+        # hermes owns its home (/opt/data) as uid 10000, mode 0700, and resets it on
+        # start, so the default coder user (1000) can't enter even via the fsGroup.
+        # Run code-server as the hermes user so it owns the workspace it edits.
+        # (coder image isn't s6-based, so forcing the uid is safe.)
+        pod:
+          securityContext:
+            runAsUser: 10000
+            runAsGroup: 10000
         containers:
           codeserver:
             image:
@@ -88,6 +96,7 @@ spec:
               tag: 4.122.0@sha256:dbe5b1cf5c1f0edf47da6363fdadb89c456fb14b3d7e2a1545cabe20f5d7402a
             env:
               TZ: *tz
+              HOME: /opt/data
             args:
               [
                 "--auth",
