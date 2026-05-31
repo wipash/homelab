@@ -43,9 +43,12 @@ spec:
               startup:
                 enabled: false
             securityContext:
+              # Don't drop capabilities: s6-overlay init runs as root and needs
+              # CAP_CHOWN (fix /opt/data ownership) plus CAP_SETUID/CAP_SETGID to
+              # drop privileges to the image's hermes user (10000). Dropping ALL
+              # breaks both ("chown failed", "unable to set supplementary group list").
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false
-              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 100m
