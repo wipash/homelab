@@ -82,9 +82,11 @@ spec:
     defaultPodOptions:
       automountServiceAccountToken: true
       securityContext:
-        runAsUser: 1001
-        runAsGroup: 1001
-        fsGroup: 1001
+        # hermes-agent uses s6-overlay: its entrypoint must start as root to fix
+        # /run permissions, then drops to the image's internal hermes user (uid 10000).
+        # Forcing runAsUser breaks s6 preinit ("/run belongs to uid 0 ... lacking
+        # privileges to fix it"), so only set fsGroup to match the image user.
+        fsGroup: 10000
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
 
