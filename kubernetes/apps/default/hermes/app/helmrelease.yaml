@@ -27,11 +27,6 @@ spec:
               TZ: &tz Pacific/Auckland
               HOME: /opt/data
               HERMES_HOME: /opt/data
-              HERMES_DASHBOARD: true
-              HERMES_DASHBOARD_HOST: 0.0.0.0
-              HERMES_DASHBOARD_PORT: &port 9119
-              HERMES_DASHBOARD_INSECURE: "1"
-              HERMES_DASHBOARD_TUI: "1"
             envFrom:
               - secretRef:
                   name: hermes-secret
@@ -55,6 +50,35 @@ spec:
                 memory: 1Gi
               limits:
                 memory: 3Gi
+          dashboard:
+            image:
+              repository: nousresearch/hermes-agent
+              tag: v2026.5.29@sha256:192a40783e9227b5f162b76af4d133050557adebd46e1c9cb40cb79a1317a9f7
+            # `gateway run` only serves the gateway API (8642); the web dashboard is
+            # a separate `hermes dashboard` process. Run it as its own container in the
+            # same pod so it reaches the gateway over localhost, and bind 0.0.0.0 so
+            # Envoy can reach it on the pod IP (the env-var dashboard bound localhost
+            # only, hence "connection refused").
+            args:
+              - dashboard
+              - --host
+              - "0.0.0.0"
+              - --insecure
+            env:
+              TZ: *tz
+              HOME: /opt/data
+              HERMES_HOME: /opt/data
+              HERMES_DASHBOARD_TUI: "1"
+              GATEWAY_HEALTH_URL: http://localhost:8642
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
       codeserver:
         strategy: Recreate
         containers:
@@ -98,7 +122,7 @@ spec:
         controller: hermes
         ports:
           dashboard:
-            port: *port
+            port: 9119
       codeserver:
         controller: codeserver
         ports:
