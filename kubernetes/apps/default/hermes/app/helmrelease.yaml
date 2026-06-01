@@ -66,6 +66,11 @@ spec:
                   mkdir -p $HOMEBREW_PREFIX
                   git clone --depth 1 https://github.com/Homebrew/brew $HOMEBREW_PREFIX
                 fi
+
+                # Ensure brew's lock dir exists — brew creates it on first run but
+                # only if the parent tree is writable. Without this, brew fails on
+                # a fresh PVC before the first `brew install`.
+                mkdir -p /opt/data/.local/homebrew/var/homebrew/locks
         containers:
           app:
             image: *image
