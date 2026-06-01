@@ -77,7 +77,6 @@ spec:
             args:
               - gateway
               - run
-              - --replace
             env:
               TZ: &tz Pacific/Auckland
               API_SERVER_ENABLED: true
@@ -108,10 +107,18 @@ spec:
               - secretRef:
                   name: hermes-secret
             probes:
-              liveness:
-                enabled: false
-              readiness:
-                enabled: false
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *port
+                  initialDelaySeconds: 30
+                  periodSeconds: 15
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *probes
               startup:
                 enabled: false
             securityContext:
