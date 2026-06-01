@@ -103,6 +103,15 @@ spec:
               HOMEBREW_REPOSITORY: /opt/data/.local/homebrew
               PATH: /opt/hermes/bin:/opt/hermes/.venv/bin:/opt/data/.local/bin:/opt/data/.local/go/bin:/opt/data/.local/homebrew/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
               PIP_BREAK_SYSTEM_PACKAGES: "1"
+              # Talos Linux disables unprivileged user namespaces at the kernel
+              # level (no AppArmor userns file, just a kernel-level restriction).
+              # Hermes auto-detects the Ubuntu/AppArmor variant via
+              # /proc/sys/kernel/apparmor_restrict_unprivileged_userns, but that
+              # file doesn't exist on Talos — so auto-detection falls through and
+              # Chrome exits with "No usable sandbox!". Setting AGENT_BROWSER_ARGS
+              # directly bypasses auto-detection and forces --no-sandbox for every
+              # browser launch.
+              AGENT_BROWSER_ARGS: "--no-sandbox,--disable-dev-shm-usage"
             envFrom:
               - secretRef:
                   name: hermes-secret
