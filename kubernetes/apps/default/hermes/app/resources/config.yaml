@@ -45,6 +45,9 @@ agent:
   api_max_retries: 2
   reasoning_effort: medium
   tool_use_enforcement: auto
+discord:
+  require_mention: false
+group_sessions_per_user: true
 # auxiliary:
 #   vision:
 #     provider: litellm
