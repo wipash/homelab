@@ -1,0 +1,126 @@
+model:
+  default: claude-sonnet-4-6
+  provider: litellm
+  base_url: ''
+providers:
+  litellm:
+    base_url: ${LITELLM_BASE_URL}
+    api_key: ${LITELLM_API_KEY}
+toolsets:
+  - hermes-cli
+terminal:
+  backend: local
+  cwd: /opt/data/workspace
+  timeout: 180
+  persistent_shell: true
+  env_passthrough:
+    - GH_TOKEN
+    - HOME_ASSISTANT_TOKEN
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
+  auto_migrate: true
+  auto_summarize:
+    threshold: 50
+compression:
+  enabled: true
+  threshold: 0.5
+  target_ratio: 0.2
+  protect_last_n: 20
+streaming:
+  enabled: false
+security:
+  redact_secrets: true
+  tirith_enabled: true
+  tirith_fail_open: true
+platform_toolsets:
+  cli:
+    - hermes-cli
+  discord:
+    - hermes-discord
+agent:
+  max_turns: 90
+  gateway_timeout: 1800
+  restart_drain_timeout: 60
+  api_max_retries: 2
+  reasoning_effort: medium
+  tool_use_enforcement: auto
+# auxiliary:
+#   vision:
+#     provider: litellm
+#     model: ''
+#     base_url: ''
+#     api_key: ''
+#     timeout: 120
+#     extra_body: {}
+#     download_timeout: 30
+#   web_extract:
+#     provider: litellm
+#     model: ''
+#     base_url: ''
+#     api_key: ''
+#     timeout: 360
+#     extra_body: {}
+#   compression:
+#     provider: litellm
+#     model: ''
+#     base_url: ''
+#     api_key: ''
+#     timeout: 120
+#     extra_body: {}
+#   skills_hub:
+#     provider: litellm
+#     model: ''
+#     base_url: ''
+#     api_key: ''
+#     timeout: 30
+#     extra_body: {}
+#   approval:
+#     provider: litellm
+#     model: ''
+#     base_url: ''
+#     api_key: ''
+#     timeout: 30
+#     extra_body: {}
+#   mcp:
+#     provider: litellm
+#     model: ''
+#     base_url: ''
+#     api_key: ''
+#     timeout: 30
+#     extra_body: {}
+#   title_generation:
+#     provider: litellm
+#     model: ''
+#     base_url: ''
+#     api_key: ''
+#     timeout: 30
+#     extra_body: {}
+#   triage_specifier:
+#     provider: litellm
+#     model: ''
+#     base_url: ''
+#     api_key: ''
+#     timeout: 120
+#     extra_body: {}
+#   kanban_decomposer:
+#     provider: litellm
+#     model: ''
+#     base_url: ''
+#     api_key: ''
+#     timeout: 180
+#     extra_body: {}
+#   profile_describer:
+#     provider: litellm
+#     model: ''
+#     base_url: ''
+#     api_key: ''
+#     timeout: 60
+#     extra_body: {}
+#   curator:
+#     provider: litellm
+#     model: ''
+#     base_url: ''
+#     api_key: ''
+#     timeout: 600
+#     extra_body: {}

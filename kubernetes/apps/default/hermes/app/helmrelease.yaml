@@ -20,6 +20,18 @@ spec:
         # file-existence guards mean the downloads only run on first start, since
         # /opt/data is the data PVC and survives restarts.
         initContainers:
+          copy-config:
+            image:
+              repository: docker.io/library/alpine
+              tag: "3.23"
+            command:
+              - sh
+              - -c
+              - |
+                set -euo pipefail
+                mkdir -p /opt/data
+                cp /run/config/config.yaml /opt/data/config.yaml
+                chown 10000:10000 /opt/data/config.yaml
           install-tools:
             image: &image
               repository: nousresearch/hermes-agent
@@ -63,6 +75,9 @@ spec:
               - --replace
             env:
               TZ: &tz Pacific/Auckland
+              API_SERVER_ENABLED: true
+              API_SERVER_HOST: 0.0.0.0
+              API_SERVER_PORT: &port 8642
               HOME: /opt/data
               HERMES_HOME: /opt/data
               # Run the dashboard under s6 in THIS container (not a sidecar): the
@@ -83,6 +98,7 @@ spec:
               HOMEBREW_CELLAR: /opt/data/.local/homebrew/Cellar
               HOMEBREW_REPOSITORY: /opt/data/.local/homebrew
               PATH: /opt/hermes/bin:/opt/hermes/.venv/bin:/opt/data/.local/bin:/opt/data/.local/go/bin:/opt/data/.local/homebrew/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+              PIP_BREAK_SYSTEM_PACKAGES: "1"
             envFrom:
               - secretRef:
                   name: hermes-secret
@@ -167,6 +183,8 @@ spec:
         ports:
           dashboard:
             port: 9119
+          agent:
+            port: *port
       codeserver:
         controller: codeserver
         ports:
@@ -214,6 +232,16 @@ spec:
           - path: /opt/data
       tmp:
         type: emptyDir
+
+      config:
+        type: configMap
+        name: hermes-configmap
+        defaultMode: 0o755
+        advancedMounts:
+          hermes:
+            copy-config:
+              - path: /run/config/config.yaml
+                subPath: config.yaml
 
     rbac:
       roles:
