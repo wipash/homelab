@@ -45,9 +45,9 @@ agent:
   api_max_retries: 2
   reasoning_effort: medium
   tool_use_enforcement: auto
-  auto_thread: false
 discord:
   require_mention: false
+  auto_thread: false
 group_sessions_per_user: true
 # auxiliary:
 #   vision:
