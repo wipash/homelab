@@ -15,7 +15,8 @@ terminal:
   persistent_shell: true
   env_passthrough:
     - GH_TOKEN
-    - HOME_ASSISTANT_TOKEN
+    - HASS_TOKEN
+    - HASS_URL
 memory:
   memory_enabled: true
   user_profile_enabled: true
@@ -36,6 +37,7 @@ security:
 platform_toolsets:
   cli:
     - hermes-cli
+    - homeassistant
   discord:
     - hermes-discord
 agent:
