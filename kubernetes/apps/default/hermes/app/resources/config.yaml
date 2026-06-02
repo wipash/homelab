@@ -51,6 +51,7 @@ agent:
 discord:
   require_mention: false
   auto_thread: false
+  reactions: false
 group_sessions_per_user: true
 # auxiliary:
 #   vision:
