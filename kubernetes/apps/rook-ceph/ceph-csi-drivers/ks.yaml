@@ -7,6 +7,11 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1h
+  # The Driver/OperatorConfig CRs need the csi.ceph.io CRDs shipped by the
+  # rook-ceph operator chart, so order this after it on cold bootstraps.
+  dependsOn:
+    - name: rook-ceph
+      namespace: flux-system
   path: ./kubernetes/apps/rook-ceph/ceph-csi-drivers/app
   prune: true
   sourceRef:
