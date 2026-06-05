@@ -6,3 +6,4 @@ namespace: rook-ceph
 resources:
   - ./helmrelease.yaml
   - ./httproute.yaml
+  - ./ocirepository.yaml
