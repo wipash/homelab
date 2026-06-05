@@ -7,14 +7,9 @@ metadata:
 spec:
   interval: 1h
   timeout: 15m
-  chart:
-    spec:
-      chart: rook-ceph
-      version: v1.20.0
-      sourceRef:
-        kind: HelmRepository
-        name: rook-ceph
-        namespace: flux-system
+  chartRef:
+    kind: OCIRepository
+    name: rook-ceph
   install:
     remediation:
       retries: 3
@@ -24,9 +19,8 @@ spec:
       strategy: rollback
       retries: 3
   values:
+    deleteUnusedCrushRules: false
     csi:
-      cephFSKernelMountOptions: ms_mode=prefer-crc
-      enableLiveness: true
       serviceMonitor:
         enabled: true
     monitoring:
