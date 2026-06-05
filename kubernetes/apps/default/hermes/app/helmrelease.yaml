@@ -153,6 +153,17 @@ spec:
           securityContext:
             runAsUser: 10000
             runAsGroup: 10000
+          # codeserver shares hermes's RWO "hermes" PVC (/opt/data), so it must run
+          # on the same node as the hermes controller — otherwise the volume can't
+          # multi-attach and codeserver is stuck Pending.
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: hermes
+                      app.kubernetes.io/controller: hermes
+                  topologyKey: kubernetes.io/hostname
         containers:
           codeserver:
             image:
