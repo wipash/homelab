@@ -1,0 +1,83 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: snapotter
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: snapotter
+  interval: 1h
+  values:
+    controllers:
+      snapotter:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/snapotter-hq/snapotter
+              tag: 1.17.2@sha256:c56d3ec81fc657faa02830c890c7d8b4857c975eec9c7b3dab6e58ed80461aac
+            env:
+              TZ: Pacific/Auckland
+              PORT: &port 1349
+              AUTH_ENABLED: false
+              ANALYTICS_ENABLED: false
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 2Gi
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+
+    service:
+      app:
+        controller: snapotter
+        ports:
+          http:
+            port: *port
+
+    route:
+      app:
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - snap.mcgrath.nz
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: http
+
+    persistence:
+      data:
+        existingClaim: snapotter-data
+        globalMounts:
+          - path: /data
+      tmp:
+        type: emptyDir
