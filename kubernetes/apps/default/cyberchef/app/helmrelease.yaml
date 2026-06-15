@@ -21,8 +21,8 @@ spec:
         containers:
           app:
             image:
-              repository: docker.io/mpepping/cyberchef
-              tag: v10.24.0
+              repository: ghcr.io/gchq/cyberchef
+              tag: 11.1.0
             env:
               TZ: Pacific/Auckland
             probes:
