@@ -156,6 +156,18 @@ endpoints:
       titleModel: gpt-5.4-nano
       modelDisplayLabel: LiteLLM
 
+    - name: LiteLLMAnthropic
+      apiKey: "$${LITELLM_API_KEY}"
+      baseURL: "https://litellm.hlms.cloud"
+      provider: anthropic
+      models:
+        default: ["claude-sonnet-4-6"]
+        fetch: true
+      titleConvo: true
+      titleModel: gpt-5.4-nano
+      titleEndpoint: LiteLLM
+      modelDisplayLabel: LiteLLM Anthropic
+
   agents:
     recursionLimit: 50
     disableBuilder: false
