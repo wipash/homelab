@@ -96,6 +96,13 @@ spec:
           - path: /config/config.yml
             subPath: config.yml
             readOnly: true
+      nginx-listen-template:
+        type: configMap
+        name: frigate-configmap
+        globalMounts:
+          - path: /usr/local/nginx/templates/listen.gotmpl
+            subPath: listen.gotmpl
+            readOnly: true
       cache:
         type: emptyDir
         medium: Memory

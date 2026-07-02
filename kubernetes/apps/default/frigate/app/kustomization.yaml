@@ -11,5 +11,6 @@ configMapGenerator:
   - name: frigate-configmap
     files:
       - config.yml=./resources/config.yml
+      - listen.gotmpl=./resources/listen.gotmpl
 generatorOptions:
   disableNameSuffixHash: true
