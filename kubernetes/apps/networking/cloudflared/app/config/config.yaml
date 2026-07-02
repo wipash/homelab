@@ -1,5 +1,13 @@
 ---
 ingress:
+  # HTTP/1.1 + Content-Length framing: with http2Origin, Envoy forwards bodyless
+  # GETs to HA as chunked, and the frigate proxy's CL+TE combo gets a nginx 400.
+  - hostname: "hass.mcgrath.nz"
+    originRequest:
+      http2Origin: false
+      noChunkedEncoding: true
+      originServerName: external.mcgrath.nz
+    service: https://envoy-external.networking.svc.cluster.local:443
   - hostname: "*.mcgrath.nz"
     originRequest:
       http2Origin: true
