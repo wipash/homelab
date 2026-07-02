@@ -118,11 +118,10 @@ spec:
         hostnames:
           - hass.mcgrath.nz
         rules:
-          # Strip heavy headers on the unauthenticated Frigate notification
-          # proxy path. HA's proxy lib forwards all request headers (minus
-          # Host/Auth/CL) to Frigate, whose nginx uses default 8k header
-          # buffers and returns 400 when a Cookie line exceeds that via
-          # Cloudflare (cf-access-jwt, large cookie jars, etc.).
+          # Strip external proxy/client headers on the unauthenticated Frigate
+          # notification proxy path. HA's proxy lib forwards request headers
+          # through to Frigate, whose nginx uses small default header buffers
+          # and can return 400 before the Frigate API handles the request.
           - matches:
               - path:
                   type: PathPrefix
@@ -133,6 +132,20 @@ spec:
                   remove:
                     - Cookie
                     - Referer
+                    - CF-Access-Authenticated-User-Email
+                    - CF-Access-Jwt-Assertion
+                    - CF-Connecting-IP
+                    - CF-IPCountry
+                    - CF-Ray
+                    - CF-Visitor
+                    - CDN-Loop
+                    - True-Client-IP
+                    - Forwarded
+                    - X-Forwarded-For
+                    - X-Forwarded-Host
+                    - X-Forwarded-Proto
+                    - X-Real-IP
+                    - X-Request-ID
             backendRefs:
               - identifier: app
                 port: http
