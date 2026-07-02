@@ -41,6 +41,11 @@ operator:
   rollOutPods: true
 rollOutCiliumPods: true
 routingMode: native
+# Per-packet LB in pod namespaces so forwarded traffic (tailscale subnet
+# router) gets VIP->backend translation in-node instead of hairpinning
+# through the fortigate, whose reply path breaks reverse masquerade.
+socketLB:
+  hostNamespaceOnly: true
 securityContext:
   capabilities:
     ciliumAgent:
