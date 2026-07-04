@@ -1,0 +1,145 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: sure
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: sure
+  interval: 1h
+  values:
+    controllers:
+      sure:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: 18
+            envFrom: &envFrom
+              - secretRef:
+                  name: sure-secret
+          migrate:
+            image: &image
+              repository: ghcr.io/we-promise/sure
+              tag: 0.7.2@sha256:96155b20c0b71f8e2ab960ab5aba8fba9df64c6a40ec581eca20af2b20ab089c
+            command:
+              - /bin/sh
+              - -c
+              - DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rake db:prepare
+            env: &env
+              TZ: Pacific/Auckland
+              RAILS_ENV: production
+              SELF_HOSTED: "true"
+              RAILS_ASSUME_SSL: "true"
+              RAILS_FORCE_SSL: "false"
+              RAILS_LOG_TO_STDOUT: "true"
+              APP_DOMAIN: sure.mcgrath.nz
+              REDIS_URL: redis://dragonfly.database.svc.cluster.local:6379/7
+            envFrom: *envFrom
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities: { drop: ["ALL"] }
+
+        containers:
+          app:
+            image: *image
+            env:
+              <<: *env
+              PORT: "3000"
+            envFrom: *envFrom
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /up
+                    port: 3000
+                  initialDelaySeconds: 15
+                  periodSeconds: 15
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /up
+                    port: 3000
+                  initialDelaySeconds: 10
+                  periodSeconds: 5
+                  timeoutSeconds: 5
+                  failureThreshold: 40
+            securityContext: *securityContext
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 1Gi
+
+          worker:
+            image: *image
+            command:
+              - bundle
+              - exec
+              - sidekiq
+            env: *env
+            envFrom: *envFrom
+            probes:
+              liveness: { enabled: false }
+              readiness: { enabled: false }
+              startup: { enabled: false }
+            securityContext: *securityContext
+            resources:
+              requests:
+                cpu: 50m
+              limits:
+                memory: 768Mi
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+
+    service:
+      app:
+        controller: sure
+        ports:
+          http:
+            port: 3000
+
+    route:
+      app:
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - "{{ .Release.Name }}.mcgrath.nz"
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: http
+
+    persistence:
+      config:
+        existingClaim: "{{ .Release.Name }}"
+        advancedMounts:
+          sure:
+            app:
+              - path: /rails/storage
+            worker:
+              - path: /rails/storage
+      tmp:
+        type: emptyDir

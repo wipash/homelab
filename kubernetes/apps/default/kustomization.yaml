@@ -48,6 +48,7 @@ resources:
   - ./snapotter/ks.yaml
   - ./sonarr/ks.yaml
   - ./sparkleandspin/ks.yaml
+  - ./sure/ks.yaml
   - ./tautulli/ks.yaml
   - ./timelapse-processor/ks.yaml
   - ./umami/ks.yaml
