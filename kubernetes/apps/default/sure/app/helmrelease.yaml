@@ -141,5 +141,5 @@ spec:
               - path: /rails/storage
             worker:
               - path: /rails/storage
-      tmp:
-        type: emptyDir
+      # No emptyDir over /tmp: Ruby's Dir.tmpdir rejects kubelet's world-writable
+      # non-sticky emptyDir mount; the image's /tmp (1777) works since rootfs is writable
