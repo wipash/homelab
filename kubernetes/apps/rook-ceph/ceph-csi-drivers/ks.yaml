@@ -16,5 +16,5 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: flux-cluster
+    name: flux-system
   targetNamespace: rook-ceph

@@ -17,7 +17,7 @@ spec:
   prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
-    name: flux-cluster
+    name: flux-system
   wait: false
   interval: 30m
   timeout: 5m
@@ -40,7 +40,7 @@ spec:
   prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
-    name: flux-cluster
+    name: flux-system
   wait: false
   interval: 30m
   timeout: 15m
