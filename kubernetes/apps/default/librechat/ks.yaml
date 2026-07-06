@@ -14,7 +14,7 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: flux-cluster
+    name: flux-system
     namespace: flux-system
   wait: false
   interval: 30m
@@ -44,7 +44,7 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: flux-cluster
+    name: flux-system
     namespace: flux-system
   wait: true
   interval: 30m
@@ -73,7 +73,7 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: flux-cluster
+    name: flux-system
     namespace: flux-system
   wait: false
   interval: 30m
@@ -102,7 +102,7 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: flux-cluster
+    name: flux-system
     namespace: flux-system
   wait: false
   interval: 30m

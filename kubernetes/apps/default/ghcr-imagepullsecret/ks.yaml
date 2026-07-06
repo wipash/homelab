@@ -15,5 +15,5 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: flux-cluster
+    name: flux-system
     namespace: flux-system
