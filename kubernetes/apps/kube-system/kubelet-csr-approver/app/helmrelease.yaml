@@ -22,10 +22,9 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  valuesFrom:
-    - kind: ConfigMap
-      name: kubelet-csr-approver-helm-values
   values:
+    providerRegex: ^hp\d$
+    bypassDnsResolution: true
     metrics:
       enable: true
       serviceMonitor:

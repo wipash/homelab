@@ -11,70 +11,71 @@ tasks:
     desc: Bootstrap a Talos Kubernetes cluster backed by flux, sops, and rook
     prompt: Bootstrap a Talos Kubernetes cluster ... continue?
     summary: |
-      cluster: Cluster to run command against (default: main)
-      nodes: Nodes in the cluster to reset Rook on (required, comma delimited, e.g. k8s-0,k8s-1)
+      cluster: Talos context to run command against (default: main)
+      nodes: Nodes in the cluster to reset Rook on (required, comma delimited, e.g. hp1,hp2,hp3)
       disk: Disk to reset Rook on (required, e.g. /dev/nvme0n1)
     vars: &vars
       cluster: '{{.cluster | default "main"}}'
-      nodes: '{{.nodes}}'
-      disk: '{{.disk}}'
+      nodes: "{{.nodes}}"
+      disk: "{{.disk}}"
     cmds:
       - { task: etcd, vars: *vars }
       - { task: kubeconfig, vars: *vars }
       - { task: apps, vars: *vars }
       - { task: rook, vars: *vars }
+      # Applying the sops-age secret is what unblocks cluster-vars and lets
+      # cluster-apps start deploying, so it runs after the Rook disk wipe
       - { task: flux, vars: *vars }
     requires:
       vars: ["nodes", "disk"]
     preconditions:
       - talosctl --context {{.cluster}} config info >/dev/null 2>&1
-      - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/talosconfig
 
   etcd:
     internal: true
+    vars:
+      CONTROLLER:
+        sh: talosctl --context {{.cluster}} config info --output yaml | yq --exit-status '.endpoints[0]'
     cmd: until talosctl --context {{.cluster}} --nodes {{.CONTROLLER}} bootstrap; do sleep 10; done
     preconditions:
-      - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/talosconfig
+      - talosctl --context {{.cluster}} config info >/dev/null 2>&1
+
+  kubeconfig:
+    internal: true
+    vars:
+      CONTROLLER:
+        sh: talosctl --context {{.cluster}} config info --output yaml | yq --exit-status '.endpoints[0]'
+    cmd: |
+      talosctl --context {{.cluster}} kubeconfig --nodes {{.CONTROLLER}} \
+          --force --force-context-name {{.cluster}} ~/.kube/config
+    preconditions:
       - talosctl --context {{.cluster}} config info >/dev/null 2>&1
 
   apps:
     internal: true
     cmds:
       - until kubectl --context {{.cluster}} wait --for=condition=Ready=False nodes --all --timeout=10m; do sleep 10; done
-      - helmfile --quiet --kube-context {{.cluster}} --file {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/helmfile.yaml apply --skip-diff-on-install --suppress-diff
+      - helmfile --quiet --kube-context {{.cluster}} --file {{.KUBERNETES_DIR}}/bootstrap/helmfile.yaml sync --hide-notes
       - until kubectl --context {{.cluster}} wait --for=condition=Ready nodes --all --timeout=10m; do sleep 10; done
     preconditions:
-      - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/talosconfig
-      - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/helmfile.yaml
-      - talosctl --context {{.cluster}} config info >/dev/null 2>&1
-
-  kubeconfig:
-    internal: true
-    cmd: |
-      talosctl --context {{.cluster}} kubeconfig --nodes {{.CONTROLLER}} \
-          --force --force-context-name {{.cluster}} {{.KUBERNETES_DIR}}/{{.cluster}}
-    preconditions:
-      - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/talosconfig
+      - test -f {{.KUBERNETES_DIR}}/bootstrap/helmfile.yaml
       - talosctl --context {{.cluster}} config info >/dev/null 2>&1
 
   flux:
     internal: true
     cmds:
-      - kubectl --context {{.cluster}} apply --server-side --kustomize {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux
-      - sops --decrypt {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/age-key.secret.sops.yaml | kubectl --context {{.cluster}} apply --server-side --filename -
-      - sops --decrypt {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/github-deploy-key.secret.sops.yaml | kubectl --context {{.cluster}} apply --server-side --filename -
-      - sops --decrypt {{.KUBERNETES_DIR}}/{{.cluster}}/flux/vars/cluster-secrets.secret.sops.yaml | kubectl --context {{.cluster}} apply --server-side --filename -
-      - kubectl --context {{.cluster}} apply --server-side --filename {{.KUBERNETES_DIR}}/{{.cluster}}/flux/vars/cluster-settings.yaml
-      - kubectl --context {{.cluster}} apply --server-side --kustomize {{.KUBERNETES_DIR}}/{{.cluster}}/flux/config
+      - kubectl --context {{.cluster}} get namespace flux-system >/dev/null 2>&1 || kubectl --context {{.cluster}} create namespace flux-system
+      - |
+        kubectl --context {{.cluster}} create secret generic sops-age --namespace flux-system \
+            --from-file=age.agekey=$SOPS_AGE_KEY_FILE \
+            --dry-run=client --output yaml | kubectl --context {{.cluster}} apply --server-side --filename -
+      - sops --decrypt {{.KUBERNETES_DIR}}/flux/vars/cluster-secrets.sops.yaml | kubectl --context {{.cluster}} apply --server-side --filename -
+      - kubectl --context {{.cluster}} apply --server-side --filename {{.KUBERNETES_DIR}}/flux/vars/cluster-settings.yaml
     preconditions:
-      - test -f {{.ROOT_DIR}}/age.key
-      - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/age-key.secret.sops.yaml
-      - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/github-deploy-key.secret.sops.yaml
-      - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/flux/vars/cluster-secrets.secret.sops.yaml
-      - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/flux/vars/cluster-settings.yaml
-      - sops filestatus {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/age-key.secret.sops.yaml | jq --exit-status '.encrypted'
-      - sops filestatus {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux/github-deploy-key.secret.sops.yaml | jq --exit-status '.encrypted'
-      - sops filestatus {{.KUBERNETES_DIR}}/{{.cluster}}/flux/vars/cluster-secrets.secret.sops.yaml | jq --exit-status '.encrypted'
+      - test -f $SOPS_AGE_KEY_FILE
+      - test -f {{.KUBERNETES_DIR}}/flux/vars/cluster-settings.yaml
+      - test -f {{.KUBERNETES_DIR}}/flux/vars/cluster-secrets.sops.yaml
+      - sops filestatus {{.KUBERNETES_DIR}}/flux/vars/cluster-secrets.sops.yaml | jq --exit-status '.encrypted'
 
   rook:
     internal: true
