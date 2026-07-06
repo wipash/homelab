@@ -29,6 +29,10 @@ spec:
       namespace: monitoring
     - name: rook-ceph-cluster
       namespace: rook-ceph
+  valuesFrom:
+    - kind: ConfigMap
+      name: flux-metrics-configmap
+      valuesKey: flux-metrics.yaml
   values:
     crds:
       enabled: true
