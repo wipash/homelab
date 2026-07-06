@@ -6,6 +6,7 @@ metadata:
   name: &app appname
   namespace: flux-system
 spec:
+  suspend: true # Template only, never applied — remove this line when scaffolding a real app
   targetNamespace: default
   commonMetadata:
     labels:
