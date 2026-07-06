@@ -3,9 +3,46 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: cluster-vars
+  namespace: flux-system
+spec:
+  interval: 30m
+  path: ./kubernetes/flux/vars
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-cluster
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-repositories
+  namespace: flux-system
+spec:
+  interval: 30m
+  path: ./kubernetes/flux/repositories
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-cluster
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: cluster-apps
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: cluster-vars
+    - name: flux-repositories
   interval: 10m
   path: ./kubernetes/apps
   prune: true
