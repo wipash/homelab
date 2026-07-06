@@ -3,9 +3,7 @@
 apiVersion: notification.toolkit.fluxcd.io/v1
 kind: Receiver
 metadata:
-  # Keep the old name: renaming a Receiver changes its webhook path,
-  # which would break the webhook configured on the GitHub repo
-  name: flux-cluster
+  name: github-webhook
   namespace: flux-system
 spec:
   type: github

@@ -7,7 +7,7 @@ vars:
 
 env:
   KUBECONFIG: "/home/sean/.kube/config"
-  SOPS_AGE_KEY_FILE: "{{.ROOT_DIR}}/age.key"
+  SOPS_AGE_KEY_FILE: "{{.HOME}}/.config/sops/age/keys.txt"
 
 includes:
   bootstrap: .taskfiles/Bootstrap

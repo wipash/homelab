@@ -22,10 +22,30 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  valuesFrom:
-    - kind: ConfigMap
-      name: cilium-values
   values:
+    autoDirectNodeRoutes: true
+    bandwidthManager:
+      bbr: true
+      enabled: true
+    bgpControlPlane:
+      enabled: true
+    bpf:
+      masquerade: true
+      tproxy: true
+    cgroup:
+      autoMount:
+        enabled: false
+      hostRoot: /sys/fs/cgroup
+    cluster:
+      id: 1
+      name: homelab
+    cni:
+      exclusive: false
+    enableRuntimeDeviceDetection: true
+    endpointRoutes:
+      enabled: true
+    envoy:
+      enabled: false
     hubble:
       enabled: true
       metrics:
@@ -52,7 +72,21 @@ spec:
         rollOutPods: true
         ingress:
           enabled: false
+    ipam:
+      mode: "kubernetes"
+    ipv4NativeRoutingCIDR: 10.244.0.0/16
+    k8sServiceHost: 127.0.0.1
+    k8sServicePort: 7445
+    kubeProxyReplacement: true
+    kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
+    l2announcements:
+      enabled: true
+    loadBalancer:
+      algorithm: maglev
+      mode: dsr
+    localRedirectPolicy: true
     operator:
+      rollOutPods: true
       prometheus:
         enabled: true
         serviceMonitor:
@@ -66,3 +100,28 @@ spec:
         trustCRDsExist: true
     dashboards:
       enabled: true
+    rollOutCiliumPods: true
+    routingMode: native
+    # Per-packet LB in pod namespaces so forwarded traffic (tailscale subnet
+    # router) gets VIP->backend translation in-node instead of hairpinning
+    # through the fortigate, whose reply path breaks reverse masquerade.
+    socketLB:
+      hostNamespaceOnly: true
+    securityContext:
+      capabilities:
+        ciliumAgent:
+          - CHOWN
+          - KILL
+          - NET_ADMIN
+          - NET_RAW
+          - IPC_LOCK
+          - SYS_ADMIN
+          - SYS_RESOURCE
+          - DAC_OVERRIDE
+          - FOWNER
+          - SETGID
+          - SETUID
+        cleanCiliumState:
+          - NET_ADMIN
+          - SYS_ADMIN
+          - SYS_RESOURCE

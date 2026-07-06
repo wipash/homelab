@@ -1,3 +1,0 @@
----
-providerRegex: ^hp\d$
-bypassDnsResolution: true
