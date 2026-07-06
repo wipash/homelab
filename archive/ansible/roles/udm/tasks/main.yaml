@@ -1,6 +1,0 @@
----
-- name: Deploy onboot
-  include_tasks: onboot.yaml
-
-# - name: Deploy udm-kernel-tools
-#   include_tasks: kernel-tools.yaml
