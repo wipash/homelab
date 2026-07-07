@@ -11,3 +11,4 @@ secret.yaml
 mosquitto_pwd
 .aider*
 *.env
+.claude/settings.local.json
