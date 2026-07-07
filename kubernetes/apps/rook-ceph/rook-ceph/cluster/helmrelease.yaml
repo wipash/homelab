@@ -116,13 +116,13 @@ spec:
             memory: 3Gi
           requests:
             cpu: 100m
-            memory: 1Gi
+            memory: 512Mi
         osd:
           limits:
             memory: 4Gi
           requests:
             cpu: 100m
-            memory: 3Gi
+            memory: 2Gi
         prepareosd:
           requests:
             cpu: 100m
