@@ -4,9 +4,9 @@ clusterName: homelab
 endpoint: https://10.0.16.132:6443
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
-talosVersion: v1.9.6
+talosVersion: v1.12.9
 # renovate: depName=kubernetes/kubernetes datasource=github-releases
-kubernetesVersion: v1.32.12
+kubernetesVersion: v1.35.3
 
 # Disable built-in Flannel to use Cilium
 cniConfig:
@@ -32,11 +32,21 @@ nodes:
     schematic: &schematic
       customization:
         extraKernelArgs:
+          - -init_on_alloc
+          - -init_on_free
+          - -selinux
+          - apparmor=0
+          - init_on_alloc=0
+          - init_on_free=0
           - mitigations=off
+          - security=none
+          - talos.auditd.disabled=1
         systemExtensions:
           officialExtensions:
             - siderolabs/i915
             - siderolabs/intel-ucode
+            - siderolabs/mei
+            - siderolabs/nfsrahead
             - siderolabs/mdadm
             - siderolabs/util-linux-tools
     networkInterfaces:
