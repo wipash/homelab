@@ -35,6 +35,10 @@ spec:
       password: ${SECRET_WP_0_MARIADB_PASS}
     ingress:
       enabled: false
+    resources:
+      requests:
+        cpu: 10m
+        memory: 192Mi
     storage:
       persistentVolumeClaimName: wordpress-0-nfs
     mariadb:

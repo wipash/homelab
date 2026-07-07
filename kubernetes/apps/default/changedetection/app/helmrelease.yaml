@@ -22,6 +22,10 @@ spec:
               PORT: &port 5000
               USE_X_SETTINGS: 1
               PLAYWRIGHT_DRIVER_URL: ws://localhost:3000/?stealth=1&--disable-web-security=true&--user-data-dir=~/browserless-cache-123
+            resources:
+              requests:
+                cpu: 10m
+                memory: 256Mi
             # securityContext:
             #   allowPrivilegeEscalation: false
             #   capabilities: { drop: ["ALL"] }
@@ -39,6 +43,10 @@ spec:
               SCREEN_DEPTH: "16"
               ENABLE_DEBUGGER: "false"
               PREBOOT_CHROME: "true"
+            resources:
+              requests:
+                cpu: 10m
+                memory: 1100Mi
               CONNECTION_TIMEOUT: "300000"
               MAX_CONCURRENT_SESSIONS: "10"
               CHROME_REFRESH_TIME: "600000"

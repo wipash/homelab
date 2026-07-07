@@ -82,6 +82,10 @@ spec:
     localRedirectPolicy: true
     operator:
       rollOutPods: true
+      resources:
+        requests:
+          cpu: 10m
+          memory: 400Mi
       prometheus:
         enabled: true
         serviceMonitor:
@@ -95,6 +99,10 @@ spec:
         trustCRDsExist: true
     dashboards:
       enabled: true
+    resources:
+      requests:
+        cpu: 100m
+        memory: 800Mi
     rollOutCiliumPods: true
     routingMode: native
     # Per-packet LB in pod namespaces so forwarded traffic (tailscale subnet

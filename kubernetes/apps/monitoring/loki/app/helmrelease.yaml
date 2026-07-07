@@ -53,6 +53,10 @@ spec:
         retention_period: 7d
     singleBinary:
       replicas: 1
+      resources:
+        requests:
+          cpu: 10m
+          memory: 288Mi
       persistence:
         enabled: true
         storageClass: ceph-block
@@ -76,5 +80,9 @@ spec:
     sidecar:
       image:
         repository: ghcr.io/kiwigrid/k8s-sidecar
+      resources:
+        requests:
+          cpu: 10m
+          memory: 96Mi
       rules:
         searchNamespace: ALL

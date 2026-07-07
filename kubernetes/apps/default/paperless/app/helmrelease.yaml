@@ -99,6 +99,10 @@ spec:
             env:
               TZ: Pacific/Auckland
               DISABLE_GOOGLE_CHROME: "1"
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -110,6 +114,10 @@ spec:
               tag: 3.3.1.0-full
             env:
               TZ: Pacific/Auckland
+            resources:
+              requests:
+                cpu: 10m
+                memory: 288Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
