@@ -59,7 +59,7 @@ spec:
             resources:
               requests:
                 cpu: 10m
-                memory: 1000M
+                memory: 512Mi
               limits:
                 memory: 2500M
             probes:

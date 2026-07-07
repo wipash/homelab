@@ -8,6 +8,7 @@ resources:
   - ./mutatingadmissionpolicy.yaml
   - ./servicemonitor.yaml
   - ./dashboards/default.yaml
+  - ./dashboards/grafana-operator.yaml
   - ./dashboards/ceph.yaml
   - ./dashboards/kubernetes.yaml
   - ./dashboards/prometheus.yaml
