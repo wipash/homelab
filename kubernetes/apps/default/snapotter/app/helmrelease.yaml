@@ -32,7 +32,7 @@ spec:
             env:
               TZ: Pacific/Auckland
               PORT: &port 1349
-              AUTH_ENABLED: false
+              AUTH_ENABLED: true
               ANALYTICS_ENABLED: false
               REDIS_URL: redis://dragonfly.database.svc.cluster.local:6379/8
             envFrom: *envFrom
