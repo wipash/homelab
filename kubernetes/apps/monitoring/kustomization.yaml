@@ -10,7 +10,7 @@ components:
 
 resources:
   - ./namespace.yaml
-  - ./grafana/ks.yaml
+  - ./grafana-operator/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
   - ./loki/ks.yaml
   - ./smartctl-exporter/ks.yaml
