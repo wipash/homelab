@@ -22,6 +22,19 @@
         "autoReplaceStringTemplate": "depName=\"{{{depName}}}\"\n{{{indentation}}}gnetId: {{{packageName}}}\n{{{indentation}}}revision: {{{newValue}}}",
         "datasourceTemplate": "custom.grafana-dashboards",
         "versioningTemplate": "regex:^(?<major>\\d+)$"
+      },
+      {
+        "customType": "regex",
+        "description": ["Process GrafanaDashboard grafanaCom dashboards"],
+        "fileMatch": [
+          "(^|/)kubernetes/.+\\.ya?ml(?:\\.j2)?$"
+        ],
+        "matchStrings": [
+          "depName=\"(?<depName>.*)\"\\n(?<indentation>\\s+)id: (?<packageName>\\d+)\\n.+revision: (?<currentValue>\\d+)"
+        ],
+        "autoReplaceStringTemplate": "depName=\"{{{depName}}}\"\n{{{indentation}}}id: {{{packageName}}}\n{{{indentation}}}revision: {{{newValue}}}",
+        "datasourceTemplate": "custom.grafana-dashboards",
+        "versioningTemplate": "regex:^(?<major>\\d+)$"
       }
     ],
     "packageRules": [
