@@ -1,0 +1,17 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/observability.giantswarm.io/silence_v1alpha2.json
+# The CephPoolGrowthWarning rule (rule_group "pools") fails evaluation for ~2 days
+# after a rook-ceph-mgr pod restart: the [2d] lookback sees both the old and new
+# pod's series for the same instance and errors with duplicate-series matching.
+# Harmless and self-healing; silence the resulting PrometheusRuleFailures pages.
+apiVersion: observability.giantswarm.io/v1alpha2
+kind: Silence
+metadata:
+  name: prometheus-rule-failures-ceph-pools
+spec:
+  matchers:
+    - name: alertname
+      value: PrometheusRuleFailures
+    - name: rule_group
+      value: .*rook-ceph-prometheus-ceph-rules.*;pools
+      matchType: "=~"
