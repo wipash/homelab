@@ -1,14 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended",
-    "docker:enableMajor",
+    "github>home-operations/renovate-presets#2.1.0",
     "replacements:k8s-registry-move",
     ":skipStatusChecks",
-    ":disableRateLimiting",
-    ":dependencyDashboard",
     ":semanticCommits",
-    ":automergeBranch",
     ":timezone(Pacific/Auckland)",
     "github>wipash/homelab//.github/renovate/allowedVersions.json5",
     "github>wipash/homelab//.github/renovate/autoMerge.json5",
@@ -20,7 +16,6 @@
     "github>wipash/homelab//.github/renovate/packageRules.json5",
     "github>wipash/homelab//.github/renovate/semanticCommits.json5"
   ],
-  "dependencyDashboardTitle": "Renovate Dashboard 🤖",
   "suppressNotifications": [
     "prEditedNotification",
     "prIgnoreNotification"
@@ -33,19 +28,19 @@
     "**/resources/**"
   ],
   "flux": {
-    "fileMatch": [
-      "(^|/)kubernetes/.+\\.ya?ml(?:\\.j2)?$"
+    "managerFilePatterns": [
+      "/(^|/)kubernetes/.+\\.ya?ml(?:\\.j2)?$/"
     ]
   },
   "helm-values": {
-    "fileMatch": [
-      "(^|/)kubernetes/.+\\.ya?ml(?:\\.j2)?$"
+    "managerFilePatterns": [
+      "/(^|/)kubernetes/.+\\.ya?ml(?:\\.j2)?$/"
     ]
   },
   "kubernetes": {
-    "fileMatch": [
-      "(^|/)\\.taskfiles/.+\\.ya?ml(?:\\.j2)?$",
-      "(^|/)kubernetes/.+\\.ya?ml(?:\\.j2)?$"
+    "managerFilePatterns": [
+      "/(^|/)\\.taskfiles/.+\\.ya?ml(?:\\.j2)?$/",
+      "/(^|/)kubernetes/.+\\.ya?ml(?:\\.j2)?$/"
     ]
   }
 }
