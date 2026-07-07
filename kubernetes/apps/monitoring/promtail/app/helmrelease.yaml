@@ -18,6 +18,10 @@ spec:
       retries: 3
   values:
     fullnameOverride: promtail
+    resources:
+      requests:
+        cpu: 10m
+        memory: 192Mi
     config:
       clients:
         - url: http://loki-headless.monitoring.svc.cluster.local:3100/loki/api/v1/push

@@ -29,6 +29,10 @@ spec:
             env:
               TZ: Pacific/Auckland
               url: "https://${SECRET_GHOST_DOMAIN}"
+            resources:
+              requests:
+                cpu: 10m
+                memory: 288Mi
               database__client: mysql
               database__connection__host: ghost-mariadb.default.svc.cluster.local
               database__connection__user: ghost

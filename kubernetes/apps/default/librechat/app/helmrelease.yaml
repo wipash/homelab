@@ -150,7 +150,7 @@ spec:
             resources:
               requests:
                 cpu: 10m
-                memory: 64Mi
+                memory: 128Mi
             securityContext: *securityContext
             probes: *probes
 
