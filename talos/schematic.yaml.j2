@@ -1,4 +1,8 @@
 ---
+# This must match the schematic actually installed on the nodes
+# (talosctl get extensions -> "schematic" pseudo-extension), or tuppr
+# will refuse to build upgrade images. Schematic changes need a one-time
+# manual `talosctl upgrade --image` transition; tuppr only does version bumps.
 customization:
   extraKernelArgs:
     - -init_on_alloc # Less security, faster puter
@@ -10,7 +14,7 @@ customization:
     # - pcie_aspm=off # Disable PCIe ASPM
     - mitigations=off # Less security, faster puter
     - security=none # Less security, faster puter
-    - talos.auditd.disabled=1 # Less security, faster puter  systemExtensions:
+    - talos.auditd.disabled=1 # Less security, faster puter
   systemExtensions:
     officialExtensions:
       - siderolabs/i915
