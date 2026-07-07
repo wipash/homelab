@@ -4,66 +4,72 @@
     {
       "description": ["1Password Connect Group"],
       "groupName": "1Password Connnect",
-      "matchPackagePatterns": ["1password/connect"],
+      "matchPackageNames": ["/1password/connect/"],
       "matchDatasources": ["docker"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       },
-      "separateMinorPatch": true
+      "separateMinorPatch": true,
+      "minimumGroupSize": 2
     },
     {
       "description": ["Actions Runner Controller Group"],
       "groupName": "Actions Runner Controller",
-      "matchPackagePatterns": [
-        "gha-runner-scale-set-controller",
-        "gha-runner-scale-set"
+      "matchPackageNames": [
+        "/gha-runner-scale-set-controller/",
+        "/gha-runner-scale-set/"
       ],
       "matchDatasources": ["docker", "helm"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       },
-      "separateMinorPatch": true
+      "separateMinorPatch": true,
+      "minimumGroupSize": 2
     },
     {
       "description": ["Dragonfly Operator Group"],
       "groupName": "Dragonfly Operator",
-      "matchPackagePatterns": ["dragonfly(?:db)?.operator"],
+      "matchPackageNames": ["/dragonfly(?:db)?.operator/"],
       "matchDatasources": ["docker", "github-releases"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       },
-      "separateMinorPatch": true
+      "separateMinorPatch": true,
+      "minimumGroupSize": 2
     },
     {
       "description": ["Flux Group"],
       "groupName": "Flux",
-      "matchPackagePatterns": ["fluxcd"],
+      "matchPackageNames": ["/fluxcd/"],
       "matchDatasources": ["docker", "github-tags"],
       "versioning": "semver",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       },
-      "separateMinorPatch": true
+      "separateMinorPatch": true,
+      "minimumGroupSize": 2
     },
     {
       "description": ["Immich images"],
       "groupName": "Immich",
-      "matchPackagePatterns": ["immich"],
+      "matchPackageNames": ["/immich/"],
       "matchDatasources": ["docker"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       },
-      "separateMinorPatch": true
+      "separateMinorPatch": true,
+      "minimumGroupSize": 2
     },
     {
       "description": ["Rook-Ceph Group"],
       "groupName": "Rook-Ceph",
-      "matchPackagePatterns": ["rook.ceph"],
+      "matchPackageNames": ["/rook.ceph/"],
       "matchDatasources": ["helm"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       },
-      "separateMinorPatch": true
+      "separateMinorPatch": true,
+      "minimumGroupSize": 2
     },
     {
       "description": ["External Snapshotter Group"],
@@ -73,28 +79,31 @@
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       },
-      "separateMinorPatch": true
+      "separateMinorPatch": true,
+      "minimumGroupSize": 2
     },
     {
+      // Only group minor/patch Volsync bumps together; majors are reviewed individually.
       "description": ["Volsync Group"],
       "groupName": "Volsync",
-      "matchPackagePatterns": ["volsync"],
+      "matchPackageNames": ["/volsync/"],
       "matchDatasources": ["docker", "helm"],
       "matchUpdateTypes": ["minor", "patch"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       },
-      "separateMinorPatch": true
+      "minimumGroupSize": 2
     },
     {
       "description": ["Talos Group"],
       "groupName": "Talos",
-      "matchPackagePatterns": ["siderolabs/talosctl", "siderolabs/installer"],
+      "matchPackageNames": ["/siderolabs/talosctl/", "/siderolabs/installer/"],
       "matchDatasources": ["docker"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       },
-      "separateMinorPatch": true
+      "separateMinorPatch": true,
+      "minimumGroupSize": 2
     }
   ]
 }

@@ -5,31 +5,42 @@
         "description": ["Loose versioning for non-semver packages"],
         "matchDatasources": ["docker"],
         "versioning": "loose",
-        "matchPackagePatterns": ["changedetection", "plex", "qbittorrent"]
+        "matchPackageNames": ["/changedetection/", "/plex/", "/qbittorrent/"]
       },
       {
         "description": ["Custom schedule for frequently updated packages"],
-        "matchDataSources": ["docker", "helm"],
-        "matchPackagePatterns": ["postgresql", "reloader"],
+        "matchDatasources": ["docker", "helm"],
+        "matchPackageNames": ["/postgresql/", "/reloader/"],
         "schedule": ["on the first day of the month"]
       },
       {
         "description": ["Custom versioning for frigate"],
         "matchDatasources": ["docker"],
         "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(-(?<compatibility>beta)(?<build>\\d+))?$",
-        "matchPackagePatterns": ["frigate"]
+        "matchPackageNames": ["/frigate/"]
       },
       {
         "description": ["Custom versioning for miniflux"],
         "matchDatasources": ["docker"],
         "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>)$",
-        "matchPackagePatterns": ["miniflux"]
+        "matchPackageNames": ["/miniflux/"]
       },
       {
         "description": ["Wait until Ghost releases are a couple of days old"],
         "matchDatasources": ["docker"],
-        "matchPackagePatterns": ["ghost"],
+        "matchPackageNames": ["/ghost/"],
         "minimumReleaseAge": "2 days"
+      },
+      {
+        // The shared preset's managers/cnpg.json5 extracts this image via the
+        // `imageName:` field, but its default "docker" versioning doesn't sort
+        // cloudnative-vectorchord's "<pgMajor>.<pgMinor>-<extensionVersion>" tags
+        // (e.g. 16.14-1.1.1) correctly. Force "redhat" versioning, matching what
+        // our own CNPG customManager used before it was superseded by the preset.
+        "description": ["Correct versioning for CloudNativePG cloudnative-vectorchord tags"],
+        "matchDatasources": ["docker"],
+        "matchPackageNames": ["ghcr.io/tensorchord/cloudnative-vectorchord"],
+        "versioning": "redhat"
       }
     ]
   }
