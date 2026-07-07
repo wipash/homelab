@@ -41,5 +41,13 @@
       ],
       ignoreTests: true,
     },
+    {
+      description: "Auto-merge Grafana dashboard revision bumps",
+      matchDatasources: ["custom.grafana-dashboards"],
+      matchUpdateTypes: ["major"],
+      automerge: true,
+      automergeType: "branch",
+      ignoreTests: true,
+    },
   ],
 }

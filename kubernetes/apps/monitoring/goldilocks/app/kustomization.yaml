@@ -6,6 +6,7 @@ namespace: monitoring
 resources:
   - ./helmrelease.yaml
   - ./httproute.yaml
+  - ./ocirepository.yaml
 labels:
   - pairs:
       app.kubernetes.io/name: goldilocks
