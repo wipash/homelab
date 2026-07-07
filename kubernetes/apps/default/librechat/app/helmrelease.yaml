@@ -53,6 +53,7 @@ spec:
             resources:
               requests:
                 cpu: 10m
+                memory: 640Mi
               limits:
                 memory: 1000Mi
             probes: &probes
@@ -68,6 +69,10 @@ spec:
             image:
               repository: ghcr.io/wipash/librechatmetrics
               tag: latest
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
             env:
               TZ: Pacific/Auckland
               MONGODB_URI: *mongo
@@ -80,6 +85,10 @@ spec:
             env:
               TZ: Pacific/Auckland
             envFrom: *envFrom
+            resources:
+              requests:
+                cpu: 10m
+                memory: 256Mi
             securityContext: &securityContext
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -97,6 +106,10 @@ spec:
               TZ: Pacific/Auckland
               MEILI_DB_PATH: "/meili_data"
             envFrom: *envFrom
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
             securityContext: *securityContext
             probes: *probes
 
@@ -117,6 +130,10 @@ spec:
             command: ["mongod", "--noauth"]
             env:
               TZ: Pacific/Auckland
+            resources:
+              requests:
+                cpu: 10m
+                memory: 384Mi
             securityContext: *securityContext
             probes: *probes
 
@@ -130,6 +147,10 @@ spec:
               ME_CONFIG_BASICAUTH_USERNAME: admin
               ME_CONFIG_BASICAUTH_PASSWORD: password
               PORT: 8081
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
             securityContext: *securityContext
             probes: *probes
 
