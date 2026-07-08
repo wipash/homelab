@@ -114,6 +114,24 @@ The Prometheus `ALERTS` metric records alert state over time but only carries la
 
 Grafana has Prometheus, Loki, and Alertmanager configured as datasources. The Explore view (requires Editor/Admin login — anonymous users are Viewers) supports querying all three. Log exploration is under Explore with the Loki datasource.
 
+## Local Validation (no cluster access needed)
+
+Use [flate](https://github.com/home-operations/flate) (same tool as CI) to render and validate all Flux manifests offline — it fetches charts over HTTPS but never touches the cluster. Run it via mise:
+
+```sh
+# Validate every Kustomization, HelmRelease, and Flux source renders cleanly
+mise x github:home-operations/flate@0.4.10 -- flate test all -p ./kubernetes/flux --no-progress
+
+# Render HelmReleases to YAML (optionally -n <namespace>)
+mise x github:home-operations/flate@0.4.10 -- flate build hr -p ./kubernetes/flux --no-progress
+
+# Diff rendered manifests against a git rev — the definitive check for what a change
+# actually does to cluster resources (catches misplaced values that still render OK)
+mise x github:home-operations/flate@0.4.10 -- flate diff hr --base <rev> -p ./kubernetes/flux --no-progress
+```
+
+`flate test` also warns about values not consumed by the chart. Note it only checks that manifests render — a structurally-valid-but-misplaced value (e.g. a block inserted mid-`env:` map) still renders, so use `flate diff` against a known-good rev to verify semantic correctness.
+
 ## Flux Operations
 
 ```sh
