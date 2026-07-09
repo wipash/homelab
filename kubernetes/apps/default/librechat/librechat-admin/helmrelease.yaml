@@ -19,11 +19,7 @@ spec:
           app:
             image:
               repository: ghcr.io/clickhouse/librechat-admin-panel
-              # Rolled back from :latest (bb70b66) due to config page failing
-              # with "Server function module export not resolved" — all exports
-              # of src/server/config.ts evaluate to undefined.
-              # This tag corresponds to upstream commit 8ceace79 (PR #46).
-              tag: 8ceace79b2237ccfa6ae1a3027c8920244e007b0@sha256:683e29eca6d9f03392c761d16a76b92fd3a6cdecff90d0962433aba156e93d81
+              tag: latest@sha256:9a78851f84f448eab780ac658c4d17db51974c240492affc789a72d61e35f678
             env:
               TZ: Pacific/Auckland
               PORT: "3000"
