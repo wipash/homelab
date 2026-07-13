@@ -22,7 +22,7 @@ spec:
               PORT: &port 5000
               USE_X_SETTINGS: 1
               FETCH_WORKERS: 3
-              PLAYWRIGHT_DRIVER_URL: ws://localhost:3000/?stealth=1&--disable-web-security=true
+              PLAYWRIGHT_DRIVER_URL: ws://localhost:3000/
             resources:
               requests:
                 cpu: 10m
@@ -34,20 +34,14 @@ spec:
 
           browser:
             image:
-              repository: mirror.gcr.io/dgtlmoon/sockpuppetbrowser
-              # renovate: datasource=docker depName=docker.io/dgtlmoon/sockpuppetbrowser
-              tag: latest@sha256:7116c61ef9cfce3d48a7efd9355d2fbe19f593ea3cfb52a5ded40ecbcb0a3f9d
+              repository: ghcr.io/browserless/chromium
+              tag: v2.54.2@sha256:8da772c56e5b64937a48447e988d1d42319809dd562098b0d08ee3c0f259d619
               pullPolicy: IfNotPresent
             env:
-              SCREEN_WIDTH: "1920"
-              SCREEN_HEIGHT: "1024"
-              SCREEN_DEPTH: "16"
-              # run Chrome non-headless under Xvfb — headless mode is the
-              # strongest signal Cloudflare's bot detection keys on
-              CHROME_HEADFUL: "true"
+              TIMEOUT: "60000"
               # headroom above FETCH_WORKERS: each check can open more than one
-              # CDP connection, and connections beyond this limit are refused
-              MAX_CONCURRENT_CHROME_PROCESSES: "6"
+              # CDP connection, and connections beyond the limit are refused
+              CONCURRENT: "6"
 
             resources:
               requests:
