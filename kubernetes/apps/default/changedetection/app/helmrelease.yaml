@@ -21,6 +21,7 @@ spec:
               TZ: Pacific/Auckland
               PORT: &port 5000
               USE_X_SETTINGS: 1
+              FETCH_WORKERS: 3
               PLAYWRIGHT_DRIVER_URL: ws://localhost:3000/?stealth=1&--disable-web-security=true
             resources:
               requests:
@@ -33,27 +34,19 @@ spec:
 
           browser:
             image:
-              repository: mirror.gcr.io/browserless/chrome
-              # renovate: datasource=docker depName=docker.io/browserless/chrome
-              tag: latest@sha256:57d19e414d9fe4ae9d2ab12ba768c97f38d51246c5b31af55a009205c136012f
+              repository: mirror.gcr.io/dgtlmoon/sockpuppetbrowser
+              # renovate: datasource=docker depName=docker.io/dgtlmoon/sockpuppetbrowser
+              tag: latest@sha256:7116c61ef9cfce3d48a7efd9355d2fbe19f593ea3cfb52a5ded40ecbcb0a3f9d
               pullPolicy: IfNotPresent
             env:
               SCREEN_WIDTH: "1920"
               SCREEN_HEIGHT: "1024"
               SCREEN_DEPTH: "16"
-              ENABLE_DEBUGGER: "false"
-              PREBOOT_CHROME: "true"
-              CONNECTION_TIMEOUT: "300000"
-              MAX_CONCURRENT_SESSIONS: "10"
-              CHROME_REFRESH_TIME: "600000"
-              DEFAULT_BLOCK_ADS: "true"
-              DEFAULT_STEALTH: "true"
-              DOWNLOAD_DIR: /downloads
-              DATA_DIR: /profile
+              MAX_CONCURRENT_CHROME_PROCESSES: "3"
 
             resources:
               requests:
-                cpu: 10m
+                cpu: 100m
                 memory: 1100Mi
 
             # securityContext:
@@ -91,11 +84,6 @@ spec:
             app:
               - path: /datastore
                 subPath: changedetection
-            browser:
-              - path: /downloads
-                subPath: downloads
-              - path: /profile
-                subPath: profile
 
       tmp:
         type: emptyDir
