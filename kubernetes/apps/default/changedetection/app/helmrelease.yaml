@@ -42,6 +42,9 @@ spec:
               SCREEN_WIDTH: "1920"
               SCREEN_HEIGHT: "1024"
               SCREEN_DEPTH: "16"
+              # run Chrome non-headless under Xvfb — headless mode is the
+              # strongest signal Cloudflare's bot detection keys on
+              CHROME_HEADFUL: "true"
               # headroom above FETCH_WORKERS: each check can open more than one
               # CDP connection, and connections beyond this limit are refused
               MAX_CONCURRENT_CHROME_PROCESSES: "6"
