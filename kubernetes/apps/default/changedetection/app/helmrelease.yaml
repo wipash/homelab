@@ -87,3 +87,5 @@ spec:
 
       tmp:
         type: emptyDir
+        medium: Memory
+        sizeLimit: 2Gi
