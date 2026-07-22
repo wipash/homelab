@@ -6,6 +6,7 @@ metadata:
   name: postgres17-librechat
 spec:
   instances: 1
+  enablePDB: false
   imageName: ghcr.io/cloudnative-pg/postgresql:17.4
   primaryUpdateStrategy: unsupervised
   storage:
