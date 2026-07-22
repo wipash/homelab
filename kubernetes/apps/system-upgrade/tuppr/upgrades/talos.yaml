@@ -8,6 +8,11 @@ spec:
   talos:
     # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
     version: v1.13.7
+  maintenance:
+    windows:
+      - start: "0 3 * * 0"
+        duration: 4h
+        timezone: Pacific/Auckland
   healthChecks:
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster

@@ -8,6 +8,11 @@ spec:
   kubernetes:
     # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
     version: v1.36.2
+  maintenance:
+    windows:
+      - start: "0 3 * * 0"
+        duration: 4h
+        timezone: Pacific/Auckland
   healthChecks:
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
