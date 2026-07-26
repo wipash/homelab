@@ -1,0 +1,149 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vector-aggregator
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: vector-aggregator
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    fullnameOverride: vector-aggregator
+    role: Aggregator
+    # Two replicas so a node dying does not take its own log sink with it.
+    replicas: 2
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: vector
+            app.kubernetes.io/instance: vector-aggregator
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        memory: 512Mi
+    podMonitor:
+      enabled: true
+    service:
+      enabled: true
+      type: LoadBalancer
+      annotations:
+        lbipam.cilium.io/ips: "172.16.10.5"
+      externalTrafficPolicy: Local
+      # Set explicitly rather than letting the chart derive ports from
+      # customConfig, which would also publish the TCP api port on the LB.
+      ports:
+        - name: talos-kernel
+          port: 6050
+          protocol: UDP
+          targetPort: 6050
+        - name: talos-service
+          port: 6051
+          protocol: UDP
+          targetPort: 6051
+    customConfig:
+      data_dir: /vector-data-dir
+      api:
+        enabled: true
+        address: 127.0.0.1:8686
+      sources:
+        # Talos ships kmsg here via the talos.logging.kernel kernel arg.
+        talos_kernel:
+          type: socket
+          mode: udp
+          address: 0.0.0.0:6050
+          max_length: 102400
+          host_key: source_addr
+          decoding:
+            codec: json
+        # Talos ships service logs here via machine.logging.destinations.
+        talos_service:
+          type: socket
+          mode: udp
+          address: 0.0.0.0:6051
+          max_length: 102400
+          host_key: source_addr
+          decoding:
+            codec: json
+      transforms:
+        # Tag the origin before merging, since a single remap cannot tell
+        # which source an event arrived on.
+        talos_kernel_tagged:
+          type: remap
+          inputs: ["talos_kernel"]
+          source: |
+            .stream = "kernel"
+        talos_service_tagged:
+          type: remap
+          inputs: ["talos_service"]
+          source: |
+            .stream = "service"
+        talos:
+          type: remap
+          inputs: ["talos_kernel_tagged", "talos_service_tagged"]
+          source: |
+            # host_key records the peer as "10.0.16.136:41234"; keep the address.
+            addr = to_string(.source_addr) ?? ""
+            .node_ip = split(addr, ":")[0]
+            del(.source_addr)
+
+            # Kernel logs carry no hostname, so the peer address is the only
+            # way to attribute them. IPs match talos/nodes/*.yaml.j2.
+            .node = if .node_ip == "10.0.16.133" {
+              "hp1"
+            } else if .node_ip == "10.0.16.135" {
+              "hp2"
+            } else if .node_ip == "10.0.16.136" {
+              "hp3"
+            } else {
+              .node_ip
+            }
+
+            # Talos puts the text in `msg`; the loki text codec reads `message`.
+            if !exists(.message) && exists(.msg) {
+              .message = .msg
+              del(.msg)
+            }
+
+            # Prefer Talos's own timestamp over time of receipt.
+            if exists(.time) {
+              parsed = parse_timestamp(to_string(.time) ?? "", "%+") ?? null
+              if parsed != null {
+                .timestamp = parsed
+              }
+              del(.time)
+            }
+
+            # Flatten the kmsg sub-object so facility survives as a label.
+            .facility = to_string(.fields.facility) ?? to_string(.facility) ?? "unknown"
+            .level = to_string(.level) ?? "info"
+            del(.fields)
+      sinks:
+        loki:
+          type: loki
+          inputs: ["talos"]
+          endpoint: http://loki-headless.monitoring.svc.cluster.local:3100
+          encoding:
+            codec: text
+          # Flush fast: a node about to die has very little time left.
+          batch:
+            timeout_secs: 1
+          labels:
+            job: talos
+            node: '{{ "{{ node }}" }}'
+            stream: '{{ "{{ stream }}" }}'
+            facility: '{{ "{{ facility }}" }}'
+            level: '{{ "{{ level }}" }}'

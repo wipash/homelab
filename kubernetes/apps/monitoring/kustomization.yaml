@@ -24,3 +24,4 @@ resources:
   - ./promtail/ks.yaml
   - ./blackbox-exporter/ks.yaml
   - ./silence-operator/ks.yaml
+  - ./vector-aggregator/ks.yaml
