@@ -109,7 +109,7 @@ spec:
             } else if .node_ip == "10.0.16.136" {
               "hp3"
             } else {
-              .node_ip
+              "unknown"
             }
 
             # Talos puts the text in `msg`; the loki text codec reads `message`.
@@ -127,9 +127,23 @@ spec:
               del(.time)
             }
 
+            # Clamp everything used as a Loki label to a known set. Label
+            # values come off the wire, and an unbounded one would let a noisy
+            # producer explode Loki's stream cardinality.
+            lvl = to_string(.level) ?? "info"
+            .level = if includes(["emerg", "alert", "crit", "err", "warn", "notice", "info", "debug"], lvl) {
+              lvl
+            } else {
+              "info"
+            }
+
             # Flatten the kmsg sub-object so facility survives as a label.
-            .facility = to_string(.fields.facility) ?? to_string(.facility) ?? "unknown"
-            .level = to_string(.level) ?? "info"
+            fac = to_string(.fields.facility) ?? (to_string(.facility) ?? "unknown")
+            .facility = if includes(["kern", "user", "mail", "daemon", "auth", "syslog", "lpr", "news", "uucp", "cron", "authpriv", "ftp"], fac) {
+              fac
+            } else {
+              "other"
+            }
             del(.fields)
       sinks:
         loki:
@@ -141,6 +155,12 @@ spec:
           # Flush fast: a node about to die has very little time left.
           batch:
             timeout_secs: 1
+          # Vector wants a literal prefix on templated labels to bound what
+          # they can resolve to. These have none by design -- the node name is
+          # mapped through an allow-list and level/facility are clamped to
+          # known sets in the transform above, so the values are already
+          # bounded before they reach here.
+          dangerously_allow_unconfined_template_resolution: true
           labels:
             job: talos
             node: '{{ "{{ node }}" }}'
