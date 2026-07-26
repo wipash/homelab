@@ -60,6 +60,8 @@ spec:
         enabled: true
         address: 127.0.0.1:8686
       sources:
+        internal_metrics:
+          type: internal_metrics
         # Talos ships kmsg here via the talos.logging.kernel kernel arg.
         talos_kernel:
           type: socket
@@ -146,6 +148,12 @@ spec:
             }
             del(.fields)
       sinks:
+        # The chart's podMonitor scrapes a container port named "prom-exporter",
+        # which is derived from this sink's id -- keep the name in step with it.
+        prom_exporter:
+          type: prometheus_exporter
+          inputs: ["internal_metrics"]
+          address: 0.0.0.0:9090
         loki:
           type: loki
           inputs: ["talos"]
