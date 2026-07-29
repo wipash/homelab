@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: ghcr.io/snapotter-hq/snapotter
-              tag: 2.1.0@sha256:cb2c8835bc0939adcf8054570f9a116f24437626c2dba9f66206f4ed86f79809
+              tag: 2.2.0@sha256:aec7254489ef85002ca256d9187981c5083fcd1a6f38da2ffbedeb2dbc2976a2
             env:
               TZ: Pacific/Auckland
               PORT: &port 1349
