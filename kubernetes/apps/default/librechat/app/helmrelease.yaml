@@ -101,7 +101,7 @@ spec:
               tag: v1.51.0
             args:
               - /bin/meilisearch
-              - --experimental-dumpless-upgrade
+              - --upgrade-db
             env:
               TZ: Pacific/Auckland
               MEILI_DB_PATH: "/meili_data"
