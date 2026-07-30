@@ -19,7 +19,7 @@ spec:
           app:
             image:
               repository: ghcr.io/clickhouse/librechat-admin-panel
-              tag: latest@sha256:9a78851f84f448eab780ac658c4d17db51974c240492affc789a72d61e35f678
+              tag: latest@sha256:3958c838caa00a1a883b8d0b91e442acafe727c97d700c3ec4558cf7d7724f8e
             env:
               TZ: Pacific/Auckland
               PORT: "3000"
