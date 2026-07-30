@@ -36,7 +36,6 @@ spec:
       name: homelab
     cni:
       exclusive: false
-    enableRuntimeDeviceDetection: true
     endpointRoutes:
       enabled: true
     envoy:
