@@ -9,5 +9,11 @@ configMapGenerator:
   - name: node-out-of-service-scripts
     files:
       - ./taint-out-of-service.sh
+    options:
+      annotations:
+        # The script is full of shell ${...} expansions. Without this, Flux's
+        # postBuild envsubst tries to resolve them as cluster variables and the
+        # Kustomization fails with "variable not set (strict mode)".
+        kustomize.toolkit.fluxcd.io/substitute: disabled
 generatorOptions:
   disableNameSuffixHash: true
