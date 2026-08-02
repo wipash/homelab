@@ -51,8 +51,27 @@ spec:
               period: 24h
       limits_config:
         retention_period: 7d
+        # ceph-mgr emits single log lines over the 256KB default, and an
+        # oversized line makes Loki reject the *entire* promtail batch with a
+        # 400, silently dropping unrelated logs alongside it. Truncate instead.
+        max_line_size: 256KB
+        max_line_size_truncate: true
+        max_line_size_truncate_identifier: "[truncated]"
     singleBinary:
       replicas: 1
+      # Keep Loki off hp3. hp3 has died twice with no warning (2026-07-25 and
+      # 2026-08-02) and hardware is suspected; when Loki lived there its pod
+      # hung in Terminating on the RWO volume and the logs needed to diagnose
+      # the outage were unreadable until the node came back. Remove this once
+      # hp3's hardware is cleared or replaced.
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: NotIn
+                    values: ["hp3"]
       resources:
         requests:
           cpu: 10m
