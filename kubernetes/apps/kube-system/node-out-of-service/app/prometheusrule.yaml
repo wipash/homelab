@@ -1,0 +1,52 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: node-out-of-service-rules
+spec:
+  groups:
+    - name: node-out-of-service.rules
+      rules:
+        # It fired. Loki only keeps 7 days, so this metric is the durable
+        # record of which node was fenced, when, and for how long.
+        - alert: NodeMarkedOutOfService
+          annotations:
+            summary: Node {{ $labels.node }} was marked out of service, its volumes
+              have been force-detached so workloads can start elsewhere.
+          expr: kube_node_spec_taint{key="node.kubernetes.io/out-of-service"} == 1
+          for: 1m
+          labels:
+            severity: critical
+
+        # It half-worked. The node came back but the taint was not removed, so
+        # nothing will schedule there - including Rook's mon and osd for that
+        # host, leaving Ceph quietly degraded and looking like a failed boot.
+        - alert: NodeOutOfServiceTaintStuck
+          annotations:
+            summary: Node {{ $labels.node }} is Ready but still carries the
+              out-of-service taint. Nothing will schedule on it, including its
+              Ceph mon and osd. Remove with `kubectl taint node {{ $labels.node }}
+              node.kubernetes.io/out-of-service-`.
+          expr: |
+            kube_node_spec_taint{key="node.kubernetes.io/out-of-service"} == 1
+              and on (node)
+            kube_node_status_condition{condition="Ready",status="true"} == 1
+          for: 15m
+          labels:
+            severity: critical
+
+        # The safety net itself is broken. This job is idle for months at a
+        # time, so without this alert the first sign of failure would be an
+        # outage where it silently does nothing. Note concurrencyPolicy is
+        # Forbid, so one wedged job stalls every later run.
+        - alert: NodeOutOfServiceJobNotRunning
+          annotations:
+            summary: The node-out-of-service CronJob has not succeeded in over
+              an hour. Nodes that die will NOT have their volumes released
+              automatically until this is fixed.
+          expr: |
+            time() - kube_cronjob_status_last_successful_time{cronjob="node-out-of-service"} > 3600
+          for: 15m
+          labels:
+            severity: critical
