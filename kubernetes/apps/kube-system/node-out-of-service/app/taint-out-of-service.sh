@@ -49,6 +49,12 @@ nodes="$(
 {{- end -}}'
 )"
 
+# Always log what was observed. This job is meant to sit idle for months and
+# then be trusted in an outage, so a run that does nothing must still be
+# distinguishable from a run that silently failed to reach the API.
+echo "observed $(echo "$nodes" | grep -c .) nodes (name ready lastTransition tainted):"
+echo "$nodes" | sed 's/^/  /'
+
 echo "$nodes" | while read -r name status since tainted; do
   [ -n "$name" ] || continue
 
