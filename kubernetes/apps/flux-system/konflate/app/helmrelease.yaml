@@ -39,5 +39,9 @@ spec:
     resources:
       requests:
         cpu: 50m
+        memory: 256Mi
       limits:
-        memory: 1Gi
+        # Renders up to diff_concurrency (4) Helm charts at once, which blew
+        # through the previous 1Gi ceiling and left the pod in CrashLoopBackOff
+        # (OOMKilled, exit 137) whenever a backlog of stale PR diffs queued up.
+        memory: 2Gi
