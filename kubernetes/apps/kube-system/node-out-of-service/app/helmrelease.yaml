@@ -72,6 +72,9 @@ spec:
     serviceAccount:
       node-out-of-service: {}
     defaultPodOptions:
+      # app-template defaults this off; without it kubectl finds no in-cluster
+      # credentials and falls back to localhost:8080.
+      automountServiceAccountToken: true
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
