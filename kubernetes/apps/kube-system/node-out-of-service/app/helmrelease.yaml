@@ -1,0 +1,93 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app node-out-of-service
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: node-out-of-service
+  interval: 1h
+  values:
+    controllers:
+      node-out-of-service:
+        type: cronjob
+        cronjob:
+          # A CronJob rather than a long-running Deployment on purpose: if the
+          # watcher happened to be running on the node that died, a Deployment
+          # replica can sit unreplaced for the pod eviction timeout, which is
+          # exactly when it is needed. Each CronJob run is scheduled fresh onto
+          # a healthy node instead.
+          schedule: "*/2 * * * *"
+          timeZone: &timeZone Pacific/Auckland
+          concurrencyPolicy: Forbid
+          successfulJobsHistory: 1
+          failedJobsHistory: 1
+        serviceAccount:
+          identifier: *app
+        containers:
+          app:
+            image:
+              repository: alpine/kubectl
+              tag: 1.36.3@sha256:1f0c86385ebec294558b450956a390116c098d04166bb279b7c9776082b339eb
+            command:
+              - /scripts/taint-out-of-service.sh
+            env:
+              NOT_READY_SECONDS: "600"
+              TZ: *timeZone
+              # readOnlyRootFilesystem leaves kubectl nowhere to write its
+              # discovery cache, so point HOME at the writable emptyDir below.
+              HOME: /tmp
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 64Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["ALL"]
+    rbac:
+      roles:
+        node-out-of-service:
+          type: ClusterRole
+          rules:
+            # `kubectl taint` is a patch against the node object. This is the
+            # only write the app performs: it cannot delete pods or detach
+            # volumes itself. The force-detach is done by kube-controller-manager
+            # in response to the taint.
+            - apiGroups: [""]
+              resources: ["nodes"]
+              verbs: ["get", "list", "patch"]
+      bindings:
+        node-out-of-service:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: *app
+          subjects:
+            - identifier: *app
+              serviceAccount: *app
+    serviceAccount:
+      node-out-of-service: {}
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
+    persistence:
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+      scripts:
+        type: configMap
+        name: node-out-of-service-scripts
+        defaultMode: 0775
+        globalMounts:
+          - path: /scripts/taint-out-of-service.sh
+            subPath: taint-out-of-service.sh
+            readOnly: true

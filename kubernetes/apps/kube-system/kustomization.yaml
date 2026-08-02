@@ -21,3 +21,4 @@ resources:
   - ./kubelet-csr-approver/ks.yaml
   - ./fstrim/ks.yaml
   - ./image-cleanup/ks.yaml
+  - ./node-out-of-service/ks.yaml
