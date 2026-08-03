@@ -193,6 +193,8 @@ endpoints:
       - skills
       - run_in_background
       - tool_intents
+      - stateful_code_sessions
+      - ask_user_question
     allowedProviders:
       - LiteLLM
 
