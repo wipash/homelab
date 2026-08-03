@@ -167,6 +167,9 @@ endpoints:
       titleModel: gpt-5.4-nano
       titleEndpoint: LiteLLM
       modelDisplayLabel: LiteLLM Anthropic
+      toolApproval:
+        enabled: true
+        mode: bypass
 
   agents:
     recursionLimit: 50
