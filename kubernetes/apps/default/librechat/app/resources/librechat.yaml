@@ -1,6 +1,6 @@
 ---
 # Configuration version (required)
-version: 1.3.9
+version: 1.3.13
 
 # Cache settings: Set to true to enable caching
 cache: true
@@ -195,8 +195,11 @@ endpoints:
       - tool_intents
       - stateful_code_sessions
       - ask_user_question
+      - hide_sequential_outputs
+      - end_after_tools
     allowedProviders:
       - LiteLLM
+      - LiteLLMAnthropic
 
   assistants:
     disableBuilder: true
