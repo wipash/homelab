@@ -1,0 +1,125 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ntfy
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: ntfy
+  interval: 1h
+  values:
+    controllers:
+      ntfy:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        strategy: Recreate
+        containers:
+          app:
+            image:
+              repository: docker.io/binwiederhier/ntfy
+              tag: v2.27.0@sha256:f2419f405127afa868f10985c1a41449e673477cee1eb19994339a5ae8b592e7
+            args:
+              - serve
+            env:
+              NTFY_BASE_URL: https://ntfy.mcgrath.nz
+              NTFY_LISTEN_HTTP: ":80"
+              NTFY_LOG_LEVEL: info
+              # Real client IPs come from Envoy, otherwise every visitor shares one rate limit bucket
+              NTFY_BEHIND_PROXY: true
+              NTFY_AUTH_FILE: /var/lib/ntfy/auth.db
+              NTFY_AUTH_DEFAULT_ACCESS: deny-all
+              NTFY_CACHE_FILE: /var/lib/ntfy/cache.db
+              NTFY_CACHE_DURATION: 12h
+              NTFY_ATTACHMENT_CACHE_DIR: /var/lib/ntfy/attachments
+              # Kept well under VOLSYNC_CAPACITY so attachments can't fill the PVC
+              NTFY_ATTACHMENT_TOTAL_SIZE_LIMIT: 2G
+              NTFY_WEB_PUSH_FILE: /var/lib/ntfy/webpush.db
+              NTFY_WEB_PUSH_EMAIL_ADDRESS: sean@mcgrath.nz
+              TZ: Pacific/Auckland
+            envFrom:
+              - secretRef:
+                  name: "{{ .Release.Name }}-secret"
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /v1/health
+                    port: &port 80
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      app:
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            path: /v1/health
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - "{{ .Release.Name }}.mcgrath.nz"
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: http
+      # LAN publishers authenticate by virtue of reaching envoy-internal: Envoy
+      # attaches the token so clients on the local network send no credentials.
+      # ntfy itself stays deny-all, so the public hostname is unaffected.
+      internal:
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - ntfy-internal.mcgrath.nz
+        rules:
+          - filters:
+              - type: RequestHeaderModifier
+                requestHeaderModifier:
+                  set:
+                    - name: Authorization
+                      # Defaulted so the app can deploy before the token exists -
+                      # the token can only be minted against a running server.
+                      # Until SECRET_NTFY_TOKEN is set in cluster-secrets this
+                      # route 401s rather than allowing anonymous access.
+                      value: "Bearer ${SECRET_NTFY_TOKEN:=placeholder}"
+            backendRefs:
+              - identifier: app
+                port: http
+    persistence:
+      config:
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /var/lib/ntfy
+      tmp:
+        type: emptyDir
