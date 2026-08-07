@@ -36,7 +36,7 @@ spec:
               # Kept well under VOLSYNC_CAPACITY so attachments can't fill the PVC
               NTFY_ATTACHMENT_TOTAL_SIZE_LIMIT: 2G
               NTFY_WEB_PUSH_FILE: /var/lib/ntfy/webpush.db
-              NTFY_WEB_PUSH_EMAIL_ADDRESS: sean@mcgrath.nz
+              NTFY_WEB_PUSH_EMAIL_ADDRESS: sean@mcgrath.net.nz
               TZ: Pacific/Auckland
             envFrom:
               - secretRef:
