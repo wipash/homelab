@@ -1,0 +1,127 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: bookorbit
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: bookorbit
+  interval: 30m
+  values:
+    configMaps:
+      bookorbit-initdb:
+        data:
+          extensions.sql: |
+            CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+            CREATE EXTENSION IF NOT EXISTS "pg_trgm";
+            CREATE EXTENSION IF NOT EXISTS "vector";
+
+    controllers:
+      bookorbit:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: 18
+            envFrom: &envFrom
+              - secretRef:
+                  name: bookorbit-secret
+        containers:
+          app:
+            image:
+              repository: ghcr.io/bookorbit/bookorbit
+              tag: 2.6.0@sha256:a7fa6d124d99bb5cda302160be0736b67e858f6957153e711edbba19e1b93057
+            env:
+              TZ: Pacific/Auckland
+              NODE_ENV: production
+              PORT: &port 3000
+              APP_URL: https://bookorbit.mcgrath.nz
+              LIBRARY_BROWSE_ROOT: /books
+              BOOKORBIT_FIX_PERMISSIONS: "false"
+              NODE_MAX_OLD_SPACE_SIZE: "1536"
+              PUID: "1000"
+              PGID: "1000"
+            envFrom: *envFrom
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v1/health
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+                memory: 256Mi
+              limits:
+                memory: 2Gi
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+
+    service:
+      app:
+        controller: bookorbit
+        ports:
+          http:
+            port: *port
+
+    route:
+      app:
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - "{{ .Release.Name }}.mcgrath.nz"
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: http
+
+    persistence:
+      data:
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /data
+
+      initdb:
+        type: configMap
+        identifier: bookorbit-initdb
+        advancedMounts:
+          bookorbit:
+            init-db:
+              - path: /initdb
+
+      books:
+        type: nfs
+        server: 172.20.0.1
+        path: /volume1/Media
+        globalMounts:
+          - path: /books
+            subPath: Books/library
+          - path: /bookdrop
+            subPath: Books/bookdrop
+
+      tmp:
+        type: emptyDir

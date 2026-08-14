@@ -12,6 +12,7 @@ resources:
   # - ./booklore/ks.yaml
   - ./authelia/ks.yaml
   - ./autobrr/ks.yaml
+  - ./bookorbit/ks.yaml
   # - ./ccattendance/ks.yaml
   - ./changedetection/ks.yaml
   - ./cups/ks.yaml

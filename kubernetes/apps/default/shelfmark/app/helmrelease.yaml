@@ -96,6 +96,10 @@ spec:
             subPath: tmp
           - path: /var/log
             subPath: var-log
+          - path: /cache
+            subPath: cache
+          - path: /run
+            subPath: run
     service:
       app:
         ports:
