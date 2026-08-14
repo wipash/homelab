@@ -13,7 +13,7 @@ spec:
     configMaps:
       bookorbit-initdb:
         data:
-          extensions.sql: |
+          bookorbit.sql: |
             CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
             CREATE EXTENSION IF NOT EXISTS "pg_trgm";
             CREATE EXTENSION IF NOT EXISTS "vector";
@@ -41,6 +41,7 @@ spec:
               PORT: &port 3000
               APP_URL: https://bookorbit.mcgrath.nz
               LIBRARY_BROWSE_ROOT: /books
+              BOOK_DOCK_PATH: /bookdrop
               BOOKORBIT_FIX_PERMISSIONS: "false"
               NODE_MAX_OLD_SPACE_SIZE: "1536"
               PUID: "1000"
