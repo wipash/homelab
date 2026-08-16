@@ -22,7 +22,7 @@ spec:
               PORT: &port 5000
               USE_X_SETTINGS: 1
               FETCH_WORKERS: 3
-              PLAYWRIGHT_DRIVER_URL: ws://localhost:3000/
+              PLAYWRIGHT_DRIVER_URL: ws://localhost:3000/?stealth=1&--disable-web-security=true
             resources:
               requests:
                 cpu: 10m
@@ -42,6 +42,13 @@ spec:
               # headroom above FETCH_WORKERS: each check can open more than one
               # CDP connection, and connections beyond the limit are refused
               CONCURRENT: "6"
+              SCREEN_WIDTH: "1920"
+              SCREEN_HEIGHT: "1024"
+              SCREEN_DEPTH: "16"
+              ENABLE_DEBUGGER: "false"
+              PREBOOT_CHROME: "true"
+              DEFAULT_BLOCK_ADS: "true"
+              DEFAULT_STEALTH: "true"
 
             resources:
               requests:
