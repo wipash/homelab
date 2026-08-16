@@ -81,7 +81,7 @@ spec:
           ragapi:
             image:
               repository: ghcr.io/danny-avila/librechat-rag-api-dev-lite
-              tag: latest@sha256:d6db3e38fb1afabcad6972d23d2cdc093e8a5b74797881e29e7599df93704985
+              tag: latest@sha256:f9f34c8ed6884b0ff9b17387e6174fed737dba29f21622ecb75604d82bc47bf8
             env:
               TZ: Pacific/Auckland
             envFrom: *envFrom
