@@ -19,6 +19,14 @@ spec:
             image:
               repository: docker.io/drpsychick/airprint-bridge
               tag: latest@sha256:8f278a14685f3828a1faafde06c507fbc4dadc337e8fec9651f8f21bb3fd6449
+            command:
+              - /bin/bash
+              - -ec
+            args:
+              - |
+                grep -Fq 'cupsctl -h localhost:631 --share-printers' /root/start-cups.sh
+                sed -i 's#cupsctl -h localhost:631 --share-printers#cupsctl -h /run/cups/cups.sock --share-printers#' /root/start-cups.sh
+                exec /root/start-cups.sh
             env:
               TZ: Pacific/Auckland
               CUPS_ADMIN_USER: print
@@ -40,15 +48,14 @@ spec:
               CUPS_LPADMIN_PRINTERCONFIG1: cupsctl ServerAlias=\*
               CUPS_LPADMIN_PRINTERCONFIG2: cupsctl DefaultEncryption=Never
 
-
             probes:
               liveness: &probes
                 enabled: true
                 custom: true
                 spec:
-                  httpGet:
-                    path: /
-                    port: &port 631
+                  exec:
+                    command:
+                      - /healthcheck.sh
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -77,9 +84,9 @@ spec:
           external-dns.alpha.kubernetes.io/hostname: "printer.mcgrath.nz"
         ports:
           http:
-            port: *port
+            port: 631
           udp:
-            port: *port
+            port: 631
             protocol: UDP
 
     route:
