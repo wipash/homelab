@@ -23,6 +23,7 @@ resources:
   - ./ghost/ks.yaml
   # - ./hermes/ks.yaml
   # - ./hi-events/ks.yaml
+  - ./hindsight/ks.yaml
   - ./hoarder/ks.yaml
   - ./home-assistant/ks.yaml
   - ./immich/ks.yaml
