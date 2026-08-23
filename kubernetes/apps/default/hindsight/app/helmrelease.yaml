@@ -1,0 +1,168 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hindsight
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: hindsight
+  interval: 1h
+  values:
+    configMaps:
+      hindsight-initdb:
+        data:
+          hindsight.sql: |
+            CREATE EXTENSION IF NOT EXISTS "vector";
+
+    controllers:
+      api:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: 18
+            envFrom: &envFrom
+              - secretRef:
+                  name: hindsight-secret
+        containers:
+          app:
+            image:
+              repository: ghcr.io/vectorize-io/hindsight-api
+              tag: 0.9.1-slim@sha256:7792e0cf76e45d2a8a4f76f062c554f1c7cf4208e7a7c2954e7d6fcedbe49922
+            env:
+              TZ: Pacific/Auckland
+              HINDSIGHT_API_LLM_PROVIDER: openrouter
+              HINDSIGHT_API_LLM_MODEL: qwen/qwen3.5-9b
+              HINDSIGHT_API_EMBEDDINGS_PROVIDER: openrouter
+              HINDSIGHT_API_RERANKER_PROVIDER: openrouter
+              HINDSIGHT_API_WORKER_ID: hindsight-api
+              HINDSIGHT_API_TENANT_EXTENSION: hindsight_api.extensions.builtin.tenant:ApiKeyTenantExtension
+            envFrom: *envFrom
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health/live
+                    port: &apiPort 8888
+                  initialDelaySeconds: 30
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *apiPort
+                  initialDelaySeconds: 10
+                  periodSeconds: 5
+                  timeoutSeconds: 3
+                  failureThreshold: 3
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                memory: 1Gi
+
+      controlplane:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/vectorize-io/hindsight-control-plane
+              tag: 0.9.1@sha256:4f83fa7ae5c55461bc55cd3da1056305df8b6b9325503e2875f069c735efafad
+            env:
+              TZ: Pacific/Auckland
+              NODE_ENV: production
+              HINDSIGHT_CP_HOSTNAME: 0.0.0.0
+              HINDSIGHT_CP_PORT: "3000"
+              HINDSIGHT_CP_DATAPLANE_API_URL: http://hindsight-api:8888
+            envFrom: *envFrom
+            probes:
+              liveness: &controlplaneProbes
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: &controlplanePort 3000
+                  initialDelaySeconds: 30
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *controlplaneProbes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 25m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+
+    defaultPodOptions:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+
+    service:
+      api:
+        controller: api
+        ports:
+          http:
+            port: *apiPort
+      controlplane:
+        controller: controlplane
+        ports:
+          http:
+            port: *controlplanePort
+
+    route:
+      app:
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - mem.mcgrath.nz
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /v1
+            backendRefs:
+              - identifier: api
+                port: http
+          - backendRefs:
+              - identifier: controlplane
+                port: http
+
+    persistence:
+      initdb:
+        type: configMap
+        identifier: hindsight-initdb
+        advancedMounts:
+          api:
+            init-db:
+              - path: /initdb
+      tmp:
+        type: emptyDir
