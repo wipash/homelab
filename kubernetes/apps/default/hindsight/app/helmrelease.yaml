@@ -38,7 +38,8 @@ spec:
               HINDSIGHT_API_LLM_PROVIDER: openrouter
               HINDSIGHT_API_LLM_MODEL: openai/gpt-oss-120b:nitro
               HINDSIGHT_API_EMBEDDINGS_PROVIDER: openrouter
-              HINDSIGHT_API_RERANKER_PROVIDER: openrouter
+              HINDSIGHT_API_RERANKER_PROVIDER: cohere
+              HINDSIGHT_API_RERANKER_COHERE_MODEL: rerank-v4.0-fast
               HINDSIGHT_API_WORKER_ID: hindsight-api
               HINDSIGHT_API_TENANT_EXTENSION: hindsight_api.extensions.builtin.tenant:ApiKeyTenantExtension
             envFrom: *envFrom
