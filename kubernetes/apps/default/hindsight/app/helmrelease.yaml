@@ -36,7 +36,7 @@ spec:
             env:
               TZ: Pacific/Auckland
               HINDSIGHT_API_LLM_PROVIDER: openrouter
-              HINDSIGHT_API_LLM_MODEL: qwen/qwen3.5-9b
+              HINDSIGHT_API_LLM_MODEL: openai/gpt-oss-120b:nitro
               HINDSIGHT_API_EMBEDDINGS_PROVIDER: openrouter
               HINDSIGHT_API_RERANKER_PROVIDER: openrouter
               HINDSIGHT_API_WORKER_ID: hindsight-api
