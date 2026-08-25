@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: docker.io/drpsychick/airprint-bridge
-              tag: latest@sha256:8f278a14685f3828a1faafde06c507fbc4dadc337e8fec9651f8f21bb3fd6449
+              tag: latest@sha256:a321ab9efb98159d8723a112b6eced8127239bf9f8d58fa1a30e399235b05026
             command:
               - /bin/bash
               - -ec
