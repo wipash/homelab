@@ -17,6 +17,26 @@ spec:
         strategy: Recreate
         pod:
           enableServiceLinks: false
+        initContainers:
+          seed-pi-auth:
+            image:
+              repository: ghcr.io/wipash/cosa
+              tag: sha-fc1a598b1898956938095bbdaee1fe0de105f4c4@sha256:65e38481a74071feb39b96dc9067ac51b19271af741fd4029b103df979c4a112
+            command:
+              - python
+              - -c
+              - |
+                import os
+                from pathlib import Path
+
+                source = Path("/run/pi-auth/auth.json")
+                target = Path("/data/cosa/pi/auth.json")
+                if not target.exists() or target.read_text().strip() in {"", "{}"}:
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    temporary = target.with_suffix(".json.tmp")
+                    temporary.write_bytes(source.read_bytes())
+                    os.chmod(temporary, 0o600)
+                    temporary.replace(target)
         containers:
           app:
             image:
@@ -122,9 +142,19 @@ spec:
                 subPath: home
               - path: /home/sean/pm
                 subPath: vault
+            seed-pi-auth:
+              - path: /data
       tmp:
         type: emptyDir
         advancedMounts:
           cosa:
             app:
               - path: /tmp
+      pi-auth-seed:
+        type: secret
+        name: cosa-pi-auth-seed
+        advancedMounts:
+          cosa:
+            seed-pi-auth:
+              - path: /run/pi-auth/auth.json
+                subPath: auth.json
