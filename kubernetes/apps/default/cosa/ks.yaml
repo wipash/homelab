@@ -25,6 +25,8 @@ spec:
       namespace: flux-system
     - name: volsync
       namespace: flux-system
+    - name: external-secrets-stores
+      namespace: kube-system
     - name: ghcr-imagepullsecret
       namespace: default
   postBuild:

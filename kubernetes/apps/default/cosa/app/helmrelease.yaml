@@ -31,6 +31,11 @@ spec:
               COSA_PI_DIR: /data/cosa/pi
               COSA_PORT: "8080"
               COSA_PASS_ISOLATION: runtime
+              COSA_DAILY_FILENAME: "%Y-%m-%d %a.md"
+              COSA_DAILY_FOLDER: "🏢 Workbrain/Daily Journal/%Y/%m/%V"
+              COSA_DAILY_TEMPLATE_PATH: "Templates/Daily template.md"
+              COSA_HINDSIGHT_URL: https://mem.mcgrath.nz
+              COSA_PI_MODELS: '{"fast":{"provider":"openai-codex","model":"gpt-5.6-luna"},"standard":{"provider":"openai-codex","model":"gpt-5.6-terra"},"deep":{"provider":"openai-codex","model":"gpt-5.6-sol"}}'
             envFrom:
               - secretRef:
                   name: cosa-secret
