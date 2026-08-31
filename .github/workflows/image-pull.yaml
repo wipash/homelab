@@ -60,16 +60,42 @@ jobs:
     needs: extract
     name: Image Pull - Pull Images
     runs-on: homelab-runner
+    timeout-minutes: 10
     strategy:
       matrix:
         image: ${{ fromJSON(needs.extract.outputs.images) }}
       max-parallel: 4
       fail-fast: false
     steps:
+      - name: Install kubectl
+        if: ${{ startsWith(matrix.image, 'ghcr.io/wipash/') }}
+        uses: azure/setup-kubectl@829323503d1be3d00ca8346e5391ca0b07a9ab0d # v5.1.0
+        with:
+          version: v1.36.2
+
+      - name: Pull private wipash image
+        if: ${{ startsWith(matrix.image, 'ghcr.io/wipash/') }}
+        env:
+          IMAGE: ${{ matrix.image }}
+          POD: image-pull-${{ github.run_id }}-${{ github.run_attempt }}-${{ strategy.job-index }}
+        run: |
+          trap 'kubectl --namespace default delete pod "$POD" --ignore-not-found --wait=false' EXIT
+          kubectl --namespace default run "$POD" \
+            --image="$IMAGE" \
+            --restart=Never \
+            --overrides='{"spec":{"imagePullSecrets":[{"name":"ghcr-imagepullsecret"}]}}' \
+            --command -- /bin/true
+          kubectl --namespace default wait \
+            --for=jsonpath='{.status.phase}'=Succeeded \
+            --timeout=5m \
+            "pod/$POD"
+
       - name: Install talosctl
+        if: ${{ !startsWith(matrix.image, 'ghcr.io/wipash/') }}
         run: curl -fsSL https://raw.githubusercontent.com/siderolabs/talos/b412ffdbc29d77a81aed88be62f21bc2999afcde/website/static/install | sh
 
-      - name: Pull Image
+      - name: Pull public image
+        if: ${{ !startsWith(matrix.image, 'ghcr.io/wipash/') }}
         env:
           IMAGE: ${{ matrix.image }}
         run: talosctl --nodes "$NODE" image pull "$IMAGE"
