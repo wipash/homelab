@@ -1,0 +1,120 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cosa
+spec:
+  suspend: true
+  chartRef:
+    kind: OCIRepository
+    name: cosa
+  interval: 1h
+  values:
+    controllers:
+      cosa:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        strategy: Recreate
+        pod:
+          enableServiceLinks: false
+        containers:
+          app:
+            image:
+              repository: ghcr.io/wipash/cosa
+              tag: sha-a21411d46c6d436a66a12dd23985c34b66ce8ced@sha256:7b4eeb3f8b25693d7116df5937aeb8e7fb3bdf9aa5c3d9fee6fc85d23cb6b7d7
+            env:
+              TZ: Pacific/Auckland
+              HOME: /data/home
+              COSA_DATA_DIR: /data/cosa
+              COSA_VAULT_DIR: /data/vault
+              COSA_PI_DIR: /data/cosa/pi
+              COSA_PORT: "8080"
+              COSA_PASS_ISOLATION: runtime
+            envFrom:
+              - secretRef:
+                  name: cosa-secret
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: &httpPort 8080
+                  initialDelaySeconds: 30
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /readyz
+                    port: *httpPort
+                  initialDelaySeconds: 5
+                  periodSeconds: 5
+                  timeoutSeconds: 3
+                  failureThreshold: 3
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /readyz
+                    port: *httpPort
+                  periodSeconds: 5
+                  timeoutSeconds: 3
+                  failureThreshold: 30
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 2Gi
+
+    defaultPodOptions:
+      automountServiceAccountToken: false
+      imagePullSecrets:
+        - name: ghcr-imagepullsecret
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+
+    service:
+      app:
+        ports:
+          http:
+            port: *httpPort
+
+    route:
+      app:
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - cosa.mcgrath.nz
+
+    persistence:
+      data:
+        existingClaim: "{{ .Release.Name }}"
+        advancedMounts:
+          cosa:
+            app:
+              - path: /data
+      tmp:
+        type: emptyDir
+        advancedMounts:
+          cosa:
+            app:
+              - path: /tmp

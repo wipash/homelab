@@ -1,0 +1,48 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cosa-migration
+  labels:
+    app.kubernetes.io/name: cosa
+    app.kubernetes.io/component: migration
+spec:
+  automountServiceAccountToken: false
+  restartPolicy: Never
+  terminationGracePeriodSeconds: 5
+  imagePullSecrets:
+    - name: ghcr-imagepullsecret
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile: { type: RuntimeDefault }
+  containers:
+    - name: migration
+      image: ghcr.io/wipash/cosa:sha-a21411d46c6d436a66a12dd23985c34b66ce8ced@sha256:7b4eeb3f8b25693d7116df5937aeb8e7fb3bdf9aa5c3d9fee6fc85d23cb6b7d7
+      imagePullPolicy: IfNotPresent
+      command: ["/usr/bin/sleep"]
+      args: ["infinity"]
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities: { drop: ["ALL"] }
+      resources:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+        limits:
+          memory: 256Mi
+      volumeMounts:
+        - name: data
+          mountPath: /target
+        - name: tmp
+          mountPath: /tmp
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: cosa
+    - name: tmp
+      emptyDir: {}
