@@ -29,6 +29,7 @@ spec:
               COSA_VAULT_DIR: /data/vault
               COSA_PI_DIR: /data/cosa/pi
               COSA_PORT: "8080"
+              FORWARDED_ALLOW_IPS: 10.244.0.0/16
               COSA_DAILY_FILENAME: "%Y-%m-%d %a.md"
               COSA_DAILY_FOLDER: "🏢 Workbrain/Daily Journal/%Y/%m/%V"
               COSA_DAILY_TEMPLATE_PATH: "Templates/Daily template.md"
