@@ -67,6 +67,12 @@ jobs:
       max-parallel: 4
       fail-fast: false
     steps:
+      - name: Install kubectl
+        if: ${{ startsWith(matrix.image, 'ghcr.io/wipash/') }}
+        uses: azure/setup-kubectl@829323503d1be3d00ca8346e5391ca0b07a9ab0d # v5.1.0
+        with:
+          version: v1.36.2
+
       - name: Pull private wipash image
         if: ${{ startsWith(matrix.image, 'ghcr.io/wipash/') }}
         env:
