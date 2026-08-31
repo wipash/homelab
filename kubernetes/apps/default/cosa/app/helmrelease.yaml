@@ -75,6 +75,7 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+              seccompProfile: { type: Unconfined }
             resources:
               requests:
                 cpu: 50m
