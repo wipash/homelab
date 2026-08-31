@@ -28,6 +28,7 @@ spec:
               COSA_DATA_DIR: /data/cosa
               COSA_VAULT_DIR: /home/sean/pm
               COSA_PI_DIR: /data/cosa/pi
+              COSA_PASS_ISOLATION: bwrap
               COSA_PORT: "8080"
               FORWARDED_ALLOW_IPS: 10.244.0.0/16
               COSA_DAILY_FILENAME: "%Y-%m-%d %a.md"
