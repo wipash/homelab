@@ -77,6 +77,7 @@ spec:
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
               seccompProfile: { type: Unconfined }
+              procMount: Unmasked
             resources:
               requests:
                 cpu: 50m
@@ -85,6 +86,7 @@ spec:
                 memory: 2Gi
 
     defaultPodOptions:
+      hostUsers: false
       automountServiceAccountToken: false
       imagePullSecrets:
         - name: ghcr-imagepullsecret
