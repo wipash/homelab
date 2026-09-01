@@ -35,6 +35,9 @@ spec:
         enabled: true
         forceConflicts: true
     cleanPrometheusOperatorObjectNames: true
+    defaultRules:
+      disabled:
+        etcdDatabaseHighFragmentationRatio: true
     alertmanager:
       ingress:
         enabled: false
