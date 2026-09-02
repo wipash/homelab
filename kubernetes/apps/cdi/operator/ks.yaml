@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cdi-operator
+  namespace: cdi
+spec:
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: cdi-operator
+      namespace: cdi
+  interval: 30m
+  path: ./kubernetes/apps/cdi/operator/app
+  prune: false
+  retryInterval: 1m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  timeout: 10m
+  wait: true

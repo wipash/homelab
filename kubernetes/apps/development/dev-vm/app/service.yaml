@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dev-vm
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: dev.mcgrath.nz
+    io.cilium/lb-ipam-ips: "${SVC_DEV_VM_ADDR}"
+spec:
+  type: LoadBalancer
+  ports:
+    - name: ssh
+      port: 22
+      protocol: TCP
+      targetPort: 22
+  selector:
+    app.kubernetes.io/name: dev-vm

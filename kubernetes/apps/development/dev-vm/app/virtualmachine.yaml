@@ -1,0 +1,89 @@
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: dev-vm
+spec:
+  runStrategy: Always
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: dev-vm
+        kubevirt.io/domain: dev-vm
+    spec:
+      domain:
+        cpu:
+          cores: 4
+          sockets: 1
+          threads: 1
+        memory:
+          guest: 6Gi
+        resources:
+          limits:
+            cpu: "4"
+            memory: 8Gi
+          requests:
+            cpu: "2"
+            memory: 6Gi
+        devices:
+          autoattachGraphicsDevice: false
+          disks:
+            - disk:
+                bus: virtio
+              name: rootdisk
+            - disk:
+                bus: virtio
+              name: cloudinitdisk
+          interfaces:
+            - masquerade: {}
+              name: default
+          rng: {}
+        machine:
+          type: q35
+      evictionStrategy: None
+      hostname: dev-vm
+      networks:
+        - name: default
+          pod: {}
+      terminationGracePeriodSeconds: 120
+      volumes:
+        - dataVolume:
+            name: dev-vm-root
+          name: rootdisk
+        - cloudInitNoCloud:
+            userData: |-
+              #cloud-config
+              hostname: dev-vm
+              manage_etc_hosts: true
+              disable_root: true
+              ssh_pwauth: false
+              users:
+                - name: sean
+                  gecos: Sean McGrath
+                  groups:
+                    - adm
+                    - sudo
+                  lock_passwd: true
+                  shell: /bin/bash
+                  ssh_authorized_keys:
+                    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC6T/Vv+IP0SV3Q6hKfpZq8E6+abluKtA7E5Vy1EL3s/ sean@mcgrath.net.nz
+                  sudo: ALL=(ALL) NOPASSWD:ALL
+              package_update: true
+              packages:
+                - openssh-server
+                - qemu-guest-agent
+                - tmux
+              write_files:
+                - path: /etc/ssh/sshd_config.d/10-key-only.conf
+                  permissions: "0644"
+                  content: |-
+                    PasswordAuthentication no
+                    KbdInteractiveAuthentication no
+                    PermitRootLogin no
+                    PubkeyAuthentication yes
+              runcmd:
+                - [sshd, -t]
+                - [systemctl, enable, --now, qemu-guest-agent]
+                - [systemctl, enable, --now, ssh]
+                - [systemctl, restart, ssh]
+          name: cloudinitdisk

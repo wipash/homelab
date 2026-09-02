@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: kubevirt
+  namespace: kubevirt
+spec:
+  dependsOn:
+    - name: kubevirt-operator
+      namespace: kubevirt
+  healthChecks:
+    - apiVersion: kubevirt.io/v1
+      kind: KubeVirt
+      name: kubevirt
+      namespace: kubevirt
+  interval: 30m
+  path: ./kubernetes/apps/kubevirt/control-plane/app
+  prune: false
+  retryInterval: 1m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: kubevirt
+  timeout: 15m
+  wait: true

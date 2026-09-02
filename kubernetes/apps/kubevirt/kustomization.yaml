@@ -1,0 +1,21 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: kubevirt
+components:
+  - ../../components/common
+resources:
+  - ./operator/ks.yaml
+  - ./control-plane/ks.yaml
+patches:
+  - target:
+      kind: Namespace
+      name: kubevirt
+    patch: |-
+      - op: add
+        path: /metadata/labels/kubevirt.io
+        value: ""
+      - op: add
+        path: /metadata/labels/pod-security.kubernetes.io~1enforce
+        value: privileged

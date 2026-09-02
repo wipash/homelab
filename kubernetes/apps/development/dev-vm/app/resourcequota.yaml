@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: dev-vm
+spec:
+  hard:
+    count/datavolumes.cdi.kubevirt.io: "1"
+    count/virtualmachines.kubevirt.io: "1"
