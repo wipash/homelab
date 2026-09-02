@@ -16,6 +16,7 @@ This repository contains the GitOps configuration for my homelab Kubernetes clus
 - [external-dns](https://github.com/kubernetes-sigs/external-dns): Automatically syncs ingress DNS records to a DNS provider.
 - [external-secrets](https://github.com/external-secrets/external-secrets): Managed Kubernetes secrets using [1Password Connect](https://github.com/1Password/connect).
 - [ingress-nginx](https://github.com/kubernetes/ingress-nginx): Kubernetes ingress controller using NGINX as a reverse proxy and load balancer.
+- [kubevirt](https://github.com/kubevirt/kubevirt): Runs virtual machines as Kubernetes workloads, with [CDI](https://github.com/kubevirt/containerized-data-importer) importing their disk images.
 - [rook](https://github.com/rook/rook): Distributed block storage for peristent storage.
 - [sops](https://github.com/getsops/sops): Managed secrets for Kubernetes and Terraform which are commited to Git.
 - [spegel](https://github.com/spegel-org/spegel): Stateless cluster local OCI registry mirror.
