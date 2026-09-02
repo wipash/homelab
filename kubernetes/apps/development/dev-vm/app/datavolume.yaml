@@ -6,11 +6,11 @@ metadata:
 spec:
   source:
     registry:
-      # renovate: datasource=docker depName=quay.io/containerdisks/ubuntu
       url: docker://quay.io/containerdisks/ubuntu:24.04@sha256:93505c66468b2f28ac83f51be4dd7075d59661cfff5de25efd1e872f35f0d10a
   storage:
     accessModes:
       - ReadWriteOnce
+    volumeMode: Filesystem
     resources:
       requests:
         storage: 200Gi

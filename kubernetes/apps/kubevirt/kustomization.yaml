@@ -11,7 +11,7 @@ resources:
 patches:
   - target:
       kind: Namespace
-      name: kubevirt
+      name: not-used
     patch: |-
       - op: add
         path: /metadata/labels/kubevirt.io

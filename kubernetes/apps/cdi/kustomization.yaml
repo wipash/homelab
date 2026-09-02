@@ -11,7 +11,7 @@ resources:
 patches:
   - target:
       kind: Namespace
-      name: cdi
+      name: not-used
     patch: |-
       - op: add
         path: /metadata/labels/cdi.kubevirt.io
