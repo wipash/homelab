@@ -20,6 +20,10 @@ spec:
       namespace: flux-system
     - name: volsync
       namespace: flux-system
+  healthCheckExprs:
+    - apiVersion: kubevirt.io/v1
+      kind: VirtualMachine
+      current: status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')
   healthChecks:
     - apiVersion: kubevirt.io/v1
       kind: VirtualMachine

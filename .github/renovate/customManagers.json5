@@ -18,22 +18,6 @@
           "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n.+/(?<currentValue>(v|\\d)[^/]+)"
         ],
         "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}"
-      },
-      {
-        // The shared preset covers `oci://` URIs but not the `docker://` form CDI
-        // uses for registry import sources, and its annotated manager captures the
-        // whole URI as currentValue. Derive the image, tag and digest from the URI
-        // itself instead, so no `# renovate:` comment is needed on these lines.
-        "customType": "regex",
-        "description": ["Process CDI registry import sources referenced as docker:// URIs"],
-        "managerFilePatterns": [
-          "/(^|/)kubernetes/.+\\.ya?ml(?:\\.j2)?$/"
-        ],
-        "matchStrings": [
-          // url: docker://quay.io/containerdisks/ubuntu:24.04@sha256:93505c66...
-          "docker://(?<depName>[^:@\\s]+):(?<currentValue>[^@\\s\"']+)(?:@(?<currentDigest>sha256:[0-9a-f]+))?"
-        ],
-        "datasourceTemplate": "docker"
       }
     ]
 }

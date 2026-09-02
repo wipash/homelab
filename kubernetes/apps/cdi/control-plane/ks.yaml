@@ -9,6 +9,10 @@ spec:
   dependsOn:
     - name: cdi-operator
       namespace: cdi
+  healthCheckExprs:
+    - apiVersion: cdi.kubevirt.io/v1beta1
+      kind: CDI
+      current: status.conditions.exists(c, c.type == 'Available' && c.status == 'True')
   healthChecks:
     - apiVersion: cdi.kubevirt.io/v1beta1
       kind: CDI

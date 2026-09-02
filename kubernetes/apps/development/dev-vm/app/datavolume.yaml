@@ -6,6 +6,7 @@ metadata:
 spec:
   source:
     registry:
+      pullMethod: node
       url: docker://quay.io/containerdisks/ubuntu:24.04@sha256:93505c66468b2f28ac83f51be4dd7075d59661cfff5de25efd1e872f35f0d10a
   storage:
     accessModes:
