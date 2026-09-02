@@ -9,6 +9,10 @@ spec:
   dependsOn:
     - name: kubevirt-operator
       namespace: kubevirt
+  healthCheckExprs:
+    - apiVersion: kubevirt.io/v1
+      kind: KubeVirt
+      current: status.conditions.exists(c, c.type == 'Available' && c.status == 'True')
   healthChecks:
     - apiVersion: kubevirt.io/v1
       kind: KubeVirt
