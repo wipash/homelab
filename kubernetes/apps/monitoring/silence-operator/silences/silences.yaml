@@ -71,3 +71,32 @@ spec:
       value: KubePersistentVolumeFillingUp
     - name: persistentvolumeclaim
       value: prometheus-kube-prometheus-stack-db-prometheus-kube-prometheus-stack-0
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/observability.giantswarm.io/silence_v1alpha2.json
+# KubeVirt fires LowKVMNodesCount whenever fewer than two nodes advertise
+# devices.kubevirt.io/kvm. Only hp2 exposes hardware virtualization, and live
+# migration is deliberately not configured, so this can never clear.
+apiVersion: observability.giantswarm.io/v1alpha2
+kind: Silence
+metadata:
+  name: low-kvm-nodes-count
+spec:
+  matchers:
+    - name: alertname
+      value: LowKVMNodesCount
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/observability.giantswarm.io/silence_v1alpha2.json
+# CDI cannot infer accessMode/volumeMode for openebs-hostpath because
+# openebs.io/local is absent from its provisioner capability map, so that
+# StorageProfile reports complete="false" permanently. Scoped to that one
+# storage class so the alert still fires for ceph-block.
+apiVersion: observability.giantswarm.io/v1alpha2
+kind: Silence
+metadata:
+  name: cdi-storage-profiles-incomplete-openebs
+spec:
+  matchers:
+    - name: alertname
+      value: CDIStorageProfilesIncomplete
+    - name: storageclass
+      value: openebs-hostpath
