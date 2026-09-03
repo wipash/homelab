@@ -19,14 +19,6 @@ spec:
             image:
               repository: docker.io/drpsychick/airprint-bridge
               tag: latest@sha256:4b8d0d88f51015c2b5c693fc469696e444a3ab9e42d11bb46ec4fff9ea85bd0a
-            command:
-              - /bin/bash
-              - -ec
-            args:
-              - |
-                grep -Fq 'cupsctl -h localhost:631 --share-printers' /root/start-cups.sh
-                sed -i 's#cupsctl -h localhost:631 --share-printers#cupsctl -h /run/cups/cups.sock --share-printers#' /root/start-cups.sh
-                exec /root/start-cups.sh
             env:
               TZ: Pacific/Auckland
               CUPS_ADMIN_USER: print
