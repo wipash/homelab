@@ -11,8 +11,9 @@
 ## Repository Structure
 
 ```
+talos/                    # Talos base template, node overlays, and image schematic
+  nodes/                  # Per-node Talos machine configuration overlays
 kubernetes/
-  bootstrap/talos/     # Talos machine config (talconfig.yaml)
   flux/
     config/            # Flux system bootstrap
     repositories/helm/ # HelmRepository sources (~40 repos)

@@ -1,9 +1,0 @@
-talosconfig*
-cluster-0-*.yaml
-main-*.yaml
-main-hp1.k8s.mcgrath.nz.yaml
-main-hp2.k8s.mcgrath.nz.yaml
-main-hp3.k8s.mcgrath.nz.yaml
-homelab-hp1.k8s.mcgrath.nz.yaml
-homelab-hp2.k8s.mcgrath.nz.yaml
-homelab-hp3.k8s.mcgrath.nz.yaml
