@@ -1,7 +1,7 @@
 # Homelab Kubernetes Cluster
 
-[![Talos](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fwipash%2Fhomelab%2Fmain%2Fkubernetes%2Fmain%2Fbootstrap%2Ftalos%2Ftalconfig.yaml&query=talosVersion&style=for-the-badge&logo=talos&logoColor=white&color=blue&label=Talos)](https://www.talos.dev/)
-[![Kubernetes](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fwipash%2Fhomelab%2Fmain%2Fkubernetes%2Fmain%2Fbootstrap%2Ftalos%2Ftalconfig.yaml&query=kubernetesVersion&style=for-the-badge&logo=kubernetes&logoColor=white&color=blue&label=Kubernetes)](https://kubernetes.io/)
+[![Talos](https://img.shields.io/badge/Talos-Linux-blue?style=for-the-badge&logo=talos&logoColor=white)](https://www.talos.dev/)
+[![Kubernetes](https://img.shields.io/badge/Kubernetes-cluster-blue?style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io/)
 
 This repository contains the GitOps configuration for my homelab Kubernetes cluster. It's powered by [Flux](https://fluxcd.io/) and [Talos Linux](https://www.talos.dev/)
 

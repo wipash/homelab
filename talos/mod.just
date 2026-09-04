@@ -36,7 +36,8 @@ reboot-node node:
 [doc('Render Talos config for a node')]
 render-config node:
     talosctl machineconfig patch <(just template "{{ talos_dir }}/machineconfig.yaml.j2") \
-        -p @<(just template "{{ talos_dir }}/nodes/{{ node }}.yaml.j2")
+        --patch "$(just template "{{ talos_dir }}/nodes/{{ node }}.yaml.j2")"
+    just template "{{ talos_dir }}/watchdog.yaml.j2"
 
 [doc('Reset a node')]
 reset-node node *args:

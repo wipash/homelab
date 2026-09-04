@@ -201,8 +201,3 @@ cluster:
   aescbcEncryptionSecret: op://Homelab/talos/CLUSTER_AESCBCENCRYPTIONSECRET
   serviceAccount:
     key: op://Homelab/talos/CLUSTER_SERVICEACCOUNT_KEY
----
-apiVersion: v1alpha1
-kind: WatchdogTimerConfig
-device: /dev/watchdog0
-timeout: 10m
