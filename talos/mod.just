@@ -26,7 +26,7 @@ generate-kubeconfig:
 
 [doc('Generate schematic ID from Talos schematic')]
 gen-schematic-id:
-    curl -sX POST --data-binary @<(just template "{{ talos_dir }}/schematic.yaml.j2") "https://factory.talos.dev/schematics" | jq -r '.id'
+    just template "{{ talos_dir }}/schematic.yaml.j2" | curl -sfX POST --data-binary @- "https://factory.talos.dev/schematics" | jq -er '.id'
 
 [doc('Reboot a node')]
 reboot-node node:
