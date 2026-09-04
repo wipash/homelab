@@ -38,7 +38,7 @@ spec:
               #       fieldPath: status.podIP
               # QBT_BitTorrent__Session__InterfaceName: eth0
             probes:
-              liveness: &probes
+              liveness:
                 enabled: true
                 custom: true
                 spec:
@@ -48,7 +48,21 @@ spec:
                   periodSeconds: 30
                   timeoutSeconds: 10
                   failureThreshold: 6
-              readiness: *probes
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - /usr/bin/curl
+                      - --fail
+                      - --silent
+                      - --show-error
+                      - http://127.0.0.1:80/api/v2/app/version
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+                  timeoutSeconds: 10
+                  failureThreshold: 6
               startup:
                 enabled: true
                 spec:
