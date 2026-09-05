@@ -6,3 +6,18 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+patches:
+  # Keep the application PVC on Retain, but delete disposable mover volumes.
+  - target:
+      kind: Replication(Source|Destination)
+    patch: |-
+      - op: replace
+        path: /spec/restic/storageClassName
+        value: synology-iscsi-ephemeral
+  # DSM snapshots depend on their source LUN remaining present.
+  - target:
+      kind: ReplicationDestination
+    patch: |-
+      - op: replace
+        path: /spec/restic/cleanupTempPVC
+        value: false
