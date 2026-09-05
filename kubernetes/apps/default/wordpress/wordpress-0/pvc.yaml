@@ -10,7 +10,7 @@ spec:
   accessModes: ["ReadWriteMany"]
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    server: 172.20.0.1
+    server: 10.0.16.16
     path: /volume1/Data/wordpress/wordpress-0
 
 ---

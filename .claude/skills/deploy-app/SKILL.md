@@ -42,7 +42,7 @@ If the user specifies `latest` as the tag, still pin the digest — `latest` is 
   - How much? (becomes `VOLSYNC_CAPACITY` — default 5Gi)
   - What mount path? (default `/config`)
   - Any additional volumes (cache, data dirs)?
-- **NFS media mount**: does it need access to the NAS media library at `172.20.0.1:/volume1/Media`?
+- **NFS media mount**: does it need access to the NAS media library at `10.0.16.16:/volume1/Media`?
 - **Secrets**: does the app need secrets from 1Password? If yes:
   - What env vars need to be secret?
   - Does it need a Postgres database? (triggers the init-db pattern)
@@ -110,7 +110,7 @@ Create a separate `pvc.yaml` with `storageClassName: ceph-block`.
 persistence:
   media:
     type: nfs
-    server: 172.20.0.1
+    server: 10.0.16.16
     path: /volume1/Media
     globalMounts:
       - path: /media

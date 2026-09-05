@@ -340,7 +340,7 @@ Add to persistence:
 ```yaml
       media:
         type: nfs
-        server: 172.20.0.1
+        server: 10.0.16.16
         path: /volume1/Media
         globalMounts:
           - path: /media
