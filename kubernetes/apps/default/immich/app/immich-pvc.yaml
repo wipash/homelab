@@ -28,6 +28,7 @@ metadata:
 spec:
   accessModes: ["ReadWriteMany"]
   storageClassName: immich-nfs
+  volumeName: immich-nfs
   resources:
     requests:
       storage: 1Mi # Size does not matter ...twss
