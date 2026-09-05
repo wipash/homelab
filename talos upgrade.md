@@ -84,3 +84,52 @@ talosctl upgrade --nodes 10.0.16.133 --preserve=true --image factory.talos.dev/i
 talosctl upgrade --nodes 10.0.16.135 --preserve=true --image factory.talos.dev/installer/5e1f9b996489d8d98a4537001db4771766998326ba72d6af4ff807ef504f9b8c:v1.12.4 --reboot-mode powercycle
 
 talosctl upgrade --nodes 10.0.16.136 --preserve=true --image factory.talos.dev/installer/5e1f9b996489d8d98a4537001db4771766998326ba72d6af4ff807ef504f9b8c:v1.12.4 --reboot-mode powercycle
+
+## Talos v1.14 multi-document workflow
+
+The shared and per-node templates now emit dedicated configuration documents.
+Sign in to 1Password before using the Just recipes:
+
+```sh
+just talos validate-config hp1
+just talos validate-config hp2
+just talos validate-config hp3
+just talos upgrade-node hp1
+# Check node readiness, etcd, Ceph, Cilium, DNS and storage before the next node.
+just talos upgrade-node hp2
+just talos upgrade-node hp3
+just talos upgrade-k8s 1.37.0
+just talos apply-node hp1 --mode=no-reboot --dry-run
+just talos apply-node hp1
+# Verify recovery before repeating the config cutover for hp2 and hp3.
+```
+
+Upgrade the OS under the existing configuration first; apply the dedicated
+documents only after all nodes run v1.14. The Kubernetes v1.37 target exceeds
+Cilium v1.20's tested compatibility matrix (through v1.36); this is an accepted
+homelab trade-off, not an upstream compatibility guarantee.
+
+`render-config` combines base, node and watchdog documents. It decodes only the
+five dedicated Kubernetes CA/service-account PEM fields after vault injection;
+existing vault fields and cluster identity remain unchanged. Rendered output
+contains secrets: do not commit it or print config diffs into public logs.
+
+The full legacy `machine.kubelet` block remains because `extraMounts` has no
+dedicated replacement and Talos rejects coexistence with `KubeletConfig`.
+`/var/openebs/local` remains a shared writable bind mount. No `UserVolumeConfig`
+or storage migration is involved, and workload isolation remains disabled.
+
+Link aliases select the original NIC MACs without renaming physical interfaces.
+Static `LinkConfig` documents disable default DHCP. A route containing only
+`gateway: 10.0.16.1` preserves the IPv4 default route; v1.14 rejects an explicit
+`destination: 0.0.0.0/0` in this document.
+
+The authentication document allows anonymous requests only to `/livez`, `/readyz`
+and `/healthz`, which Talos uses for API server probes. Verify these return 200
+without credentials while `/api` returns 401; disabling anonymous authentication
+entirely causes the unauthenticated probes to fail and restart the API server.
+
+An etcd upgrade also advances its storage/protocol version. After the v1.14
+rollout advances etcd to 3.7, do not assume that reinstalling the previous Talos
+image is a safe rollback. Keep the pre-upgrade etcd snapshot and machine configs
+protected, and use an explicitly supported recovery procedure.

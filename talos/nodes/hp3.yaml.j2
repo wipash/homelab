@@ -1,20 +1,38 @@
 ---
-machine:
-  network:
-    hostname: hp3.k8s.mcgrath.nz
-    interfaces:
-      - deviceSelector:
-          hardwareAddr: "e4:1d:a5:9e:bd:ef"
-        addresses:
-          - 10.0.16.136/24
-          - 172.20.0.4/24
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 10.0.16.1
-        mtu: 1500
-        dhcp: false
-        vip:
-          ip: 10.0.16.132
-      - deviceSelector:
-          hardwareAddr: "a0:d3:c1:0f:e8:32"
-        dhcp: false
+apiVersion: v1alpha1
+kind: HostnameConfig
+hostname: hp3.k8s.mcgrath.nz
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: net0
+selector:
+  match: mac(link.permanent_addr) == "e4:1d:a5:9e:bd:ef"
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: net1
+selector:
+  match: mac(link.permanent_addr) == "a0:d3:c1:0f:e8:32"
+---
+apiVersion: v1alpha1
+kind: LinkConfig
+name: net0
+up: true
+mtu: 1500
+addresses:
+  - address: 10.0.16.136/24
+  - address: 172.20.0.4/24
+routes:
+  # Omitting destination selects the IPv4 default route.
+  - gateway: 10.0.16.1
+---
+apiVersion: v1alpha1
+kind: LinkConfig
+name: net1
+up: true
+---
+apiVersion: v1alpha1
+kind: Layer2VIPConfig
+name: 10.0.16.132
+link: net0

@@ -35,9 +35,28 @@ reboot-node node:
 
 [doc('Render Talos config for a node')]
 render-config node:
-    talosctl machineconfig patch <(just template "{{ talos_dir }}/machineconfig.yaml.j2") \
-        --patch "$(just template "{{ talos_dir }}/nodes/{{ node }}.yaml.j2")"
-    just template "{{ talos_dir }}/watchdog.yaml.j2"
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    base="$(
+        just template "{{ talos_dir }}/machineconfig.yaml.j2" |
+            yq -e '
+                (select(.kind == "KubeAPIServerCAConfig" or .kind == "KubeAggregatorCAConfig") |
+                    .issuingCA.cert) |= @base64d |
+                (select(.kind == "KubeAPIServerCAConfig" or .kind == "KubeAggregatorCAConfig") |
+                    .issuingCA.key) |= @base64d |
+                (select(.kind == "KubeServiceAccountConfig") |
+                    .issuer.privateKey) |= @base64d
+            '
+    )"
+    node="$(just template "{{ talos_dir }}/nodes/{{ node }}.yaml.j2")"
+    watchdog="$(just template "{{ talos_dir }}/watchdog.yaml.j2")"
+
+    printf '%s\n%s\n%s\n' "$base" "$node" "$watchdog"
+
+[doc('Validate Talos config for a node')]
+validate-config node:
+    just talos render-config "{{ node }}" | talosctl validate --mode metal --config /dev/stdin
 
 [doc('Reset a node')]
 reset-node node *args:
@@ -59,8 +78,8 @@ upgrade-node node *args:
 
 [private]
 node-ip node:
-    yq '.machine.network.interfaces[0].addresses[0] | sub("/.*", "")' "{{ talos_dir }}/nodes/{{ node }}.yaml.j2"
+    yq -e -r 'select(.kind == "LinkConfig" and .name == "net0") | .addresses[].address | select(test("^10\\.0\\.16\\.")) | sub("/.*", "")' "{{ talos_dir }}/nodes/{{ node }}.yaml.j2"
 
 [private]
 machine-image:
-    just template "{{ talos_dir }}/machineconfig.yaml.j2" | yq -e 'select(.machine) | .machine.install.image'
+    just template "{{ talos_dir }}/machineconfig.yaml.j2" | yq -e -r 'select(.kind == "UnattendedInstallConfig") | .installer.image'
