@@ -21,6 +21,7 @@ metadata:
 spec:
   accessModes: ["ReadWriteMany"]
   storageClassName: wordpress-0-nfs
+  volumeName: wordpress-0-nfs
   resources:
     requests:
       storage: 1Mi # Size does not matter ...twss
