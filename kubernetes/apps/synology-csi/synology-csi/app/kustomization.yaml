@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: synology-csi
+resources:
+  # Synology CSI v1.3.1; exclude upstream default class and common snapshot controller.
+  - https://raw.githubusercontent.com/SynologyOpenSource/synology-csi/d6e51755fb09dc8e6979aa4f7e14649158c1b6a3/deploy/kubernetes/v1.20/csi-driver.yml
+  - https://raw.githubusercontent.com/SynologyOpenSource/synology-csi/d6e51755fb09dc8e6979aa4f7e14649158c1b6a3/deploy/kubernetes/v1.20/controller.yml
+  - https://raw.githubusercontent.com/SynologyOpenSource/synology-csi/d6e51755fb09dc8e6979aa4f7e14649158c1b6a3/deploy/kubernetes/v1.20/node.yml
+  - https://raw.githubusercontent.com/SynologyOpenSource/synology-csi/d6e51755fb09dc8e6979aa4f7e14649158c1b6a3/deploy/kubernetes/v1.20/snapshotter/snapshotter.yaml
+  - ./externalsecret.yaml
+  - ./storage.yaml
+images:
+  - name: synology/synology-csi
+    newTag: v1.3.1
+    digest: sha256:8aa84848187648a65c899f54e96061d3f22cdba0ad8926d770b431d4b274406f
+  - name: registry.k8s.io/sig-storage/csi-snapshotter
+    newTag: v8.6.0
+    digest: sha256:42af0929bcd60a43499825c078a60ff0534e08af8fbeb283aa391be40feb9f3e
+patches:
+  - target:
+      kind: DaemonSet
+      name: synology-csi-node
+    patch: |-
+      - op: add
+        path: /spec/template/spec/tolerations
+        value:
+          - operator: Exists
+      # Talos has iscsiadm but no /usr/bin/env; an absolute path avoids PATH lookup.
+      - op: add
+        path: /spec/template/spec/containers/1/args/-
+        value: --iscsiadm-path=/usr/local/sbin/iscsiadm
+  - target:
+      kind: ClusterRole
+      name: synology-csi-snapshotter-role
+    patch: |-
+      - op: add
+        path: /rules/2/verbs/-
+        value: patch
+      - op: add
+        path: /rules/3/verbs/-
+        value: patch
