@@ -319,7 +319,7 @@ spec:
           - path: *homepath
       data:
         type: nfs
-        server: 172.20.0.1
+        server: 10.0.16.16
         path: /volume1/Data/claw
         globalMounts:
           - path: /data
