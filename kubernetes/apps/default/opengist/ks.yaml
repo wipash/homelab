@@ -12,21 +12,6 @@ spec:
       namespace: flux-system
   interval: 1h
   path: ./kubernetes/apps/default/opengist/app
-  patches:
-    # Keep the application PVC on Retain, but delete disposable mover volumes.
-    - target:
-        kind: Replication(Source|Destination)
-      patch: |-
-        - op: replace
-          path: /spec/restic/storageClassName
-          value: synology-iscsi-ephemeral
-    # DSM snapshots depend on their source LUN remaining present.
-    - target:
-        kind: ReplicationDestination
-      patch: |-
-        - op: replace
-          path: /spec/restic/cleanupTempPVC
-          value: false
   postBuild:
     substitute:
       APP: opengist
