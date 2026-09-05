@@ -12,7 +12,7 @@ spec:
   components:
     - ../../../../components/volsync
   dependsOn:
-    - name: rook-ceph-cluster
+    - name: synology-csi
       namespace: flux-system
   interval: 1h
   path: ./kubernetes/apps/default/changedetection/app
@@ -20,6 +20,11 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_LOCAL_SCHEDULE: "38 * * * *"
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
+      VOLSYNC_PUID: "0"
+      VOLSYNC_PGID: "1000"
   prune: true
   retryInterval: 2m
   sourceRef:

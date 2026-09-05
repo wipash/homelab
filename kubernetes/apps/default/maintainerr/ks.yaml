@@ -7,6 +7,9 @@ metadata:
   namespace: default
 spec:
   targetNamespace: default
+  dependsOn:
+    - name: synology-csi
+      namespace: flux-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -24,5 +27,10 @@ spec:
       APP: *app
       VOLSYNC_CAPACITY: 2Gi
       VOLSYNC_LOCAL_SCHEDULE: "48 * * * *"
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
+      VOLSYNC_PUID: "568"
+      VOLSYNC_PGID: "568"
   components:
     - ../../../../components/volsync
