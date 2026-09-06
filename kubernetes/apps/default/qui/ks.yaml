@@ -12,7 +12,11 @@ spec:
   components:
     - ../../../../components/volsync
   dependsOn:
-    - name: rook-ceph-cluster
+    - name: external-secrets-stores
+      namespace: kube-system
+    - name: synology-csi
+      namespace: flux-system
+    - name: volsync
       namespace: flux-system
   interval: 1h
   path: ./kubernetes/apps/default/qui/app
@@ -21,6 +25,11 @@ spec:
       APP: *app
       VOLSYNC_CAPACITY: 5Gi
       VOLSYNC_LOCAL_SCHEDULE: "57 * * * *"
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
+      VOLSYNC_PUID: "1000"
+      VOLSYNC_PGID: "1000"
   prune: true
   retryInterval: 2m
   sourceRef:
