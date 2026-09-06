@@ -1,0 +1,84 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app snmp-exporter-synology
+  namespace: monitoring
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: snmp-exporter-synology
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  dependsOn:
+    - name: kube-prometheus-stack
+      namespace: monitoring
+  # The exporter loads these subPath-mounted files at startup. Reuse the
+  # cluster reloader so credential and metadata updates restart the pod.
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+              name: snmp-exporter-synology
+            patch: |
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: snmp-exporter-synology
+                annotations:
+                  reloader.stakater.com/auto: "true"
+  values:
+    fullnameOverride: *app
+    image:
+      tag: v0.30.1@sha256:e5fd5e8b43ace6c088fe9bf0b37b7fff0e04380bee352be7ec41b853a4dd5859
+    securityContext:
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+    extraArgs:
+      - --config.file=/etc/snmp_exporter/snmp.yml
+      - --config.file=/config/snmp-auth.yml
+      - --config.file=/config/snmp-metadata.yml
+    extraConfigmapMounts:
+      - name: synology-snmp-metadata
+        mountPath: /config/snmp-metadata.yml
+        subPath: snmp-metadata.yml
+        configMap: synology-snmp-metadata
+        readOnly: true
+        defaultMode: 420
+    extraSecretMounts:
+      - name: synology-snmp-auth
+        mountPath: /config/snmp-auth.yml
+        subPath: snmp-auth.yml
+        secretName: snmp-exporter-synology
+        readOnly: true
+        defaultMode: 288
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        memory: 128Mi
+    serviceMonitor:
+      enabled: true
+      path: /snmp
+      scrapeTimeout: 30s
+      params:
+        - name: synology
+          module: [synology, if_mib, hrStorage, synology_lun_metadata]
+          target: 10.0.16.16
+          interval: 60s
+          auth: [synology_v3]
+          relabelings:
+            - targetLabel: instance
+              replacement: 10.0.16.16
+            - targetLabel: job
+              replacement: synology

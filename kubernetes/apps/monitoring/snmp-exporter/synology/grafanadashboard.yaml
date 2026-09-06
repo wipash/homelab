@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: synology-storage
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  folder: Storage
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus
+    - inputName: DS_LOKI
+      datasourceName: Loki
+  configMapRef:
+    name: synology-dashboard
+    key: synology-dashboard.json
