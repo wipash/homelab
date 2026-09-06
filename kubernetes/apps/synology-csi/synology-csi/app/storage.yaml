@@ -9,6 +9,7 @@ parameters:
   dsm: 10.0.16.16
   location: /volume3
   fsType: ext4
+  enableSpaceReclamation: "true"
 reclaimPolicy: Retain
 allowVolumeExpansion: true
 volumeBindingMode: Immediate
@@ -24,6 +25,7 @@ parameters:
   dsm: 10.0.16.16
   location: /volume3
   fsType: ext4
+  enableSpaceReclamation: "true"
 reclaimPolicy: Delete
 allowVolumeExpansion: true
 volumeBindingMode: Immediate
