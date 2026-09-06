@@ -54,6 +54,10 @@ spec:
           port: 6051
           protocol: UDP
           targetPort: 6051
+        - name: synology-syslog
+          port: 6052
+          protocol: TCP
+          targetPort: 6052
     customConfig:
       data_dir: /vector-data-dir
       api:
@@ -80,6 +84,16 @@ spec:
           host_key: source_addr
           decoding:
             codec: json
+        # DSM Log Center sends RFC 3164 syslog over TCP. The peer address is
+        # retained long enough to reject traffic from every host except brian.
+        synology_syslog:
+          type: socket
+          mode: tcp
+          address: 0.0.0.0:6052
+          max_length: 102400
+          host_key: source_addr
+          decoding:
+            codec: syslog
       transforms:
         # Tag the origin before merging, since a single remap cannot tell
         # which source an event arrived on.
@@ -97,13 +111,12 @@ spec:
           type: remap
           inputs: ["talos_kernel_tagged", "talos_service_tagged"]
           source: |
-            # host_key records the peer as "10.0.16.136:41234"; keep the address.
+            # Map only known physical peers; do not guess the origin of a
+            # SNAT address. Those logs intentionally remain node=unknown.
             addr = to_string(.source_addr) ?? ""
             .node_ip = split(addr, ":")[0]
             del(.source_addr)
 
-            # Kernel logs carry no hostname, so the peer address is the only
-            # way to attribute them. IPs match talos/nodes/*.yaml.j2.
             .node = if .node_ip == "10.0.16.133" {
               "hp1"
             } else if .node_ip == "10.0.16.135" {
@@ -147,6 +160,36 @@ spec:
               "other"
             }
             del(.fields)
+        synology_from_brian:
+          type: filter
+          inputs: ["synology_syslog"]
+          condition: .source_addr == "10.0.16.16"
+        synology:
+          type: remap
+          inputs: ["synology_from_brian"]
+          source: |
+            del(.source_addr)
+            del(.port)
+            .host = "brian"
+
+            # Normalize RFC 3164 severity names to the same bounded vocabulary
+            # already used by the Talos sink.
+            severity = downcase(to_string(.severity) ?? "info")
+            .level = if severity == "emergency" {
+              "emerg"
+            } else if severity == "critical" {
+              "crit"
+            } else if severity == "error" {
+              "err"
+            } else if severity == "warning" {
+              "warn"
+            } else if severity == "informational" {
+              "info"
+            } else if includes(["emerg", "alert", "crit", "err", "warn", "notice", "info", "debug"], severity) {
+              severity
+            } else {
+              "info"
+            }
       sinks:
         # The chart's podMonitor scrapes a container port named "prom-exporter",
         # which is derived from this sink's id -- keep the name in step with it.
@@ -175,3 +218,15 @@ spec:
             stream: '{{ "{{ stream }}" }}'
             facility: '{{ "{{ facility }}" }}'
             level: '{{ "{{ level }}" }}'
+        synology_loki:
+          type: loki
+          inputs: ["synology"]
+          endpoint: http://loki-headless.monitoring.svc.cluster.local:3100
+          encoding:
+            codec: text
+          labels:
+            job: synology
+            host: brian
+            level: '{{ "{{ level }}" }}'
+          # `level` is normalized through the allow-list above.
+          dangerously_allow_unconfined_template_resolution: true

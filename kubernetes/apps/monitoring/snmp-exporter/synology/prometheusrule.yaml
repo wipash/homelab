@@ -1,0 +1,336 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: synology
+spec:
+  groups:
+    - name: synology.iscsi
+      rules:
+        # Join the actual iSCSI target PV to its current claim. Unmounted
+        # recovery staging has no node disk and is intentionally absent.
+        - record: synology:iscsi_device:info
+          expr: |
+            max by (instance, device, kubernetes_node, volumename) (
+              label_replace(
+                node_disk_info{job="node-exporter",path=~"ip-10[.]0[.]16[.]16:3260-iscsi-.*"},
+                "volumename", "$1", "path",
+                ".*[.](pvc-[0-9a-f-]+)-lun-[0-9]+"
+              )
+            )
+            * on (volumename) group_left (namespace, persistentvolumeclaim)
+            max by (volumename, namespace, persistentvolumeclaim) (
+              kube_persistentvolumeclaim_info{storageclass=~"synology-iscsi.*"}
+            )
+        - record: synology:iscsi_read_iops:rate5m
+          expr: |
+            max by (instance, device) (
+              rate(node_disk_reads_completed_total{job="node-exporter"}[5m])
+            )
+            * on (instance, device)
+              group_left (namespace, persistentvolumeclaim, kubernetes_node)
+              synology:iscsi_device:info
+        - record: synology:iscsi_write_iops:rate5m
+          expr: |
+            max by (instance, device) (
+              rate(node_disk_writes_completed_total{job="node-exporter"}[5m])
+            )
+            * on (instance, device)
+              group_left (namespace, persistentvolumeclaim, kubernetes_node)
+              synology:iscsi_device:info
+        - record: synology:iscsi_read_bytes:rate5m
+          expr: |
+            max by (instance, device) (
+              rate(node_disk_read_bytes_total{job="node-exporter"}[5m])
+            )
+            * on (instance, device)
+              group_left (namespace, persistentvolumeclaim, kubernetes_node)
+              synology:iscsi_device:info
+        - record: synology:iscsi_write_bytes:rate5m
+          expr: |
+            max by (instance, device) (
+              rate(node_disk_written_bytes_total{job="node-exporter"}[5m])
+            )
+            * on (instance, device)
+              group_left (namespace, persistentvolumeclaim, kubernetes_node)
+              synology:iscsi_device:info
+        # Mean Linux block-device completion time, not a latency percentile
+        # or DSM service time. No samples when there are no operations.
+        - record: synology:iscsi_read_latency_seconds:rate5m
+          expr: |
+            (
+              max by (instance, device) (
+                rate(node_disk_read_time_seconds_total{job="node-exporter"}[5m])
+              )
+              * on (instance, device)
+                group_left (namespace, persistentvolumeclaim, kubernetes_node)
+                synology:iscsi_device:info
+              / synology:iscsi_read_iops:rate5m
+            ) and (synology:iscsi_read_iops:rate5m > 0)
+        - record: synology:iscsi_write_latency_seconds:rate5m
+          expr: |
+            (
+              max by (instance, device) (
+                rate(node_disk_write_time_seconds_total{job="node-exporter"}[5m])
+              )
+              * on (instance, device)
+                group_left (namespace, persistentvolumeclaim, kubernetes_node)
+                synology:iscsi_device:info
+              / synology:iscsi_write_iops:rate5m
+            ) and (synology:iscsi_write_iops:rate5m > 0)
+        # The controller retains metrics for deleted proof resources. Join
+        # source names (including the -r2 suffix) to current Synology claims.
+        - record: synology:backup_out_of_sync
+          expr: |
+            label_replace(
+              label_replace(
+                max by (obj_namespace, obj_name) (
+                  volsync_volume_out_of_sync{role="source"}
+                ), "namespace", "$1", "obj_namespace", "(.*)"
+              ), "persistentvolumeclaim", "$1", "obj_name", "(.*?)(-r2)?"
+            )
+            and on (namespace, persistentvolumeclaim)
+            max by (namespace, persistentvolumeclaim) (
+              kube_persistentvolumeclaim_info{storageclass=~"synology-iscsi.*"}
+            )
+        - alert: SynologyISCSIHighReadLatency
+          expr: |
+            (synology:iscsi_read_latency_seconds:rate5m > 0.1)
+            and (synology:iscsi_read_iops:rate5m > 1)
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: >-
+              High iSCSI read latency for
+              {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }}
+            description: >-
+              Mean client block-device read completion exceeds 100ms at
+              more than 1 IOPS for 15 minutes on {{ $labels.kubernetes_node }}.
+              Check NAS disk/RAID activity, network errors and iSCSI logs.
+            dashboard_url: https://grafana.mcgrath.nz/d/synology-storage
+        - alert: SynologyISCSIHighWriteLatency
+          expr: |
+            (synology:iscsi_write_latency_seconds:rate5m > 0.1)
+            and (synology:iscsi_write_iops:rate5m > 1)
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: >-
+              High iSCSI write latency for
+              {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }}
+            description: >-
+              Mean client block-device write completion exceeds 100ms at
+              more than 1 IOPS for 15 minutes on {{ $labels.kubernetes_node }}.
+              Check NAS disk/RAID activity, network errors and iSCSI logs.
+            dashboard_url: https://grafana.mcgrath.nz/d/synology-storage
+        - alert: SynologyISCSIStalledIO
+          expr: |
+            (
+              max by (instance, device) (
+                node_disk_io_now{job="node-exporter"}
+              )
+              * on (instance, device)
+                group_left (namespace, persistentvolumeclaim, kubernetes_node)
+                synology:iscsi_device:info
+              > 0
+            )
+            and (
+              synology:iscsi_read_iops:rate5m
+              + synology:iscsi_write_iops:rate5m == 0
+            )
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: >-
+              Stalled iSCSI I/O for
+              {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }}
+            description: >-
+              Requests remain in flight on {{ $labels.kubernetes_node }}
+              with no completed reads or writes in the five-minute rate
+              window, sustained for five minutes. Check iSCSI sessions,
+              NAS availability and kernel logs. Idle disks do not trigger.
+            dashboard_url: https://grafana.mcgrath.nz/d/synology-storage
+    - name: synology.nas
+      rules:
+        # HOST-RESOURCES values were checked byte-for-byte against DSM df.
+        # RAID/LUN allocation and provisioned capacity are different views.
+        - record: synology:volume_capacity_bytes
+          expr: |
+            max by (instance, hrStorageDescr) (
+              hrStorageSize{job="synology",hrStorageDescr=~"/volume[0-9]+"}
+              * hrStorageAllocationUnits{job="synology"}
+            )
+        - record: synology:volume_available_bytes
+          expr: |
+            max by (instance, hrStorageDescr) (
+              (
+                hrStorageSize{job="synology",hrStorageDescr=~"/volume[0-9]+"}
+                - hrStorageUsed{job="synology"}
+              ) * hrStorageAllocationUnits{job="synology"}
+            )
+        - record: synology:lun:info
+          expr: |
+            label_replace(
+              group by (instance, iSCSILUNInfoIndex, iSCSILUNName) (
+                iSCSILUNInfo{job="synology"}
+              ), "volumename", "$1", "iSCSILUNName",
+              "k8s-csi-(pvc-[0-9a-f-]+)"
+            )
+            * on (volumename) group_left (namespace, persistentvolumeclaim)
+            max by (volumename, namespace, persistentvolumeclaim) (
+              kube_persistentvolumeclaim_info{storageclass=~"synology-iscsi.*"}
+            )
+        - alert: SynologyMonitoringUnavailable
+          expr: |
+            up{job="synology",instance="10.0.16.16"} == 0
+            or absent(up{job="synology",instance="10.0.16.16"})
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Synology SNMP monitoring is unavailable
+            description: >-
+              Authenticated NAS collection has failed or disappeared for
+              five minutes. Check the exporter, SNMPv3 credentials, network
+              and DSM. This alone does not prove the storage service is down.
+            dashboard_url: https://grafana.mcgrath.nz/d/synology-storage
+        - alert: SynologyVolumeSpaceCritical
+          expr: |
+            synology:volume_available_bytes
+            / synology:volume_capacity_bytes < 0.05
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: >-
+              Synology {{ $labels.hrStorageDescr }} has less than 5% free
+            description: >-
+              Physical NAS filesystem space is critically low. Thin LUNs,
+              snapshots and other data share this capacity. Check DSM;
+              do not delete protected recovery staging or rollback data.
+            dashboard_url: https://grafana.mcgrath.nz/d/synology-storage
+        - alert: SynologyVolumeSpaceLow
+          expr: |
+            (
+              synology:volume_available_bytes
+              / synology:volume_capacity_bytes < 0.15
+            ) and (
+              synology:volume_available_bytes
+              / synology:volume_capacity_bytes >= 0.05
+            )
+          for: 30m
+          labels:
+            severity: warning
+          annotations:
+            summary: >-
+              Synology {{ $labels.hrStorageDescr }} has less than 15% free
+            description: >-
+              Physical NAS filesystem capacity is low. Inspect growth and
+              snapshot retention before expanding thin LUNs. Protected
+              recovery and rollback data must not be deleted automatically.
+            dashboard_url: https://grafana.mcgrath.nz/d/synology-storage
+        - alert: SynologyVolumeFillingUp
+          expr: |
+            (
+              synology:volume_available_bytes
+              / synology:volume_capacity_bytes < 0.20
+            )
+            and (predict_linear(synology:volume_available_bytes[6h], 86400) < 0)
+            and (count_over_time(synology:volume_available_bytes[6h]) >= 300)
+            and (
+              synology:volume_available_bytes
+              / synology:volume_capacity_bytes >= 0.15
+            )
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: >-
+              Synology {{ $labels.hrStorageDescr }} may fill within 24 hours
+            description: >-
+              Free space is below 20% and the recent trend predicts
+              exhaustion within a day. Requires at least 300 observations
+              before forecasting; investigate growth rather than treating
+              the prediction as a guarantee.
+            dashboard_url: https://grafana.mcgrath.nz/d/synology-storage
+        # Vendor codes 2-10 and 13-20 include expected repair/scrub/migration
+        # transitions; they are not failures merely because they are not 1.
+        - alert: SynologyRAIDDegraded
+          expr: |
+            raidStatus{job="synology"} == 11
+            or raidStatus{job="synology"} == 12
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Synology {{ $labels.raidName }} is degraded or crashed
+            description: >-
+              DSM reports degraded (11) or crashed/read-only (12) RAID.
+              Inspect Storage Manager and independent DSM notifications.
+            dashboard_url: https://grafana.mcgrath.nz/d/synology-storage
+        - alert: SynologyDiskFailed
+          expr: diskStatus{job="synology"} >= 4
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Synology {{ $labels.diskID }} reports a disk failure
+            description: >-
+              DSM reports system-partition failure (4), crashed (5) or
+              disconnected (6). Inspect Storage Manager before acting.
+            dashboard_url: https://grafana.mcgrath.nz/d/synology-storage
+        - alert: SynologyDiskHealthCritical
+          expr: diskHealthStatus{job="synology"} >= 3
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Synology {{ $labels.diskID }} health is critical
+            description: DSM reports critical (3) or failing (4) disk health.
+            dashboard_url: https://grafana.mcgrath.nz/d/synology-storage
+        - alert: SynologyDiskHealthWarning
+          expr: diskHealthStatus{job="synology"} == 2
+          for: 30m
+          labels:
+            severity: warning
+          annotations:
+            summary: Synology {{ $labels.diskID }} has a health warning
+            description: Inspect DSM disk health and SMART diagnostics.
+            dashboard_url: https://grafana.mcgrath.nz/d/synology-storage
+        - alert: SynologyHardwareFault
+          expr: |
+            label_replace(systemStatus{job="synology"},
+              "component", "system", "instance", ".*") == 2
+            or label_replace(powerStatus{job="synology"},
+              "component", "power", "instance", ".*") == 2
+            or label_replace(systemFanStatus{job="synology"},
+              "component", "system fan", "instance", ".*") == 2
+            or label_replace(cpuFanStatus{job="synology"},
+              "component", "CPU fan", "instance", ".*") == 2
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Synology reports a {{ $labels.component }} fault
+            description: DSM reports failed hardware status; inspect the NAS.
+            dashboard_url: https://grafana.mcgrath.nz/d/synology-storage
+        - alert: SynologyNetworkErrors
+          expr: |
+            (
+              rate(ifInErrors{job="synology"}[5m])
+              + rate(ifOutErrors{job="synology"}[5m])
+            ) > 1
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: Synology {{ $labels.ifName }} has sustained packet errors
+            description: >-
+              More than one receive/transmit error per second persists
+              for 15 minutes. Check cable, transceiver, switch counters
+              and MTU. Disconnected unused interfaces alone do not alert.
+            dashboard_url: https://grafana.mcgrath.nz/d/synology-storage
