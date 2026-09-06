@@ -84,14 +84,19 @@ spec:
           host_key: source_addr
           decoding:
             codec: json
-        # DSM Log Center sends RFC 3164 syslog over TCP. The peer address is
-        # retained long enough to reject traffic from every host except brian.
+        # DSM must send IETF/RFC 5424, preserving its Auckland UTC offset.
+        # BSD timestamps omit the timezone and look 12-13 hours in the future.
+        # Accept RFC 6587 octet counting (and newline framing) over TCP.
         synology_syslog:
           type: socket
           mode: tcp
           address: 0.0.0.0:6052
           max_length: 102400
           host_key: source_addr
+          framing:
+            method: octet_counting
+            octet_counting:
+              max_length: 102400
           decoding:
             codec: syslog
       transforms:
@@ -172,7 +177,7 @@ spec:
             del(.port)
             .host = "brian"
 
-            # Normalize RFC 3164 severity names to the same bounded vocabulary
+            # Normalize syslog severity names to the same bounded vocabulary
             # already used by the Talos sink.
             severity = downcase(to_string(.severity) ?? "info")
             .level = if severity == "emergency" {
