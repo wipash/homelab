@@ -17,6 +17,25 @@ spec:
           reloader.stakater.com/auto: "true"
 
         initContainers:
+          # Restic restores into a provisioned filesystem root, whose inode is
+          # not part of the archive. Repair only that mountpoint before Mealie.
+          fix-data-root:
+            image:
+              repository: ghcr.io/mealie-recipes/mealie
+              tag: v3.25.1
+            command:
+              - /bin/sh
+              - -c
+            args:
+              - chown 911:911 /app/data
+            securityContext:
+              allowPrivilegeEscalation: false
+              runAsNonRoot: false
+              runAsUser: 0
+              runAsGroup: 0
+              capabilities:
+                drop: ["ALL"]
+                add: ["CHOWN"]
           init-db:
             image:
               repository: ghcr.io/home-operations/postgres-init
