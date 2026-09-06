@@ -19,13 +19,16 @@ spec:
   wait: false
   interval: 10m
   dependsOn:
-    - name: external-secrets-stores
-      namespace: kube-system
-    - name: volsync
+    - name: synology-csi
       namespace: flux-system
   postBuild:
     substitute:
       APP: *app
       VOLSYNC_LOCAL_SCHEDULE: "20 */6 * * *"
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
+      VOLSYNC_PUID: "568"
+      VOLSYNC_PGID: "568"
   components:
     - ../../../../components/volsync

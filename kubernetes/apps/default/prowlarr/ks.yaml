@@ -13,6 +13,8 @@ spec:
   dependsOn:
     - name: external-secrets-stores
       namespace: kube-system
+    - name: synology-csi
+      namespace: flux-system
   path: ./kubernetes/apps/default/prowlarr/app
   prune: true
   sourceRef:
@@ -27,5 +29,10 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_LOCAL_SCHEDULE: "10 * * * *"
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
+      VOLSYNC_PUID: "568"
+      VOLSYNC_PGID: "568"
   components:
     - ../../../../components/volsync

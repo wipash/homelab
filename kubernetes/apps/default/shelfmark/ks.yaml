@@ -7,6 +7,9 @@ metadata:
   namespace: default
 spec:
   targetNamespace: default
+  dependsOn:
+    - name: synology-csi
+      namespace: flux-system
   path: ./kubernetes/apps/default/shelfmark/app
   prune: true
   sourceRef:
@@ -21,6 +24,9 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 5Gi
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
       VOLSYNC_LOCAL_SCHEDULE: "50 * * * *"
   components:
     - ../../../../components/volsync
