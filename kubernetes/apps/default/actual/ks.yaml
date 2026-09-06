@@ -21,7 +21,7 @@ spec:
     namespace: flux-system
   wait: false
   dependsOn:
-    - name: rook-ceph-cluster
+    - name: synology-csi
       namespace: flux-system
     - name: volsync
       namespace: flux-system
@@ -31,3 +31,8 @@ spec:
     substitute:
       APP: *appname
       VOLSYNC_LOCAL_SCHEDULE: "45 * * * *"
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
+      VOLSYNC_PUID: "568"
+      VOLSYNC_PGID: "568"

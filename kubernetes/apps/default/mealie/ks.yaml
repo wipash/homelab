@@ -13,6 +13,8 @@ spec:
   dependsOn:
     - name: cloudnative-pg-cluster
       namespace: flux-system
+    - name: synology-csi
+      namespace: flux-system
     - name: external-secrets-stores
       namespace: kube-system
     - name: volsync
@@ -31,5 +33,10 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_LOCAL_SCHEDULE: "33 * * * *"
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
+      VOLSYNC_PUID: "911"
+      VOLSYNC_PGID: "911"
   components:
     - ../../../../components/volsync

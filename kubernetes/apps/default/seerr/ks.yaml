@@ -15,6 +15,8 @@ spec:
       namespace: kube-system
     - name: volsync
       namespace: flux-system
+    - name: synology-csi
+      namespace: flux-system
   path: ./kubernetes/apps/default/seerr/app
   prune: true
   sourceRef:
@@ -28,6 +30,9 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
       VOLSYNC_CAPACITY: 5Gi
       VOLSYNC_LOCAL_SCHEDULE: "30 * * * *"
   components:
