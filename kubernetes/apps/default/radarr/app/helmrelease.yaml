@@ -9,9 +9,6 @@ spec:
     kind: OCIRepository
     name: radarr
   interval: 1h
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
   values:
     controllers:
       radarr:
