@@ -104,7 +104,7 @@
     },
     {
       "id": 2,
-      "title": "Authenticated NAS scrape",
+      "title": "SNMPv3 scrape",
       "type": "stat",
       "description": "Scrape success is not a direct guarantee of working iSCSI. Missing data remains missing.",
       "datasource": {
@@ -122,7 +122,7 @@
           "unit": "short",
           "min": 0,
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "mappings": [
             {
@@ -184,7 +184,7 @@
     },
     {
       "id": 3,
-      "title": "Degraded / crashed RAID objects",
+      "title": "RAID failures",
       "type": "stat",
       "description": "",
       "datasource": {
@@ -202,7 +202,7 @@
           "unit": "short",
           "min": 0,
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
@@ -252,7 +252,7 @@
     },
     {
       "id": 4,
-      "title": "Disks with health warnings",
+      "title": "Disk warnings",
       "type": "stat",
       "description": "",
       "datasource": {
@@ -270,7 +270,7 @@
           "unit": "short",
           "min": 0,
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
@@ -320,7 +320,7 @@
     },
     {
       "id": 5,
-      "title": "NAS system temperature",
+      "title": "NAS temperature",
       "type": "stat",
       "description": "",
       "datasource": {
@@ -338,7 +338,7 @@
           "unit": "celsius",
           "min": 0,
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
@@ -402,7 +402,7 @@
           "unit": "percent",
           "min": 0,
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
@@ -475,7 +475,7 @@
           "unit": "bytes",
           "min": 0,
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
@@ -686,7 +686,7 @@
           "unit": "short",
           "min": 0,
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "mappings": [
             {
@@ -861,7 +861,7 @@
           "unit": "short",
           "min": 0,
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "mappings": [
             {
@@ -951,7 +951,7 @@
           "unit": "short",
           "min": 0,
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "mappings": [
             {
@@ -1051,7 +1051,7 @@
           "unit": "short",
           "min": 0,
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "mappings": [
             {
@@ -1815,7 +1815,7 @@
           "unit": "short",
           "min": 0,
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
@@ -1879,7 +1879,7 @@
           "unit": "short",
           "min": 0,
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
@@ -1943,7 +1943,7 @@
           "unit": "short",
           "min": 0,
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
