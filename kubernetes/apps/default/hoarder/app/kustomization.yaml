@@ -6,3 +6,17 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+  - ./meilisearch-volsync.yaml
+patches:
+  - target:
+      kind: Replication(Source|Destination)
+    patch: |-
+      - op: replace
+        path: /spec/restic/storageClassName
+        value: synology-iscsi-ephemeral
+  - target:
+      kind: ReplicationDestination
+    patch: |-
+      - op: replace
+        path: /spec/restic/cleanupTempPVC
+        value: false
