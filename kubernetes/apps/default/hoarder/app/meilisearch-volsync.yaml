@@ -1,0 +1,138 @@
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: hoarder-meilisearch-volsync
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  target:
+    name: hoarder-meilisearch-volsync-secret
+    template:
+      data:
+        RESTIC_REPOSITORY: "{{ .REPOSITORY_TEMPLATE }}/hoarder-meilisearch"
+        RESTIC_PASSWORD: "{{ .RESTIC_PASSWORD }}"
+        AWS_ACCESS_KEY_ID: "{{ .MINIO_ROOT_USER }}"
+        AWS_SECRET_ACCESS_KEY: "{{ .MINIO_ROOT_PASSWORD }}"
+  dataFrom:
+    - extract:
+        key: minio
+    - extract:
+        key: volsync-minio-template
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: hoarder-meilisearch-volsync-r2
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  target:
+    name: hoarder-meilisearch-volsync-r2-secret
+    template:
+      data:
+        RESTIC_REPOSITORY: "{{ .REPOSITORY_TEMPLATE }}/hoarder-meilisearch"
+        RESTIC_PASSWORD: "{{ .RESTIC_PASSWORD }}"
+        AWS_ACCESS_KEY_ID: "{{ .AWS_ACCESS_KEY_ID }}"
+        AWS_SECRET_ACCESS_KEY: "{{ .AWS_SECRET_ACCESS_KEY }}"
+  dataFrom:
+    - extract:
+        key: volsync-r2-template
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: hoarder-meilisearch
+spec:
+  sourcePVC: hoarder-meilisearch
+  trigger:
+    schedule: "40 * * * *"
+  restic:
+    copyMethod: Snapshot
+    pruneIntervalDays: 14
+    repository: hoarder-meilisearch-volsync-secret
+    volumeSnapshotClassName: synology-iscsi
+    cacheCapacity: 1Gi
+    cacheStorageClassName: synology-iscsi-ephemeral
+    cacheAccessModes: [ReadWriteOnce]
+    storageClassName: synology-iscsi-ephemeral
+    accessModes: [ReadWriteOnce]
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+    retain:
+      hourly: 24
+      daily: 7
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: hoarder-meilisearch-r2
+spec:
+  sourcePVC: hoarder-meilisearch
+  trigger:
+    schedule: "35 0 * * *"
+  restic:
+    copyMethod: Snapshot
+    pruneIntervalDays: 14
+    repository: hoarder-meilisearch-volsync-r2-secret
+    volumeSnapshotClassName: synology-iscsi
+    cacheCapacity: 1Gi
+    cacheStorageClassName: synology-iscsi-ephemeral
+    cacheAccessModes: [ReadWriteOnce]
+    storageClassName: synology-iscsi-ephemeral
+    accessModes: [ReadWriteOnce]
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+    retain:
+      daily: 7
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+  name: hoarder-meilisearch
+  labels:
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+spec:
+  trigger:
+    manual: restore-once
+  restic:
+    repository: hoarder-meilisearch-volsync-secret
+    copyMethod: Snapshot
+    volumeSnapshotClassName: synology-iscsi
+    cacheStorageClassName: synology-iscsi-ephemeral
+    cacheAccessModes: [ReadWriteOnce]
+    cacheCapacity: 1Gi
+    storageClassName: synology-iscsi-ephemeral
+    accessModes: [ReadWriteOnce]
+    capacity: 1Gi
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+    enableFileDeletion: true
+    cleanupCachePVC: true
+    cleanupTempPVC: false
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: hoarder-meilisearch
+spec:
+  accessModes: [ReadWriteOnce]
+  dataSourceRef:
+    kind: ReplicationDestination
+    apiGroup: volsync.backube
+    name: hoarder-meilisearch
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: synology-iscsi

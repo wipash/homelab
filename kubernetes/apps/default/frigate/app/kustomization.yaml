@@ -7,6 +7,19 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   - ./resourceclaimtemplate.yaml
+patches:
+  - target:
+      kind: Replication(Source|Destination)
+    patch: |-
+      - op: replace
+        path: /spec/restic/storageClassName
+        value: synology-iscsi-ephemeral
+  - target:
+      kind: ReplicationDestination
+    patch: |-
+      - op: replace
+        path: /spec/restic/cleanupTempPVC
+        value: false
 configMapGenerator:
   - name: frigate-configmap
     files:

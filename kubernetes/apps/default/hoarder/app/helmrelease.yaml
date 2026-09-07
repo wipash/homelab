@@ -9,9 +9,6 @@ spec:
     kind: OCIRepository
     name: hoarder
   interval: 1h
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
   values:
     controllers:
       hoarder:
@@ -179,11 +176,7 @@ spec:
                 subPath: hoarder
 
       meilisearch:
-        type: persistentVolumeClaim
-        suffix: meilisearch
-        storageClass: ceph-block
-        accessMode: ReadWriteOnce
-        size: 1Gi
+        existingClaim: hoarder-meilisearch
         advancedMounts:
           meilisearch:
             app:
