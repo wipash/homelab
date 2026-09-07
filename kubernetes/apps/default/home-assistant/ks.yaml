@@ -11,6 +11,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
+    - name: synology-csi
+      namespace: flux-system
     - name: cloudnative-pg-cluster
       namespace: flux-system
     - name: external-secrets-stores
@@ -31,5 +33,10 @@ spec:
       VOLSYNC_CAPACITY: 5Gi
       VOLSYNC_CACHE_CAPACITY: 4Gi
       VOLSYNC_LOCAL_SCHEDULE: "28 * * * *"
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
+      VOLSYNC_PUID: "1000"
+      VOLSYNC_PGID: "65533"
   components:
     - ../../../../components/volsync
