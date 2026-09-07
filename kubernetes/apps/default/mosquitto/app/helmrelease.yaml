@@ -39,12 +39,6 @@ spec:
                 cpu: 10m
               limits:
                 memory: 100Mi
-        statefulset:
-          volumeClaimTemplates:
-            - name: config
-              storageClass: ceph-block
-              accessMode: ReadWriteOnce
-              size: 5Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -76,6 +70,8 @@ spec:
             persistence true
             persistence_location /config
     persistence:
+      config:
+        existingClaim: mosquitto
       config-file:
         type: configMap
         identifier: config

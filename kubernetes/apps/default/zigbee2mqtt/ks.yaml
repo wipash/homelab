@@ -12,6 +12,8 @@ spec:
       namespace: kube-system
     - name: node-feature-discovery-rules
       namespace: kube-system
+    - name: synology-csi
+      namespace: flux-system
   path: ./kubernetes/apps/default/zigbee2mqtt/app
   prune: true
   sourceRef:
@@ -27,5 +29,10 @@ spec:
       APP: *app
       VOLSYNC_CAPACITY: 1Gi
       VOLSYNC_LOCAL_SCHEDULE: "3 * * * *"
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
+      VOLSYNC_PUID: "1000"
+      VOLSYNC_PGID: "1000"
   components:
     - ../../../../components/volsync

@@ -18,9 +18,18 @@ spec:
   dependsOn:
     - name: external-secrets-stores
       namespace: kube-system
-    - name: volsync
+    - name: synology-csi
       namespace: flux-system
   postBuild:
     substitute:
       APP: *app
       CONTROLLER: StatefulSet
+      VOLSYNC_CAPACITY: 5Gi
+      VOLSYNC_LOCAL_SCHEDULE: "42 * * * *"
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
+      VOLSYNC_PUID: "1000"
+      VOLSYNC_PGID: "1000"
+  components:
+    - ../../../../components/volsync
