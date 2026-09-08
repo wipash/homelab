@@ -32,7 +32,7 @@ concurrency:
 
 env:
   LOG_LEVEL: debug
-  RENOVATE_DRY_RUN: "${{ inputs.dryRun == true }}"
+  RENOVATE_DRY_RUN: "${{ inputs.dryRun == 'true' && 'full' || '' }}"
   RENOVATE_PLATFORM: github
   RENOVATE_PLATFORM_COMMIT: true
   RENOVATE_INTERNAL_CHECKS_FILTER: strict
@@ -46,6 +46,9 @@ jobs:
   renovate:
     name: Renovate
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
     steps:
       - name: Generate Token
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
@@ -63,10 +66,10 @@ jobs:
       - name: Renovate
         uses: renovatebot/github-action@39b914146caeff8cd512e61c8992f1d5913af85c # v46.2.5
         env:
-          # Private GHCR digest lookups need registry auth, not the GitHub App token.
-          # GHCR_TOKEN uses the cluster's pull credential; refresh it on rotation.
+          # The CoSA package grants this repository Actions read access.
+          # Use the short-lived workflow token for GHCR, not the GitHub App token.
           RENOVATE_HOST_RULES: >-
-            [{"hostType":"docker","matchHost":"ghcr.io","username":"wipash","password":${{ toJSON(secrets.GHCR_TOKEN) }}}]
+            [{"hostType":"docker","matchHost":"ghcr.io","username":${{ toJSON(github.actor) }},"password":${{ toJSON(github.token) }}}]
         with:
           configurationFile: .github/renovate-config.json5
           token: "${{ steps.app-token.outputs.token }}"
