@@ -23,7 +23,7 @@ spec:
   dependsOn:
     - name: nfs-cache
       namespace: kube-system
-    - name: rook-ceph-cluster
+    - name: synology-csi
       namespace: flux-system
     - name: volsync
       namespace: flux-system
@@ -36,3 +36,8 @@ spec:
       APP: *appname
       VOLSYNC_CAPACITY: 5Gi
       VOLSYNC_LOCAL_SCHEDULE: "47 * * * *"
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache
+      VOLSYNC_PUID: "0"
+      VOLSYNC_PGID: "1000"
