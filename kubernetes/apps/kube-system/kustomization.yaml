@@ -13,6 +13,7 @@ resources:
   - ./intel-gpu-resource-driver/ks.yaml
   # - ./kube-image-keeper/ks.yaml
   - ./metrics-server/ks.yaml
+  - ./nfs-cache/ks.yaml
   - ./node-feature-discovery/ks.yaml
   - ./reloader/ks.yaml
   - ./descheduler/ks.yaml

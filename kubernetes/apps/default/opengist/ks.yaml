@@ -8,6 +8,8 @@ spec:
   components:
     - ../../../../components/volsync
   dependsOn:
+    - name: nfs-cache
+      namespace: kube-system
     - name: synology-csi
       namespace: flux-system
   interval: 1h
@@ -17,7 +19,7 @@ spec:
       APP: opengist
       VOLSYNC_STORAGECLASS: synology-iscsi
       VOLSYNC_SNAPSHOTCLASS: synology-iscsi
-      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache
   prune: true
   sourceRef:
     kind: GitRepository

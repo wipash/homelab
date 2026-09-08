@@ -1,0 +1,82 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app nfs-cache
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: nfs-cache
+  interval: 1h
+  values:
+    controllers:
+      nfs-cache:
+        replicas: 1
+        strategy: Recreate
+        serviceAccount:
+          identifier: *app
+        containers:
+          app:
+            image:
+              repository: registry.k8s.io/sig-storage/nfs-subdir-external-provisioner
+              tag: v4.0.2@sha256:63d5e04551ec8b5aae83b6f35938ca5ddc50a88d85492d9731810c31591fa4c9
+            env:
+              ENABLE_LEADER_ELECTION: "false"
+              NFS_PATH: /volume3/volsync-cache
+              NFS_SERVER: 10.0.16.16
+              PROVISIONER_NAME: mcgrath.nz/synology-nfs-cache
+              TZ: Pacific/Auckland
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["ALL"]
+                add: ["DAC_OVERRIDE", "FOWNER"]
+    rbac:
+      roles:
+        nfs-cache:
+          type: ClusterRole
+          rules:
+            - apiGroups: [""]
+              resources: ["persistentvolumes"]
+              verbs: ["get", "list", "watch", "create", "delete"]
+            - apiGroups: [""]
+              resources: ["persistentvolumeclaims"]
+              verbs: ["get", "list", "watch", "update"]
+            - apiGroups: ["storage.k8s.io"]
+              resources: ["storageclasses"]
+              verbs: ["get", "list", "watch"]
+            - apiGroups: [""]
+              resources: ["events"]
+              verbs: ["create", "update", "patch"]
+      bindings:
+        nfs-cache:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: *app
+          subjects:
+            - identifier: *app
+    serviceAccount:
+      nfs-cache: {}
+    defaultPodOptions:
+      automountServiceAccountToken: true
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        seccompProfile:
+          type: RuntimeDefault
+    persistence:
+      root:
+        existingClaim: nfs-cache-provisioner-root
+        globalMounts:
+          - path: /persistentvolumes
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp

@@ -8,6 +8,8 @@ metadata:
 spec:
   targetNamespace: default
   dependsOn:
+    - name: nfs-cache
+      namespace: kube-system
     - name: external-secrets-stores
       namespace: kube-system
   path: ./kubernetes/apps/default/librechat/app

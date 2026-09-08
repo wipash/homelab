@@ -8,6 +8,8 @@ metadata:
 spec:
   targetNamespace: default
   dependsOn:
+    - name: nfs-cache
+      namespace: kube-system
     - name: external-secrets-stores
       namespace: kube-system
     - name: node-feature-discovery-rules
@@ -31,7 +33,7 @@ spec:
       VOLSYNC_LOCAL_SCHEDULE: "3 * * * *"
       VOLSYNC_STORAGECLASS: synology-iscsi
       VOLSYNC_SNAPSHOTCLASS: synology-iscsi
-      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache
       VOLSYNC_PUID: "1000"
       VOLSYNC_PGID: "1000"
   components:

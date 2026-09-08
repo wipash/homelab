@@ -11,6 +11,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
+    - name: nfs-cache
+      namespace: kube-system
     - name: volsync
       namespace: flux-system
     - name: synology-csi
@@ -32,7 +34,7 @@ spec:
       VOLSYNC_LOCAL_SCHEDULE: "13 * * * *"
       VOLSYNC_STORAGECLASS: synology-iscsi
       VOLSYNC_SNAPSHOTCLASS: synology-iscsi
-      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache
       VOLSYNC_PUID: "568"
       VOLSYNC_PGID: "568"
   components:

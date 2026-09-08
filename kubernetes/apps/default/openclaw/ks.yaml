@@ -12,6 +12,8 @@ spec:
   components:
     - ../../../../components/volsync
   dependsOn:
+    - name: nfs-cache
+      namespace: kube-system
     - name: rook-ceph-cluster
       namespace: flux-system
   interval: 1h
