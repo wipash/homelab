@@ -62,6 +62,11 @@ jobs:
 
       - name: Renovate
         uses: renovatebot/github-action@39b914146caeff8cd512e61c8992f1d5913af85c # v46.2.5
+        env:
+          # Private GHCR digest lookups need registry auth, not the GitHub App token.
+          # GHCR_TOKEN uses the cluster's pull credential; refresh it on rotation.
+          RENOVATE_HOST_RULES: >-
+            [{"hostType":"docker","matchHost":"ghcr.io","username":"wipash","password":${{ toJSON(secrets.GHCR_TOKEN) }}}]
         with:
           configurationFile: .github/renovate-config.json5
           token: "${{ steps.app-token.outputs.token }}"
