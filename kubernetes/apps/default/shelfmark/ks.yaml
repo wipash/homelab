@@ -8,6 +8,8 @@ metadata:
 spec:
   targetNamespace: default
   dependsOn:
+    - name: nfs-cache
+      namespace: kube-system
     - name: synology-csi
       namespace: flux-system
   path: ./kubernetes/apps/default/shelfmark/app
@@ -26,7 +28,7 @@ spec:
       VOLSYNC_CAPACITY: 5Gi
       VOLSYNC_STORAGECLASS: synology-iscsi
       VOLSYNC_SNAPSHOTCLASS: synology-iscsi
-      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache
       VOLSYNC_LOCAL_SCHEDULE: "50 * * * *"
   components:
     - ../../../../components/volsync

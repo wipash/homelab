@@ -55,7 +55,7 @@ spec:
     repository: hoarder-meilisearch-volsync-secret
     volumeSnapshotClassName: synology-iscsi
     cacheCapacity: 1Gi
-    cacheStorageClassName: synology-iscsi-ephemeral
+    cacheStorageClassName: synology-nfs-cache
     cacheAccessModes: [ReadWriteOnce]
     storageClassName: synology-iscsi-ephemeral
     accessModes: [ReadWriteOnce]
@@ -82,7 +82,7 @@ spec:
     repository: hoarder-meilisearch-volsync-r2-secret
     volumeSnapshotClassName: synology-iscsi
     cacheCapacity: 1Gi
-    cacheStorageClassName: synology-iscsi-ephemeral
+    cacheStorageClassName: synology-nfs-cache
     cacheAccessModes: [ReadWriteOnce]
     storageClassName: synology-iscsi-ephemeral
     accessModes: [ReadWriteOnce]
@@ -107,7 +107,7 @@ spec:
     repository: hoarder-meilisearch-volsync-secret
     copyMethod: Snapshot
     volumeSnapshotClassName: synology-iscsi
-    cacheStorageClassName: synology-iscsi-ephemeral
+    cacheStorageClassName: synology-nfs-cache
     cacheAccessModes: [ReadWriteOnce]
     cacheCapacity: 1Gi
     storageClassName: synology-iscsi-ephemeral

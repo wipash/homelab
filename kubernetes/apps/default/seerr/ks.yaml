@@ -11,6 +11,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
+    - name: nfs-cache
+      namespace: kube-system
     - name: external-secrets-stores
       namespace: kube-system
     - name: volsync
@@ -32,7 +34,7 @@ spec:
       APP: *app
       VOLSYNC_STORAGECLASS: synology-iscsi
       VOLSYNC_SNAPSHOTCLASS: synology-iscsi
-      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache
       VOLSYNC_CAPACITY: 5Gi
       VOLSYNC_LOCAL_SCHEDULE: "30 * * * *"
   components:

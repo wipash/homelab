@@ -12,6 +12,8 @@ spec:
   components:
     - ../../../../components/volsync
   dependsOn:
+    - name: nfs-cache
+      namespace: kube-system
     - name: synology-csi
       namespace: flux-system
   interval: 1h
@@ -22,7 +24,7 @@ spec:
       VOLSYNC_LOCAL_SCHEDULE: "38 * * * *"
       VOLSYNC_STORAGECLASS: synology-iscsi
       VOLSYNC_SNAPSHOTCLASS: synology-iscsi
-      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-iscsi-ephemeral
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache
       VOLSYNC_PUID: "0"
       VOLSYNC_PGID: "1000"
   prune: true

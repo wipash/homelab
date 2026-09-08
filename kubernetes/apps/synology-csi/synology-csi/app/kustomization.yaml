@@ -20,6 +20,28 @@ images:
     digest: sha256:42af0929bcd60a43499825c078a60ff0534e08af8fbeb283aa391be40feb9f3e
 patches:
   - target:
+      kind: StatefulSet
+      name: synology-csi-controller
+    patch: |-
+      # Bound provisioning concurrency to avoid overwhelming DSM at target limits.
+      - op: replace
+        path: /spec/template/spec/containers/0/args/0
+        value: --timeout=5m
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --worker-threads=1
+  - target:
+      kind: StatefulSet
+      name: synology-csi-snapshotter
+    patch: |-
+      # Snapshot lookup scans every LUN; avoid concurrent full-inventory retries.
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --worker-threads=1
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --timeout=5m
+  - target:
       kind: DaemonSet
       name: synology-csi-node
     patch: |-

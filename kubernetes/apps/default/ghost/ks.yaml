@@ -13,6 +13,8 @@ spec:
     labels:
       app.kubernetes.io/name: *appdb
   dependsOn:
+    - name: nfs-cache
+      namespace: kube-system
     - name: external-secrets-stores
       namespace: kube-system
   path: ./kubernetes/apps/default/ghost/mariadb
@@ -45,6 +47,9 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  dependsOn:
+    - name: nfs-cache
+      namespace: kube-system
   path: ./kubernetes/apps/default/ghost/app
   prune: true
   sourceRef:
