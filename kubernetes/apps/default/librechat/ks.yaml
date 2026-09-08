@@ -69,6 +69,8 @@ spec:
   dependsOn:
     - name: external-secrets-stores
       namespace: kube-system
+    - name: synology-csi
+      namespace: flux-system
     - name: garage
       namespace: default
   path: ./kubernetes/apps/default/librechat/code-interpreter

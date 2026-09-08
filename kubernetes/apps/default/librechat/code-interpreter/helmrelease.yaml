@@ -117,7 +117,7 @@ spec:
 
       skill-deps:
         type: persistentVolumeClaim
-        storageClass: ceph-block
+        storageClass: synology-iscsi
         accessMode: ReadWriteOnce
         size: 10Gi
         globalMounts:

@@ -17,6 +17,8 @@ spec:
       namespace: kube-system
     - name: volsync
       namespace: flux-system
+    - name: synology-csi
+      namespace: flux-system
   path: ./kubernetes/apps/default/plex/app
   prune: true
   sourceRef:

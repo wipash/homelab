@@ -14,6 +14,8 @@ spec:
       namespace: kube-system
     - name: dragonfly-cluster
       namespace: flux-system
+    - name: synology-csi
+      namespace: flux-system
   targetNamespace: default
   path: ./kubernetes/apps/default/immich/app
   prune: true
