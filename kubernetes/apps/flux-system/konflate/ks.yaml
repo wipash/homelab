@@ -10,6 +10,8 @@ spec:
   dependsOn:
     - name: external-secrets-stores
       namespace: kube-system
+    - name: synology-csi
+      namespace: flux-system
   path: ./kubernetes/apps/flux-system/konflate/app
   prune: true
   sourceRef:
