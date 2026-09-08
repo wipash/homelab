@@ -15,6 +15,8 @@ spec:
   dependsOn:
     - name: nfs-cache
       namespace: kube-system
+    - name: synology-csi
+      namespace: flux-system
     - name: external-secrets-stores
       namespace: kube-system
   path: ./kubernetes/apps/default/ghost/mariadb
@@ -30,6 +32,11 @@ spec:
   postBuild:
     substitute:
       APP: *appdb
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache
+      VOLSYNC_PUID: "1001"
+      VOLSYNC_PGID: "1001"
       VOLSYNC_LOCAL_SCHEDULE: "20 * * * *"
   components:
     - ../../../../components/volsync
@@ -50,6 +57,8 @@ spec:
   dependsOn:
     - name: nfs-cache
       namespace: kube-system
+    - name: synology-csi
+      namespace: flux-system
   path: ./kubernetes/apps/default/ghost/app
   prune: true
   sourceRef:
@@ -63,6 +72,9 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache
       VOLSYNC_CAPACITY: 5Gi
       VOLSYNC_LOCAL_SCHEDULE: "22 * * * *"
   components:

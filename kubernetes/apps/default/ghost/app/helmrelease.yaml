@@ -10,8 +10,6 @@ spec:
     name: ghost
   interval: 1h
   dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
     - name: volsync
       namespace: volsync
     - name: ghost-mariadb
