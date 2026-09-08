@@ -38,7 +38,7 @@ spec:
           app:
             image:
               repository: dxflrs/garage
-              tag: v2.4.0
+              tag: v2.4.1
             command:
               - /garage
             args:
