@@ -35,9 +35,8 @@ spec:
               CUPS_LPADMIN_PRINTER1_ENABLE: cupsenable OfficeLaser
               CUPS_LPADMIN_PRINTER1_ACCEPT: cupsaccept OfficeLaser
 
-              # Hack to run arbitrary commands
-              # The init script will eval the content of any variable named CUPS_LPADMIN_PRINTER*
-              CUPS_LPADMIN_PRINTERCONFIG1: cupsctl ServerAlias=\* DefaultEncryption=Never
+              # The image evaluates these commands after its built-in CUPS setup.
+              CUPS_LPADMIN_PRINTERCONFIG1: cupsctl ServerAlias=cups.mcgrath.nz DefaultEncryption=Never
 
             probes:
               liveness: &probes
@@ -51,7 +50,17 @@ spec:
                   periodSeconds: 10
                   timeoutSeconds: 1
                   failureThreshold: 3
-              readiness: *probes
+              readiness:
+                <<: *probes
+                spec:
+                  exec:
+                    command:
+                      - /bin/sh
+                      - -ec
+                      - /healthcheck.sh && lpstat -p OfficeLaser
+                  periodSeconds: 10
+                  timeoutSeconds: 2
+                  failureThreshold: 3
             securityContext:
               privileged: true
             resources:
@@ -90,6 +99,13 @@ spec:
           - cups.mcgrath.nz
 
     persistence:
+      cupsctl:
+        type: configMap
+        name: cups-config
+        defaultMode: 0555
+        globalMounts:
+          - path: /usr/local/sbin/cupsctl
+            subPath: cupsctl
       usb:
         type: hostPath
         hostPath: /dev/bus/usb
