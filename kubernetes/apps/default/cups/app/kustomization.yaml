@@ -9,5 +9,6 @@ configMapGenerator:
   - name: cups-config
     files:
       - cupsctl=./resources/cupsctl
+      - public-jobs.conf=./resources/public-jobs.conf
 generatorOptions:
   disableNameSuffixHash: true

@@ -30,10 +30,12 @@ spec:
               CUPS_LOGLEVEL: info
               CUPS_ENV_DEBUG: "no"
               CUPS_HOSTNAME: printer.mcgrath.nz
+              PRE_INIT_HOOK: cat /etc/cups/public-jobs.conf >> /etc/cups/cupsd.conf
 
               CUPS_LPADMIN_PRINTER1: "lpadmin -p OfficeLaser -D 'Fuji Xerox DocuPrint CP225/228' -m 'foo2zjs:0/ppd/foo2zjs/Fuji_Xerox-DocuPrint_CM215.ppd' -o PageSize=A4 -o ColorMode=Color -v usb://FUJI%20XEROX/DocuPrint%20CP225/228%20w?serial=301943--CD"
               CUPS_LPADMIN_PRINTER1_ENABLE: cupsenable OfficeLaser
               CUPS_LPADMIN_PRINTER1_ACCEPT: cupsaccept OfficeLaser
+              CUPS_LPADMIN_PRINTER1_POLICY: lpadmin -p OfficeLaser -o printer-op-policy=public-jobs
 
               # The image evaluates these commands after its built-in CUPS setup.
               CUPS_LPADMIN_PRINTERCONFIG1: cupsctl ServerAlias=cups.mcgrath.nz DefaultEncryption=Never
@@ -106,6 +108,8 @@ spec:
         globalMounts:
           - path: /usr/local/sbin/cupsctl
             subPath: cupsctl
+          - path: /etc/cups/public-jobs.conf
+            subPath: public-jobs.conf
       usb:
         type: hostPath
         hostPath: /dev/bus/usb
