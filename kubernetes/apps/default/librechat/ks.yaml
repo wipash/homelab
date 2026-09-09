@@ -12,6 +12,8 @@ spec:
       namespace: kube-system
     - name: external-secrets-stores
       namespace: kube-system
+    - name: synology-csi
+      namespace: flux-system
   path: ./kubernetes/apps/default/librechat/app
   prune: true
   sourceRef:
@@ -26,6 +28,12 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_LOCAL_SCHEDULE: "43 * * * *"
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache
+      VOLSYNC_CAPACITY: 5Gi
+      VOLSYNC_PUID: "0"
+      VOLSYNC_PGID: "568"
   components:
     - ../../../../components/volsync
 
@@ -42,6 +50,8 @@ spec:
   dependsOn:
     - name: external-secrets-stores
       namespace: kube-system
+    - name: synology-csi
+      namespace: flux-system
   path: ./kubernetes/apps/default/librechat/garage
   prune: true
   sourceRef:
