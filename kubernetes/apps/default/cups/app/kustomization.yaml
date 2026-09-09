@@ -8,6 +8,6 @@ resources:
 configMapGenerator:
   - name: cups-config
     files:
-      - cupsd.conf=./resources/cupsd.conf
+      - cupsctl=./resources/cupsctl
 generatorOptions:
   disableNameSuffixHash: true

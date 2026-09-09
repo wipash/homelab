@@ -1,0 +1,11 @@
+#!/bin/sh
+# cupsd briefly closes its control socket while reloading configuration.
+# The image runs consecutive cupsctl commands under set -e during startup.
+attempt=0
+until /usr/sbin/cupsctl "$@"; do
+  attempt=$((attempt + 1))
+  if [ "$attempt" -ge 10 ]; then
+    exit 1
+  fi
+  sleep 1
+done
