@@ -8,6 +8,12 @@ metadata:
 spec:
   targetNamespace: harvco
   dependsOn:
+    - name: nfs-cache
+      namespace: kube-system
+    - name: synology-csi
+      namespace: flux-system
+    - name: volsync
+      namespace: flux-system
     - name: external-secrets-stores
       namespace: kube-system
   path: ./kubernetes/apps/harvco/harvco-sensor-hub/mosquitto
@@ -19,6 +25,18 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 5m
+  postBuild:
+    substitute:
+      APP: harvco-sensor-hub-mosquitto
+      VOLSYNC_CAPACITY: 1Gi
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache
+      VOLSYNC_CACHE_CAPACITY: 1Gi
+      VOLSYNC_PUID: "1000"
+      VOLSYNC_PGID: "1000"
+  components:
+    - ../../../../components/volsync
 
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
