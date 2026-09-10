@@ -2,6 +2,14 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
+      description: "Auto-merge CoSA container updates",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["ghcr.io/wipash/cosa"],
+      automerge: true,
+      automergeType: "pr",
+      ignoreTests: false,
+    },
+    {
       description: "Auto-merge trusted container digests",
       matchDatasources: ["docker"],
       automerge: true,
