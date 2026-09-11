@@ -242,9 +242,6 @@ spec:
 
       meilisearch:
         type: emptyDir
-        # storageClass: ceph-block
-        # accessMode: ReadWriteOnce
-        # size: 1Gi
         advancedMounts:
           librechat:
             meilisearch:
