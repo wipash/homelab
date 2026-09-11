@@ -9,6 +9,16 @@ spec:
   enablePDB: false
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16.14-1.1.1
   primaryUpdateStrategy: unsupervised
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                  - hp1
+                  - hp2
   storage:
     size: 20Gi
     storageClass: openebs-hostpath
