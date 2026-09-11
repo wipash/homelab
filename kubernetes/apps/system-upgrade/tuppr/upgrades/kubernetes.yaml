@@ -13,8 +13,3 @@ spec:
       - start: "0 3 * * 0"
         duration: 4h
         timezone: Pacific/Auckland
-  healthChecks:
-    - apiVersion: ceph.rook.io/v1
-      kind: CephCluster
-      expr: |-
-        status.ceph.health in ['HEALTH_OK']

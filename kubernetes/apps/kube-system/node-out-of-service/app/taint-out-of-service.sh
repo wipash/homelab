@@ -1,6 +1,6 @@
 #!/bin/sh
 # Applies the well-known out-of-service taint to nodes that have stopped
-# reporting entirely, so that RWO Ceph volumes are force-detached and stateful
+# reporting entirely, so that RWO volumes are force-detached and stateful
 # workloads can start on a surviving node. Removes the taint again once the
 # node comes back.
 #
@@ -58,8 +58,8 @@ echo "$nodes" | sed 's/^/  /'
 echo "$nodes" | while read -r name status since tainted; do
   [ -n "$name" ] || continue
 
-  # Node is healthy again: clear the taint so workloads and Rook's mon/osd for
-  # this host can come back. The taint never clears itself.
+  # Node is healthy again: clear the taint so workloads can return.
+  # The taint never clears itself.
   if [ "$status" = "True" ]; then
     if [ "$tainted" = "yes" ]; then
       echo "node/${name} is Ready again, removing ${TAINT_KEY} taint"

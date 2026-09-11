@@ -19,14 +19,13 @@ spec:
           labels:
             severity: critical
 
-        # It half-worked. The node came back but the taint was not removed, so
-        # nothing will schedule there - including Rook's mon and osd for that
-        # host, leaving Ceph quietly degraded and looking like a failed boot.
+        # The node came back but the taint was not removed, so workloads
+        # still cannot schedule there.
         - alert: NodeOutOfServiceTaintStuck
           annotations:
             summary: Node {{ $labels.node }} is Ready but still carries the
-              out-of-service taint. Nothing will schedule on it, including its
-              Ceph mon and osd. Remove with `kubectl taint node {{ $labels.node }}
+              out-of-service taint. Workloads cannot schedule on it.
+              Remove with `kubectl taint node {{ $labels.node }}
               node.kubernetes.io/out-of-service-`.
           expr: |
             kube_node_spec_taint{key="node.kubernetes.io/out-of-service"} == 1
