@@ -5,3 +5,20 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+  - ../../../../templates/volsync
+patches:
+  - target:
+      kind: Replication(Source|Destination)
+    patch: |-
+      - op: replace
+        path: /spec/restic/storageClassName
+        value: synology-iscsi-ephemeral
+      - op: add
+        path: /spec/restic/moverSecurityContext/fsGroupChangePolicy
+        value: OnRootMismatch
+  - target:
+      kind: ReplicationDestination
+    patch: |-
+      - op: replace
+        path: /spec/restic/cleanupTempPVC
+        value: false

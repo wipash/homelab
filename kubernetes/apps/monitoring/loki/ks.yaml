@@ -5,6 +5,15 @@ kind: Kustomization
 metadata:
   name: loki
 spec:
+  dependsOn:
+    - name: nfs-cache
+      namespace: kube-system
+    - name: external-secrets-stores
+      namespace: kube-system
+    - name: synology-csi
+      namespace: flux-system
+    - name: volsync
+      namespace: flux-system
   targetNamespace: monitoring
   path: ./kubernetes/apps/monitoring/loki/app
   prune: true
@@ -15,3 +24,13 @@ spec:
   wait: false
   interval: 30m
   timeout: 5m
+  postBuild:
+    substitute:
+      APP: loki
+      VOLSYNC_CLAIM: storage-loki-0
+      VOLSYNC_CAPACITY: 50Gi
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache
+      VOLSYNC_PUID: "10001"
+      VOLSYNC_PGID: "10001"

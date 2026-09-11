@@ -12,3 +12,22 @@ resources:
   - ./dashboards/ceph.yaml
   - ./dashboards/kubernetes.yaml
   - ./dashboards/prometheus.yaml
+  - ../../../../templates/volsync
+patches:
+  # Keep the application claim on Retain while deleting disposable mover volumes.
+  - target:
+      kind: Replication(Source|Destination)
+    patch: |-
+      - op: replace
+        path: /spec/restic/storageClassName
+        value: synology-iscsi-ephemeral
+      - op: add
+        path: /spec/restic/moverSecurityContext/fsGroupChangePolicy
+        value: OnRootMismatch
+  # Preserve the recovery staging claim for offline comparison and native checks.
+  - target:
+      kind: ReplicationDestination
+    patch: |-
+      - op: replace
+        path: /spec/restic/cleanupTempPVC
+        value: false

@@ -26,6 +26,14 @@ spec:
   targetNamespace: monitoring
   dependsOn:
     - name: grafana-operator
+    - name: nfs-cache
+      namespace: kube-system
+    - name: external-secrets-stores
+      namespace: kube-system
+    - name: synology-csi
+      namespace: flux-system
+    - name: volsync
+      namespace: flux-system
   path: ./kubernetes/apps/monitoring/grafana-operator/instance
   prune: true
   sourceRef:
@@ -35,4 +43,14 @@ spec:
   wait: false
   interval: 30m
   retryInterval: 1m
+  postBuild:
+    substitute:
+      APP: grafana
+      VOLSYNC_CLAIM: grafana-pvc
+      VOLSYNC_CAPACITY: 5Gi
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache
+      VOLSYNC_PUID: "1000"
+      VOLSYNC_PGID: "1000"
   timeout: 5m
