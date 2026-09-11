@@ -13,6 +13,8 @@ spec:
   dependsOn:
     - name: nfs-cache
       namespace: kube-system
+    - name: synology-csi
+      namespace: flux-system
     - name: external-secrets-stores
       namespace: kube-system
   path: ./kubernetes/apps/default/booklore/app
