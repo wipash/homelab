@@ -41,6 +41,11 @@ Residual Ceph disk data is not a supported rollback, and disks must be prepared
 separately before reuse. Do not remove active Synology storage or recovery
 stages.
 
+### Node networking
+
+The former Ceph-only `172.20.0.0/24` node addresses are removed. Management,
+the API VIP and NAS connectivity remain on `10.0.16.0/24`.
+
 ### GitOps
 
 [Flux](https://github.com/fluxcd/flux2) watches the clusters in my [kubernetes](./kubernetes/) folder (see Directories below) and makes the changes to the cluster based on the state of this Git repository.
