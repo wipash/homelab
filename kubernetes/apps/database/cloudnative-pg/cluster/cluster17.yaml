@@ -19,8 +19,8 @@ spec:
               - key: kubernetes.io/hostname
                 operator: In
                 values:
+                  - hp1
                   - hp2
-                  - hp3
   storage:
     size: 20Gi
     storageClass: openebs-hostpath
