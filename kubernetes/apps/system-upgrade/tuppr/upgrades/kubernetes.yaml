@@ -4,6 +4,10 @@ apiVersion: tuppr.home-operations.com/v1alpha1
 kind: KubernetesUpgrade
 metadata:
   name: kubernetes
+  annotations:
+    # Removing the obsolete storage health gate reset a terminal failure.
+    # Require an explicit retry decision before another v1.37.0 attempt.
+    tuppr.home-operations.com/suspend: "true"
 spec:
   kubernetes:
     # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
