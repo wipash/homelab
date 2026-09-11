@@ -16,7 +16,7 @@ This repository contains the GitOps configuration for my homelab Kubernetes clus
 - [external-dns](https://github.com/kubernetes-sigs/external-dns): Automatically syncs ingress DNS records to a DNS provider.
 - [external-secrets](https://github.com/external-secrets/external-secrets): Managed Kubernetes secrets using [1Password Connect](https://github.com/1Password/connect).
 - [ingress-nginx](https://github.com/kubernetes/ingress-nginx): Kubernetes ingress controller using NGINX as a reverse proxy and load balancer.
-- [rook](https://github.com/rook/rook): Ceph storage awaiting cluster retirement; no longer the default provisioner.
+- [rook](https://github.com/rook/rook): Retired Ceph storage; no longer deployed or used as a provisioner.
 - [sops](https://github.com/getsops/sops): Managed secrets for Kubernetes and Terraform which are commited to Git.
 - [spegel](https://github.com/spegel-org/spegel): Stateless cluster local OCI registry mirror.
 - [Synology CSI](https://github.com/SynologyOpenSource/synology-csi): Primary persistent storage on Synology iSCSI.
@@ -33,11 +33,13 @@ snapshots, and `synology-nfs-cache` metadata caches, with independent MinIO and 
 backup repositories. Existing application overrides remain in place.
 Recovery destinations keep their staging volumes: Synology snapshots depend on
 the source LUN and are deleted with it. Do not reclaim active recovery staging.
-Rook/Ceph retirement is a separate operation from changing these defaults. The
-verified MinIO/R2 backups are the accepted recovery path; retirement does not
-require reclaiming individual old RBD images or wiping the underlying SSDs.
+Rook/Ceph is retired from the desired state and no longer provisions storage.
+The verified MinIO/R2 backups are the accepted recovery path for any residual
+Ceph-backed data; retirement does not require reclaiming individual old RBD
+images or wiping the underlying SSDs.
 Residual Ceph disk data is not a supported rollback, and disks must be prepared
-separately before reuse. Do not remove active Synology storage or recovery stages.
+separately before reuse. Do not remove active Synology storage or recovery
+stages.
 
 ### GitOps
 
