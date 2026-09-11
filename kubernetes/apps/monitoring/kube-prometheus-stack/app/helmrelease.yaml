@@ -49,8 +49,14 @@ spec:
         externalUrl: https://alertmanager.mcgrath.nz
         storage:
           volumeClaimTemplate:
+            metadata:
+              name: data
             spec:
-              storageClassName: ceph-block
+              dataSourceRef:
+                apiGroup: volsync.backube
+                kind: ReplicationDestination
+                name: alertmanager
+              storageClassName: synology-iscsi
               resources:
                 requests:
                   storage: 1Gi

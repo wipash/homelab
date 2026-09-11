@@ -16,12 +16,23 @@ This repository contains the GitOps configuration for my homelab Kubernetes clus
 - [external-dns](https://github.com/kubernetes-sigs/external-dns): Automatically syncs ingress DNS records to a DNS provider.
 - [external-secrets](https://github.com/external-secrets/external-secrets): Managed Kubernetes secrets using [1Password Connect](https://github.com/1Password/connect).
 - [ingress-nginx](https://github.com/kubernetes/ingress-nginx): Kubernetes ingress controller using NGINX as a reverse proxy and load balancer.
-- [rook](https://github.com/rook/rook): Distributed block storage for peristent storage.
+- [rook](https://github.com/rook/rook): Ceph storage retained for migration rollback volumes.
 - [sops](https://github.com/getsops/sops): Managed secrets for Kubernetes and Terraform which are commited to Git.
 - [spegel](https://github.com/spegel-org/spegel): Stateless cluster local OCI registry mirror.
+- [Synology CSI](https://github.com/SynologyOpenSource/synology-csi): Primary persistent storage on Synology iSCSI.
 - [volsync](https://github.com/backube/volsync): Backup and recovery of persistent volume claims.
 
 ## How the cluster works
+
+### Storage
+
+Migrated application claims use retained Synology iSCSI volumes. VolSync backs up to
+independent MinIO and R2 repositories, with disposable movers and NFS caches.
+Recovery destinations keep their staging volumes: Synology snapshots depend on
+the source LUN and are deleted with it. Do not reclaim active recovery staging.
+Original Ceph volumes remain protected until their rollback copies are explicitly
+released; completing application migration does not authorize Ceph teardown.
+
 ### GitOps
 
 [Flux](https://github.com/fluxcd/flux2) watches the clusters in my [kubernetes](./kubernetes/) folder (see Directories below) and makes the changes to the cluster based on the state of this Git repository.

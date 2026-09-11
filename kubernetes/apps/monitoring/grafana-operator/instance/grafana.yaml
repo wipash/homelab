@@ -7,6 +7,7 @@ metadata:
   labels:
     dashboards: grafana
 spec:
+  suspend: false
   config:
     analytics:
       check_for_updates: "false"
@@ -77,8 +78,12 @@ spec:
     spec:
       accessModes:
         - ReadWriteOnce
+      dataSourceRef:
+        kind: ReplicationDestination
+        apiGroup: volsync.backube
+        name: grafana-dst
       resources:
         requests:
           storage: 5Gi
-      storageClassName: ceph-block
+      storageClassName: synology-iscsi
   disableDefaultSecurityContext: All

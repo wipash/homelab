@@ -19,9 +19,6 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
   values:
     deploymentMode: SingleBinary
     loki:
@@ -77,9 +74,14 @@ spec:
           cpu: 10m
           memory: 288Mi
       persistence:
-        enabled: true
-        storageClass: ceph-block
-        size: 50Gi
+        enabled: false
+      extraVolumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: storage-loki-0
+      extraVolumeMounts:
+        - name: storage
+          mountPath: /var/loki
     gateway:
       replicas: 0
     backend:

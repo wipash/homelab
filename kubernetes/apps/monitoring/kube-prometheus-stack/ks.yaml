@@ -9,6 +9,12 @@ spec:
   dependsOn:
     - name: external-secrets-stores
       namespace: kube-system
+    - name: nfs-cache
+      namespace: kube-system
+    - name: synology-csi
+      namespace: flux-system
+    - name: volsync
+      namespace: flux-system
   path: ./kubernetes/apps/monitoring/kube-prometheus-stack/app
   prune: true
   sourceRef:
@@ -18,3 +24,13 @@ spec:
   wait: false
   interval: 30m
   timeout: 5m
+  postBuild:
+    substitute:
+      APP: alertmanager
+      VOLSYNC_CLAIM: data-alertmanager-kube-prometheus-stack-0
+      VOLSYNC_CAPACITY: 1Gi
+      VOLSYNC_STORAGECLASS: synology-iscsi
+      VOLSYNC_SNAPSHOTCLASS: synology-iscsi
+      VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache
+      VOLSYNC_PUID: "1000"
+      VOLSYNC_PGID: "2000"

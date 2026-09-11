@@ -8,6 +8,33 @@ resources:
   - ./helmrelease.yaml
   - ./httproute.yaml
   - ./ocirepository.yaml
+  - ../../../../components/volsync/local/replicationsource.yaml
+  - ../../../../components/volsync/local/replicationdestination.yaml
+  - ../../../../components/volsync/local/externalsecret.yaml
+  - ../../../../components/volsync/remote/replicationsource.yaml
+  - ../../../../components/volsync/remote/externalsecret.yaml
+patches:
+  # The operator-generated PVC is the VolSync source; do not create a second claim.
+  - target:
+      kind: ReplicationSource
+    patch: |-
+      - op: replace
+        path: /spec/sourcePVC
+        value: data-alertmanager-kube-prometheus-stack-0
+  # Keep disposable mover volumes off the retained application class.
+  - target:
+      kind: Replication(Source|Destination)
+    patch: |-
+      - op: replace
+        path: /spec/restic/storageClassName
+        value: synology-iscsi-ephemeral
+  # A destination snapshot must retain its staging PVC while the snapshot is referenced.
+  - target:
+      kind: ReplicationDestination
+    patch: |-
+      - op: replace
+        path: /spec/restic/cleanupTempPVC
+        value: false
 configMapGenerator:
   - name: flux-metrics-configmap
     files:
