@@ -60,7 +60,6 @@ spec:
                     operator: In
                     values:
                       - hp2
-                      - hp3
       securityContext:
         runAsNonRoot: true
         runAsUser: 82 # www-data, required for serversideup/php base image
