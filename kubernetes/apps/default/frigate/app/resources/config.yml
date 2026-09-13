@@ -1,4 +1,6 @@
 # yaml-language-server: $schema=https://frigate.mcgrath.nz/api/config/schema.json
+version: "0.18-0"
+
 mqtt:
   host: mosquitto.default.svc.cluster.local
   port: 1883
@@ -95,14 +97,32 @@ cameras:
       filters:
         person:
           mask:
-            - 0,310,137,154,246,121,463,53,782,54,909,63,1053,129,1070,80,1084,0,0,0
+            object_mask_1:
+              friendly_name: Object Mask 1 (person)
+              enabled: true
+              coordinates: 0,310,137,154,246,121,463,53,782,54,909,63,1053,129,1070,80,1084,0,0,0
     motion:
       mask:
-        - 0.1,0.003,0.228,0.003,0.213,0.168,0.106,0.188
-        - 0.778,0,0.7,0.002,0.715,0.153,0.766,0.152
-        - 0.259,0.153,0.318,0.102,0.329,0.197,0.365,0.198,0.361,0.307,0.289,0.355
-        - 0.273,0.077,0.31,0.018,0.334,0.032,0.381,0.017,0.425,0.05,0.431,0.107,0.388,0.138,0.361,0.165,0.34,0.158,0.333,0.09,0.266,0.137
-        - 0.245,0.928,0.288,0.927,0.291,0.99,0.246,0.995
+        motion_mask_1:
+          friendly_name: Motion Mask 1
+          enabled: true
+          coordinates: 0.1,0.003,0.228,0.003,0.213,0.168,0.106,0.188
+        motion_mask_2:
+          friendly_name: Motion Mask 2
+          enabled: true
+          coordinates: 0.778,0,0.7,0.002,0.715,0.153,0.766,0.152
+        motion_mask_3:
+          friendly_name: Motion Mask 3
+          enabled: true
+          coordinates: 0.259,0.153,0.318,0.102,0.329,0.197,0.365,0.198,0.361,0.307,0.289,0.355
+        motion_mask_4:
+          friendly_name: Motion Mask 4
+          enabled: true
+          coordinates: 0.273,0.077,0.31,0.018,0.334,0.032,0.381,0.017,0.425,0.05,0.431,0.107,0.388,0.138,0.361,0.165,0.34,0.158,0.333,0.09,0.266,0.137
+        motion_mask_5:
+          friendly_name: Motion Mask 5
+          enabled: true
+          coordinates: 0.245,0.928,0.288,0.927,0.291,0.99,0.246,0.995
 
     ffmpeg:
       inputs:
@@ -124,13 +144,28 @@ cameras:
         person:
           threshold: 0.81
           mask:
-            - 1280,611,625,105,471,73,442,110,374,118,265,92,253,0,577,0,642,0,770,0,1002,0,1242,0,1280,0
-            - 0,720,300,720,293,611,242,417,229,178,253,0,0,0
+            object_mask_1:
+              friendly_name: Object Mask 1 (person)
+              enabled: true
+              coordinates: 1280,611,625,105,471,73,442,110,374,118,265,92,253,0,577,0,642,0,770,0,1002,0,1242,0,1280,0
+            object_mask_2:
+              friendly_name: Object Mask 2 (person)
+              enabled: true
+              coordinates: 0,720,300,720,293,611,242,417,229,178,253,0,0,0
     motion:
       mask:
-        - 0.489,0.274,1,0.91,1,0.535,1,0,0.355,0,0.371,0.096,0.495,0.15
-        - 0.359,0,0.25,0,0.241,0.113,0.233,0.202,0.26,0.235,0.362,0.217,0.371,0.095
-        - 0.579,0.384,0.687,0.518,0.676,0.723,0.604,0.765,0.517,0.59,0.514,0.488
+        motion_mask_1:
+          friendly_name: Motion Mask 1
+          enabled: true
+          coordinates: 0.489,0.274,1,0.91,1,0.535,1,0,0.355,0,0.371,0.096,0.495,0.15
+        motion_mask_2:
+          friendly_name: Motion Mask 2
+          enabled: true
+          coordinates: 0.359,0,0.25,0,0.241,0.113,0.233,0.202,0.26,0.235,0.362,0.217,0.371,0.095
+        motion_mask_3:
+          friendly_name: Motion Mask 3
+          enabled: true
+          coordinates: 0.579,0.384,0.687,0.518,0.676,0.723,0.604,0.765,0.517,0.59,0.514,0.488
     ffmpeg:
       inputs:
         - path: rtsp://127.0.0.1:8554/bdc_hq
@@ -150,11 +185,20 @@ cameras:
       filters:
         person:
           mask:
-            - 1280,419,1280,0,847,0
+            object_mask_1:
+              friendly_name: Object Mask 1 (person)
+              enabled: true
+              coordinates: 1280,419,1280,0,847,0
     motion:
       mask:
-        - 0,720,419,720,419,368,391,0,0,0
-        - 1280,446,1280,0,844,0
+        motion_mask_1:
+          friendly_name: Motion Mask 1
+          enabled: true
+          coordinates: 0,720,419,720,419,368,391,0,0,0
+        motion_mask_2:
+          friendly_name: Motion Mask 2
+          enabled: true
+          coordinates: 1280,446,1280,0,844,0
     ffmpeg:
       inputs:
         - path: rtsp://127.0.0.1:8554/sdc_hq
@@ -169,6 +213,8 @@ cameras:
         Sub Stream: sdc_lq
 
 genai:
-  provider: openai
-  api_key: "{FRIGATE_OPENAI_API_KEY}"
-  model: gpt-5-mini
+  default:
+    provider: openai
+    api_key: "{FRIGATE_OPENAI_API_KEY}"
+    model: gpt-5-mini
+    roles: [descriptions, chat]
