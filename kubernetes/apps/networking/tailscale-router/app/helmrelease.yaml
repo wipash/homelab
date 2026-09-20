@@ -49,6 +49,8 @@ spec:
               # Headscale assigns tag:homelab-router from the pre-auth key.
               TS_EXTRA_ARGS: --login-server=https://hs.mcgrath.nz --advertise-exit-node --accept-routes=false
               TS_ROUTES: 10.0.16.0/24,10.0.10.0/24,10.244.0.0/16,172.16.10.0/24
+              # Match the operator's backend detection; Talos uses nftables, not legacy iptables.
+              TS_DEBUG_FIREWALL_MODE: auto
               TS_ENABLE_HEALTH_CHECK: "true"
               TS_LOCAL_ADDR_PORT: 0.0.0.0:9002
             probes:
