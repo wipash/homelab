@@ -46,7 +46,8 @@ spec:
               TS_USERSPACE: "false"
               TS_ACCEPT_DNS: "false"
               TS_HOSTNAME: ts-pod-cidrs
-              TS_EXTRA_ARGS: --login-server=https://hs.mcgrath.nz --advertise-tags=tag:homelab-router --advertise-exit-node --accept-routes=false
+              # Headscale assigns tag:homelab-router from the pre-auth key.
+              TS_EXTRA_ARGS: --login-server=https://hs.mcgrath.nz --advertise-exit-node --accept-routes=false
               TS_ROUTES: 10.0.16.0/24,10.0.10.0/24,10.244.0.0/16,172.16.10.0/24
               TS_ENABLE_HEALTH_CHECK: "true"
               TS_LOCAL_ADDR_PORT: 0.0.0.0:9002
