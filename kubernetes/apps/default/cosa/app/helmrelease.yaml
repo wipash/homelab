@@ -22,7 +22,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/cosa
-              tag: main@sha256:fba3a2fc22cf6e731314894b653860f26fddb89c417de05b05911218d83f89c6
+              tag: main@sha256:c85564afcb7400df7f93e9ca8652afc6538b3b584dabfb8d2c3bbe680519a066
             env:
               TZ: Pacific/Auckland
               HOME: /home/sean
@@ -68,7 +68,7 @@ spec:
                 custom: true
                 spec:
                   httpGet:
-                    path: /readyz
+                    path: /healthz
                     port: *httpPort
                   periodSeconds: 5
                   timeoutSeconds: 3
