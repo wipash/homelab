@@ -22,7 +22,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/cosa
-              tag: main@sha256:c85564afcb7400df7f93e9ca8652afc6538b3b584dabfb8d2c3bbe680519a066
+              tag: main@sha256:69170db453f3f7585cb0e1f37fb88110754bd0ce74833334a298ec0a0f8bca06
             env:
               TZ: Pacific/Auckland
               HOME: /home/sean
