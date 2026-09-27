@@ -21,8 +21,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/cosa2
-              # Set to main@sha256:<digest> of the first image CI pushes; Renovate keeps it current.
-              tag: main
+              tag: main@sha256:ea3ea6c41416a0564a81c84221dd4d609070e02e215999dfd798f730a10af487
             env:
               TZ: Pacific/Auckland
               COSA2_PUBLIC_ORIGIN: https://cosa2.mcgrath.nz
