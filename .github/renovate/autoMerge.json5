@@ -4,7 +4,7 @@
     {
       description: "Auto-merge CoSA container updates",
       matchDatasources: ["docker"],
-      matchPackageNames: ["ghcr.io/wipash/cosa"],
+      matchPackageNames: ["ghcr.io/wipash/cosa", "ghcr.io/wipash/cosa2"],
       automerge: true,
       automergeType: "pr",
       ignoreTests: false,
