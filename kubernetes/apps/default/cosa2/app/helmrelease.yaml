@@ -21,7 +21,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/cosa2
-              tag: main@sha256:c0df2a699addf601d91febb62cfcaf5609b5ee5427ec6397f5a079e15e90ec83
+              tag: main@sha256:33d53261d620eff817f603f12b03515bc41722b2b3fa3ace1c7a0ae712abbeaf
             env:
               TZ: Pacific/Auckland
               COSA2_PUBLIC_ORIGIN: https://cosa2.mcgrath.nz
