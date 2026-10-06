@@ -3,7 +3,6 @@
   "extends": [
     "github>home-operations/renovate-presets",
     "replacements:k8s-registry-move",
-    ":skipStatusChecks",
     ":semanticCommits",
     ":timezone(Pacific/Auckland)",
     "github>wipash/homelab//.github/renovate/allowedVersions.json5",
@@ -16,6 +15,10 @@
     "github>wipash/homelab//.github/renovate/packageRules.json5",
     "github>wipash/homelab//.github/renovate/semanticCommits.json5"
   ],
+  "automergeType": "pr",
+  "ignoreTests": false,
+  // GitHub enforces main's required CI checks before automerging these PRs.
+  "platformAutomerge": true,
   "suppressNotifications": [
     "prEditedNotification",
     "prIgnoreNotification"
