@@ -25,7 +25,7 @@ spec:
           vault-folders:
             image: &syncImage
               repository: ghcr.io/wipash/cosa2-obsidian-sync
-              tag: sha-51a56fcd0fb5b1f4021d109157d45ab92e0c1409@sha256:d056318f76874bbd58aa8265ab5572c94a379a0607c8d783774c436c69cd6a76
+              tag: sha-596c63358aacda1280368fe5fe0d1c26c623f6ac@sha256:49b8ac710aef0cb6ba1f9f0bc9a6ee2e367c896bccbe4a1f4111fc70396a3cd3
             command: ["mkdir", "-p", "/vault-volume/notes", "/vault-volume/state"]
             securityContext: &restricted
               allowPrivilegeEscalation: false
@@ -35,7 +35,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/cosa2
-              tag: main@sha256:af4ea78cef4c84f0b00563d10f70bf7fae9dde11840d47a0b9aa0839db8214ab
+              tag: main@sha256:71019b241b2853dfb594293e713b4b50931f276f88ad8a5a68547e8d4829e1d2
             env:
               TZ: Pacific/Auckland
               COSA2_PUBLIC_ORIGIN: https://cosa2.mcgrath.nz
