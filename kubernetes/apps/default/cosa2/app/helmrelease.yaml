@@ -14,14 +14,28 @@ spec:
       cosa2:
         replicas: 1
         strategy: Recreate
+        annotations:
+          reloader.stakater.com/auto: "true"
         pod:
           enableServiceLinks: false
           terminationGracePeriodSeconds: 30
+        initContainers:
+          # The volume root belongs to root with group 1000, so the folders
+          # each container mounts are made first, owned by 1000.
+          vault-folders:
+            image: &syncImage
+              repository: ghcr.io/wipash/cosa2-obsidian-sync
+              tag: sha-51a56fcd0fb5b1f4021d109157d45ab92e0c1409@sha256:d056318f76874bbd58aa8265ab5572c94a379a0607c8d783774c436c69cd6a76
+            command: ["mkdir", "-p", "/vault-volume/notes", "/vault-volume/state"]
+            securityContext: &restricted
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
         containers:
           app:
             image:
               repository: ghcr.io/wipash/cosa2
-              tag: main@sha256:a88418d4143bd850d82d984359ff57bbd1f13200fe6dc5741fc3ff80da2aa8be
+              tag: main@sha256:af4ea78cef4c84f0b00563d10f70bf7fae9dde11840d47a0b9aa0839db8214ab
             env:
               TZ: Pacific/Auckland
               COSA2_PUBLIC_ORIGIN: https://cosa2.mcgrath.nz
@@ -56,16 +70,38 @@ spec:
                   periodSeconds: 5
                   timeoutSeconds: 3
                   failureThreshold: 30
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+            securityContext: *restricted
             resources:
               requests:
                 cpu: 100m
                 memory: 256Mi
               limits:
                 memory: 1Gi
+          # Keeps /vault in step with the Obsidian Sync vault, download only
+          # (mirror-remote). CoSA2 reads it as its notes vault source.
+          obsidian-sync:
+            image: *syncImage
+            env:
+              TZ: Pacific/Auckland
+              VAULT_PATH: /vault-volume/notes
+              XDG_CONFIG_HOME: /vault-volume/state
+              HOME: /vault-volume/state
+            envFrom:
+              - secretRef:
+                  name: cosa2-obsidian-secret
+            # Each sync is bounded by SYNC_TIMEOUT_SECONDS, and CoSA2 shows a
+            # sync that stops succeeding as a problem on the notes source.
+            probes:
+              liveness: { enabled: false }
+              readiness: { enabled: false }
+              startup: { enabled: false }
+            securityContext: *restricted
+            resources:
+              requests:
+                cpu: 10m
+                memory: 96Mi
+              limits:
+                memory: 512Mi
 
     defaultPodOptions:
       automountServiceAccountToken: false
@@ -101,10 +137,24 @@ spec:
           cosa2:
             app:
               - path: /data
+      vault:
+        existingClaim: cosa2-vault
+        advancedMounts:
+          cosa2:
+            vault-folders:
+              - path: /vault-volume
+            obsidian-sync:
+              - path: /vault-volume
+            app:
+              - path: /vault
+                subPath: notes
+                readOnly: true
       tmp:
         type: emptyDir
         sizeLimit: 64Mi
         advancedMounts:
           cosa2:
             app:
+              - path: /tmp
+            obsidian-sync:
               - path: /tmp
