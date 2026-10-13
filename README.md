@@ -29,9 +29,10 @@ Flux applies the configuration under `kubernetes/apps`, grouped by namespace. Ea
 
 ## CoSA
 
-CoSA pulls private images from `holmesazae.azurecr.io/holmesgroup/cosa` and `holmesazae.azurecr.io/holmesgroup/cosa/obsidian-sync`. The app follows `main`, pinned to its digest; until the sync image publishes a `main` tag, select its `sha-<commit>` tag matching the app's OCI revision and pin that digest too.
+CoSA pulls private images from `holmesazae.azurecr.io/holmesgroup/cosa` and `holmesazae.azurecr.io/holmesgroup/cosa/obsidian-sync`. The app currently follows `main`, pinned to its digest; the sync image uses a digest-pinned `sha-<commit>` tag matching the app's OCI revision. Once both publish a shared release tag such as `v0.2.0`, switch both pins to that tag with their respective digests. Renovate groups version-tag updates under CoSA without holding up current `main` digest updates. Grouping does not enforce equal target versions: publish matching tags for both repositories and check both versions before merging.
 
 - **Registry credentials:** vault `Kubernetes`, item `cosa-acr`, concealed field `dockerconfigjson`, with an auth entry for `holmesazae.azurecr.io`. External Secrets creates `default/cosa-imagepullsecret`; no registry password is stored in Git.
+- **Renovate credentials:** GitHub Actions secrets `ACR_USERNAME` (token name) and `ACR_PASSWORD` (token password) authenticate the workflow to `holmesazae.azurecr.io`. These are independent of the Kubernetes pull secret; update both GitHub and 1Password when rotating a shared token.
 - **Access:** a dedicated ACR token needs `content/read` on both repositories; `metadata/read` permits tag/manifest discovery. Rotate its password in 1Password before expiry.
 - **Deployment:** manifests remain under `kubernetes/apps/default/cosa2`; the release and PVCs (`cosa2`, `cosa2-vault`) retain their existing names and data. The current image still uses `COSA2_*` environment variables.
 - **Endpoint:** `https://cosa2.mcgrath.nz`; `/healthz` and `/readyz` report application health. Check `obsidian-sync` container logs for a successful `Synced at` message.
