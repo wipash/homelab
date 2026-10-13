@@ -31,7 +31,7 @@ spec:
           app:
             image:
               repository: ghcr.io/authelia/authelia
-              tag: v4.38.0-beta3@sha256:b48ae4d0ed9d1eee76efe382df60928bae550ec19e5663858dde6dc5f41cf285
+              tag: 4.39.28@sha256:bd97cff4fcbf715b5ff1f9ae286afbe6033afce385302520b0368122d43a6f54
             env:
               TZ: Pacific/Auckland
               AUTHELIA_SERVER_ADDRESS: tcp://0.0.0.0:80
@@ -40,7 +40,7 @@ spec:
               AUTHELIA_TELEMETRY_METRICS_ENABLED: "true"
               AUTHELIA_THEME: dark
               X_AUTHELIA_CONFIG: /config/configuration.yaml
-              X_AUTHELIA_CONFIG_FILTERS: expand-env
+              X_AUTHELIA_CONFIG_FILTERS: template
             envFrom: *envFrom
             probes:
               liveness: &probes
