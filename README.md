@@ -27,6 +27,15 @@ Flux applies the configuration under `kubernetes/apps`, grouped by namespace. Ea
 
 [Renovate](https://github.com/renovatebot/renovate) opens pull requests for dependency updates. Flux applies merged changes to the cluster.
 
+## CoSA
+
+CoSA pulls private images from `holmesazae.azurecr.io/holmesgroup/cosa` and `holmesazae.azurecr.io/holmesgroup/cosa/obsidian-sync`. The app follows `main`, pinned to its digest; until the sync image publishes a `main` tag, select its `sha-<commit>` tag matching the app's OCI revision and pin that digest too.
+
+- **Registry credentials:** vault `Kubernetes`, item `cosa-acr`, concealed field `dockerconfigjson`, with an auth entry for `holmesazae.azurecr.io`. External Secrets creates `default/cosa-imagepullsecret`; no registry password is stored in Git.
+- **Access:** a dedicated ACR token needs `content/read` on both repositories; `metadata/read` permits tag/manifest discovery. Rotate its password in 1Password before expiry.
+- **Deployment:** manifests remain under `kubernetes/apps/default/cosa2`; the release and PVCs (`cosa2`, `cosa2-vault`) retain their existing names and data. The current image still uses `COSA2_*` environment variables.
+- **Endpoint:** `https://cosa2.mcgrath.nz`; `/healthz` and `/readyz` report application health. Check `obsidian-sync` container logs for a successful `Synced at` message.
+
 ## Headscale tailnet
 
 `kubernetes/apps/networking/tailscale-router` runs a standalone Tailscale subnet/exit router against **https://hs.mcgrath.nz**. Headscale 0.29.3 does not provide the OAuth API needed by the native Kubernetes operator, so the previous operator and Connector have been removed.
