@@ -35,7 +35,7 @@ spec:
           app:
             image:
               repository: holmesazae.azurecr.io/holmesgroup/cosa
-              tag: main@sha256:509f23328b03a9e81812e8c7d67472f0e88822a2278fa041a51553d0d29d3b35
+              tag: main@sha256:c62af19ad4df4b96248e9d6c89755a942647fc064adb503441c38f9ede2b703a
             env:
               TZ: Pacific/Auckland
               COSA2_PUBLIC_ORIGIN: https://cosa2.mcgrath.nz
