@@ -27,6 +27,21 @@
       "minimumGroupSize": 2
     },
     {
+      "description": ["CoSA versioned images"],
+      "groupName": "CoSA",
+      "matchPackageNames": [
+        "holmesazae.azurecr.io/holmesgroup/cosa",
+        "holmesazae.azurecr.io/holmesgroup/cosa/obsidian-sync"
+      ],
+      "matchDatasources": ["docker"],
+      "matchCurrentVersion": "/^v?\\d+\\.\\d+\\.\\d+/",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "separateMinorPatch": true,
+      "minimumGroupSize": 2
+    },
+    {
       "description": ["Dragonfly Operator Group"],
       "groupName": "Dragonfly Operator",
       "matchPackageNames": ["/dragonfly(?:db)?.operator/"],
