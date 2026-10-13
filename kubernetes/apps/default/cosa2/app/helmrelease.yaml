@@ -24,8 +24,8 @@ spec:
           # each container mounts are made first, owned by 1000.
           vault-folders:
             image: &syncImage
-              repository: ghcr.io/wipash/cosa2-obsidian-sync
-              tag: sha-e1bc558fba9dece66419b9cab08683154b9b0242@sha256:03b6cae3541d42001e62d2e8833db6b6da2d8fb4e700b2ed9b35b6be50170a3f
+              repository: holmesazae.azurecr.io/holmesgroup/cosa/obsidian-sync
+              tag: sha-3324b8fb8bfa1c3b7c243b884cb87c4ec3e64ec8@sha256:a9e2efbb20b1bb4f639b0a0ec748905bea2fed8f3d395cff1fc0c810ba593349
             command: ["mkdir", "-p", "/vault-volume/notes", "/vault-volume/state"]
             securityContext: &restricted
               allowPrivilegeEscalation: false
@@ -34,8 +34,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/wipash/cosa2
-              tag: main@sha256:a6a5e2d9895e7f35ba8722e2493bca3c7cd74bf8febb749a5ba22fe02ae5d989
+              repository: holmesazae.azurecr.io/holmesgroup/cosa
+              tag: main@sha256:509f23328b03a9e81812e8c7d67472f0e88822a2278fa041a51553d0d29d3b35
             env:
               TZ: Pacific/Auckland
               COSA2_PUBLIC_ORIGIN: https://cosa2.mcgrath.nz
@@ -78,7 +78,7 @@ spec:
               limits:
                 memory: 1Gi
           # Keeps /vault in step with the Obsidian Sync vault, download only
-          # (mirror-remote). CoSA2 reads it as its notes vault source.
+          # (mirror-remote). CoSA reads it as its notes vault source.
           obsidian-sync:
             image: *syncImage
             env:
@@ -89,7 +89,7 @@ spec:
             envFrom:
               - secretRef:
                   name: cosa2-obsidian-secret
-            # Each sync is bounded by SYNC_TIMEOUT_SECONDS, and CoSA2 shows a
+            # Each sync is bounded by SYNC_TIMEOUT_SECONDS, and CoSA shows a
             # sync that stops succeeding as a problem on the notes source.
             probes:
               liveness: { enabled: false }
@@ -106,7 +106,7 @@ spec:
     defaultPodOptions:
       automountServiceAccountToken: false
       imagePullSecrets:
-        - name: ghcr-imagepullsecret
+        - name: cosa-imagepullsecret
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000

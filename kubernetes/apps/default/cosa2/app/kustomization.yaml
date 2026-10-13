@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
+  - ./imagepullsecret.yaml
   - ./ocirepository.yaml
   - ./vault-pvc.yaml
 patches:
