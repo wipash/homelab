@@ -29,7 +29,7 @@ Flux applies the configuration under `kubernetes/apps`, grouped by namespace. Ea
 
 ## CoSA
 
-CoSA pulls private images from `holmesazae.azurecr.io/holmesgroup/cosa` and `holmesazae.azurecr.io/holmesgroup/cosa/obsidian-sync`. The app currently follows `main`, pinned to its digest; the sync image uses a digest-pinned `sha-<commit>` tag matching the app's OCI revision. Once both publish a shared release tag such as `v0.2.0`, switch both pins to that tag with their respective digests. Renovate groups version-tag updates under CoSA without holding up current `main` digest updates. Grouping does not enforce equal target versions: publish matching tags for both repositories and check both versions before merging.
+CoSA pulls private images from `holmesazae.azurecr.io/holmesgroup/cosa` and `holmesazae.azurecr.io/holmesgroup/cosa/obsidian-sync`. Both images use matching release tags, starting with `v0.2.2`, each pinned to its own OCI index digest. Renovate groups version-tag updates under CoSA. Grouping does not enforce equal target versions: publish matching tags for both repositories and check both versions before merging.
 
 - **Registry credentials:** vault `Kubernetes`, item `cosa-acr`, concealed field `dockerconfigjson`, with an auth entry for `holmesazae.azurecr.io`. External Secrets creates `default/cosa-imagepullsecret`; no registry password is stored in Git.
 - **Renovate credentials:** GitHub Actions secrets `ACR_USERNAME` (token name) and `ACR_PASSWORD` (token password) authenticate the workflow to `holmesazae.azurecr.io`. These are independent of the Kubernetes pull secret; update both GitHub and 1Password when rotating a shared token.
