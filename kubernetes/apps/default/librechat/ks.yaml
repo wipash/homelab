@@ -28,6 +28,7 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_LOCAL_SCHEDULE: "43 * * * *"
+      VOLSYNC_REMOTE_SCHEDULE: "27 1 * * *"
       VOLSYNC_STORAGECLASS: synology-iscsi
       VOLSYNC_SNAPSHOTCLASS: synology-iscsi
       VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache

@@ -28,6 +28,8 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_LOCAL_SCHEDULE: "11 * * * *"
+      VOLSYNC_REMOTE_SCHEDULE: "52 1 * * *"
       VOLSYNC_PUID: "0"
   components:
     - ../../../../components/volsync

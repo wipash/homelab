@@ -32,8 +32,9 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_LOCAL_SCHEDULE: "12 */6 * * *"
+      VOLSYNC_REMOTE_SCHEDULE: "37 0 * * *"
       VOLSYNC_CAPACITY: 5Gi
-      VOLSYNC_LOCAL_SCHEDULE: "10 */6 * * *"
       VOLSYNC_STORAGECLASS: synology-iscsi
       VOLSYNC_SNAPSHOTCLASS: synology-iscsi
       VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache

@@ -32,6 +32,7 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_LOCAL_SCHEDULE: "35 * * * *"
+      VOLSYNC_REMOTE_SCHEDULE: "17 1 * * *"
       VOLSYNC_CAPACITY: 5Gi
       VOLSYNC_STORAGECLASS: synology-iscsi
       VOLSYNC_SNAPSHOTCLASS: synology-iscsi

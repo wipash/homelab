@@ -46,6 +46,8 @@ spec:
   postBuild:
     substitute:
       APP: grafana
+      VOLSYNC_LOCAL_SCHEDULE: "14 * * * *"
+      VOLSYNC_REMOTE_SCHEDULE: "52 0 * * *"
       VOLSYNC_CLAIM: grafana-pvc
       VOLSYNC_CAPACITY: 5Gi
       VOLSYNC_STORAGECLASS: synology-iscsi

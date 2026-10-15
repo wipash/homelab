@@ -27,6 +27,8 @@ spec:
   postBuild:
     substitute:
       APP: alertmanager
+      VOLSYNC_LOCAL_SCHEDULE: "58 * * * *"
+      VOLSYNC_REMOTE_SCHEDULE: "32 3 * * *"
       VOLSYNC_CLAIM: data-alertmanager-kube-prometheus-stack-0
       VOLSYNC_CAPACITY: 1Gi
       VOLSYNC_STORAGECLASS: synology-iscsi

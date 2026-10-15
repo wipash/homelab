@@ -32,6 +32,7 @@ spec:
     substitute:
       APP: *appname
       VOLSYNC_LOCAL_SCHEDULE: "40 * * * *"
+      VOLSYNC_REMOTE_SCHEDULE: "32 0 * * *"
       VOLSYNC_STORAGECLASS: synology-iscsi
       VOLSYNC_SNAPSHOTCLASS: synology-iscsi
       VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache

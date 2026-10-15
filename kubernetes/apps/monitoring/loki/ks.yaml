@@ -27,6 +27,8 @@ spec:
   postBuild:
     substitute:
       APP: loki
+      VOLSYNC_LOCAL_SCHEDULE: "54 * * * *"
+      VOLSYNC_REMOTE_SCHEDULE: "32 1 * * *"
       VOLSYNC_CLAIM: storage-loki-0
       VOLSYNC_CAPACITY: 50Gi
       VOLSYNC_STORAGECLASS: synology-iscsi

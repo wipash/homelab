@@ -23,6 +23,8 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_LOCAL_SCHEDULE: "6 * * * *"
+      VOLSYNC_REMOTE_SCHEDULE: "2 1 * * *"
       VOLSYNC_CAPACITY: 50Gi
   prune: true
   retryInterval: 2m

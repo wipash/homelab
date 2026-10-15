@@ -48,7 +48,7 @@ metadata:
 spec:
   sourcePVC: hoarder-meilisearch
   trigger:
-    schedule: "40 * * * *"
+    schedule: "41 * * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 14
@@ -75,7 +75,7 @@ metadata:
 spec:
   sourcePVC: hoarder-meilisearch
   trigger:
-    schedule: "35 0 * * *"
+    schedule: "37 3 * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 14

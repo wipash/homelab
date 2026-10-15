@@ -33,6 +33,7 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_LOCAL_SCHEDULE: "42 * * * *"
+      VOLSYNC_REMOTE_SCHEDULE: "7 1 * * *"
   components:
     - ../../../../components/volsync
 # ---
@@ -103,5 +104,6 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_LOCAL_SCHEDULE: "46 * * * *"
+      VOLSYNC_REMOTE_SCHEDULE: "12 1 * * *"
   components:
     - ../../../../components/volsync

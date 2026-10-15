@@ -26,7 +26,8 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_LOCAL_SCHEDULE: "20 */6 * * *"
+      VOLSYNC_LOCAL_SCHEDULE: "21 */6 * * *"
+      VOLSYNC_REMOTE_SCHEDULE: "7 0 * * *"
       VOLSYNC_STORAGECLASS: synology-iscsi
       VOLSYNC_SNAPSHOTCLASS: synology-iscsi
       VOLSYNC_CACHE_SNAPSHOTCLASS: synology-nfs-cache

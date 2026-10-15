@@ -30,7 +30,8 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_LOCAL_SCHEDULE: "19 * * * *"
+      VOLSYNC_REMOTE_SCHEDULE: "47 2 * * *"
       VOLSYNC_CAPACITY: 1Gi
-      VOLSYNC_LOCAL_SCHEDULE: "28 * * * *"
   components:
     - ../../../../components/volsync
