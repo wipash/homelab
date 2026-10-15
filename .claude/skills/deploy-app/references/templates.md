@@ -30,7 +30,7 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: flux-cluster
+    name: flux-system
     namespace: flux-system
   wait: false
   interval: 30m
@@ -57,13 +57,17 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: rook-ceph-cluster
+    - name: synology-csi
       namespace: flux-system
+    - name: volsync
+      namespace: flux-system
+    - name: nfs-cache
+      namespace: kube-system
   path: ./kubernetes/apps/<namespace>/<appname>/app
   prune: true
   sourceRef:
     kind: GitRepository
-    name: flux-cluster
+    name: flux-system
     namespace: flux-system
   wait: false
   interval: 30m
@@ -73,6 +77,8 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: <capacity>
+      VOLSYNC_LOCAL_SCHEDULE: "<unused minute> * * * *"
+      VOLSYNC_REMOTE_SCHEDULE: "<next free 5-minute slot> * * *"
   components:
     - ../../../../components/volsync
 ```
@@ -82,8 +88,12 @@ spec:
 Add to `dependsOn`:
 ```yaml
   dependsOn:
-    - name: rook-ceph-cluster
+    - name: synology-csi
       namespace: flux-system
+    - name: volsync
+      namespace: flux-system
+    - name: nfs-cache
+      namespace: kube-system
     - name: external-secrets-stores
       namespace: kube-system
 ```
@@ -451,7 +461,7 @@ spec:
   resources:
     requests:
       storage: <size>
-  storageClassName: ceph-block
+  storageClassName: synology-iscsi
 ```
 
 ---

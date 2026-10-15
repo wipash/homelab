@@ -6,9 +6,9 @@ description: |
 
 # Deploy App to Homelab Cluster
 
-You are deploying a new application to Sean's homelab Kubernetes cluster. The cluster runs Flux CD for GitOps, uses the bjw-s app-template Helm chart for all apps, Gateway API with Envoy Gateway for routing, ExternalSecrets with 1Password for secrets, VolSync for backup, and Ceph for storage.
+You are deploying a new application to Sean's homelab Kubernetes cluster. The cluster runs Flux CD for GitOps, uses the bjw-s app-template Helm chart for all apps, Gateway API with Envoy Gateway for routing, ExternalSecrets with 1Password for secrets, VolSync for backup, and Synology iSCSI (`synology-iscsi`) for storage.
 
-The repo is at `/home/sean/homelab` and all Kubernetes manifests live under `kubernetes/`.
+The repo is at `/home/sean/dev/homelab` and all Kubernetes manifests live under `kubernetes/`.
 
 ## Interview the User
 
@@ -89,7 +89,7 @@ Key conventions to follow exactly:
 - Route `sectionName: https` is always set
 - OCIRepository name matches the app name, always points to `oci://ghcr.io/bjw-s-labs/helm/app-template` tag `4.6.2`
 - HelmRelease `chartRef` references the OCIRepository by the app name
-- The `ks.yaml` sourceRef is `GitRepository/flux-cluster` in `flux-system`
+- The `ks.yaml` sourceRef is `GitRepository/flux-system` in `flux-system`
 - ExternalSecret target is always `<appname>-secret`, secretStoreRef is `ClusterSecretStore/onepassword-connect`
 
 ## Persistence Patterns
@@ -99,11 +99,12 @@ Choose the right pattern based on what the app needs:
 ### VolSync-backed config storage (most apps)
 Add the volsync component to `ks.yaml` and reference the PVC in helmrelease:
 - `ks.yaml`: add `components: [../../../../components/volsync]` and set `VOLSYNC_CAPACITY` in postBuild.substitute
-- `ks.yaml`: add `dependsOn` for `rook-ceph-cluster` (namespace: `flux-system`)
+- `ks.yaml`: set `VOLSYNC_LOCAL_SCHEDULE` and `VOLSYNC_REMOTE_SCHEDULE` to unused slots, following "VolSync schedules" in the repo's `AGENTS.md`
+- `ks.yaml`: add `dependsOn` for `synology-csi` and `volsync` (namespace: `flux-system`) and `nfs-cache` (namespace: `kube-system`)
 - HelmRelease: `persistence.config.existingClaim: "{{ .Release.Name }}"`
 
 ### Extra PVCs (cache, data that doesn't need backup)
-Create a separate `pvc.yaml` with `storageClassName: ceph-block`.
+Create a separate `pvc.yaml` with `storageClassName: synology-iscsi`.
 
 ### NFS media mount
 ```yaml
