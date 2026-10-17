@@ -37,7 +37,10 @@ spec:
               TZ: Pacific/Auckland
               HINDSIGHT_API_LLM_PROVIDER: openrouter
               HINDSIGHT_API_LLM_MODEL: openai/gpt-oss-120b:nitro
+              HINDSIGHT_API_SKIP_LLM_VERIFICATION: "true"
               HINDSIGHT_API_EMBEDDINGS_PROVIDER: openrouter
+              # Match existing vectors and avoid the billable startup dimension probe.
+              HINDSIGHT_API_EMBEDDINGS_OPENAI_DIMENSIONS: "1024"
               HINDSIGHT_API_RERANKER_PROVIDER: cohere
               HINDSIGHT_API_RERANKER_COHERE_MODEL: rerank-v4.0-fast
               HINDSIGHT_API_WORKER_ID: hindsight-api
