@@ -87,7 +87,7 @@ spec:
           app:
             image:
               repository: ghcr.io/vectorize-io/hindsight-control-plane
-              tag: 1.0.0@sha256:ad5257866e1a0a0198da55e14a1c373e260e4faa945c9a64d3a3926cb3498cd6
+              tag: 1.1.0@sha256:373f86848649a8dadc9b2d9ecf1d18b4c446162ca7b556fc4152e92ef433e983
             env:
               TZ: Pacific/Auckland
               NODE_ENV: production
