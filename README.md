@@ -35,6 +35,7 @@ CoSA pulls private images from `holmesazae.azurecr.io/holmesgroup/cosa` and `hol
 - **Renovate credentials:** GitHub Actions secrets `ACR_USERNAME` (token name) and `ACR_PASSWORD` (token password) authenticate the workflow to `holmesazae.azurecr.io`. These are independent of the Kubernetes pull secret; update both GitHub and 1Password when rotating a shared token.
 - **Access:** a dedicated ACR token needs `content/read` on both repositories; `metadata/read` permits tag/manifest discovery. Rotate its password in 1Password before expiry.
 - **Deployment:** manifests remain under `kubernetes/apps/default/cosa2`; the release and PVCs (`cosa2`, `cosa2-vault`) retain their existing names and data. The current image still uses `COSA2_*` environment variables.
+- **Release updates:** Update both image tags and OCI index digests in `kubernetes/apps/default/cosa2/app/helmrelease.yaml`. After pushing, run `flux reconcile kustomization cosa2 -n default --with-source` and `flux reconcile helmrelease cosa2 -n default`. Verify the deployment rollout, both running container image pins, the health endpoints, and a successful Obsidian sync.
 - **Endpoint:** `https://cosa2.mcgrath.nz`; `/healthz` and `/readyz` report application health. Check `obsidian-sync` container logs for a successful `Synced at` message.
 
 ## Headscale tailnet
