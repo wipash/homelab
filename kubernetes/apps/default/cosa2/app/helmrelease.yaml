@@ -25,7 +25,7 @@ spec:
           vault-folders:
             image: &syncImage
               repository: holmesazae.azurecr.io/holmesgroup/cosa/obsidian-sync
-              tag: sha-f6816d3b994f2c73d5fc24299b73f533ff1a452b@sha256:e62b261a5ceb4319b27966b1c95ab34e824ee4c003b31a8a00a5e9171236b8a7
+              tag: v0.5.0@sha256:a32f8f17f679db573c1b276b862cbcfa83b0094bc15e8da64d3371ddc13a0ee2
             command: ["mkdir", "-p", "/vault-volume/notes", "/vault-volume/state"]
             securityContext: &restricted
               allowPrivilegeEscalation: false
@@ -35,7 +35,7 @@ spec:
           app:
             image:
               repository: holmesazae.azurecr.io/holmesgroup/cosa
-              tag: sha-f6816d3b994f2c73d5fc24299b73f533ff1a452b@sha256:3c4f7caac37e0bdb23501c379cbc8fe4942db1dcd8347d3e712bd077ecd0f63a
+              tag: v0.5.0@sha256:e855df9365b399ce502b36031b5860deb315adb12f008a3afbef0e26eb9dc577
             env:
               TZ: Pacific/Auckland
               COSA2_PUBLIC_ORIGIN: https://cosa2.mcgrath.nz
