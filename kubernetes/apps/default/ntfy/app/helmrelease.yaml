@@ -19,7 +19,7 @@ spec:
           app:
             image:
               repository: docker.io/binwiederhier/ntfy
-              tag: v2.32.0@sha256:59250e1d8be2ee2186c4560322f625faef22ace380331f05b63f8842dbd62602
+              tag: v2.34.0@sha256:901e14503d3f605f445be0e68f2ac71f0aa73391897ce6ceb599f8c48d8b3792
             args:
               - serve
             env:
