@@ -27,6 +27,10 @@ Flux applies the configuration under `kubernetes/apps`, grouped by namespace. Ea
 
 [Renovate](https://github.com/renovatebot/renovate) opens pull requests for dependency updates. Flux applies merged changes to the cluster.
 
+### Tautulli JBOPS synchronization
+
+Tautulli's `jbops` git-sync sidecar publishes scripts under `/add-ons/JBOPS`. The `fix-add-ons-root` init container changes only the `/add-ons` emptyDir mountpoint to UID/GID 568 before startup: `fsGroup` alone leaves its owner as root, which Git rejects as dubious ownership. Only this init container runs as root with `CHOWN`; the application and git-sync remain non-root. Keep this initialization when changing the volume or sidecar image.
+
 ## CoSA
 
 CoSA pulls private images from `holmesazae.azurecr.io/holmesgroup/cosa` and `holmesazae.azurecr.io/holmesgroup/cosa/obsidian-sync`. Both images use matching release tags, starting with `v0.2.2`, each pinned to its own OCI index digest. Renovate groups version-tag updates under CoSA. Grouping does not enforce equal target versions: publish matching tags for both repositories and check both versions before merging.

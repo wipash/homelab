@@ -19,7 +19,7 @@ spec:
           reloader.stakater.com/auto: "true"
         containers:
           app:
-            image:
+            image: &tautulliImage
               repository: ghcr.io/tautulli/tautulli
               tag: v2.18.2@sha256:1b5875fe3193d450a62e7b438eb6701195c841f14f3dcb962e545eda42d3696f
             env:
@@ -69,6 +69,21 @@ spec:
                 memory: 64Mi
               limits:
                 memory: 128Mi
+        initContainers:
+          # fsGroup leaves the emptyDir root owned by UID 0; Git requires UID 568.
+          fix-add-ons-root:
+            image: *tautulliImage
+            command: ["/usr/local/bin/python", "-c"]
+            args: ["import os; os.chown('/add-ons', 568, 568)"]
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              runAsNonRoot: false
+              runAsUser: 0
+              runAsGroup: 0
+              capabilities:
+                drop: ["ALL"]
+                add: ["CHOWN"]
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
