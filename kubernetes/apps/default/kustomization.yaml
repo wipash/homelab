@@ -15,6 +15,7 @@ resources:
   - ./bookorbit/ks.yaml
   # - ./ccattendance/ks.yaml
   - ./changedetection/ks.yaml
+  - ./cleanrr/ks.yaml
   - ./cosa2/ks.yaml
   - ./cups/ks.yaml
   - ./cyberchef/ks.yaml
