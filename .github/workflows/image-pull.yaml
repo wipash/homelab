@@ -71,7 +71,7 @@ jobs:
         if: ${{ startsWith(matrix.image, 'ghcr.io/wipash/') }}
         uses: azure/setup-kubectl@bda439f5f36b99b262ebdcd3613869bddb064c8e # v5.2.0
         with:
-          version: v1.37.1
+          version: v1.37.2
 
       - name: Pull private wipash image
         if: ${{ startsWith(matrix.image, 'ghcr.io/wipash/') }}
