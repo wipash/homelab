@@ -23,6 +23,7 @@ resources:
   - ./frigate/ks.yaml
   - ./ghcr-imagepullsecret/ks.yaml
   - ./ghost/ks.yaml
+  - ./gitbored/ks.yaml
   # - ./hermes/ks.yaml
   # - ./hi-events/ks.yaml
   - ./hindsight/ks.yaml
