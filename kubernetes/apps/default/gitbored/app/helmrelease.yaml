@@ -1,0 +1,101 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: gitbored
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: gitbored
+  interval: 1h
+  values:
+    controllers:
+      gitbored:
+        replicas: 1
+        strategy: Recreate
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          enableServiceLinks: false
+          terminationGracePeriodSeconds: 30
+        containers:
+          app:
+            image:
+              repository: ghcr.io/wipash/gitbored
+              tag: latest@sha256:426b25b395588340e2b64323a6bf1386e1a252b0ce7ff3a704443b6e5d850e39
+            env:
+              TZ: Pacific/Auckland
+              NODE_ENV: production
+              HOST: 0.0.0.0
+              PORT: &port 3001
+              APP_ORIGIN: https://bored.mcgrath.nz
+              # The app chmods this directory; fsGroup does not own the PVC root.
+              DATA_DIR: /data/gitbored
+            envFrom:
+              - secretRef:
+                  name: gitbored-secret
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/health
+                    port: *port
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/health
+                    port: *port
+                  periodSeconds: 5
+                  timeoutSeconds: 5
+                  failureThreshold: 30
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+    defaultPodOptions:
+      automountServiceAccountToken: false
+      imagePullSecrets:
+        - name: ghcr-imagepullsecret
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      app:
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        hostnames:
+          - bored.mcgrath.nz
+        parentRefs:
+          - name: envoy-external
+            namespace: networking
+            sectionName: https
+    persistence:
+      data:
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /data
+      tmp:
+        type: emptyDir
+        sizeLimit: 64Mi
