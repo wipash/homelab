@@ -11,6 +11,7 @@ env:
 
 includes:
   bootstrap: .taskfiles/Bootstrap
+  cluster: .taskfiles/cluster.yml
   external-secrets: .taskfiles/ExternalSecrets
   flux: .taskfiles/Flux
   kubernetes: .taskfiles/Kubernetes
