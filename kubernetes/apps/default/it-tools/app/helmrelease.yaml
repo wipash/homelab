@@ -19,7 +19,7 @@ spec:
           app:
             image:
               repository: ghcr.io/sharevb/it-tools
-              tag: latest@sha256:1ac249e26f3622c9b4b7c492525bff401299ceec865d717aec2aa2604fc151eb
+              tag: latest@sha256:a05e70c5e5a75f16aa5a25952c028e05a2e1f98d60abd45b316ac8e43aa367db
             env:
               TZ: Pacific/Auckland
             probes:
