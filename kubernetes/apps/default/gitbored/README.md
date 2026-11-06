@@ -6,8 +6,11 @@ GitBored handles GitHub sign-in and account isolation.
 
 Configure the GitHub App callback URL as
 `https://bored.mcgrath.nz/api/auth/callback`.
-External Secrets reads `TOKEN_ENCRYPTION_KEY`, `GITHUB_CLIENT_SECRET` and
-`GITHUB_CLIENT_ID` from the `gitbored` item in 1Password. The encryption key must
+External Secrets reads `TOKEN_ENCRYPTION_KEY`, `GITHUB_CLIENT_SECRET`,
+`GITHUB_CLIENT_ID` and `TLDRAW_KEY` from the `gitbored` item in 1Password.
+The tldraw key must cover `bored.mcgrath.nz`; the application publishes it to the
+browser for SDK validation. Reloader restarts the pod after secret changes;
+reload an open browser tab to load the replacement key. The encryption key must
 be 64 hexadecimal characters and remain stable across deployments and restores.
 
 One replica uses `Recreate` updates and a 5Gi `synology-iscsi` PVC. SQLite and its
