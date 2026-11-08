@@ -23,7 +23,7 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/gitbored
-              tag: sha-0596bbf4f6cde0915f7da4cc87a143d05427b0f1
+              tag: sha-15325d27cd19f54f4166a0b15921fec4635887e8@sha256:99925e2497b711b0978d332df051ab694a2e9b6e0051221312ac3ecd6ffeb699
             env:
               TZ: Pacific/Auckland
               NODE_ENV: production
