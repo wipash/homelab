@@ -50,10 +50,15 @@ jobs:
 
       - name: Extract Images
         id: extract
+        shell: bash
         run: |
-          echo 'images<<EOF' >> $GITHUB_OUTPUT
-          flate diff images -p ./kubernetes/flux -o json >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
+          {
+            echo 'images<<EOF'
+            # Holmes ACR credentials are available to Renovate, not the image-pull runner.
+            flate diff images -p ./kubernetes/flux -o json \
+              | jq 'map(select(startswith("holmesazae.azurecr.io/") | not))'
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
 
   pull:
     if: ${{ needs.extract.outputs.images != '[]' }}
