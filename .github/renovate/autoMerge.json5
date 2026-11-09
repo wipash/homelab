@@ -2,9 +2,9 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
-      description: "Auto-merge CoSA container updates",
+      description: "Auto-merge wipash GHCR and Holmes ACR container updates",
       matchDatasources: ["docker"],
-      matchPackageNames: ["ghcr.io/wipash/cosa", "ghcr.io/wipash/cosa2"],
+      matchPackageNames: ["ghcr.io/wipash/**", "holmesazae.azurecr.io/**"],
       automerge: true,
     },
     {

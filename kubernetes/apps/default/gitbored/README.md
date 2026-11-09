@@ -21,7 +21,8 @@ VolSync snapshots the whole volume hourly at minute 2 to MinIO and nightly at
 in 1Password when restoring the volume; it is not included in the volume backup.
 
 The `latest` image is pinned by digest and pulled using the existing
-`ghcr-imagepullsecret`. Update the digest to deploy a later build.
+`ghcr-imagepullsecret`. Renovate checks hourly for a new `latest` digest and
+opens an update PR, which auto-merges after the required CI checks pass.
 Readiness, liveness and startup probe `/api/health`, including SQLite.
 
 After Flux reconciles, check the external URL, sign in, create a board, and
