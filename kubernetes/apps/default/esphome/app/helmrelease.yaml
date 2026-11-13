@@ -24,6 +24,9 @@ spec:
               PLATFORMIO_CORE_DIR: /cache/platformio
               PLATFORMIO_GLOBALLIB_DIR: /cache/platformio/lib
               PLATFORMIO_SETTING_ENABLE_TELEMETRY: No
+              # HOME is / for uid 2000 and the root filesystem is read-only, so
+              # uv (ESP-IDF Python env) needs its cache pointed somewhere writable.
+              XDG_CACHE_HOME: /cache
             probes:
               liveness:
                 enabled: false
