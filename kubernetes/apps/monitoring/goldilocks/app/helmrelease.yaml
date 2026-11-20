@@ -23,6 +23,18 @@ spec:
     keepHistory: false
   values:
     controller:
+      # VolSync movers and GitHub Actions runners are short-lived Jobs, so recommendations for them are useless.
+      # Goldilocks must be able to list their owners to recognise and skip them.
+      flags:
+        ignore-controller-kind: ReplicationSource,ReplicationDestination,EphemeralRunner,EphemeralRunnerSet,AutoscalingRunnerSet,AutoscalingListener
+      rbac:
+        extraRules:
+          - apiGroups: ["volsync.backube"]
+            resources: ["replicationsources", "replicationdestinations"]
+            verbs: ["get", "list", "watch"]
+          - apiGroups: ["actions.github.com"]
+            resources: ["ephemeralrunners", "ephemeralrunnersets", "autoscalinglisteners", "autoscalingrunnersets"]
+            verbs: ["get", "list", "watch"]
       resources:
         requests:
           cpu: 10m

@@ -24,6 +24,8 @@ spec:
               tag: 3.32.0@sha256:5dcd5bef9d49c614bb74453df3da198afc05a38d8e2cd96b3669bc2c76a94112
             env:
               TZ: Pacific/Auckland
+              # Node sizes its default heap from the memory limit (~268MB at 512Mi), and the 8-hourly rule run exceeds it
+              NODE_OPTIONS: --max-old-space-size=768
             probes:
               liveness:
                 enabled: true
@@ -43,7 +45,7 @@ spec:
                 cpu: 5m
                 memory: 256Mi
               limits:
-                memory: 512Mi
+                memory: 1Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
