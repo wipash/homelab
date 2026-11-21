@@ -10,11 +10,13 @@ spec:
       rules:
         - alert: SpeedtestExporterAbsent
           annotations:
-            description: Speedtest Exporter has disappeared from Prometheus target discovery.
+            description: Speedtest Exporter has not been scraped successfully for 2 hours.
             summary: Speedtest Exporter is down.
+          # The exporter is scraped hourly, so `up` is stale for most of each hour and must be read over a window.
           expr: |
-            absent(up{job=~".*speedtest-exporter.*"} == 1)
-          for: 75m
+            (max_over_time(up{job=~".*speedtest-exporter.*"}[2h]) == 0)
+              or absent_over_time(up{job=~".*speedtest-exporter.*"}[2h])
+          for: 0m
           labels:
             severity: critical
         - alert: SpeedtestSlowInternetDownload
@@ -22,7 +24,7 @@ spec:
             description: Internet download speed is averaging {{ humanize $value }} Mbps.
             summary: SpeedTest slow internet download.
           expr: |
-            avg_over_time(speedtest_download_bits_per_second{job=~".*speedtest-exporter.*"}[4h])
+            avg_over_time(speedtest_download_bits_per_second{job=~".*speedtest-exporter.*"}[4h]) / 1e6
               < 400
           for: 0m
           labels:
@@ -32,7 +34,7 @@ spec:
             description: Internet upload speed is averaging {{ humanize $value }} Mbps.
             summary: SpeedTest slow internet upload.
           expr: |
-            avg_over_time(speedtest_upload_bits_per_second{job=~".*speedtest-exporter.*"}[4h])
+            avg_over_time(speedtest_upload_bits_per_second{job=~".*speedtest-exporter.*"}[4h]) / 1e6
               < 400
           for: 0m
           labels:
