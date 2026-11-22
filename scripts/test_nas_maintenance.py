@@ -34,6 +34,7 @@ class MemoryCluster:
         self.deleted_state = False
         self.fail_name = None
         self.extra_pods = []
+        self.extra_replicasets = []
         self.extra_jobs = []
         self.extra_pvs = []
         self.extra_volumeattachments = []
@@ -93,6 +94,7 @@ class MemoryCluster:
     def snapshot(self):
         resources = {key: [] for key in maintenance.RESOURCE_KINDS.values()}
         resources["pods"] = copy.deepcopy(self.extra_pods)
+        resources["replicasets"] = copy.deepcopy(self.extra_replicasets)
         resources["jobs"] = copy.deepcopy(self.extra_jobs)
         resources["persistentvolumes"] = copy.deepcopy(self.extra_pvs)
         resources["volumeattachments"] = copy.deepcopy(self.extra_volumeattachments)
@@ -428,6 +430,98 @@ class MaintenanceTests(unittest.TestCase):
         for name in ("app-1", "app-2", "app-3", "app-4", "app-5"):
             self.assertEqual(cluster.objects[("deployments.apps", "test", name)]["spec"]["replicas"], 1)
         self.assertEqual(cluster.objects[("deployments.apps", "test", "zero-app")]["spec"]["replicas"], 0)
+
+    def test_resume_advances_on_volume_mount_before_slow_readiness_and_enforces_tier_barrier(self):
+        records = [
+            controller("gitops", role="gitops"),
+            controller("slow-app", replicas=1),
+            controller("init-crash", replicas=1),
+            controller("fast-app", replicas=1),
+        ]
+        state = state_for(records)
+        cluster = MemoryCluster(state)
+        maintenance.pause(cluster, state, timeout=1)
+
+        cluster.extra_replicasets = [
+            {"metadata": {"name": f"{name}-rs", "namespace": "test", "uid": f"{name}-rs",
+                          "ownerReferences": [{"kind": "Deployment", "uid": name, "controller": True}]}}
+            for name in ("slow-app", "init-crash", "fast-app")
+        ]
+        orig_patch = cluster.patch
+        started = []
+        tick = 0
+
+        def tracking_patch(record, operations):
+            orig_patch(record, operations)
+            name = record["name"]
+            if name in ("slow-app", "init-crash", "fast-app"):
+                obj = cluster.objects[cluster.key(record)]
+                if obj["spec"].get("replicas", 0) > 0:
+                    obj["status"]["readyReplicas"] = 0
+                    started.append(name)
+
+        def fake_sleep(_seconds):
+            nonlocal tick
+            tick += 1
+            if tick == 1:
+                # slow-app mounted (Running, still not Ready); init-crash mounted (initContainer crashlooping).
+                cluster.extra_pods = [
+                    {"metadata": {"name": "slow-app-pod", "namespace": "test",
+                                  "ownerReferences": [{"kind": "ReplicaSet", "uid": "slow-app-rs", "controller": True}]},
+                     "status": {"phase": "Running", "containerStatuses": [{"state": {"running": {}}}]}},
+                    {"metadata": {"name": "init-crash-pod", "namespace": "test",
+                                  "ownerReferences": [{"kind": "ReplicaSet", "uid": "init-crash-rs", "controller": True}]},
+                     "status": {"phase": "Pending", "initContainerStatuses": [{
+                         "state": {"waiting": {"reason": "CrashLoopBackOff"}},
+                         "lastState": {"terminated": {"exitCode": 1}},
+                         "restartCount": 1,
+                     }]}},
+                ]
+            elif tick == 2:
+                # fast-app should already have been started while slow-app & init-crash are still ready=0.
+                self.assertIn("fast-app", started)
+                # Gitops must NOT have started yet because the tier barrier waits for full readiness.
+                self.assertEqual(cluster.objects[("deployments.apps", "test", "gitops")]["spec"]["replicas"], 0)
+                for name in ("slow-app", "init-crash", "fast-app"):
+                    cluster.objects[("deployments.apps", "test", name)]["status"]["readyReplicas"] = 1
+
+        cluster.patch = tracking_patch
+        with patch.object(maintenance.time, "sleep", side_effect=fake_sleep):
+            maintenance.resume(cluster, state, timeout=10, batch_size=2)
+
+        self.assertEqual(started, ["slow-app", "init-crash", "fast-app"])
+        self.assertEqual(cluster.objects[("deployments.apps", "test", "gitops")]["spec"]["replicas"], 1)
+        self.assertTrue(cluster.deleted_state)
+
+    def test_mount_blockers_ignore_stale_failed_and_terminating_pods_and_handle_daemonsets(self):
+        dep = controller("app", replicas=1)
+        ds = controller("importer", resource="daemonsets.apps", selector={"hardware": "cd-reader"})
+        state = state_for([controller("gitops", role="gitops"), dep, ds])
+        cluster = MemoryCluster(state)
+        cluster.objects[cluster.key(dep)]["status"]["readyReplicas"] = 0
+        cluster.objects[cluster.key(ds)]["status"]["numberReady"] = 0
+        rs = {"metadata": {"name": "app-rs", "namespace": "test", "uid": "app-rs",
+                           "ownerReferences": [{"kind": "Deployment", "uid": "app", "controller": True}]}}
+        resources = {
+            "replicasets": [rs],
+            "pods": [
+                # Stale Failed pod and terminating Running pod must not count as mounted.
+                {"metadata": {"name": "app-old-failed", "namespace": "test",
+                              "ownerReferences": [{"kind": "ReplicaSet", "uid": "app-rs", "controller": True}]},
+                 "status": {"phase": "Failed", "containerStatuses": [{"state": {"terminated": {"exitCode": 1}}}]}},
+                {"metadata": {"name": "app-terminating", "namespace": "test", "deletionTimestamp": "2026-11-23T00:00:00Z",
+                              "ownerReferences": [{"kind": "ReplicaSet", "uid": "app-rs", "controller": True}]},
+                 "status": {"phase": "Running", "containerStatuses": [{"state": {"running": {}}}]}},
+                # Live new pod still mounting volumes.
+                {"metadata": {"name": "app-new", "namespace": "test",
+                              "ownerReferences": [{"kind": "ReplicaSet", "uid": "app-rs", "controller": True}]},
+                 "status": {"phase": "Pending", "containerStatuses": [{"state": {"waiting": {"reason": "ContainerCreating"}}}]}},
+            ],
+        }
+        dep_blockers = maintenance.mount_blockers(cluster, dep, resources)
+        self.assertEqual(dep_blockers, ["test/deployments/app waiting for volume mount (0/1 pods started)"])
+        ds_blockers = maintenance.mount_blockers(cluster, ds, resources)
+        self.assertEqual(ds_blockers, ["test/daemonsets/importer ready 0/2, updated 2"])
 
 
 if __name__ == "__main__":
