@@ -247,6 +247,53 @@ def ready_blockers(cluster, records):
     return blockers
 
 
+def _pod_past_volume_mount(pod):
+    """True once kubelet has finished WaitForAttachAndMount and started any container."""
+    metadata = pod.get("metadata", {})
+    status = pod.get("status", {})
+    if metadata.get("deletionTimestamp") or status.get("phase") in ("Succeeded", "Failed"):
+        return False
+    if status.get("phase") == "Running":
+        return True
+    for entry in status.get("initContainerStatuses", []) + status.get("containerStatuses", []):
+        state = entry.get("state", {})
+        last_state = entry.get("lastState", {})
+        if (
+            "running" in state
+            or "terminated" in state
+            or "terminated" in last_state
+            or entry.get("restartCount", 0) > 0
+        ):
+            return True
+    return False
+
+
+def mount_blockers(cluster, record, resources):
+    """Return blockers while a workload is still mounting volumes (before advancing the queue)."""
+    if record["resource"] == "daemonsets.apps":
+        return ready_blockers(cluster, [record])
+    current = cluster.get(record["resource"], record["namespace"], record["name"])
+    if current["metadata"]["uid"] != record["uid"]:
+        raise RuntimeError(f"{label(record)} was replaced during maintenance")
+    desired = record["replicas"]
+    if desired == 0 and current["spec"].get("replicas", 1) == 0:
+        return []
+    status = current.get("status", {})
+    if status.get("observedGeneration", 0) < current["metadata"].get("generation", 1):
+        return [f"Waiting for controller to observe {label(record)}"]
+    if current["spec"].get("replicas", 1) != desired:
+        return [f"{label(record)} ready {status.get('readyReplicas', 0)}/{desired}"]
+    if status.get("readyReplicas", 0) >= desired:
+        return []
+    mounted = sum(
+        1 for pod in resources.get("pods", [])
+        if _pod_past_volume_mount(pod) and owner_uid(pod, resources, {record["uid"]}) == record["uid"]
+    )
+    if mounted >= desired:
+        return []
+    return [f"{label(record)} waiting for volume mount ({mounted}/{desired} pods started)"]
+
+
 def _restore_one(cluster, record):
     print(f"Restoring {label(record)}", flush=True)
     if record["resource"] == "daemonsets.apps":
@@ -269,14 +316,16 @@ def restore_controllers(cluster, records, timeout, *, batch_size=None):
     restored = []
 
     def step():
-        still_waiting = []
         blockers = []
-        for record in in_flight:
-            item_blockers = ready_blockers(cluster, [record])
-            if item_blockers:
-                still_waiting.append(record)
-                blockers.extend(item_blockers)
-        in_flight[:] = still_waiting
+        if pending and in_flight:
+            resources = cluster.snapshot()
+            still_waiting = []
+            for record in in_flight:
+                item_blockers = mount_blockers(cluster, record, resources)
+                if item_blockers:
+                    still_waiting.append(record)
+                    blockers.extend(item_blockers)
+            in_flight[:] = still_waiting
 
         while pending and len(in_flight) < batch_size:
             record = pending.pop(0)
@@ -292,12 +341,10 @@ def restore_controllers(cluster, records, timeout, *, batch_size=None):
         if pending:
             blockers.append(f"{len(pending)} controller(s) queued for restore")
             return blockers
-        if blockers:
-            return blockers
         return ready_blockers(cluster, restored)
 
     wait_for(
-        f"Restoring {len(records)} workload(s) (up to {batch_size} at a time)...",
+        f"Restoring {len(records)} workload(s) (up to {batch_size} mounting at a time)...",
         step,
         timeout,
     )
