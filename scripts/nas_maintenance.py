@@ -14,13 +14,15 @@ import time
 import uuid
 
 from nas_inventory import build_plan, nas_jobs, nas_pods
-from nas_storage import nas_ready, storage_blockers
+from nas_storage import CSI_DRIVER, inspect_node_storage, nas_ready, storage_blockers
 
 STATE_NAMESPACE = "kube-system"
 STATE_NAME = "nas-maintenance"
 RECONCILE = "fluxcd.controlplane.io/reconcile"
 SELECTOR = "maintenance.mcgrath.nz/nas-paused"
 NAS_HOSTS = {"10.0.16.16", "brian.sk.mcgrath.nz"}
+ORPHAN_STALL_SECONDS = 15
+RESTORE_BATCH_SIZE = 4
 RESOURCE_KINDS = {
     "PersistentVolume": "persistentvolumes",
     "PersistentVolumeClaim": "persistentvolumeclaims",
@@ -35,6 +37,7 @@ RESOURCE_KINDS = {
     "Node": "nodes",
     "FluxInstance": "fluxinstances",
     "HorizontalPodAutoscaler": "horizontalpodautoscalers",
+    "VolumeAttachment": "volumeattachments",
 }
 
 
@@ -244,15 +247,60 @@ def ready_blockers(cluster, records):
     return blockers
 
 
-def restore_controllers(cluster, records, timeout):
-    for record in records:
-        print(f"Restoring {label(record)}", flush=True)
-        if record["resource"] == "daemonsets.apps":
-            set_field(cluster, record, "/spec/template/spec/nodeSelector", record["nodeSelector"])
-        else:
-            set_field(cluster, record, "/spec/replicas", record["replicas"])
-    if records:
+def _restore_one(cluster, record):
+    print(f"Restoring {label(record)}", flush=True)
+    if record["resource"] == "daemonsets.apps":
+        set_field(cluster, record, "/spec/template/spec/nodeSelector", record["nodeSelector"])
+    else:
+        set_field(cluster, record, "/spec/replicas", record["replicas"])
+
+
+def restore_controllers(cluster, records, timeout, *, batch_size=None):
+    if not records:
+        return
+    if batch_size is None or batch_size >= len(records):
+        for record in records:
+            _restore_one(cluster, record)
         wait_for("Waiting for restored workloads to become ready...", lambda: ready_blockers(cluster, records), timeout)
+        return
+
+    pending = list(records)
+    in_flight = []
+    restored = []
+
+    def step():
+        still_waiting = []
+        blockers = []
+        for record in in_flight:
+            item_blockers = ready_blockers(cluster, [record])
+            if item_blockers:
+                still_waiting.append(record)
+                blockers.extend(item_blockers)
+        in_flight[:] = still_waiting
+
+        while pending and len(in_flight) < batch_size:
+            record = pending.pop(0)
+            _restore_one(cluster, record)
+            restored.append(record)
+            if record["replicas"] == 0:
+                continue
+            item_blockers = ready_blockers(cluster, [record])
+            if item_blockers:
+                in_flight.append(record)
+                blockers.extend(item_blockers)
+
+        if pending:
+            blockers.append(f"{len(pending)} controller(s) queued for restore")
+            return blockers
+        if blockers:
+            return blockers
+        return ready_blockers(cluster, restored)
+
+    wait_for(
+        f"Restoring {len(records)} workload(s) (up to {batch_size} at a time)...",
+        step,
+        timeout,
+    )
 
 
 def job_blockers(resources, plan):
@@ -287,7 +335,101 @@ def show_plan(state):
         print(f"Warning: {warning}")
 
 
-def pause(cluster, state, timeout):
+def _synology_volume_attachments(resources):
+    return [
+        va for va in resources.get("volumeattachments", [])
+        if va.get("spec", {}).get("attacher") == CSI_DRIVER
+    ]
+
+
+def wait_for_storage_cleanup(cluster, plan, timeout, *, stall_seconds=ORPHAN_STALL_SECONDS):
+    last_raw = None
+    stalled_since = None
+    attempted_mounts = set()
+    attempted_sessions = set()
+    cleanup_errors = []
+
+    def check():
+        nonlocal last_raw, stalled_since
+        raw = storage_blockers(plan, run)
+        if not raw:
+            return []
+        raw_key = tuple(sorted(set(raw)))
+        now = time.monotonic()
+        if raw_key != last_raw:
+            last_raw = raw_key
+            stalled_since = now
+        if now - stalled_since < stall_seconds:
+            return raw + cleanup_errors
+
+        resources = cluster.snapshot()
+        consumer_blockers = job_blockers(resources, plan) + [
+            f"NAS consumer remains: {p['metadata']['namespace']}/{p['metadata']['name']}"
+            for p in nas_pods(resources, set(plan["nas_hosts"]))
+        ]
+        if consumer_blockers:
+            stalled_since = now
+            return consumer_blockers + raw + cleanup_errors
+
+        attachments = _synology_volume_attachments(resources)
+        if attachments:
+            stalled_since = now
+            return raw + [
+                f"Waiting for VolumeAttachment {va['metadata']['name']}"
+                for va in attachments
+            ] + cleanup_errors
+
+        inspection = inspect_node_storage(plan, resources, run, cluster.command)
+        cleaned_mounts = False
+        for item in inspection["orphan_mounts"]:
+            key = (item["node"], item["target"])
+            if key in attempted_mounts or not item["pod"]:
+                continue
+            attempted_mounts.add(key)
+            print(f"Cleaning up {item['description']}", flush=True)
+            try:
+                cluster.command(
+                    "-n", "synology-csi", "exec", item["pod"], "-c", "csi-plugin", "--",
+                    "umount", item["target"],
+                )
+                cleaned_mounts = True
+            except (RuntimeError, subprocess.SubprocessError) as error:
+                cleanup_errors.append(f"Failed to unmount {item['node']} {item['target']}: {error}")
+
+        if cleaned_mounts:
+            # Re-read /proc/mounts so sessions backed by unmounted orphan mounts become eligible.
+            inspection = inspect_node_storage(plan, resources, run, cluster.command)
+
+        cleaned_sessions = False
+        for item in inspection["orphan_sessions"]:
+            key = (item["node"], item["sid"])
+            if key in attempted_sessions or not item["pod"] or not item["unmounted"]:
+                continue
+            attempted_sessions.add(key)
+            print(f"Cleaning up {item['description']}", flush=True)
+            try:
+                cluster.command(
+                    "-n", "synology-csi", "exec", item["pod"], "-c", "csi-plugin", "--",
+                    "chroot", "/host", "/usr/local/sbin/iscsiadm", "-m", "session", "-r", item["sid"], "-u",
+                )
+                cleaned_sessions = True
+            except (RuntimeError, subprocess.SubprocessError) as error:
+                cleanup_errors.append(f"Failed to log out {item['node']} session{item['sid']}: {error}")
+
+        if cleaned_mounts or cleaned_sessions:
+            raw = storage_blockers(plan, run)
+            if not raw:
+                return []
+            last_raw = tuple(sorted(set(raw)))
+            stalled_since = time.monotonic()
+            inspection = inspect_node_storage(plan, cluster.snapshot(), run, cluster.command)
+
+        return (inspection["blockers"] or raw) + cleanup_errors
+
+    wait_for("Waiting for node-side NFS unmounts and iSCSI logout...", check, timeout)
+
+
+def pause(cluster, state, timeout, *, orphan_stall_seconds=ORPHAN_STALL_SECONDS):
     if state["phase"] == "resuming":
         raise RuntimeError("A resume was started; finish cluster:resume before pausing again")
     plan = state["plan"]
@@ -316,14 +458,14 @@ def pause(cluster, state, timeout):
         ]
 
     wait_for("Checking for remaining NAS consumers...", no_nas_pods, timeout)
-    wait_for("Waiting for node-side NFS unmounts and iSCSI logout...", lambda: storage_blockers(plan, run), timeout)
+    wait_for_storage_cleanup(cluster, plan, timeout, stall_seconds=orphan_stall_seconds)
     state["phase"] = "paused"
     cluster.save_state(state)
     print("PAUSED: NAS consumers are stopped and node storage is disconnected. The NAS can now be updated/rebooted.")
     print("Keep both cluster nodes running. Afterwards run: task cluster:resume")
 
 
-def resume(cluster, state, timeout):
+def resume(cluster, state, timeout, *, batch_size=RESTORE_BATCH_SIZE):
     plan = state["plan"]
     # Check all original identities before any restoration, including partial-pause recovery.
     for record in plan["controllers"] + plan["cronjobs"] + plan["flux_instances"]:
@@ -335,7 +477,12 @@ def resume(cluster, state, timeout):
     cluster.save_state(state)
     workloads = [r for r in plan["controllers"] if r["role"] == "workload"]
     for resource in ("statefulsets.apps", "deployments.apps", "daemonsets.apps"):
-        restore_controllers(cluster, [r for r in workloads if r["resource"] == resource], timeout)
+        restore_controllers(
+            cluster,
+            [r for r in workloads if r["resource"] == resource],
+            timeout,
+            batch_size=batch_size,
+        )
     for role in ("operator", "backup"):
         restore_controllers(cluster, [r for r in plan["controllers"] if r["role"] == role], timeout)
     for record in plan["cronjobs"]:
@@ -364,10 +511,13 @@ def main(argv=None):
     parser.add_argument("action", choices=("pause", "resume"))
     parser.add_argument("--dry-run", action="store_true", help="Read-only inventory and NAS readiness checks; no state or workload changes")
     parser.add_argument("--timeout", type=int, default=900, help="Seconds to wait per shutdown/readiness barrier (default: 900)")
+    parser.add_argument("--batch-size", type=int, default=RESTORE_BATCH_SIZE, help=f"Max workloads to restore concurrently during resume (default: {RESTORE_BATCH_SIZE})")
     parser.add_argument("--context", help="Kubeconfig context (default: current context)")
     args = parser.parse_args(argv)
     if args.timeout <= 0:
         parser.error("--timeout must be positive")
+    if args.batch_size <= 0:
+        parser.error("--batch-size must be positive")
     context = args.context or run(["kubectl", "config", "current-context"]).strip()
     cluster = Cluster(context)
     cluster_uid = cluster.get("namespaces", STATE_NAMESPACE, STATE_NAMESPACE)["metadata"]["uid"]
@@ -390,6 +540,15 @@ def main(argv=None):
             blockers = nas_ready(state["plan"], run)
             if blockers:
                 print("NAS readiness blockers:\n" + "\n".join(blockers))
+            if args.action == "pause":
+                inspection = inspect_node_storage(state["plan"], cluster.snapshot(), run, cluster.command)
+                orphans = inspection["orphan_mounts"] + inspection["orphan_sessions"]
+                if orphans:
+                    print("Orphaned NAS storage detected (will be cleaned automatically during pause):")
+                    for item in orphans:
+                        print("  " + item["description"])
+                for warning in inspection["warnings"]:
+                    print(f"Warning: {warning}")
             print("DRY RUN: no Kubernetes or NAS resources changed.")
             return 1 if blockers else 0
         if saved is None:
@@ -397,7 +556,7 @@ def main(argv=None):
         if args.action == "pause":
             pause(cluster, state, args.timeout)
         else:
-            resume(cluster, state, args.timeout)
+            resume(cluster, state, args.timeout, batch_size=args.batch_size)
     return 0
 
 

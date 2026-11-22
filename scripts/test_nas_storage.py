@@ -1,11 +1,12 @@
 """Behavioral tests; all remote observations are supplied in memory."""
 
 import copy
+import hashlib
 import json
 import subprocess
 import unittest
 
-from nas_storage import nas_ready, storage_blockers
+from nas_storage import inspect_node_storage, nas_ready, storage_blockers
 
 
 ROOT = "/dev/root / ext4 rw,relatime 0 0\n"
@@ -247,6 +248,191 @@ class NasReadyTests(unittest.TestCase):
         original = copy.deepcopy(self.plan)
         nas_ready(self.plan, self.run)
         self.assertEqual(self.plan, original)
+
+
+def _iscsi_block(target, sid, portal="10.0.16.16:3260,1", conn="IN LOGIN", sess="FREE", disks=()):
+    lines = [
+        f"Target: {target} (non-flash)",
+        f"\tCurrent Portal: {portal}",
+        f"\tPersistent Portal: {portal}",
+        f"\t\tSID: {sid}",
+        f"\t\tiSCSI Connection State: {conn}",
+        f"\t\tiSCSI Session State: {sess}",
+    ]
+    for disk, state in disks:
+        lines.append(f"\t\t\tAttached scsi disk {disk}\t\tState: {state}")
+    return "\n".join(lines) + "\n"
+
+
+def _csi_pod(name, node):
+    return {
+        "metadata": {"name": name, "namespace": "synology-csi", "labels": {"app": "synology-csi-node"}},
+        "spec": {"nodeName": node},
+        "status": {"phase": "Running"},
+    }
+
+
+def _pv(name, handle, claim_ns="default", claim_name="app-data"):
+    return {
+        "metadata": {"name": name},
+        "spec": {
+            "claimRef": {"namespace": claim_ns, "name": claim_name},
+            "csi": {"driver": "csi.san.synology.com", "volumeHandle": handle},
+        },
+    }
+
+
+class InspectNodeStorageTests(unittest.TestCase):
+    def setUp(self):
+        self.plan = copy.deepcopy(PLAN)
+        self.sessions = {"10.0.16.133": ".\n", "10.0.16.135": ".\n"}
+        self.node_mounts = {"10.0.16.133": ROOT, "10.0.16.135": ROOT}
+        self.vol_data = {}
+        self.iscsi_out = {"synology-csi-node-hp1": "", "synology-csi-node-hp2": ""}
+        self.resources = {
+            "persistentvolumes": [],
+            "volumeattachments": [],
+            "pods": [_csi_pod("synology-csi-node-hp1", "hp1"), _csi_pod("synology-csi-node-hp2", "hp2")],
+        }
+
+    def run_cmd(self, argv):
+        self.assertEqual(argv[0], "talosctl")
+        address = argv[argv.index("-n") + 1]
+        if argv[-2:] == ["ls", "/sys/class/iscsi_session"]:
+            result = self.sessions[address]
+        elif argv[-2:] == ["read", "/proc/mounts"]:
+            result = self.node_mounts[address]
+        elif argv[-2] == "read" and argv[-1].endswith("/vol_data.json"):
+            result = self.vol_data[argv[-1]]
+        else:
+            raise AssertionError(f"unexpected command: {argv}")
+        if isinstance(result, Exception):
+            raise result
+        return result
+
+    def kube_cmd(self, *args):
+        pod = args[args.index("exec") + 1]
+        result = self.iscsi_out[pod]
+        if isinstance(result, Exception):
+            raise result
+        return result
+
+    def test_classifies_orphaned_globalmounts_and_dead_sessions_without_matching_pv(self):
+        orphan_handle = "8aa4d1fa-d0ef-4fa8-8f91-6cabb44330fc"
+        orphan_hash = hashlib.sha256(orphan_handle.encode()).hexdigest()
+        mount_dir = f"/var/lib/kubelet/plugins/kubernetes.io/csi/csi.san.synology.com/{orphan_hash}"
+        self.node_mounts["10.0.16.133"] += f"/dev/sdah {mount_dir}/globalmount ext4 rw,relatime,shutdown 0 0\n"
+        self.vol_data[f"{mount_dir}/vol_data.json"] = json.dumps({
+            "driverName": "csi.san.synology.com", "volumeHandle": orphan_handle,
+        })
+        self.sessions["10.0.16.133"] = ".\nsession30\n"
+        self.iscsi_out["synology-csi-node-hp1"] = _iscsi_block(
+            "iqn.2000-01.com.synology:brian.pvc-c99fb3fa-8965-4757-90a8-27ec9d8440f2",
+            "30", disks=[("sdab", "transport-offline")],
+        )
+        result = inspect_node_storage(self.plan, self.resources, self.run_cmd, self.kube_cmd)
+        self.assertEqual(len(result["orphan_mounts"]), 1)
+        self.assertEqual(result["orphan_mounts"][0]["volume_handle"], orphan_handle)
+        self.assertEqual(result["orphan_mounts"][0]["pod"], "synology-csi-node-hp1")
+        self.assertEqual(len(result["orphan_sessions"]), 1)
+        self.assertEqual(result["orphan_sessions"][0]["sid"], "30")
+        self.assertTrue(result["orphan_sessions"][0]["unmounted"])
+        self.assertEqual(result["warnings"], [])
+
+    def test_live_pv_mounts_and_sessions_are_never_classified_as_orphans(self):
+        live_handle = "a1709615-06ab-44c5-839f-cdd6f6f26304"
+        live_hash = hashlib.sha256(live_handle.encode()).hexdigest()
+        pv_name = "pvc-11111111-2222-3333-4444-555555555555"
+        self.resources["persistentvolumes"] = [_pv(pv_name, live_handle, "default", "actual")]
+        mount_dir = f"/var/lib/kubelet/plugins/kubernetes.io/csi/csi.san.synology.com/{live_hash}"
+        self.node_mounts["10.0.16.133"] += f"/dev/sdb {mount_dir}/globalmount ext4 rw,relatime 0 0\n"
+        self.sessions["10.0.16.133"] = ".\nsession12\n"
+        self.iscsi_out["synology-csi-node-hp1"] = _iscsi_block(
+            f"iqn.2000-01.com.synology:brian.{pv_name}",
+            "12", conn="LOGGED IN", sess="LOGGED_IN", disks=[("sdb", "running")],
+        )
+        result = inspect_node_storage(self.plan, self.resources, self.run_cmd, self.kube_cmd)
+        self.assertEqual(result["orphan_mounts"], [])
+        self.assertEqual(result["orphan_sessions"], [])
+        self.assertTrue(any(pv_name in b and "default/actual" in b for b in result["blockers"]))
+        self.assertTrue(any("session12" in b and "default/actual" in b for b in result["blockers"]))
+
+    def test_coupled_orphan_mount_and_session_marks_session_mounted_until_unmounted(self):
+        orphan_handle = "6449b3d1-3699-40ab-b37f-612deb71f746"
+        orphan_hash = hashlib.sha256(orphan_handle.encode()).hexdigest()
+        mount_dir = f"/var/lib/kubelet/plugins/kubernetes.io/csi/csi.san.synology.com/{orphan_hash}"
+        self.node_mounts["10.0.16.133"] += f"/dev/sdab {mount_dir}/globalmount ext4 rw,relatime 0 0\n"
+        self.vol_data[f"{mount_dir}/vol_data.json"] = json.dumps({
+            "driverName": "csi.san.synology.com", "volumeHandle": orphan_handle,
+        })
+        self.sessions["10.0.16.133"] = ".\nsession30\n"
+        self.iscsi_out["synology-csi-node-hp1"] = _iscsi_block(
+            "iqn.2000-01.com.synology:brian.pvc-c99fb3fa-8965-4757-90a8-27ec9d8440f2",
+            "30", disks=[("sdab", "running")],
+        )
+        result = inspect_node_storage(self.plan, self.resources, self.run_cmd, self.kube_cmd)
+        self.assertEqual(len(result["orphan_mounts"]), 1)
+        self.assertEqual(len(result["orphan_sessions"]), 1)
+        self.assertFalse(result["orphan_sessions"][0]["unmounted"])
+
+    def test_shared_device_or_pod_mount_prevents_orphan_classification(self):
+        orphan_handle = "6449b3d1-3699-40ab-b37f-612deb71f746"
+        orphan_hash = hashlib.sha256(orphan_handle.encode()).hexdigest()
+        mount_dir = f"/var/lib/kubelet/plugins/kubernetes.io/csi/csi.san.synology.com/{orphan_hash}"
+        self.node_mounts["10.0.16.133"] += (
+            f"/dev/sdab {mount_dir}/globalmount ext4 rw,relatime 0 0\n"
+            "/dev/sdab /var/lib/kubelet/pods/pod1/volumes/kubernetes.io~csi/pvc-data/mount ext4 rw,relatime 0 0\n"
+        )
+        self.vol_data[f"{mount_dir}/vol_data.json"] = json.dumps({
+            "driverName": "csi.san.synology.com", "volumeHandle": orphan_handle,
+        })
+        self.sessions["10.0.16.133"] = ".\nsession30\n"
+        self.iscsi_out["synology-csi-node-hp1"] = _iscsi_block(
+            "iqn.2000-01.com.synology:brian.pvc-c99fb3fa-8965-4757-90a8-27ec9d8440f2",
+            "30", disks=[("sdab", "running")],
+        )
+        result = inspect_node_storage(self.plan, self.resources, self.run_cmd, self.kube_cmd)
+        self.assertEqual(result["orphan_mounts"], [])
+        self.assertEqual(result["orphan_sessions"], [])
+        self.assertTrue(any("shared by 2 mounts" in b for b in result["blockers"]))
+        self.assertTrue(any("disk still mounted" in b for b in result["blockers"]))
+
+    def test_volume_attachment_non_pvc_target_foreign_portal_and_bad_vol_data_fail_closed(self):
+        orphan_handle = "8aa4d1fa-d0ef-4fa8-8f91-6cabb44330fc"
+        orphan_hash = hashlib.sha256(orphan_handle.encode()).hexdigest()
+        mount_dir = f"/var/lib/kubelet/plugins/kubernetes.io/csi/csi.san.synology.com/{orphan_hash}"
+        self.node_mounts["10.0.16.133"] += f"/dev/sdah {mount_dir}/globalmount ext4 rw,relatime 0 0\n"
+        self.vol_data[f"{mount_dir}/vol_data.json"] = json.dumps({
+            "driverName": "csi.san.synology.com", "volumeHandle": "wrong-handle",
+        })
+        self.resources["volumeattachments"] = [{
+            "metadata": {"name": "csi-va-1"},
+            "spec": {"attacher": "csi.san.synology.com", "source": {"persistentVolumeName": "pvc-aaaaaaaa-1111"}},
+        }]
+        self.sessions["10.0.16.133"] = ".\nsession1\nsession2\nsession3\n"
+        self.iscsi_out["synology-csi-node-hp1"] = (
+            _iscsi_block("iqn.2000-01.com.synology:brian.pvc-aaaaaaaa-1111", "1")
+            + _iscsi_block("iqn.2000-01.com.synology:brian.manual-lun", "2")
+            + _iscsi_block("iqn.2000-01.com.synology:brian.pvc-bbbbbbbb-2222", "3", portal="10.0.16.99:3260,1")
+        )
+        result = inspect_node_storage(self.plan, self.resources, self.run_cmd, self.kube_cmd)
+        self.assertEqual(result["orphan_mounts"], [])
+        self.assertEqual(result["orphan_sessions"], [])
+        self.assertTrue(any("hash does not match" in w for w in result["warnings"]))
+        self.assertEqual(len(result["blockers"]), 4)
+
+    def test_missing_csi_node_pod_or_truncated_iscsiadm_output_fails_closed(self):
+        self.sessions["10.0.16.133"] = ".\nsession30\n"
+        self.resources["pods"] = []
+        result = inspect_node_storage(self.plan, self.resources, self.run_cmd, self.kube_cmd)
+        self.assertEqual(result["orphan_sessions"], [])
+        self.assertTrue(any("no running synology-csi-node pod" in w for w in result["warnings"]))
+
+        self.resources["pods"] = [_csi_pod("synology-csi-node-hp1", "hp1")]
+        self.iscsi_out["synology-csi-node-hp1"] = "Target: iqn.2000-01.com.synology:brian.pvc-c99fb3fa\n"
+        result = inspect_node_storage(self.plan, self.resources, self.run_cmd, self.kube_cmd)
+        self.assertEqual(result["orphan_sessions"], [])
+        self.assertTrue(any("cannot inspect via iscsiadm" in w for w in result["warnings"]))
 
 
 if __name__ == "__main__":
