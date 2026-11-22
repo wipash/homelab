@@ -14,13 +14,14 @@ import time
 import uuid
 
 from nas_inventory import build_plan, nas_jobs, nas_pods
-from nas_storage import nas_ready, storage_blockers
+from nas_storage import CSI_DRIVER, inspect_node_storage, nas_ready, storage_blockers
 
 STATE_NAMESPACE = "kube-system"
 STATE_NAME = "nas-maintenance"
 RECONCILE = "fluxcd.controlplane.io/reconcile"
 SELECTOR = "maintenance.mcgrath.nz/nas-paused"
 NAS_HOSTS = {"10.0.16.16", "brian.sk.mcgrath.nz"}
+ORPHAN_STALL_SECONDS = 15
 RESOURCE_KINDS = {
     "PersistentVolume": "persistentvolumes",
     "PersistentVolumeClaim": "persistentvolumeclaims",
@@ -35,6 +36,7 @@ RESOURCE_KINDS = {
     "Node": "nodes",
     "FluxInstance": "fluxinstances",
     "HorizontalPodAutoscaler": "horizontalpodautoscalers",
+    "VolumeAttachment": "volumeattachments",
 }
 
 
@@ -287,7 +289,101 @@ def show_plan(state):
         print(f"Warning: {warning}")
 
 
-def pause(cluster, state, timeout):
+def _synology_volume_attachments(resources):
+    return [
+        va for va in resources.get("volumeattachments", [])
+        if va.get("spec", {}).get("attacher") == CSI_DRIVER
+    ]
+
+
+def wait_for_storage_cleanup(cluster, plan, timeout, *, stall_seconds=ORPHAN_STALL_SECONDS):
+    last_raw = None
+    stalled_since = None
+    attempted_mounts = set()
+    attempted_sessions = set()
+    cleanup_errors = []
+
+    def check():
+        nonlocal last_raw, stalled_since
+        raw = storage_blockers(plan, run)
+        if not raw:
+            return []
+        raw_key = tuple(sorted(set(raw)))
+        now = time.monotonic()
+        if raw_key != last_raw:
+            last_raw = raw_key
+            stalled_since = now
+        if now - stalled_since < stall_seconds:
+            return raw + cleanup_errors
+
+        resources = cluster.snapshot()
+        consumer_blockers = job_blockers(resources, plan) + [
+            f"NAS consumer remains: {p['metadata']['namespace']}/{p['metadata']['name']}"
+            for p in nas_pods(resources, set(plan["nas_hosts"]))
+        ]
+        if consumer_blockers:
+            stalled_since = now
+            return consumer_blockers + raw + cleanup_errors
+
+        attachments = _synology_volume_attachments(resources)
+        if attachments:
+            stalled_since = now
+            return raw + [
+                f"Waiting for VolumeAttachment {va['metadata']['name']}"
+                for va in attachments
+            ] + cleanup_errors
+
+        inspection = inspect_node_storage(plan, resources, run, cluster.command)
+        cleaned_mounts = False
+        for item in inspection["orphan_mounts"]:
+            key = (item["node"], item["target"])
+            if key in attempted_mounts or not item["pod"]:
+                continue
+            attempted_mounts.add(key)
+            print(f"Cleaning up {item['description']}", flush=True)
+            try:
+                cluster.command(
+                    "-n", "synology-csi", "exec", item["pod"], "-c", "csi-plugin", "--",
+                    "umount", item["target"],
+                )
+                cleaned_mounts = True
+            except (RuntimeError, subprocess.SubprocessError) as error:
+                cleanup_errors.append(f"Failed to unmount {item['node']} {item['target']}: {error}")
+
+        if cleaned_mounts:
+            # Re-read /proc/mounts so sessions backed by unmounted orphan mounts become eligible.
+            inspection = inspect_node_storage(plan, resources, run, cluster.command)
+
+        cleaned_sessions = False
+        for item in inspection["orphan_sessions"]:
+            key = (item["node"], item["sid"])
+            if key in attempted_sessions or not item["pod"] or not item["unmounted"]:
+                continue
+            attempted_sessions.add(key)
+            print(f"Cleaning up {item['description']}", flush=True)
+            try:
+                cluster.command(
+                    "-n", "synology-csi", "exec", item["pod"], "-c", "csi-plugin", "--",
+                    "chroot", "/host", "/usr/local/sbin/iscsiadm", "-m", "session", "-r", item["sid"], "-u",
+                )
+                cleaned_sessions = True
+            except (RuntimeError, subprocess.SubprocessError) as error:
+                cleanup_errors.append(f"Failed to log out {item['node']} session{item['sid']}: {error}")
+
+        if cleaned_mounts or cleaned_sessions:
+            raw = storage_blockers(plan, run)
+            if not raw:
+                return []
+            last_raw = tuple(sorted(set(raw)))
+            stalled_since = time.monotonic()
+            inspection = inspect_node_storage(plan, cluster.snapshot(), run, cluster.command)
+
+        return (inspection["blockers"] or raw) + cleanup_errors
+
+    wait_for("Waiting for node-side NFS unmounts and iSCSI logout...", check, timeout)
+
+
+def pause(cluster, state, timeout, *, orphan_stall_seconds=ORPHAN_STALL_SECONDS):
     if state["phase"] == "resuming":
         raise RuntimeError("A resume was started; finish cluster:resume before pausing again")
     plan = state["plan"]
@@ -316,7 +412,7 @@ def pause(cluster, state, timeout):
         ]
 
     wait_for("Checking for remaining NAS consumers...", no_nas_pods, timeout)
-    wait_for("Waiting for node-side NFS unmounts and iSCSI logout...", lambda: storage_blockers(plan, run), timeout)
+    wait_for_storage_cleanup(cluster, plan, timeout, stall_seconds=orphan_stall_seconds)
     state["phase"] = "paused"
     cluster.save_state(state)
     print("PAUSED: NAS consumers are stopped and node storage is disconnected. The NAS can now be updated/rebooted.")
@@ -390,6 +486,15 @@ def main(argv=None):
             blockers = nas_ready(state["plan"], run)
             if blockers:
                 print("NAS readiness blockers:\n" + "\n".join(blockers))
+            if args.action == "pause":
+                inspection = inspect_node_storage(state["plan"], cluster.snapshot(), run, cluster.command)
+                orphans = inspection["orphan_mounts"] + inspection["orphan_sessions"]
+                if orphans:
+                    print("Orphaned NAS storage detected (will be cleaned automatically during pause):")
+                    for item in orphans:
+                        print("  " + item["description"])
+                for warning in inspection["warnings"]:
+                    print(f"Warning: {warning}")
             print("DRY RUN: no Kubernetes or NAS resources changed.")
             return 1 if blockers else 0
         if saved is None:

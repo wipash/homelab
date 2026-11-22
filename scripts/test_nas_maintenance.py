@@ -1,7 +1,9 @@
 """Safety invariants for maintenance transitions, using an in-memory API adapter."""
 
 import copy
+import io
 import unittest
+from contextlib import redirect_stdout
 from unittest.mock import patch
 
 import nas_maintenance as maintenance
@@ -33,6 +35,10 @@ class MemoryCluster:
         self.fail_name = None
         self.extra_pods = []
         self.extra_jobs = []
+        self.extra_pvs = []
+        self.extra_volumeattachments = []
+        self.exec_handler = None
+        self.exec_calls = []
         for record in state["plan"]["controllers"]:
             spec = {"template": {"spec": {}}}
             if record["nodeSelector"] is not None:
@@ -88,6 +94,8 @@ class MemoryCluster:
         resources = {key: [] for key in maintenance.RESOURCE_KINDS.values()}
         resources["pods"] = copy.deepcopy(self.extra_pods)
         resources["jobs"] = copy.deepcopy(self.extra_jobs)
+        resources["persistentvolumes"] = copy.deepcopy(self.extra_pvs)
+        resources["volumeattachments"] = copy.deepcopy(self.extra_volumeattachments)
         return resources
 
     def save_state(self, state):
@@ -96,9 +104,11 @@ class MemoryCluster:
     def command(self, *args, **kwargs):
         if args[0] == "delete" and args[1] == "configmap":
             self.deleted_state = True
-        else:
-            raise AssertionError(f"Unexpected destructive operation: {args}")
-        return ""
+            return ""
+        if self.exec_handler is not None and "exec" in args:
+            self.exec_calls.append(args)
+            return self.exec_handler(args)
+        raise AssertionError(f"Unexpected destructive operation: {args}")
 
 
 class MaintenanceTests(unittest.TestCase):
@@ -221,6 +231,149 @@ class MaintenanceTests(unittest.TestCase):
         maintenance.resume(self.cluster, self.state, timeout=1)
         self.assertEqual(self.cluster.get("deployments.apps", "test", "app")["spec"]["replicas"], 3)
         self.assertTrue(self.cluster.deleted_state)
+
+    def test_pause_auto_cleans_orphaned_mounts_then_sessions_and_reaches_paused(self):
+        self.storage.stop()
+        mount_a = "/var/lib/kubelet/plugins/kubernetes.io/csi/csi.san.synology.com/" + "a" * 64 + "/globalmount"
+        mount_b = "/var/lib/kubelet/plugins/kubernetes.io/csi/csi.san.synology.com/" + "b" * 64 + "/globalmount"
+        remaining_mounts = [mount_a, mount_b]
+        remaining_sessions = ["30", "66"]
+        actions = []
+
+        def fake_exec(args):
+            if "umount" in args:
+                target = args[-1]
+                actions.append(("umount", target))
+                remaining_mounts.remove(target)
+                return ""
+            if "/usr/local/sbin/iscsiadm" in args and "-u" in args:
+                sid = args[args.index("-r") + 1]
+                actions.append(("logout", sid))
+                remaining_sessions.remove(sid)
+                return ""
+            raise AssertionError(f"unexpected exec: {args}")
+
+        self.cluster.exec_handler = fake_exec
+
+        def fake_blockers(_plan, _run):
+            out = [f"hp1: mount {m}" for m in remaining_mounts]
+            if remaining_sessions:
+                out.append(f"hp1: {len(remaining_sessions)} iSCSI session(s) remain")
+            return out
+
+        def fake_inspect(_plan, _resources, _run, _kube):
+            return {
+                "blockers": fake_blockers(_plan, _run),
+                "orphan_mounts": [
+                    {"node": "hp1", "address": "10.0.16.133", "pod": "synology-csi-node-hp1",
+                     "target": m, "source": "/dev/sdab", "volume_handle": "h", "description": f"hp1: orphan {m}"}
+                    for m in remaining_mounts
+                ],
+                "orphan_sessions": [
+                    {"node": "hp1", "address": "10.0.16.133", "pod": "synology-csi-node-hp1",
+                     "sid": sid, "target": f"iqn.test.{sid}", "pv_name": f"pvc-{sid}",
+                     "state": "FREE/IN LOGIN",
+                     # session 66 is backed by mount_b until mount_b is unmounted
+                     "unmounted": sid != "66" or mount_b not in remaining_mounts,
+                     "description": f"hp1: orphan session{sid}"}
+                    for sid in remaining_sessions
+                ],
+                "warnings": [],
+            }
+
+        with (
+            patch.object(maintenance, "storage_blockers", side_effect=fake_blockers),
+            patch.object(maintenance, "inspect_node_storage", side_effect=fake_inspect),
+        ):
+            maintenance.pause(self.cluster, self.state, timeout=1, orphan_stall_seconds=0)
+
+        self.assertEqual(self.cluster.saved["phase"], "paused")
+        self.assertEqual(actions, [
+            ("umount", mount_a),
+            ("umount", mount_b),
+            ("logout", "30"),
+            ("logout", "66"),
+        ])
+
+    def test_pause_waits_for_volume_attachments_before_cleaning_orphans(self):
+        self.storage.stop()
+        self.cluster.extra_volumeattachments = [{
+            "metadata": {"name": "csi-va-active"},
+            "spec": {"attacher": "csi.san.synology.com", "source": {"persistentVolumeName": "pvc-live"}},
+        }]
+        self.cluster.exec_handler = lambda args: (_ for _ in ()).throw(AssertionError(f"should not exec: {args}"))
+        with (
+            patch.object(maintenance, "storage_blockers", return_value=["hp1: 1 iSCSI session(s) remain"]),
+            patch.object(maintenance, "inspect_node_storage") as inspect_mock,
+        ):
+            with self.assertRaisesRegex(RuntimeError, "VolumeAttachment csi-va-active"):
+                maintenance.pause(self.cluster, self.state, timeout=0, orphan_stall_seconds=0)
+        inspect_mock.assert_not_called()
+        self.assertEqual(self.cluster.saved["phase"], "pausing")
+
+    def test_pause_never_cleans_live_pv_blockers_and_surfaces_detailed_blocker(self):
+        self.storage.stop()
+        detailed = "hp1: iSCSI session12 remains for pvc-live (default/actual) (iqn.test, state=LOGGED_IN/LOGGED IN)"
+        with (
+            patch.object(maintenance, "storage_blockers", return_value=["hp1: 1 iSCSI session(s) remain"]),
+            patch.object(maintenance, "inspect_node_storage", return_value={
+                "blockers": [detailed], "orphan_mounts": [], "orphan_sessions": [], "warnings": [],
+            }),
+        ):
+            with self.assertRaisesRegex(RuntimeError, "default/actual"):
+                maintenance.pause(self.cluster, self.state, timeout=0, orphan_stall_seconds=0)
+        self.assertEqual(self.cluster.exec_calls, [])
+        self.assertEqual(self.cluster.saved["phase"], "pausing")
+
+    def test_pause_cleanup_failure_fails_closed_without_marking_paused(self):
+        self.storage.stop()
+        mount_a = "/var/lib/kubelet/plugins/kubernetes.io/csi/csi.san.synology.com/" + "a" * 64 + "/globalmount"
+        self.cluster.exec_handler = lambda args: (_ for _ in ()).throw(RuntimeError("target is busy"))
+        with (
+            patch.object(maintenance, "storage_blockers", return_value=[f"hp1: Synology CSI mount remains at {mount_a}"]),
+            patch.object(maintenance, "inspect_node_storage", return_value={
+                "blockers": [f"hp1: orphaned Synology CSI globalmount {mount_a}"],
+                "orphan_mounts": [{
+                    "node": "hp1", "address": "10.0.16.133", "pod": "synology-csi-node-hp1",
+                    "target": mount_a, "source": "/dev/sdc", "volume_handle": "h",
+                    "description": f"hp1: orphaned {mount_a}",
+                }],
+                "orphan_sessions": [],
+                "warnings": [],
+            }),
+        ):
+            with self.assertRaisesRegex(RuntimeError, "target is busy"):
+                maintenance.pause(self.cluster, self.state, timeout=0, orphan_stall_seconds=0)
+        self.assertEqual(len(self.cluster.exec_calls), 1)
+        self.assertEqual(self.cluster.saved["phase"], "pausing")
+
+    def test_pause_dry_run_reports_orphans_without_mutating(self):
+        fake_cluster = self.cluster
+        fake_cluster.state = lambda: None
+        fake_cluster.create_state = lambda state: (_ for _ in ()).throw(AssertionError("dry-run created state"))
+        orig_get = fake_cluster.get
+        fake_cluster.get = lambda resource, ns, name, **kw: (
+            {"metadata": {"uid": "cluster"}} if (resource, ns, name) == ("namespaces", "kube-system", "kube-system")
+            else orig_get(resource, ns, name, **kw)
+        )
+        stdout = io.StringIO()
+        with (
+            patch.object(maintenance, "Cluster", return_value=fake_cluster),
+            patch.object(maintenance, "run", return_value="test-context\n"),
+            patch.object(maintenance, "build_plan", return_value=self.state["plan"]),
+            patch.object(maintenance, "inspect_node_storage", return_value={
+                "blockers": ["hp1: orphaned iSCSI session30 (no matching PV)"],
+                "orphan_mounts": [],
+                "orphan_sessions": [{"description": "hp1: orphaned iSCSI session30 (no matching PV)"}],
+                "warnings": [],
+            }),
+            redirect_stdout(stdout),
+        ):
+            rc = maintenance.main(["pause", "--dry-run"])
+        self.assertEqual(rc, 0)
+        self.assertIn("Orphaned NAS storage detected", stdout.getvalue())
+        self.assertIn("session30", stdout.getvalue())
+        self.assertEqual(fake_cluster.exec_calls, [])
 
 
 if __name__ == "__main__":
