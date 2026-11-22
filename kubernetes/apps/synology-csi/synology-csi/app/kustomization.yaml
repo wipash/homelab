@@ -18,6 +18,13 @@ images:
   - name: registry.k8s.io/sig-storage/csi-snapshotter
     newTag: v8.6.0
     digest: sha256:42af0929bcd60a43499825c078a60ff0534e08af8fbeb283aa391be40feb9f3e
+configMapGenerator:
+  - name: synology-csi-iscsiadm-wrapper
+    options:
+      annotations:
+        kustomize.toolkit.fluxcd.io/substitute: disabled
+    files:
+      - iscsiadm=iscsiadm-wrapper.sh
 patches:
   - target:
       kind: StatefulSet
@@ -49,10 +56,35 @@ patches:
         path: /spec/template/spec/tolerations
         value:
           - operator: Exists
-      # Talos has iscsiadm but no /usr/bin/env; an absolute path avoids PATH lookup.
+      # Wrap host iscsiadm with flock inside the container (Talos /host has no sh/flock).
+      - op: test
+        path: /spec/template/spec/containers/1/name
+        value: csi-plugin
+      - op: test
+        path: /spec/template/spec/containers/1/args/5
+        value: --chroot-dir=/host
+      - op: replace
+        path: /spec/template/spec/containers/1/args/5
+        value: --chroot-dir=
       - op: add
         path: /spec/template/spec/containers/1/args/-
-        value: --iscsiadm-path=/usr/local/sbin/iscsiadm
+        value: --multipath=false
+      - op: add
+        path: /spec/template/spec/containers/1/args/-
+        value: --iscsiadm-path=/opt/iscsiadm-wrapper/iscsiadm
+      - op: add
+        path: /spec/template/spec/containers/1/volumeMounts/-
+        value:
+          name: iscsiadm-wrapper
+          mountPath: /opt/iscsiadm-wrapper
+          readOnly: true
+      - op: add
+        path: /spec/template/spec/volumes/-
+        value:
+          name: iscsiadm-wrapper
+          configMap:
+            name: synology-csi-iscsiadm-wrapper
+            defaultMode: 493
   - target:
       kind: ClusterRole
       name: synology-csi-snapshotter-role
