@@ -22,6 +22,7 @@ RECONCILE = "fluxcd.controlplane.io/reconcile"
 SELECTOR = "maintenance.mcgrath.nz/nas-paused"
 NAS_HOSTS = {"10.0.16.16", "brian.sk.mcgrath.nz"}
 ORPHAN_STALL_SECONDS = 15
+RESTORE_BATCH_SIZE = 4
 RESOURCE_KINDS = {
     "PersistentVolume": "persistentvolumes",
     "PersistentVolumeClaim": "persistentvolumeclaims",
@@ -246,15 +247,60 @@ def ready_blockers(cluster, records):
     return blockers
 
 
-def restore_controllers(cluster, records, timeout):
-    for record in records:
-        print(f"Restoring {label(record)}", flush=True)
-        if record["resource"] == "daemonsets.apps":
-            set_field(cluster, record, "/spec/template/spec/nodeSelector", record["nodeSelector"])
-        else:
-            set_field(cluster, record, "/spec/replicas", record["replicas"])
-    if records:
+def _restore_one(cluster, record):
+    print(f"Restoring {label(record)}", flush=True)
+    if record["resource"] == "daemonsets.apps":
+        set_field(cluster, record, "/spec/template/spec/nodeSelector", record["nodeSelector"])
+    else:
+        set_field(cluster, record, "/spec/replicas", record["replicas"])
+
+
+def restore_controllers(cluster, records, timeout, *, batch_size=None):
+    if not records:
+        return
+    if batch_size is None or batch_size >= len(records):
+        for record in records:
+            _restore_one(cluster, record)
         wait_for("Waiting for restored workloads to become ready...", lambda: ready_blockers(cluster, records), timeout)
+        return
+
+    pending = list(records)
+    in_flight = []
+    restored = []
+
+    def step():
+        still_waiting = []
+        blockers = []
+        for record in in_flight:
+            item_blockers = ready_blockers(cluster, [record])
+            if item_blockers:
+                still_waiting.append(record)
+                blockers.extend(item_blockers)
+        in_flight[:] = still_waiting
+
+        while pending and len(in_flight) < batch_size:
+            record = pending.pop(0)
+            _restore_one(cluster, record)
+            restored.append(record)
+            if record["replicas"] == 0:
+                continue
+            item_blockers = ready_blockers(cluster, [record])
+            if item_blockers:
+                in_flight.append(record)
+                blockers.extend(item_blockers)
+
+        if pending:
+            blockers.append(f"{len(pending)} controller(s) queued for restore")
+            return blockers
+        if blockers:
+            return blockers
+        return ready_blockers(cluster, restored)
+
+    wait_for(
+        f"Restoring {len(records)} workload(s) (up to {batch_size} at a time)...",
+        step,
+        timeout,
+    )
 
 
 def job_blockers(resources, plan):
@@ -419,7 +465,7 @@ def pause(cluster, state, timeout, *, orphan_stall_seconds=ORPHAN_STALL_SECONDS)
     print("Keep both cluster nodes running. Afterwards run: task cluster:resume")
 
 
-def resume(cluster, state, timeout):
+def resume(cluster, state, timeout, *, batch_size=RESTORE_BATCH_SIZE):
     plan = state["plan"]
     # Check all original identities before any restoration, including partial-pause recovery.
     for record in plan["controllers"] + plan["cronjobs"] + plan["flux_instances"]:
@@ -431,7 +477,12 @@ def resume(cluster, state, timeout):
     cluster.save_state(state)
     workloads = [r for r in plan["controllers"] if r["role"] == "workload"]
     for resource in ("statefulsets.apps", "deployments.apps", "daemonsets.apps"):
-        restore_controllers(cluster, [r for r in workloads if r["resource"] == resource], timeout)
+        restore_controllers(
+            cluster,
+            [r for r in workloads if r["resource"] == resource],
+            timeout,
+            batch_size=batch_size,
+        )
     for role in ("operator", "backup"):
         restore_controllers(cluster, [r for r in plan["controllers"] if r["role"] == role], timeout)
     for record in plan["cronjobs"]:
@@ -460,10 +511,13 @@ def main(argv=None):
     parser.add_argument("action", choices=("pause", "resume"))
     parser.add_argument("--dry-run", action="store_true", help="Read-only inventory and NAS readiness checks; no state or workload changes")
     parser.add_argument("--timeout", type=int, default=900, help="Seconds to wait per shutdown/readiness barrier (default: 900)")
+    parser.add_argument("--batch-size", type=int, default=RESTORE_BATCH_SIZE, help=f"Max workloads to restore concurrently during resume (default: {RESTORE_BATCH_SIZE})")
     parser.add_argument("--context", help="Kubeconfig context (default: current context)")
     args = parser.parse_args(argv)
     if args.timeout <= 0:
         parser.error("--timeout must be positive")
+    if args.batch_size <= 0:
+        parser.error("--batch-size must be positive")
     context = args.context or run(["kubectl", "config", "current-context"]).strip()
     cluster = Cluster(context)
     cluster_uid = cluster.get("namespaces", STATE_NAMESPACE, STATE_NAMESPACE)["metadata"]["uid"]
@@ -502,7 +556,7 @@ def main(argv=None):
         if args.action == "pause":
             pause(cluster, state, args.timeout)
         else:
-            resume(cluster, state, args.timeout)
+            resume(cluster, state, args.timeout, batch_size=args.batch_size)
     return 0
 
 

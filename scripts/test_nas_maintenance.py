@@ -375,6 +375,60 @@ class MaintenanceTests(unittest.TestCase):
         self.assertIn("session30", stdout.getvalue())
         self.assertEqual(fake_cluster.exec_calls, [])
 
+    def test_resume_limits_concurrent_workload_restores_and_slides_window(self):
+        records = [
+            controller("gitops", role="gitops"),
+            controller("app-1", replicas=1),
+            controller("zero-app", replicas=0),
+            controller("app-2", replicas=1),
+            controller("app-3", replicas=1),
+            controller("app-4", replicas=1),
+            controller("app-5", replicas=1),
+        ]
+        state = state_for(records)
+        cluster = MemoryCluster(state)
+        maintenance.pause(cluster, state, timeout=1)
+
+        # Simulate delayed readiness so we can observe the bounded concurrency window.
+        polls_until_ready = {"app-1": 3, "app-2": 1, "app-3": 1, "app-4": 1, "app-5": 1}
+        in_flight_active = set()
+        max_concurrent = 0
+        orig_patch = cluster.patch
+        orig_get = cluster.get
+
+        def delayed_patch(record, operations):
+            nonlocal max_concurrent
+            orig_patch(record, operations)
+            name = record["name"]
+            if name in polls_until_ready:
+                obj = cluster.objects[cluster.key(record)]
+                if obj["spec"].get("replicas", 0) > 0:
+                    obj["status"]["readyReplicas"] = 0
+                    in_flight_active.add(name)
+                    max_concurrent = max(max_concurrent, len(in_flight_active))
+
+        def stepping_get(resource, namespace, name, **kwargs):
+            obj = orig_get(resource, namespace, name, **kwargs)
+            return obj
+
+        def fake_sleep(_seconds):
+            for name in list(in_flight_active):
+                polls_until_ready[name] -= 1
+                if polls_until_ready[name] <= 0:
+                    cluster.objects[("deployments.apps", "test", name)]["status"]["readyReplicas"] = 1
+                    in_flight_active.remove(name)
+
+        cluster.patch = delayed_patch
+        cluster.get = stepping_get
+        with patch.object(maintenance.time, "sleep", side_effect=fake_sleep):
+            maintenance.resume(cluster, state, timeout=10, batch_size=2)
+
+        self.assertEqual(max_concurrent, 2)
+        self.assertTrue(cluster.deleted_state)
+        for name in ("app-1", "app-2", "app-3", "app-4", "app-5"):
+            self.assertEqual(cluster.objects[("deployments.apps", "test", name)]["spec"]["replicas"], 1)
+        self.assertEqual(cluster.objects[("deployments.apps", "test", "zero-app")]["spec"]["replicas"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()
