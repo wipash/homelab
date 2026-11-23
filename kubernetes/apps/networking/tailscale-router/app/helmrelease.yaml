@@ -51,6 +51,9 @@ spec:
               TS_ROUTES: 10.0.16.0/24,10.0.10.0/24,10.244.0.0/16,172.16.10.0/24
               # Match the operator's backend detection; Talos uses nftables, not legacy iptables.
               TS_DEBUG_FIREWALL_MODE: auto
+              # With UDP GRO on, back-to-back UDP packets from tailnet clients are forwarded as one
+              # merged packet, which pods on this node never answer. That breaks QUIC handshakes.
+              TS_TUN_DISABLE_UDP_GRO: "true"
               TS_ENABLE_HEALTH_CHECK: "true"
               TS_LOCAL_ADDR_PORT: 0.0.0.0:9002
             probes:
