@@ -32,6 +32,8 @@ spec:
               APP_ORIGIN: https://bored.mcgrath.nz
               # The app chmods this directory; fsGroup does not own the PVC root.
               DATA_DIR: /data/gitbored
+              # The browser container below. The MCP's render page loads from the app over loopback.
+              SIDECAR_BROWSER_ENDPOINT: ws://127.0.0.1:3003/gitbored-sidecar
             envFrom:
               - secretRef:
                   name: gitbored-secret
@@ -67,6 +69,44 @@ spec:
                 memory: 128Mi
               limits:
                 memory: 512Mi
+          browser:
+            image:
+              repository: ghcr.io/wipash/gitbored-sidecar
+              # PLACEHOLDER: replace with the digest that gitbored CI publishes for latest.
+              tag: latest@sha256:0000000000000000000000000000000000000000000000000000000000000000
+            env:
+              TZ: Pacific/Auckland
+            probes:
+              # The browser server listens on loopback only, so kubelet can't reach it over the pod IP.
+              # No readiness probe: the board UI shouldn't go out of rotation when the browser is down.
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - node
+                      - -e
+                      - >-
+                        fetch('http://127.0.0.1:3003/gitbored-sidecar')
+                        .then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))
+                  periodSeconds: 60
+                  timeoutSeconds: 10
+                  failureThreshold: 3
+              readiness:
+                enabled: false
+              startup:
+                enabled: false
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
     defaultPodOptions:
       automountServiceAccountToken: false
       imagePullSecrets:
@@ -94,8 +134,22 @@ spec:
     persistence:
       data:
         existingClaim: "{{ .Release.Name }}"
-        globalMounts:
-          - path: /data
+        advancedMounts:
+          gitbored:
+            app:
+              - path: /data
       tmp:
         type: emptyDir
         sizeLimit: 64Mi
+        advancedMounts:
+          gitbored:
+            app:
+              - path: /tmp
+      # Chromium's profiles, caches and shared memory files. HOME is /tmp in the image.
+      browser-tmp:
+        type: emptyDir
+        sizeLimit: 512Mi
+        advancedMounts:
+          gitbored:
+            browser:
+              - path: /tmp
