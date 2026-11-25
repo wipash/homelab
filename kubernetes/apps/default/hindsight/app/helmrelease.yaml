@@ -32,7 +32,7 @@ spec:
           app:
             image:
               repository: ghcr.io/vectorize-io/hindsight-api
-              tag: 1.2.3-slim@sha256:9f5aae1ee85cba98781bbee3aa2afd21bf9c657371f2a7a5ce8e01288b1c87bb
+              tag: 1.3.0-slim@sha256:600ec51eefedd499e357cb84ece860a8f656fef62a22080e854498fb3971bb7e
             env:
               TZ: Pacific/Auckland
               HINDSIGHT_API_LLM_PROVIDER: openrouter
