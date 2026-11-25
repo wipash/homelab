@@ -65,6 +65,15 @@
       "minimumGroupSize": 2
     },
     {
+      "description": ["GitBored app and sidecar images, which must run the same Playwright version"],
+      "groupName": "GitBored",
+      "matchPackageNames": ["ghcr.io/wipash/gitbored", "ghcr.io/wipash/gitbored-sidecar"],
+      "matchDatasources": ["docker"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
       "description": ["Immich images"],
       "groupName": "Immich",
       "matchPackageNames": ["/immich/"],
