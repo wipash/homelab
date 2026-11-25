@@ -23,7 +23,9 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/gitbored
-              tag: latest@sha256:6144d26886f36a6f67d419f03a419bab17763dfb1d9546713746d1427e1b89cd
+              # PLACEHOLDER: the gitbored commit and digest that CI publishes, the same commit as the browser.
+              # Keep sha- tags until that commit is on gitbored main: Renovate would move latest@ back to main.
+              tag: sha-0000000000000000000000000000000000000000@sha256:0000000000000000000000000000000000000000000000000000000000000000
             env:
               TZ: Pacific/Auckland
               NODE_ENV: production
@@ -72,13 +74,14 @@ spec:
           browser:
             image:
               repository: ghcr.io/wipash/gitbored-sidecar
-              # PLACEHOLDER: replace with the digest that gitbored CI publishes for latest.
-              tag: latest@sha256:0000000000000000000000000000000000000000000000000000000000000000
+              # PLACEHOLDER: the same gitbored commit as the app, with the digest that CI publishes.
+              tag: sha-0000000000000000000000000000000000000000@sha256:0000000000000000000000000000000000000000000000000000000000000000
             env:
               TZ: Pacific/Auckland
             probes:
               # The browser server listens on loopback only, so kubelet can't reach it over the pod IP.
-              # No readiness probe: the board UI shouldn't go out of rotation when the browser is down.
+              # The pod is ready only while this container runs, so a browser that can't start, crash
+              # loops or restarts takes the board UI down too (one replica). That's accepted for now.
               liveness:
                 enabled: true
                 custom: true
@@ -105,8 +108,9 @@ spec:
               requests:
                 cpu: 50m
                 memory: 256Mi
+              # 6 small boards (the app's cap) used about 800MB, 228MB of it shared memory.
               limits:
-                memory: 1Gi
+                memory: 1536Mi
     defaultPodOptions:
       automountServiceAccountToken: false
       imagePullSecrets:
@@ -145,7 +149,8 @@ spec:
           gitbored:
             app:
               - path: /tmp
-      # Chromium's profiles, caches and shared memory files. HOME is /tmp in the image.
+      # Chromium's profiles. HOME is /tmp in the image, which empties it on start. 6 open boards used
+      # under 1MB. Going over the limit evicts the whole pod.
       browser-tmp:
         type: emptyDir
         sizeLimit: 512Mi
