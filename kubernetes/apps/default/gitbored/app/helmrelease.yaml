@@ -22,9 +22,9 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/wipash/gitbored
-              # Renovate's GitBored group updates this with the browser image, from the same commit.
-              tag: latest@sha256:04316b664375b3a834865086d31ece04c6aea8e37e50e7fe343c2eea70afc914
+              repository: holmesazae.azurecr.io/holmesgroup/gitbored
+              # Renovate's GitBored group updates this with the browser image, from the same release.
+              tag: v0.1.0@sha256:eaaa237e2bbc12775160d7c8fcb14185495974df723af9b536374428ee98da2c
             env:
               TZ: Pacific/Auckland
               NODE_ENV: production
@@ -72,9 +72,9 @@ spec:
                 memory: 512Mi
           browser:
             image:
-              repository: ghcr.io/wipash/gitbored-sidecar
-              # Same gitbored commit as the app. A Playwright server refuses a client at a different minor version.
-              tag: latest@sha256:a2d8cd72b89b7d5ad9cca6031ee64261dca6eda6aac6de053740ee1ea704794a
+              repository: holmesazae.azurecr.io/holmesgroup/gitbored/sidecar
+              # Same gitbored release as the app. A Playwright server refuses a client at a different minor version.
+              tag: v0.1.0@sha256:eededb2165bad92712ec464c9235547ea554d41c222229a9947079d5a1e1931e
             env:
               TZ: Pacific/Auckland
             probes:
@@ -113,7 +113,8 @@ spec:
     defaultPodOptions:
       automountServiceAccountToken: false
       imagePullSecrets:
-        - name: ghcr-imagepullsecret
+        # Provisioned by cosa2; its ACR scope map covers both CoSA and GitBored.
+        - name: cosa-imagepullsecret
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
