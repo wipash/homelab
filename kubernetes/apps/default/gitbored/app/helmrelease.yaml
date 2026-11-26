@@ -23,9 +23,9 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/gitbored
-              # PLACEHOLDER: the gitbored commit and digest that CI publishes, the same commit as the browser.
-              # Keep sha- tags until that commit is on gitbored main: Renovate would move latest@ back to main.
-              tag: sha-0000000000000000000000000000000000000000@sha256:0000000000000000000000000000000000000000000000000000000000000000
+              # Same gitbored commit as the browser. Keep sha- tags until that commit is on gitbored main,
+              # because Renovate would move latest@ back to main's build, which has no sidecar.
+              tag: sha-cca4b6585a123f8a9a7ca8ca7f1d2846400b6c69@sha256:6b27be1bf5b45542591875237ecb07a3c485cf5596805e7b5c95474c4c87598a
             env:
               TZ: Pacific/Auckland
               NODE_ENV: production
@@ -74,8 +74,8 @@ spec:
           browser:
             image:
               repository: ghcr.io/wipash/gitbored-sidecar
-              # PLACEHOLDER: the same gitbored commit as the app, with the digest that CI publishes.
-              tag: sha-0000000000000000000000000000000000000000@sha256:0000000000000000000000000000000000000000000000000000000000000000
+              # Same gitbored commit as the app. A Playwright server refuses a client at a different minor version.
+              tag: sha-cca4b6585a123f8a9a7ca8ca7f1d2846400b6c69@sha256:87ba8d3e7e1aa4836c26022176af0a2a449fa35478caf2b760b90270964656ac
             env:
               TZ: Pacific/Auckland
             probes:
