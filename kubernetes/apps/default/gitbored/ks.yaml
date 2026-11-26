@@ -29,7 +29,8 @@ spec:
       namespace: flux-system
     - name: external-secrets-stores
       namespace: kube-system
-    - name: ghcr-imagepullsecret
+    # cosa2 provisions default/cosa-imagepullsecret (ACR scope map covers CoSA and GitBored).
+    - name: cosa2
       namespace: default
   postBuild:
     substitute:
