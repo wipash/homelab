@@ -23,7 +23,9 @@ spec:
           app:
             image:
               repository: ghcr.io/wipash/gitbored
-              tag: latest@sha256:6144d26886f36a6f67d419f03a419bab17763dfb1d9546713746d1427e1b89cd
+              # Same gitbored commit as the browser. Keep sha- tags until that commit is on gitbored main,
+              # because Renovate would move latest@ back to main's build, which has no sidecar.
+              tag: sha-cca4b6585a123f8a9a7ca8ca7f1d2846400b6c69@sha256:6b27be1bf5b45542591875237ecb07a3c485cf5596805e7b5c95474c4c87598a
             env:
               TZ: Pacific/Auckland
               NODE_ENV: production
@@ -32,6 +34,8 @@ spec:
               APP_ORIGIN: https://bored.mcgrath.nz
               # The app chmods this directory; fsGroup does not own the PVC root.
               DATA_DIR: /data/gitbored
+              # The browser container below. The MCP's render page loads from the app over loopback.
+              SIDECAR_BROWSER_ENDPOINT: ws://127.0.0.1:3003/gitbored-sidecar
             envFrom:
               - secretRef:
                   name: gitbored-secret
@@ -67,6 +71,46 @@ spec:
                 memory: 128Mi
               limits:
                 memory: 512Mi
+          browser:
+            image:
+              repository: ghcr.io/wipash/gitbored-sidecar
+              # Same gitbored commit as the app. A Playwright server refuses a client at a different minor version.
+              tag: sha-cca4b6585a123f8a9a7ca8ca7f1d2846400b6c69@sha256:87ba8d3e7e1aa4836c26022176af0a2a449fa35478caf2b760b90270964656ac
+            env:
+              TZ: Pacific/Auckland
+            probes:
+              # The browser server listens on loopback only, so kubelet can't reach it over the pod IP.
+              # The pod is ready only while this container runs, so a browser that can't start, crash
+              # loops or restarts takes the board UI down too (one replica). That's accepted for now.
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - node
+                      - -e
+                      - >-
+                        fetch('http://127.0.0.1:3003/gitbored-sidecar')
+                        .then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))
+                  periodSeconds: 60
+                  timeoutSeconds: 10
+                  failureThreshold: 3
+              readiness:
+                enabled: false
+              startup:
+                enabled: false
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              # 6 small boards (the app's cap) used about 800MB, 228MB of it shared memory.
+              limits:
+                memory: 1536Mi
     defaultPodOptions:
       automountServiceAccountToken: false
       imagePullSecrets:
@@ -94,8 +138,23 @@ spec:
     persistence:
       data:
         existingClaim: "{{ .Release.Name }}"
-        globalMounts:
-          - path: /data
+        advancedMounts:
+          gitbored:
+            app:
+              - path: /data
       tmp:
         type: emptyDir
         sizeLimit: 64Mi
+        advancedMounts:
+          gitbored:
+            app:
+              - path: /tmp
+      # Chromium's profiles. HOME is /tmp in the image, which empties it on start. 6 open boards used
+      # under 1MB. Going over the limit evicts the whole pod.
+      browser-tmp:
+        type: emptyDir
+        sizeLimit: 512Mi
+        advancedMounts:
+          gitbored:
+            browser:
+              - path: /tmp
