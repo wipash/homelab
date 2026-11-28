@@ -51,7 +51,7 @@ spec:
   grafanaCom:
     # renovate: depName="Kubernetes / Views / Global"
     id: 15757
-    revision: 43
+    revision: 46
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
